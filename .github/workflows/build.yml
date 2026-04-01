@@ -1,0 +1,185 @@
+name: Build Isabelle + LaTeX + Release intelligente
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install minimal TeX Live + pygments + français
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          texlive-latex-base \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-lang-french \
+          python3-pygments
+
+    - name: Install Isabelle 2024
+      run: |
+        wget https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz
+        tar -xzf Isabelle2024_linux.tar.gz
+        mv Isabelle2024 isabelle
+        echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+
+    - name: Build Isabelle session Univers_Au_Carre
+      run: |
+        echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
+        isabelle build -v -d src/hol Univers_Au_Carre
+
+    - name: Compile LaTeX (minted + TOC) et déplacer les PDF
+      run: |
+        set -e
+        mkdir -p src/pdf
+        for file in src/tex/*.tex; do
+          echo "Compiling $file"
+          pdflatex -shell-escape -interaction=nonstopmode "$file"
+          pdflatex -shell-escape -interaction=nonstopmode "$file"
+          pdflatex -shell-escape -interaction=nonstopmode "$file"
+          pdf="${file%.tex}.pdf"
+          if [ -f "$pdf" ]; then
+            mv "$pdf" src/pdf/
+          fi
+        done
+
+    - name: Generate attestation report (SHA-256 des PDF)
+      run: |
+        cd src/pdf
+        if ls *.pdf >/dev/null 2>&1; then
+          sha256sum *.pdf > ../../attestation_report.txt
+        else
+          echo "Aucun PDF généré." > ../../attestation_report.txt
+        fi
+
+    - name: Generate build metadata
+      run: |
+        echo "Build provenance" > build_metadata.txt
+        echo "Commit SHA : $(git rev-parse HEAD)" >> build_metadata.txt
+        echo "Branche : $(git rev-parse --abbrev-ref HEAD)" >> build_metadata.txt
+        echo "Date : $(date -u)" >> build_metadata.txt
+        echo "" >> build_metadata.txt
+        echo "PDF générés :" >> build_metadata.txt
+        ls src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun PDF" >> build_metadata.txt
+        echo "" >> build_metadata.txt
+        echo "SHA-256 des PDF :" >> build_metadata.txt
+        sha256sum src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun hash" >> build_metadata.txt
+
+    - name: Upload PDF artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: pdf-documents
+        path: src/pdf/*.pdf
+
+    - name: Upload attestation report
+      uses: actions/upload-artifact@v4
+      with:
+        name: attestation-report
+        path: attestation_report.txt
+
+    - name: Upload build metadata
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-metadata
+        path: build_metadata.txt
+
+    - name: Generate build provenance (SLSA v1 pour .tex, .thy, .pdf)
+      uses: actions/attest-build-provenance@v1
+      with:
+        subject-path: |
+          src/tex/*.tex
+          src/hol/*.thy
+          src/pdf/*.pdf
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Download attestation report
+      uses: actions/download-artifact@v4
+      with:
+        name: attestation-report
+        path: .
+
+    - name: Download build metadata
+      uses: actions/download-artifact@v4
+      with:
+        name: build-metadata
+        path: .
+
+  update_changelog:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Lire la note si elle existe
+      id: note
+      run: |
+        NOTE_FILE=".git/.note"
+        if [ -f "$NOTE_FILE" ]; then
+          echo "note_exists=true" >> $GITHUB_OUTPUT
+          source "$NOTE_FILE"
+          echo "q1=$q1" >> $GITHUB_OUTPUT
+          echo "q2=$q2" >> $GITHUB_OUTPUT
+          echo "q3=$q3" >> $GITHUB_OUTPUT
+        else
+          echo "note_exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Mettre à jour le CHANGELOG
+      run: |
+        DATE="$(date -u +"%Y-%m-%d %H:%M UTC")"
+        SHA="$(git rev-parse HEAD)"
+
+        echo "## Commit $SHA — $DATE" >> CHANGELOG.md
+
+        if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
+          echo "- **Changements** : ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
+          echo "- **Effet immédiat** : ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
+          echo "- **Prochaine étape** : ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
+        else
+          echo "- Mise à jour sans note fournie." >> CHANGELOG.md
+        fi
+
+        echo "" >> CHANGELOG.md
+
+    - name: Supprimer la note après utilisation
+      run: |
+        if [ -f ".git/.note" ]; then
+          rm .git/.note
+        fi
+
+    - name: Commit et push du CHANGELOG mis à jour
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add CHANGELOG.md
+        git commit -m "Mise à jour automatique du CHANGELOG"
+        git push
