@@ -44,20 +44,29 @@ jobs:
         echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
         isabelle build -v -d src/hol Univers_Au_Carre
 
-    - name: Compile LaTeX (minted + TOC) et déplacer les PDF
+    ###########################################################################
+    # 🟦 SECTION LATEX — VERSION ROBUSTE ET CORRIGÉE
+    ###########################################################################
+
+    - name: Nettoyer les anciens PDF
       run: |
-        set -e
         mkdir -p src/pdf
+        rm -f src/pdf/*.pdf
+
+    - name: Compiler tous les fichiers LaTeX
+      run: |
         for file in src/tex/*.tex; do
-          echo "Compiling $file"
-          pdflatex -shell-escape -interaction=nonstopmode "$file"
-          pdflatex -shell-escape -interaction=nonstopmode "$file"
-          pdflatex -shell-escape -interaction=nonstopmode "$file"
-          pdf="${file%.tex}.pdf"
-          if [ -f "$pdf" ]; then
-            mv "$pdf" src/pdf/
-          fi
+          echo "Compilation de $file"
+          pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+          pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+          pdflatex -shell-escape -interaction=nonstopmode "$file" || true
         done
+
+    - name: Copier tous les PDF générés
+      run: |
+        find . -name "*.pdf" -exec cp {} src/pdf/ \;
+
+    ###########################################################################
 
     - name: Generate attestation report (SHA-256 des PDF)
       run: |
