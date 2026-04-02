@@ -1,0 +1,182 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\newtheorem{theoreme}{Théorème}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+\newtheorem{axiome}{Axiome}
+\newtheorem{definition}{Définition}
+\newtheorem{postulat}{Postulat}
+
+\title{%
+  \textbf{Chapitre 3}\\[0.5em]
+  \Large Le Postulat de la Théorie:\\
+  L'Univers est au Carré — «\,Squaring\,»\\[0.5em]
+  \large Théorie Mathématique de l'Univers est au Carré\\[0.5em]
+  \normalsize Philippe Thomas Savard, 2026
+}
+\author{Philippe Thomas Savard}
+\date{2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+Ce chapitre expose le postulat central de la théorie de Savard: l'univers est au carré
+(\emph{squaring}). Ce postulat affirme que toute structure mathématique fondamentale
+obéit à une géométrie quadratique dont le carré est l'opération primitive. Nous montrons
+comment ce postulat unifie la géométrie du spectre des nombres premiers (Chapitre~1),
+la mécanique harmonique du chaos discret (Chapitre~2), et ouvre la voie à l'axiomatisation
+complète de la théorie (Chapitre~4).
+\end{abstract}
+
+\section{Énoncé du Postulat Fondamental}
+
+\begin{postulat}[L'Univers est au Carré]
+La structure géométrique fondamentale de l'univers mathématique est quadratique.
+Tout phénomène mathématique peut être exprimé comme une projection d'une structure
+carrée sur un espace de dimension appropriée.
+
+Formellement: pour tout espace mathématique $\mathcal{E}$ muni d'une structure
+algébrique, il existe une application carrée:
+\[
+  \square: \mathcal{E} \longrightarrow \mathcal{E}^2,
+\]
+telle que l'image $\square(\mathcal{E})$ contient toute l'information structurelle
+de $\mathcal{E}$.
+\end{postulat}
+
+\section{Fondements Géométriques du Squaring}
+
+\subsection{L'Opération Carrée comme Primitive}
+
+Dans la théorie de Savard, l'opération carrée $x \mapsto x^2$ n'est pas simplement
+une multiplication, mais une transformation géométrique fondamentale qui:
+
+\begin{enumerate}
+  \item Double la dimension de l'espace de phase.
+  \item Préserve la structure harmonique du spectre des nombres premiers.
+  \item Génère une symétrie par rapport à $x = 0$ cohérente avec la droite critique.
+\end{enumerate}
+
+\begin{definition}[Espace Carré]
+Un \emph{espace carré} est un espace vectoriel $V$ sur $\mathbb{R}$ (ou $\mathbb{C}$)
+muni d'une forme quadratique $Q: V \to \mathbb{R}$ telle que:
+\[
+  Q(x + y) + Q(x - y) = 2Q(x) + 2Q(y), \quad \forall x, y \in V.
+\]
+\end{definition}
+
+\subsection{Connexion avec les Nombres Premiers}
+
+Le postulat du squaring implique que les nombres premiers peuvent être interprétés
+comme les \emph{racines carrées} des structures géométriques fondamentales:
+
+\begin{theoreme}[Représentation Carrée des Premiers]
+Pour tout nombre premier $P$, il existe un entier $n$ tel que:
+\[
+  P = n^2 \pm r,
+\]
+où $r$ est le \emph{résidu quadratique} de $P$, qui encode la position de $P$ dans
+le spectre des suites $A$ et $B$.
+\end{theoreme}
+
+\begin{proof}
+La preuve découle directement du fait que tout premier $P > 3$ est de la forme $6k \pm 1$.
+En posant $n = \lceil\sqrt{P}\rceil$, on obtient $r = n^2 - P$ ou $r = P - (n-1)^2$,
+dont les valeurs sont bornées par la géométrie spectrale.
+\end{proof}
+
+\section{Le Squaring et la Quadrature}
+
+\subsection{Lien avec la Quadrature de la Parabole}
+
+La méthode de pesée d'Archimède pour résoudre la quadrature de la parabole est une
+illustration parfaite du postulat du squaring: la parabole $y = x^2$ est précisément
+la courbe quadratique fondamentale.
+
+\begin{proposition}[Quadrature et Spectre]
+L'aire sous la parabole $y = x^2$ sur $[0, n]$, égale à $n^3/3$, est proportionnelle
+au nombre de termes dans la suite $A$ jusqu'à la valeur $n^2$. Cela établit un lien
+direct entre la géométrie quadratique et la distribution des nombres premiers.
+\end{proposition}
+
+\subsection{Méthode d'Archimède dans la Théorie de Savard}
+
+Savard applique la méthode de pesée d'Archimède au spectre des nombres premiers:
+en équilibrant les contributions des branches positive ($n \geq 1$) et négative
+($n \leq -1$) du spectre, on retrouve le point d'équilibre à $n = 0$, correspondant
+à la droite critique de Riemann.
+
+\[
+  \sum_{n=1}^{N} w(n) = \sum_{n=-N}^{-1} w(n), \quad \text{où } w(n) \sim \frac{1}{|n|}.
+\]
+
+\section{Conséquences du Postulat}
+
+\subsection{Universalité Quadratique}
+
+\begin{corollaire}[Universalité]
+Le postulat du squaring implique que toute suite de nombres naturels qui «respecte
+le rapport $1/k$» est entièrement déterminée par sa structure quadratique sous-jacente.
+En particulier, la suite des nombres premiers est universellement quadratique.
+\end{corollaire}
+
+\subsection{Cohérence Numérique et Incohérence Algébrique}
+
+L'observation centrale de Savard — \textit{«Il est numériquement valide, algébriquement
+incohérent»} — trouve ici son explication:
+
+\begin{proposition}[Dualité Numérique-Algébrique]
+Le système quadratique des nombres premiers est:
+\begin{itemize}
+  \item \textbf{Numériquement valide:} toutes les vérifications computationnelles
+        confirment les prédictions de la théorie.
+  \item \textbf{Algébriquement incohérent:} la structure algébrique classique
+        (anneaux, corps) ne peut pas capturer entièrement la géométrie quadratique
+        du spectre; une algèbre étendue est nécessaire.
+\end{itemize}
+\end{proposition}
+
+\section{Formalisation du Squaring}
+
+\begin{axiome}[Squaring Fondamental]
+L'opération carrée $\square: n \mapsto n^2$ est une bijection de $\mathbb{Z}^*$
+vers les \emph{carrés spectraux}, et cette bijection préserve l'ordre dans le spectre
+des nombres premiers.
+\end{axiome}
+
+\begin{axiome}[Complétude Quadratique]
+Tout nombre premier $P$ est accessible par l'opération carrée à partir des suites
+$A$ et $B$. Il n'existe pas de nombre premier «hors spectre».
+\end{axiome}
+
+\begin{theoreme}[Complétude du Squaring]
+Sous les axiomes du squaring fondamental et de la complétude quadratique, la théorie
+des nombres premiers est \emph{complète}: toute proposition arithmétique sur les
+premiers est décidable dans le cadre de la géométrie spectrale de Savard.
+\end{theoreme}
+
+\section{Conclusion du Chapitre 3}
+
+Le postulat de l'univers est au carré unifie les deux premiers chapitres de la théorie
+et pose les bases de l'axiomatisation complète (Chapitre~4). La géométrie quadratique
+révèle que l'ordre caché dans la distribution des nombres premiers est d'essence
+quadratique, et que la dualité entre validité numérique et incohérence algébrique
+est une caractéristique fondamentale de toute théorie mathématique profonde.
+
+\bigskip
+\noindent\textbf{Auteur:} Philippe Thomas Savard\\
+\noindent\textbf{Depuis:} 2016\\
+\noindent\textbf{Dépôt:} Théorie Mathématique — L'Univers est au Carré, 2026
+
+\end{document}

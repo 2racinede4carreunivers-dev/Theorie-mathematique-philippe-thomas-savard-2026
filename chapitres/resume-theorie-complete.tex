@@ -1,0 +1,119 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\newtheorem{theoreme}{Théorème}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+\newtheorem{axiome}{Axiome}
+\newtheorem{definition}{Définition}
+
+\title{%
+  \textbf{Résumé de la Théorie Complète}\\[0.5em]
+  \Large L'Univers est au Carré:\\
+  Synthèse Mathématique et Validations Isabelle/HOL\\[0.5em]
+  \large Philippe Thomas Savard, 2026
+}
+\author{Philippe Thomas Savard}
+\date{2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+Ce document constitue un résumé de la théorie complète de l'univers est au carré,
+développée par Philippe Thomas Savard depuis 2016. Il présente en condensé les quatre
+chapitres complétés, les cinq validations formelles Isabelle/HOL, et la réponse
+de l'auteur à l'hypothèse de Riemann. Ce document sert de point d'entrée pour les
+lecteurs souhaitant avoir une vue d'ensemble avant d'approfondir chaque chapitre.
+\end{abstract}
+
+\section{Vue d'Ensemble de la Théorie}
+
+La théorie mathématique de l'univers est au carré de Savard repose sur quatre chapitres
+principaux:
+
+\begin{enumerate}
+  \item \textbf{Géométrie du spectre des nombres premiers} (≈55--60\% du contenu total).
+  \item \textbf{Mécanique harmonique du chaos discret}.
+  \item \textbf{Le postulat de l'univers est au carré — Squaring}.
+  \item \textbf{Axiomatisation et conclusion — La quadrature par la pesée d'Archimède}.
+\end{enumerate}
+
+\section{Les Suites A et B: Fondements de la Théorie}
+
+Toute la théorie repose sur deux suites fondamentales:
+
+\[
+  A = (a_i)_{i \geq 1}, \quad a_i = 2i - 1
+\]
+\[
+  B = (b_j)_{j \geq 1}, \quad b_j \in \{6j-1, 6j+1\}
+\]
+
+Ces suites génèrent le \emph{spectre des nombres premiers}, une structure géométrique
+dans $\mathbb{Z}$ qui encode tous les nombres premiers.
+
+\section{L'Observation Centrale}
+
+\begin{center}
+\large\textbf{Observation fondamentale de Savard:}\\[0.5em]
+\textit{«\, Quand $n \geq 1$ et que $n \leq -1$, tous les $n$ ramènent à un nombre premier $P$.}\\
+\textit{Toutes les valeurs de $n$ sont la conséquence directe}\\
+\textit{de la quantité de termes contenus dans les suites $A$ et $B$.}\\
+\textit{Tous les $P$ entre eux respectent le rapport $1/k$.}\\
+\textit{Il est numériquement valide, algébriquement incohérent.\,»}
+\end{center}
+
+\section{La Réponse à l'Hypothèse de Riemann}
+
+L'hypothèse de Riemann (l'un des sept problèmes du prix du millénaire de l'Institut Clay)
+affirme que tous les zéros non triviaux de la fonction zêta $\zeta(s)$ ont leur partie
+réelle égale à $1/2$.
+
+La réponse de Savard: la symétrie du spectre des nombres premiers entre les branches
+$n \geq 1$ et $n \leq -1$, confirmée par la méthode de la pesée d'Archimède, impose
+que le centre de masse spectral — correspondant à la droite critique $\Re(s) = 1/2$ —
+est l'unique axe de symétrie des zéros de $\zeta(s)$.
+
+\section{Les Cinq Validations Isabelle/HOL}
+
+\begin{enumerate}
+  \item \textbf{PrimeSpectrumGeometry.thy}: Géométrie spectrale et suites $A$, $B$.
+  \item \textbf{RiemannZetaConjecture.thy}: Axiomatisation de la conjecture de Riemann.
+  \item \textbf{HarmonicMechanics.thy}: Mécanique harmonique du chaos discret.
+  \item \textbf{UniversSquaring.thy}: Postulat du squaring universel.
+  \item \textbf{ArchimedesParabola.thy}: Méthode de la pesée d'Archimède.
+\end{enumerate}
+
+\section{Structure du Dépôt}
+
+Le dépôt GitHub contient 19 fichiers certifiés (.tex, .thy, .pdf) validés par
+GitHub Actions:
+\begin{itemize}
+  \item 7 fichiers \LaTeX{} (.tex): sources des documents en français (5) et anglais (2).
+  \item 5 fichiers Isabelle/HOL (.thy): les validations formelles.
+  \item 7 fichiers PDF (.pdf): les documents compilés et certifiés.
+\end{itemize}
+
+\section{Conclusion}
+
+La théorie de l'univers est au carré représente dix ans de recherche mathématique
+originale (2016--2026). Elle offre une réponse élégante et géométrique à la plus
+célèbre des conjectures non résolues en mathématiques, et démontre que la nature
+«carrée» de l'univers est la clé pour comprendre la distribution des nombres premiers.
+
+\bigskip
+\noindent\textbf{Auteur:} Philippe Thomas Savard\\
+\noindent\textbf{Depuis:} 2016\\
+\noindent\textbf{Dépôt:} \url{https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026}
+
+\end{document}

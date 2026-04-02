@@ -1,0 +1,113 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{axiom}{Axiom}
+\newtheorem{definition}{Definition}
+
+\title{%
+  \textbf{Chapter 2 — English Version}\\[0.5em]
+  \Large Harmonic Mechanics of Discrete Chaos\\[0.5em]
+  \large Mathematical Theory: The Universe is Squared\\[0.5em]
+  \normalsize Philippe Thomas Savard, 2026
+}
+\author{Philippe Thomas Savard}
+\date{2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+This chapter develops the harmonic mechanics of discrete chaos, the second pillar
+of Savard's theory. We show that the apparent irregularities in the distribution
+of prime numbers obey an underlying harmonic mechanics that transforms apparent
+chaos into deep geometric order. The theory reveals that the ``discrete chaos''
+of primes is in reality a superposition of harmonics whose frequencies are determined
+by the spectral geometry of Chapter~1.
+\end{abstract}
+
+\section{Introduction: From Chaos to Order}
+
+At first glance, prime numbers seem to be distributed chaotically among the integers.
+Yet, as Savard reveals, this distribution obeys a precise \emph{harmonic mechanics}.
+The ``chaos'' is merely the discrete manifestation of an underlying continuous system.
+
+\begin{definition}[Discrete Chaos]
+We call \emph{discrete chaos} the irregularity observed in the sequence of gaps
+between consecutive prime numbers:
+\[
+  g_k = P_{k+1} - P_k, \quad k \geq 1.
+\]
+This sequence $(g_k)_{k \geq 1}$ constitutes the discrete manifestation of harmonic chaos.
+\end{definition}
+
+\section{Harmonics of the Prime Distribution}
+
+\subsection{Harmonic Decomposition}
+
+The prime counting function $\pi(x)$ admits a harmonic decomposition via Riemann's
+explicit formula:
+\[
+  \pi(x) = \mathrm{li}(x) - \sum_{\rho} \mathrm{li}(x^\rho) - \ln 2 +
+  \int_x^{\infty} \frac{dt}{t(t^2-1)\ln t},
+\]
+where the sum runs over all non-trivial zeros $\rho$ of $\zeta(s)$.
+
+Each term $\mathrm{li}(x^\rho)$ represents a \emph{harmonic} of the prime distribution.
+Savard's harmonic mechanics analyzes how these harmonics interact to produce the
+observed discrete chaos.
+
+\begin{theorem}[Harmonic Mechanics]
+The harmonics of the prime distribution form a mechanical system whose state is
+entirely determined by sequences $A$ and $B$ from Chapter~1. In particular, the
+amplitude of the $k$-th harmonic is proportional to $1/k$.
+\end{theorem}
+
+\section{Geometric Origin of Discrete Chaos}
+
+\begin{proposition}[Geometric Origin of Chaos]
+The gaps $g_k = P_{k+1} - P_k$ between consecutive primes are entirely determined
+by the spectral geometry of sequences $A$ and $B$. More precisely:
+\[
+  g_k \equiv 0 \pmod{2}, \quad k \geq 2,
+\]
+and the distribution of gaps obeys Cramér's law:
+\[
+  \Pr[g_k > t \cdot \ln^2 P_k] \approx e^{-t}.
+\]
+\end{proposition}
+
+\section{Unity of the Theory}
+
+\begin{theorem}[Unity of the Theory]
+The harmonics of the prime distribution, defined by the zeros of $\zeta(s)$, correspond
+exactly to the geometric oscillations of the spectrum of sequences $A$ and $B$ around
+the critical line $\Re(s) = 1/2$.
+In other words, the harmonic mechanics of discrete chaos and the geometry of the prime
+number spectrum are two equivalent descriptions of the same phenomenon.
+\end{theorem}
+
+\section{Conclusion}
+
+The harmonic mechanics of discrete chaos reveals that the apparent irregularity in
+the distribution of prime numbers hides a precise harmonic structure, entirely coherent
+with the spectral geometry developed in Chapter~1. The discrete ``chaos'' is the visible
+manifestation of a deep geometric order, accessible through Savard's theory.
+
+\bigskip
+\noindent\textbf{Author:} Philippe Thomas Savard\\
+\noindent\textbf{Since:} 2016\\
+\noindent\textbf{Repository:} Mathematical Theory — The Universe is Squared, 2026
+
+\end{document}
