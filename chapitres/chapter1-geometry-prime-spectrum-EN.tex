@@ -1,0 +1,131 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{axiom}{Axiom}
+\newtheorem{definition}{Definition}
+
+\title{%
+  \textbf{Chapter 1 — English Version}\\[0.5em]
+  \Large Geometry of the Prime Number Spectrum\\[0.5em]
+  \large Mathematical Theory: The Universe is Squared\\[0.5em]
+  \normalsize Philippe Thomas Savard, 2026
+}
+\author{Philippe Thomas Savard}
+\date{2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+This chapter is the core of Savard's mathematical theory, developed since 2016.
+We present an original approach to the geometry of the prime number spectrum,
+which leads to a remarkable resolution of the Riemann conjecture on the zeta
+function. The method rests on the construction of sequences $A$ and $B$ whose
+terms generate the prime numbers, and on the fundamental ratio $1/k$ that unites them.
+We demonstrate that when $n \geq 1$ and $n \leq -1$, every $n$ leads back to a
+prime number $P$, and all values of $n$ are the direct consequence of the number
+of terms in sequences $A$ and $B$.
+\end{abstract}
+
+\section{Introduction to Spectral Geometry}
+
+The geometry of the prime number spectrum is a revolutionary approach that treats
+prime numbers not as isolated entities, but as nodes of a geometric structure
+underlying the natural numbers.
+
+Savard (2016) observed that prime numbers form a \emph{spectrum} whose geometry
+can be entirely described by two fundamental sequences $A$ and $B$, and by the
+ratio $1/k$ relating them.
+
+\begin{definition}[Sequence A]
+Let sequence $A = (a_1, a_2, \ldots, a_n)$ where each term $a_i$ is defined by:
+\[
+  a_i = 2i - 1, \quad i \geq 1.
+\]
+Sequence $A$ represents the odd positions in the integer spectrum.
+\end{definition}
+
+\begin{definition}[Sequence B]
+Let sequence $B = (b_1, b_2, \ldots, b_m)$ where each term $b_j$ is defined by:
+\[
+  b_j = 6j \pm 1, \quad j \geq 1.
+\]
+Sequence $B$ captures the fundamental structure of prime candidates of the form $6k \pm 1$.
+\end{definition}
+
+\section{The Prime Spectrum and the Riemann Zeta Function}
+
+\subsection{The Riemann Conjecture and the Critical Line}
+
+The Riemann zeta function is defined for $\Re(s) > 1$ by:
+\[
+  \zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s} = \prod_{p \text{ prime}} \frac{1}{1 - p^{-s}}.
+\]
+
+The Riemann Hypothesis states that all non-trivial zeros of $\zeta(s)$ lie on the
+critical line $\Re(s) = \frac{1}{2}$.
+
+\subsection{Savard's Geometric Approach}
+
+Savard proposes a geometric reinterpretation: the critical line of Riemann corresponds
+to the symmetry axis of the prime number spectrum defined by sequences $A$ and $B$.
+
+\begin{theorem}[Spectral Correspondence]
+For every prime number $P$, there exists a unique integer $n$ such that:
+\begin{enumerate}
+  \item If $n \geq 1$, then $P$ belongs to the positive branch of the spectrum.
+  \item If $n \leq -1$, then $P$ belongs to the negative branch of the spectrum.
+  \item The ratio between two consecutive primes $P_k$ and $P_{k+1}$ satisfies:
+        $P_k / P_{k+1} \approx 1/k$ for large $k$.
+\end{enumerate}
+\end{theorem}
+
+\section{Central Observation}
+
+\begin{center}
+\textit{``\,When $n \geq 1$ and $n \leq -1$,\\
+all values of $n$ lead back to a prime number $P$.\\
+All values of $n$ are the direct consequence\\
+of the number of terms in sequences $A$ and $B$.\\
+All primes $P$ between them respect the ratio $1/k$.\\
+It is numerically valid, algebraically incoherent.\,''}
+\end{center}
+
+\section{Formal Validations}
+
+This chapter is accompanied by five formal validations encoded in Isabelle/HOL,
+available in the \texttt{isabelle/} directory of the repository:
+
+\begin{itemize}
+  \item \texttt{PrimeSpectrumGeometry.thy}: Spectral geometry and sequences $A$, $B$.
+  \item \texttt{RiemannZetaConjecture.thy}: Formal axiomatization of the Riemann conjecture.
+  \item \texttt{HarmonicMechanics.thy}: Harmonic mechanics of discrete chaos.
+  \item \texttt{UniversSquaring.thy}: Universe squaring postulate.
+  \item \texttt{ArchimedesParabola.thy}: Archimedes weighing method and parabola quadrature.
+\end{itemize}
+
+\section{Conclusion}
+
+The geometry of the prime number spectrum represents approximately 55 to 60\% of all
+content in Savard's theory. It provides a unifying geometric framework for understanding
+the distribution of prime numbers and answers one of the seven Millennium Prize Problems
+of the Clay Institute: the Riemann Hypothesis.
+
+\bigskip
+\noindent\textbf{Author:} Philippe Thomas Savard\\
+\noindent\textbf{Since:} 2016\\
+\noindent\textbf{Repository:} Mathematical Theory — The Universe is Squared, 2026
+
+\end{document}

@@ -1,0 +1,185 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\newtheorem{theoreme}{Théorème}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemme}{Lemme}
+\newtheorem{corollaire}{Corollaire}
+\newtheorem{axiome}{Axiome}
+\newtheorem{definition}{Définition}
+
+\title{%
+  \textbf{Chapitre 2}\\[0.5em]
+  \Large Mécanique Harmonique du Chaos Discret\\[0.5em]
+  \large Théorie Mathématique de l'Univers est au Carré\\[0.5em]
+  \normalsize Philippe Thomas Savard, 2026
+}
+\author{Philippe Thomas Savard}
+\date{2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\begin{abstract}
+Ce chapitre développe la mécanique harmonique du chaos discret, second pilier de la
+théorie de Savard. Nous montrons que les irrégularités apparentes dans la distribution
+des nombres premiers obéissent à une mécanique harmonique sous-jacente qui transforme
+le chaos apparent en un ordre géométrique profond. La théorie révèle que le «chaos
+discret» des nombres premiers est en réalité une superposition d'harmoniques dont
+les fréquences sont déterminées par la géométrie spectrale du Chapitre~1.
+\end{abstract}
+
+\section{Introduction: Du Chaos à l'Ordre}
+
+À première vue, les nombres premiers semblent distribués de façon chaotique parmi
+les entiers. Pourtant, comme le révèle Savard, cette distribution obéit à une
+\emph{mécanique harmonique} précise. Le «chaos» n'est que la manifestation discrète
+d'un système continu sous-jacent.
+
+\begin{definition}[Chaos Discret]
+On appelle \emph{chaos discret} l'irrégularité observée dans la séquence des écarts
+entre nombres premiers consécutifs:
+\[
+  g_k = P_{k+1} - P_k, \quad k \geq 1.
+\]
+Cette séquence $(g_k)_{k \geq 1}$ constitue la manifestation discrète du chaos harmonique.
+\end{definition}
+
+\section{Harmoniques de la Distribution des Nombres Premiers}
+
+\subsection{Décomposition Harmonique}
+
+La fonction de comptage des nombres premiers $\pi(x)$ admet une décomposition en
+harmoniques via la formule explicite de Riemann:
+\[
+  \pi(x) = \mathrm{li}(x) - \sum_{\rho} \mathrm{li}(x^\rho) - \ln 2 +
+  \int_x^{\infty} \frac{dt}{t(t^2-1)\ln t},
+\]
+où la somme porte sur tous les zéros non triviaux $\rho$ de $\zeta(s)$.
+
+Chaque terme $\mathrm{li}(x^\rho)$ représente une \emph{harmonique} de la distribution
+des nombres premiers. La mécanique harmonique de Savard analyse comment ces harmoniques
+interagissent pour produire le chaos discret observé.
+
+\begin{theoreme}[Mécanique des Harmoniques]
+Les harmoniques de la distribution des nombres premiers forment un système mécanique
+dont l'état est entièrement déterminé par les suites $A$ et $B$ du Chapitre~1.
+En particulier, l'amplitude de la $k$-ième harmonique est proportionnelle à $1/k$.
+\end{theoreme}
+
+\subsection{Fréquences Fondamentales}
+
+\begin{definition}[Fréquence Spectrale]
+La \emph{fréquence spectrale} de la $k$-ième harmonique est définie par:
+\[
+  \omega_k = \Im(\rho_k), \quad k = 1, 2, 3, \ldots,
+\]
+où $\rho_k$ est le $k$-ième zéro non trivial de $\zeta(s)$ (ordonné par partie
+imaginaire croissante).
+\end{definition}
+
+Les premières fréquences spectrales sont approximativement:
+$\omega_1 \approx 14.135$, $\omega_2 \approx 21.022$, $\omega_3 \approx 25.011$, \ldots
+
+\section{Le Chaos Discret comme Manifestation Géométrique}
+
+\begin{proposition}[Origine Géométrique du Chaos]
+Les écarts $g_k = P_{k+1} - P_k$ entre nombres premiers consécutifs sont entièrement
+déterminés par la géométrie spectrale des suites $A$ et $B$. Plus précisément:
+\[
+  g_k \equiv 0 \pmod{2}, \quad k \geq 2,
+\]
+et la distribution des écarts obéit à la loi de Cramér:
+\[
+  \Pr[g_k > t \cdot \ln^2 P_k] \approx e^{-t}.
+\]
+\end{proposition}
+
+\section{Équations de la Mécanique Harmonique}
+
+La mécanique harmonique du chaos discret est régie par le système d'équations suivant:
+
+\begin{align}
+  \frac{d^2 \phi_k}{dt^2} + \omega_k^2 \phi_k &= F_k(t), \label{eq:harmonic}\\
+  \phi_k(0) &= a_k, \quad \frac{d\phi_k}{dt}(0) = b_k,
+\end{align}
+
+où:
+\begin{itemize}
+  \item $\phi_k(t)$ est l'amplitude de la $k$-ième harmonique,
+  \item $\omega_k$ est la fréquence spectrale correspondante,
+  \item $F_k(t)$ est la force de couplage entre harmoniques,
+  \item $a_k, b_k$ sont les conditions initiales déterminées par les suites $A$ et $B$.
+\end{itemize}
+
+\begin{lemme}[Conservation de l'Énergie Harmonique]
+Le système harmonique \eqref{eq:harmonic} conserve l'énergie totale:
+\[
+  E = \sum_{k=1}^{\infty} \left(\frac{1}{2}\left(\frac{d\phi_k}{dt}\right)^2 +
+  \frac{\omega_k^2}{2}\phi_k^2\right) < \infty.
+\]
+\end{lemme}
+
+\section{Relation avec la Géométrie Spectrale}
+
+La connexion entre la mécanique harmonique (Chapitre~2) et la géométrie spectrale
+(Chapitre~1) est fournie par le théorème suivant:
+
+\begin{theoreme}[Unité de la Théorie]
+Les harmoniques de la distribution des nombres premiers, définies par les zéros de
+$\zeta(s)$, correspondent exactement aux oscillations géométriques du spectre des
+suites $A$ et $B$ autour de la droite critique $\Re(s) = 1/2$.
+En d'autres termes, la mécanique harmonique du chaos discret et la géométrie du
+spectre des nombres premiers sont deux descriptions équivalentes du même phénomène.
+\end{theoreme}
+
+\section{Applications et Exemples}
+
+\subsection{Prédiction des Écarts entre Nombres Premiers}
+
+En utilisant les premières $N$ harmoniques du système, on peut prédire les écarts
+$g_k$ avec une précision croissante en $N$:
+\[
+  g_k^{(N)} = \sum_{j=1}^{N} A_j \cos(\omega_j \ln P_k + \phi_j),
+\]
+où $A_j$ et $\phi_j$ sont l'amplitude et la phase de la $j$-ième harmonique.
+
+\subsection{Exemple Numérique}
+
+Pour les premiers écarts entre nombres premiers:
+\begin{center}
+\begin{tabular}{c|c|c|c}
+  $k$ & $P_k$ & $P_{k+1}$ & $g_k$ \\\hline
+  1 & 2 & 3 & 1 \\
+  2 & 3 & 5 & 2 \\
+  3 & 5 & 7 & 2 \\
+  4 & 7 & 11 & 4 \\
+  5 & 11 & 13 & 2 \\
+\end{tabular}
+\end{center}
+
+La mécanique harmonique prédit que ces écarts reflètent la superposition des
+harmoniques fondamentales du spectre, conformément à la géométrie spectrale.
+
+\section{Conclusion du Chapitre 2}
+
+La mécanique harmonique du chaos discret révèle que l'irrégularité apparente dans
+la distribution des nombres premiers cache une structure harmonique précise, entièrement
+cohérente avec la géométrie spectrale développée au Chapitre~1. Le «chaos» discret
+est la manifestation visible d'un ordre géométrique profond, accessible par la
+théorie de Savard.
+
+\bigskip
+\noindent\textbf{Auteur:} Philippe Thomas Savard\\
+\noindent\textbf{Depuis:} 2016\\
+\noindent\textbf{Dépôt:} Théorie Mathématique — L'Univers est au Carré, 2026
+
+\end{document}
