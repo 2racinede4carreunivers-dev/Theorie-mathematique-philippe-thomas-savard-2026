@@ -115,12 +115,18 @@ section \<open>Chaos Discret et Équivalence avec la Géométrie Spectrale\<clos
 
 text \<open>
   Définition: Un système harmonique est dit "équivalent" à la géométrie spectrale
-  s'il prédit les mêmes écarts entre nombres premiers.
+  s'il prédit les mêmes écarts entre nombres premiers, à une tolérance relative près.
 \<close>
 
+text \<open>
+  Approximation relative: f est une bonne approximation de g si
+  l'erreur relative est inférieure à 1.
+\<close>
+definition approx_rel :: "real \<Rightarrow> real \<Rightarrow> bool" where
+  "approx_rel x y \<longleftrightarrow> abs (x - y) / max 1 (abs y) < 1"
+
 definition harmonically_equivalent :: "(nat \<Rightarrow> real) \<Rightarrow> bool" where
-  "harmonically_equivalent f = (\<forall> k \<ge> 1. f k \<approx> real (prime_gap k))"
-  where "x \<approx> y \<longleftrightarrow> abs (x - y) / max 1 (abs y) < 1"
+  "harmonically_equivalent f = (\<forall> k \<ge> 1. approx_rel (f k) (real (prime_gap k)))"
 
 text \<open>
   Proposition fondamentale: La superposition des premières N harmoniques

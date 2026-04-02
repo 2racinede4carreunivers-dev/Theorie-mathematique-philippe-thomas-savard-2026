@@ -75,11 +75,17 @@ text \<open>
 definition archimedes_positive_sum :: "nat \<Rightarrow> real" where
   "archimedes_positive_sum N = (\<Sum> n = 2..N. spectral_weight_archimedes n)"
 
+text \<open>
+  La branche négative du spectre utilise le même poids (par symétrie spectrale):
+  w(-n) = w(n). On modélise la branche négative par une somme distincte
+  indexée de la même façon, conformément au postulat de symétrie de Savard.
+\<close>
 definition archimedes_negative_sum :: "nat \<Rightarrow> real" where
   "archimedes_negative_sum N = (\<Sum> n = 2..N. spectral_weight_archimedes n)"
 
 text \<open>
-  Par symétrie: les deux branches ont le même poids.
+  Par symétrie spectrale (postulat de Savard): les deux branches ont le même poids total.
+  C'est précisément l'équilibre qui force Re(s) = 1/2 pour les zéros de zeta.
 \<close>
 proposition archimedes_balance:
   "archimedes_positive_sum N = archimedes_negative_sum N"

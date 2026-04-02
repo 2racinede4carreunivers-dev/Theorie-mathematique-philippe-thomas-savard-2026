@@ -29,23 +29,34 @@ text \<open>
 text \<open>
   Axiome 1 (Symétrie Spectrale):
   Le spectre des nombres premiers est symétrique par rapport à Re(s) = 1/2.
+  spectral_weight modélise les poids de la branche positive (n >= 1).
 \<close>
 axiomatization
-  spectral_weight :: "nat \<Rightarrow> real"
+  spectral_weight :: "nat \<Rightarrow> real"  \<comment> \<open>poids de la branche positive n >= 1\<close>
 where
-  spectral_weight_pos: "\<forall> n \<ge> 1. spectral_weight n > 0" and
-  spectral_weight_sym: "\<forall> n \<ge> 1. spectral_weight n = spectral_weight n" and
+  spectral_weight_pos:   "\<forall> n \<ge> 1. spectral_weight n > 0" and
   spectral_weight_decay: "\<forall> n \<ge> 1. spectral_weight n \<le> 1 / real n"
 
 text \<open>
+  Axiome sur la symétrie entre les branches positive et négative du spectre:
+  le poids sur la branche n >= 1 est le même que sur la branche n <= -1.
+  spectral_weight_neg modélise les poids de la branche négative,
+  et par symétrie (postulat du squaring), ils sont égaux aux poids positifs.
+\<close>
+axiomatization
+  spectral_weight_neg :: "nat \<Rightarrow> real"
+where
+  spectral_weight_neg_eq: "\<forall> n \<ge> 1. spectral_weight_neg n = spectral_weight n"
+
+text \<open>
   Axiome 2 (Équilibre d'Archimède):
-  La somme pondérée du spectre converge vers un point d'équilibre.
+  La somme pondérée du spectre — branche positive moins branche négative — est nulle.
 \<close>
 axiomatization
   archimedes_balance :: "nat \<Rightarrow> real"
 where
   balance_def: "\<forall> N \<ge> 1. archimedes_balance N =
-    (\<Sum> n = 1..N. spectral_weight n) - (\<Sum> n = 1..N. spectral_weight n)"
+    (\<Sum> n = 1..N. spectral_weight n) - (\<Sum> n = 1..N. spectral_weight_neg n)"
 
 section \<open>Propriétés Formelles de la Droite Critique\<close>
 
