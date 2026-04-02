@@ -1,6 +1,18 @@
-## Commit b1791d984ad5ae6216b40ae2fa65b0fff2db0251 — 2026-04-01 20:28 UTC
-- Mise à jour sans note fournie.
 
-## Commit c9771873746277e698bec2a2e9dbefcf93c6b9c3 — 2026-04-01 21:27 UTC
-- Mise à jour sans note fournie.
+# CHANGELOG
+
+## Table des mises à jour
+- [2026‑04‑01 — Lancement officiel du dépôt](#2026-04-01--lancement-officiel-du-dépôt)
+
+---
+
+## 2026-04-01 — Lancement officiel du dépôt
+
+Le dépôt **L’univers est au carré** est maintenant entièrement fonctionnel et officiellement ouvert au public.  
+La structure du projet, les workflows de compilation (Isabelle + LaTeX), ainsi que les mécanismes d’attestation et de génération des artefacts PDF sont en place et opérationnels.
+
+Cette première version marque le début du développement public du projet, offrant aux utilisateurs un accès clair, reproductible et transparent à l’ensemble des documents scientifiques, sources formelles et outils associés.
+
+---
+>>>>>>> Stashed changes
 
