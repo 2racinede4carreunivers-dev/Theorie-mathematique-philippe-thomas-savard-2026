@@ -12,12 +12,13 @@ Ce système génère automatiquement des questions et réponses basées sur le c
 votre-depot/
 ├── .github/
 │   └── workflows/
-│       └── qa-generation.yml    # Workflow GitHub Actions
+│       └── build.yml            # Workflow unifié (Build + Q&R)
 ├── scripts/
 │   ├── qa_config.py             # Configuration du système
 │   ├── qa_database.py           # Gestion de la banque SQLite
 │   ├── qa_generator.py          # Générateur principal
 │   ├── qa_validator.py          # Outil de validation manuelle
+│   ├── qa_wolfram.py            # Intégration Wolfram (optionnel)
 │   └── requirements.txt         # Dépendances Python
 ├── qa_bank/
 │   └── qa_bank.db               # Base de données SQLite
@@ -38,12 +39,10 @@ Copiez tous les fichiers dans votre dépôt en respectant la structure ci-dessus
 2. Créez un nouveau secret nommé `EMERGENT_LLM_KEY`
 3. Collez votre clé Emergent: `sk-emergent-c20D27d2bDa5755870`
 
-### 3. Adapter le workflow
+### 3. Le workflow est déjà intégré
 
-Dans `.github/workflows/qa-generation.yml`, modifiez la ligne:
-```yaml
-workflows: ["Build"]  # Remplacez par le nom exact de votre workflow de build
-```
+Le fichier `build.yml` contient maintenant votre workflow existant PLUS la génération Q&R.
+Il suffit de remplacer votre `build.yml` actuel par celui fourni.
 
 ---
 
