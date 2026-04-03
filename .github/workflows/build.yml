@@ -117,7 +117,7 @@ jobs:
           src/pdf/*.pdf
 
   ###########################################################################
-  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL (VÉRIFICATION MATHÉMATIQUE)
+  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
   ###########################################################################
 
   hol_verification:
@@ -135,10 +135,22 @@ jobs:
         mv Isabelle2024 isabelle
         echo "$PWD/isabelle/bin" >> $GITHUB_PATH
 
-    - name: Vérification complète du corpus HOL
+    - name: Vérification complète du corpus HOL + Rapport HTML
       run: |
         echo "Analyse logique complète du corpus HOL"
-        isabelle build -D src/hol -v
+        isabelle build -D src/hol -v -o browser_info
+
+    - name: Upload HOL report (HTML complet)
+      uses: actions/upload-artifact@v4
+      with:
+        name: hol-report
+        path: isabelle/browser_info/
+
+    - name: Upload HOL session log
+      uses: actions/upload-artifact@v4
+      with:
+        name: hol-session-log
+        path: ~/.isabelle/Isabelle2024/heaps/
 
   ###########################################################################
 
