@@ -1,8 +1,3 @@
-# =============================================================================
-# Workflow principal: Build Isabelle + LaTeX + Release + Génération Q&R
-# Théorie Mathématique Philippe Thomas Savard 2026
-# =============================================================================
-
 name: Build Isabelle + LaTeX + Release intelligente
 
 on:
@@ -35,9 +30,6 @@ permissions:
   attestations: write
 
 jobs:
-  # ===========================================================================
-  # JOB 1: BUILD PRINCIPAL (Isabelle + LaTeX)
-  # ===========================================================================
   build:
     runs-on: ubuntu-latest
 
@@ -50,24 +42,29 @@ jobs:
       - name: Install minimal TeX Live + pygments + français
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-recommended \
-            texlive-latex-extra texlive-fonts-recommended texlive-lang-french \
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-lang-french \
             python3-pygments
 
       - name: Install Isabelle 2024
         run: |
-          wget https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz
+          wget https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
           echo "$PWD/isabelle/bin" >> $GITHUB_PATH
 
       - name: Build Isabelle session Univers_Au_Carre
         run: |
+          echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
           isabelle build -v -d src/hol Univers_Au_Carre
 
-      # =========================================================================
+      ###########################################################################
       # 🟦 SECTION LATEX — VERSION ROBUSTE ET CORRIGÉE
-      # =========================================================================
+      ###########################################################################
 
       - name: Nettoyer les anciens PDF
         run: |
@@ -87,27 +84,29 @@ jobs:
         run: |
           find . -name "*.pdf" -exec cp {} src/pdf/ \;
 
+      ###########################################################################
+
       - name: Generate attestation report (SHA-256 des PDF)
         run: |
           cd src/pdf
-          if ls *.pdf 1> /dev/null 2>&1; then
+          if ls *.pdf >/dev/null 2>&1; then
             sha256sum *.pdf > ../../attestation_report.txt
           else
-            echo "Aucun PDF généré" > ../../attestation_report.txt
+            echo "Aucun PDF généré." > ../../attestation_report.txt
           fi
 
       - name: Generate build metadata
         run: |
           echo "Build provenance" > build_metadata.txt
-          echo "Commit: ${{ github.sha }}" >> build_metadata.txt
-          echo "Branch: ${{ github.ref_name }}" >> build_metadata.txt
-          echo "Date: $(date -u)" >> build_metadata.txt
+          echo "Commit SHA : $(git rev-parse HEAD)" >> build_metadata.txt
+          echo "Branche : $(git rev-parse --abbrev-ref HEAD)" >> build_metadata.txt
+          echo "Date : $(date -u)" >> build_metadata.txt
           echo "" >> build_metadata.txt
-          echo "PDF générés:" >> build_metadata.txt
-          ls -la src/pdf/*.pdf 2>/dev/null || echo "Aucun PDF"
+          echo "PDF générés :" >> build_metadata.txt
+          ls src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun PDF" >> build_metadata.txt
           echo "" >> build_metadata.txt
-          echo "SHA-256:" >> build_metadata.txt
-          cat attestation_report.txt 2>/dev/null || echo "N/A"
+          echo "SHA-256 des PDF :" >> build_metadata.txt
+          sha256sum src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun hash" >> build_metadata.txt
 
       - name: Upload PDF artifacts
         uses: actions/upload-artifact@v4
@@ -135,9 +134,10 @@ jobs:
             src/hol/*.thy
             src/pdf/*.pdf
 
-  # ===========================================================================
-  # JOB 2: VÉRIFICATION HOL COMPLÈTE
-  # ===========================================================================
+  ###########################################################################
+  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
+  ###########################################################################
+
   hol_verification:
     runs-on: ubuntu-latest
     needs: build
@@ -148,13 +148,14 @@ jobs:
 
       - name: Install Isabelle 2024
         run: |
-          wget https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz
+          wget https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
           echo "$PWD/isabelle/bin" >> $GITHUB_PATH
 
       - name: Vérification complète du corpus HOL + Rapport HTML
         run: |
+          echo "Analyse logique complète du corpus HOL"
           isabelle build -D src/hol -v -o browser_info
 
       - name: Upload HOL report (HTML complet)
@@ -169,13 +170,13 @@ jobs:
           name: hol-session-log
           path: ~/.isabelle/Isabelle2024/heaps/
 
-  # ===========================================================================
-  # 🟩 JOB 3: GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
-  # ===========================================================================
+  ###########################################################################
+  # 🟪 NOUVEAU JOB : GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
+  ###########################################################################
+
   generate_qa:
     runs-on: ubuntu-latest
     needs: build
-    # S'exécute si le build réussit ET si la génération Q&R est activée
     if: ${{ github.event.inputs.generate_qa != 'false' }}
 
     steps:
@@ -265,9 +266,8 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
-  # ===========================================================================
-  # JOB 4: PRÉPARATION RELEASE
-  # ===========================================================================
+  ###########################################################################
+
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -290,9 +290,6 @@ jobs:
           name: build-metadata
           path: .
 
-  # ===========================================================================
-  # JOB 5: MISE À JOUR AUTOMATIQUE DU CHANGELOG
-  # ===========================================================================
   update_changelog:
     runs-on: ubuntu-latest
     needs: build
@@ -306,9 +303,10 @@ jobs:
       - name: Lire la note si elle existe
         id: note
         run: |
-          if [ -f .git/.note ]; then
-            source .git/.note
+          NOTE_FILE=".git/.note"
+          if [ -f "$NOTE_FILE" ]; then
             echo "note_exists=true" >> $GITHUB_OUTPUT
+            source "$NOTE_FILE"
             echo "q1=$q1" >> $GITHUB_OUTPUT
             echo "q2=$q2" >> $GITHUB_OUTPUT
             echo "q3=$q3" >> $GITHUB_OUTPUT
@@ -318,25 +316,24 @@ jobs:
 
       - name: Mettre à jour le CHANGELOG
         run: |
-          DATE=$(date -u +"%Y-%m-%d %H:%M UTC")
-          SHA="${{ github.sha }}"
-          
-          echo "" >> CHANGELOG.md
-          echo "## Commit ${SHA:0:7} — $DATE" >> CHANGELOG.md
-          
+          DATE="$(date -u +"%Y-%m-%d %H:%M UTC")"
+          SHA="$(git rev-parse HEAD)"
+
+          echo "## Commit $SHA — $DATE" >> CHANGELOG.md
+
           if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
-            echo "- **Changements:** ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
-            echo "- **Effets immédiats:** ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
-            echo "- **Prochaines étapes:** ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
+            echo "- **Changements** : ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
+            echo "- **Effet immédiat** : ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
+            echo "- **Prochaine étape** : ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
           else
             echo "- Mise à jour sans note fournie." >> CHANGELOG.md
           fi
-          
+
           echo "" >> CHANGELOG.md
 
       - name: Supprimer la note après utilisation
         run: |
-          if [ -f .git/.note ]; then
+          if [ -f ".git/.note" ]; then
             rm .git/.note
           fi
 
@@ -345,5 +342,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add CHANGELOG.md
-          git commit -m "Mise à jour automatique du CHANGELOG" || echo "Aucun changement à commit"
-          git push || echo "Rien à pousser"
+          git commit -m "Mise à jour automatique du CHANGELOG"
+          git push
