@@ -232,8 +232,11 @@ jobs:
           echo "🧠 Démarrage de la génération Q&R..."
           echo "   Commit: $GITHUB_SHA"
           echo "   Langue: $GENERATION_LANGUAGE"
-          cd scripts
-          python qa_generator.py
+          echo "   Répertoire: $(pwd)"
+          echo "   Fichiers .tex: $(find . -name '*.tex' | wc -l)"
+          echo "   Fichiers .thy: $(find . -name '*.thy' | wc -l)"
+          export PYTHONPATH="${PYTHONPATH}:$(pwd)/scripts"
+          python scripts/qa_generator.py
 
       - name: Résumé de la génération Q&R
         run: |
