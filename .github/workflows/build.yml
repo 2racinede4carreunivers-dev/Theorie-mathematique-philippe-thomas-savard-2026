@@ -201,7 +201,7 @@ jobs:
 
       - name: Vérification de la clé API
         run: |
-          if [ -z "${{ secrets.EMERGENT_LLM_KEY }}" ]; then
+          if [ -z "${{ secrets._CLE }}" ]; then
             echo "⚠️  EMERGENT_LLM_KEY non configuré - Génération Q&R désactivée"
             echo "qa_enabled=false" >> $GITHUB_OUTPUT
           else
@@ -225,7 +225,7 @@ jobs:
       - name: Génération des Questions/Réponses
         if: steps.check_key.outputs.qa_enabled == 'true'
         env:
-          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY}}
+          EMERGENT_LLM_KEY: ${{ secrets._CLE}}
           GITHUB_SHA: ${{ github.sha }}
           GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
         run: |
