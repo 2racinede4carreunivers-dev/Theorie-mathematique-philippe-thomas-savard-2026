@@ -16,6 +16,10 @@ from datetime import datetime
 from typing import List, Dict, Tuple, Optional
 from pathlib import Path
 
+# Ajouter le dossier scripts au path pour les imports
+script_dir = Path(__file__).parent
+sys.path.insert(0, str(script_dir))
+
 # Configuration
 from qa_config import (
     LANGUAGES, QUESTION_RATIO, QUESTIONS_PER_RUN, MATH_CATEGORIES,
