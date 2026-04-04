@@ -205,16 +205,28 @@ class QAGenerator:
     def _get_system_prompt(self) -> str:
         """Retourne le prompt système pour la génération de Q&R."""
         if self.language == "fr":
-            return """Tu es un expert en mathématiques et en pédagogie, spécialisé dans la théorie "L'Univers est au Carré" de Philippe Thomas Savard.
+            return """Tu es un expert en mathématiques et en pédagogie, spécialisé dans la théorie complète "L'Univers est au Carré" de Philippe Thomas Savard (2026).
 
-Ta mission est de générer des questions et réponses de haute qualité basées sur le contenu mathématique fourni.
+CONTEXTE DE LA THÉORIE:
+La théorie "L'Univers est au Carré" est une œuvre mathématique complète qui comprend PLUSIEURS chapitres et sections:
+- Le postulat unique du "squaring" (postulat_carre, postulat_univers_carre) - UN des chapitres
+- Les fondements géométriques et algébriques
+- Les démonstrations formelles en Isabelle/HOL
+- Les applications et corollaires
+- Les implications philosophiques et ontologiques
+
+IMPORTANT: Tu dois générer des questions sur L'ENSEMBLE de la théorie, pas seulement sur le postulat unique. Couvre tous les chapitres, sections et concepts présents dans les documents fournis.
+
+Ta mission est de générer des questions et réponses de haute qualité basées sur TOUT le contenu mathématique fourni, en variant les sujets pour couvrir l'ensemble de l'œuvre.
 
 RÈGLES IMPORTANTES:
-1. Génère des questions variées couvrant différents aspects de la théorie
-2. Les réponses doivent être précises, complètes et pédagogiques
-3. Inclus des références aux formules et théorèmes quand pertinent
-4. Adapte le niveau de difficulté selon les instructions
-5. Pour les questions philosophiques, explore les implications profondes de la théorie
+1. Génère des questions variées couvrant TOUS les chapitres et aspects de la théorie
+2. Ne te limite PAS au postulat unique - explore TOUTE la documentation
+3. Les réponses doivent être précises, complètes et pédagogiques
+4. Inclus des références aux formules et théorèmes quand pertinent
+5. Adapte le niveau de difficulté selon les instructions
+6. Pour les questions philosophiques, explore les implications profondes de la théorie
+7. Mentionne explicitement de quel chapitre/section provient chaque question
 
 FORMAT DE SORTIE (JSON):
 {
@@ -268,26 +280,31 @@ OUTPUT FORMAT (JSON):
         # Prompt pour les questions mathématiques
         math_prompt = f"""Analyse le contenu mathématique suivant et génère exactement {num_math} questions mathématiques/techniques variées.
 
-CONTENU À ANALYSER:
+IMPORTANT: Les questions doivent couvrir L'ENSEMBLE de la théorie "L'Univers est au Carré", pas seulement le postulat unique. 
+Assure-toi de varier les sources et de poser des questions sur DIFFÉRENTS fichiers et chapitres.
+
+CONTENU À ANALYSER (provenant de plusieurs fichiers/chapitres):
 {content_summary}
 
 {context_prompt}
 
-CATÉGORIES À COUVRIR (répartis les questions):
-- Définitions et concepts fondamentaux
-- Démonstrations et preuves
+CATÉGORIES À COUVRIR (répartis les questions sur TOUS les chapitres):
+- Définitions et concepts fondamentaux (de différents chapitres)
+- Démonstrations et preuves formelles (Isabelle/HOL)
 - Théorèmes et leurs applications  
 - Formules et équations clés
-- Relations entre concepts
+- Relations entre concepts de différentes parties de la théorie
 - Applications pratiques
+
+CONSIGNE: Chaque question doit mentionner explicitement de quel fichier/chapitre elle provient dans "source_reference".
 
 Génère les questions en JSON selon le format spécifié."""
 
         # Prompt pour la question philosophique
-        philo_prompt = f"""Basé sur le même contenu mathématique, génère exactement {num_philo} question(s) philosophique(s)/ontologique(s) sur:
-- La signification profonde de la théorie pour la compréhension de l'univers
+        philo_prompt = f"""Basé sur l'ENSEMBLE de la théorie "L'Univers est au Carré" (pas seulement le postulat), génère exactement {num_philo} question(s) philosophique(s)/ontologique(s) sur:
+- La signification profonde de la théorie COMPLÈTE pour la compréhension de l'univers
 - L'impact sur notre vision du monde
-- Les implications épistémologiques
+- Les implications épistémologiques de l'ensemble de l'œuvre
 
 CONTENU:
 {content_summary[:2000]}
