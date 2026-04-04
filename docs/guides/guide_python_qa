@@ -1,0 +1,135 @@
+#  Guide d’utilisation — Gestion de la banque de Questions/Réponses (Python)
+
+Ce guide explique comment utiliser la banque de données SQLite (`qa_bank.db`) générée automatiquement par le workflow GitHub Actions, et comment valider les Questions/Réponses via le script Python.
+
+---
+
+#  1. Structure des fichiers
+
+Lorsque vous téléchargez l’artifact généré par GitHub Actions, vous obtenez un fichier ZIP contenant deux dossiers :
+
+artifact.zip
+├── qa_output/
+│   ├── generated_qa_xxx.json    ← Référence uniquement
+│   └── generated_qa_xxx.md      ← Référence uniquement
+└── qa_bank/
+└── qa_bank.db               ← FICHIER IMPORTANT
+
+Code
+
+Les fichiers `.json` et `.md` servent uniquement de **référence visuelle**.  
+Ils ne sont pas utilisés directement par le validateur.
+
+---
+
+#  2. Où placer les fichiers de l’artifact ?
+
+Dans votre dépôt local, la structure correcte est :
+
+votre-dépôt/
+├── qa_bank/
+│   └── qa_bank.db        ← REMPLACER par celui de l’artifact
+├── scripts/
+│   └── qa_validator.py   ← Ne rien ajouter ici
+└── ...
+
+Code
+
+ **Le fichier `qa_bank.db` doit être placé dans `qa_bank/` et nulle part ailleurs.**  
+ **Ne placez jamais les fichiers `.json` dans la base.**
+
+---
+
+#  3. Procédure complète
+
+## Étape 1 — Télécharger l’artifact
+Depuis GitHub → Actions → dernier workflow → *Download artifact*.
+
+## Étape 2 — Extraire le ZIP
+Vous obtenez :
+
+- `qa_output/` (référence)
+- `qa_bank/qa_bank.db` (fichier essentiel)
+
+## Étape 3 — Copier la base
+Copiez **uniquement** :
+
+artifact/qa_bank/qa_bank.db
+
+Code
+
+vers :
+
+votre-dépôt/qa_bank/qa_bank.db
+
+Code
+
+Cela remplace l’ancienne base par la nouvelle version générée automatiquement.
+
+## Étape 4 — Lancer le validateur Python
+
+Dans un terminal à la racine du dépôt :
+
+```bash
+python scripts/qa_validator.py --interactive
+Le validateur va :
+
+charger la base qa_bank.db
+
+afficher les Q&R en attente (qa_pending)
+
+vous permettre de valider, corriger ou rejeter
+
+déplacer les Q&R validées dans qa_validated
+
+Étape 5 — Valider les Q&R
+Le validateur propose :
+
+v → valider
+
+e → éditer
+
+s → sauter
+
+d → supprimer
+
+q → quitter
+
+Les modifications sont enregistrées automatiquement dans qa_bank.db.
+
+Étape 6 — Committer la base mise à jour
+bash
+git add qa_bank/qa_bank.db
+git commit -m "Mise à jour de la banque Q&R validée"
+git push
+ 4. Notes importantes
+ Le fichier qa_bank.db est la seule source de vérité
+Le validateur lit uniquement :
+
+qa_pending → Q&R en attente
+
+qa_validated → Q&R validées
+
+ Les fichiers .json et .md ne sont pas importés automatiquement
+Ils servent uniquement de référence.
+
+ Le workflow GitHub Actions régénère la base
+Chaque build produit une nouvelle version de qa_bank.db.
+
+ Vous devez remplacer la base locale après chaque build
+Sinon, le validateur ne verra pas les nouvelles Q&R.
+
+ 5. Résumé rapide
+Télécharger l’artifact
+
+Extraire
+
+Copier qa_bank.db → qa_bank/
+
+Lancer python scripts/qa_validator.py --interactive
+
+Valider les Q&R
+
+Committer la base
+
+ Fin du guide
