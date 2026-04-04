@@ -30,9 +30,6 @@ permissions:
   attestations: write
 
 jobs:
-  ###########################################################################
-  # 🟦 JOB PRINCIPAL : COMPILATION ISABELLE + LATEX + ATTESTATION
-  ###########################################################################
   build:
     runs-on: ubuntu-latest
 
@@ -65,6 +62,10 @@ jobs:
           echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
           isabelle build -v -d src/hol Univers_Au_Carre
 
+      ###########################################################################
+      # 🟦 SECTION LATEX — VERSION ROBUSTE ET CORRIGÉE
+      ###########################################################################
+
       - name: Nettoyer les anciens PDF
         run: |
           mkdir -p src/pdf
@@ -82,6 +83,8 @@ jobs:
       - name: Copier tous les PDF générés
         run: |
           find . -name "*.pdf" -exec cp {} src/pdf/ \;
+
+      ###########################################################################
 
       - name: Generate attestation report (SHA-256 des PDF)
         run: |
@@ -132,8 +135,9 @@ jobs:
             src/pdf/*.pdf
 
   ###########################################################################
-  # 🟩 JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
+  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
   ###########################################################################
+
   hol_verification:
     runs-on: ubuntu-latest
     needs: build
@@ -167,17 +171,13 @@ jobs:
           path: ~/.isabelle/Isabelle2024/heaps/
 
   ###########################################################################
-  # 🟪 JOB : GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
+  # 🟪 NOUVEAU JOB : GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
   ###########################################################################
+
   generate_qa:
     runs-on: ubuntu-latest
     needs: build
     if: ${{ github.event.inputs.generate_qa != 'false' }}
-
-    env:
-      EMERGENT_API_KEY: ${{ secrets._CLE }}
-      GITHUB_SHA: ${{ github.sha }}
-      GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
 
     steps:
       - name: Checkout repository
@@ -199,6 +199,17 @@ jobs:
             pip install -r scripts/requirements.txt
           fi
 
+      - name: Vérification de la clé API
+        run: |
+          if [ -z "${{ sk-emergent-c20D27d2bDa5755870 }}" ]; then
+            echo "⚠️  EMERGENT_LLM_KEY non configuré - Génération Q&R désactivée"
+            echo "qa_enabled=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Clé API Emergent configurée"
+            echo "qa_enabled=true" >> $GITHUB_OUTPUT
+          fi
+        id: check_key
+
       - name: Création des répertoires Q&R
         run: |
           mkdir -p qa_bank
@@ -212,12 +223,17 @@ jobs:
         continue-on-error: true
 
       - name: Génération des Questions/Réponses
+        if: steps.check_key.outputs.qa_enabled == 'true'
+        env:
+          EMERGENT_LLM_KEY: ${{ sk-emergent-c20D27d2bDa5755870}}
+          GITHUB_SHA: ${{ github.sha }}
+          GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
         run: |
           echo "🧠 Démarrage de la génération Q&R..."
-          echo "Commit: $GITHUB_SHA"
-          echo "Langue: $GENERATION_LANGUAGE"
+          echo "   Commit: $GITHUB_SHA"
+          echo "   Langue: $GENERATION_LANGUAGE"
           cd scripts
-          python qa_generator.py --language "$GENERATION_LANGUAGE" --output ../qa_output --bank ../qa_bank
+          python qa_generator.py
 
       - name: Résumé de la génération Q&R
         run: |
@@ -225,22 +241,106 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          if ls qa_output/*.json >/dev/null 2>&1; then
-            TOTAL=$(cat qa_output/*.json | python3 -c "import sys,json; data=json.load(sys.stdin); print(data.get('total_questions', 0))")
+          
+          if [ -f qa_output/*.json ]; then
+            TOTAL=$(cat qa_output/*.json 2>/dev/null | python3 -c "import sys,json; data=json.load(sys.stdin); print(data.get('total_questions', 0))" 2>/dev/null || echo "0")
             echo "**Questions générées:** $TOTAL" >> $GITHUB_STEP_SUMMARY
           else
-            echo "**Questions générées:** En attente de configuration EMERGENT_API_KEY" >> $GITHUB_STEP_SUMMARY
+            echo "**Questions générées:** En attente de configuration EMERGENT_LLM_KEY" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
+          echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Examinez les Q&R dans le fichier Markdown" >> $GITHUB_STEP_SUMMARY
+          echo "3. Utilisez \`python qa_validator.py --interactive\` pour valider" >> $GITHUB_STEP_SUMMARY
+          echo "4. Committez la banque mise à jour" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Q&R générées
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-generated-${{ github.sha }}
+          path: |
+            qa_output/
+            qa_bank/qa_bank.db
+          retention-days: 30
+          if-no-files-found: warn
+
+  ###########################################################################
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download attestation report
+        uses: actions/download-artifact@v4
+        with:
+          name: attestation-report
+          path: .
+
+      - name: Download build metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: build-metadata
+          path: .
+
+  update_changelog:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Lire la note si elle existe
+        id: note
+        run: |
+          NOTE_FILE=".git/.note"
+          if [ -f "$NOTE_FILE" ]; then
+            echo "note_exists=true" >> $GITHUB_OUTPUT
+            source "$NOTE_FILE"
+            echo "q1=$q1" >> $GITHUB_OUTPUT
+            echo "q2=$q2" >> $GITHUB_OUTPUT
+            echo "q3=$q3" >> $GITHUB_OUTPUT
+          else
+            echo "note_exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload Q&A generated
-        uses: actions/upload-artifact@v4
-        with:
-          name: qa-generated
-          path: qa_output/*.json
+      - name: Mettre à jour le CHANGELOG
+        run: |
+          DATE="$(date -u +"%Y-%m-%d %H:%M UTC")"
+          SHA="$(git rev-parse HEAD)"
 
-      - name: Upload Q&A bank
-        uses: actions/upload-artifact@v4
-        with:
-          name: qa-bank
-          path: qa_bank/
+          echo "## Commit $SHA — $DATE" >> CHANGELOG.md
+
+          if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
+            echo "- **Changements** : ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
+            echo "- **Effet immédiat** : ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
+            echo "- **Prochaine étape** : ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
+          else
+            echo "- Mise à jour sans note fournie." >> CHANGELOG.md
+          fi
+
+          echo "" >> CHANGELOG.md
+
+      - name: Supprimer la note après utilisation
+        run: |
+          if [ -f ".git/.note" ]; then
+            rm .git/.note
+          fi
+
+      - name: Commit et push du CHANGELOG mis à jour
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add CHANGELOG.md
+          git commit -m "Mise à jour automatique du CHANGELOG"
+          git push
