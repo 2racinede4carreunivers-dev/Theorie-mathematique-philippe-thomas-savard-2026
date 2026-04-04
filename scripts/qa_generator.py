@@ -313,22 +313,33 @@ Génère en JSON selon le format spécifié."""
 
         questions = []
         
-        # Générer les questions mathématiques
-        try:
-            math_response = await self.chat.send_message(UserMessage(text=math_prompt))
-            math_questions = self._parse_response(math_response)
-            questions.extend(math_questions)
-        except Exception as e:
-            print(f"Erreur génération math: {e}")
+        # Générer les questions mathématiques (avec retry si pas assez)
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                print(f"   Génération des questions mathématiques (tentative {attempt + 1})...")
+                math_response = await self.chat.send_message(UserMessage(text=math_prompt))
+                math_questions = self._parse_response(math_response)
+                questions.extend(math_questions)
+                
+                if len(math_questions) >= num_math:
+                    break
+                elif attempt < max_retries - 1:
+                    print(f"   ⚠️ Seulement {len(math_questions)} questions générées, nouvelle tentative...")
+                    
+            except Exception as e:
+                print(f"Erreur génération math: {e}")
         
         # Générer la question philosophique
         try:
+            print(f"   Génération de la question philosophique...")
             philo_response = await self.chat.send_message(UserMessage(text=philo_prompt))
             philo_questions = self._parse_response(philo_response)
             questions.extend(philo_questions)
         except Exception as e:
             print(f"Erreur génération philo: {e}")
         
+        print(f"   ✅ Total: {len(questions)} questions générées")
         return questions
     
     def _prepare_content_summary(self, documents: List[Dict]) -> str:
@@ -374,15 +385,32 @@ Contenu:
             # Nettoyer la réponse
             response = response.strip()
             
-            # Chercher le JSON dans la réponse
+            # Supprimer les balises markdown de code si présentes
             import re
-            json_match = re.search(r'\{[\s\S]*\}', response)
+            response = re.sub(r'```json\s*', '', response)
+            response = re.sub(r'```\s*', '', response)
+            
+            # Chercher le JSON dans la réponse (objet avec "questions")
+            json_match = re.search(r'\{[\s\S]*"questions"[\s\S]*\}', response)
             if json_match:
-                data = json.loads(json_match.group())
-                return data.get("questions", [])
+                json_str = json_match.group()
+                # S'assurer que le JSON est complet
+                data = json.loads(json_str)
+                questions = data.get("questions", [])
+                print(f"   → {len(questions)} questions parsées")
+                return questions
+            
+            # Essayer de parser directement comme tableau
+            array_match = re.search(r'\[[\s\S]*\]', response)
+            if array_match:
+                questions = json.loads(array_match.group())
+                if isinstance(questions, list):
+                    print(f"   → {len(questions)} questions parsées (tableau)")
+                    return questions
+                    
         except json.JSONDecodeError as e:
             print(f"Erreur parsing JSON: {e}")
-            print(f"Réponse brute: {response[:500]}")
+            print(f"Réponse brute (500 premiers caractères): {response[:500]}")
         
         return []
 
