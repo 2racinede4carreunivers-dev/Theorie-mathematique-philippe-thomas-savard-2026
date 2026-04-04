@@ -28,10 +28,56 @@ class QADatabase:
         self.db_path = db_path
         self._ensure_directory()
         self._init_database()
+        self._migrate_database()
     
     def _ensure_directory(self):
         """Crée le répertoire de la base de données si nécessaire."""
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        if os.path.dirname(self.db_path):
+            os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+    
+    def _migrate_database(self):
+        """Migration pour corriger les tables existantes."""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        try:
+            # Vérifier si learned_patterns a besoin de migration
+            cursor.execute("PRAGMA table_info(learned_patterns)")
+            columns = cursor.fetchall()
+            
+            # Recréer la table avec UNIQUE si elle existe mais sans contrainte
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='learned_patterns'")
+            if cursor.fetchone():
+                # Créer une nouvelle table avec la contrainte UNIQUE
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS learned_patterns_new (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        pattern_type TEXT NOT NULL,
+                        pattern_value TEXT NOT NULL UNIQUE,
+                        frequency INTEGER DEFAULT 1,
+                        success_rate REAL DEFAULT 0.0,
+                        last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        metadata TEXT
+                    )
+                ''')
+                
+                # Copier les données existantes (en ignorant les doublons)
+                cursor.execute('''
+                    INSERT OR IGNORE INTO learned_patterns_new 
+                    (pattern_type, pattern_value, frequency, success_rate, last_used, metadata)
+                    SELECT pattern_type, pattern_value, frequency, success_rate, last_used, metadata
+                    FROM learned_patterns
+                ''')
+                
+                # Supprimer l'ancienne table et renommer la nouvelle
+                cursor.execute('DROP TABLE learned_patterns')
+                cursor.execute('ALTER TABLE learned_patterns_new RENAME TO learned_patterns')
+                
+            conn.commit()
+        except Exception as e:
+            print(f"Migration: {e}")
+        finally:
+            conn.close()
     
     def _init_database(self):
         """Initialise la structure de la base de données."""
@@ -85,7 +131,7 @@ class QADatabase:
             CREATE TABLE IF NOT EXISTS learned_patterns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 pattern_type TEXT NOT NULL,
-                pattern_value TEXT NOT NULL,
+                pattern_value TEXT NOT NULL UNIQUE,
                 frequency INTEGER DEFAULT 1,
                 success_rate REAL DEFAULT 0.0,
                 last_used TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
