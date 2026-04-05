@@ -1,4 +1,32 @@
-t
+### Aperçu de la Release
+
+Cette mise à jour s’inscrit dans le dépôt « Théorie mathématique de Philippe Thomas Savard 2026 », 
+répertoire complet dédié à la théorie « L’univers est au carré ». La documentation principale 
+se structure en quatre chapitres : (1) La géométrie du spectre des nombres premiers, 
+(2) La mécanique harmonique du chaos discret, (3) L’espace de Philippôt, 
+(4) Le postulat de l’univers est au carré. Ces chapitres sont rendus accessibles à travers 
+un ensemble de 19 fichiers .tex, .thy et .pdf, compilés automatiquement par le workflow 
+(TeX Live pour LaTeX, Isabelle 2024 pour le corpus HOL).
+
+Chaque build génère des PDF, un corpus Isabelle/HOL, ainsi qu’un rapport de certification SLSA 
+garantissant la traçabilité et l’intégrité des artefacts. Une base de données évolutive est en cours 
+de construction, destinée à accueillir de futures fonctionnalités autour des corpus générés. 
+Le corpus HOL vérifie la cohérence logique des développements mathématiques et soutient formellement 
+les résultats présentés dans les documents.
+
+Une banque de Questions/Réponses intelligente et évolutive accompagne le dépôt, permettant aux 
+contributeurs d’influencer progressivement le contenu et la mise à jour des 19 fichiers principaux 
+et des suivants. Le dépôt peut être cloné (sous licence Apache 2.0) via :
+
+git clone https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026.git
+
+Un guide pour les contributeurs, des méthodologies de reproduction des résultats en Markdown, 
+le fichier README et le fichier SECURITY sont disponibles dans l’arborescence du dépôt et doivent 
+être consultés pour toute analyse, contribution ou considération de sécurité. Les mises à jour 
+successives sont consignées dans le fichier CHANGELOG.md et reflétées dans les releases.
+
+
+
 # CHANGELOG
 
 ## Table des mises à jour
@@ -14,7 +42,7 @@ La structure du projet, les workflows de compilation (Isabelle + LaTeX), ainsi q
 Cette première version marque le début du développement public du projet, offrant aux utilisateurs un accès clair, reproductible et transparent à l’ensemble des documents scientifiques, sources formelles et outils associés.
 
 ---
->>>>>>> Stashed changes
+
 
 ## Commit 9bf0be5a5ba5de2aea4cfa82bb1d10ffb3b60611 — 2026-04-02 22:05 UTC
 - Mise à jour sans note fournie.
