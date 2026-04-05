@@ -310,24 +310,26 @@ jobs:
           if [ -f "$NOTE_FILE" ]; then
             echo "note_exists=true" >> $GITHUB_OUTPUT
             source "$NOTE_FILE"
-            echo "q1=$q1" >> $GITHUB_OUTPUT
-            echo "q2=$q2" >> $GITHUB_OUTPUT
-            echo "q3=$q3" >> $GITHUB_OUTPUT
+            echo "title=$title" >> $GITHUB_OUTPUT
+            echo "summary=$summary" >> $GITHUB_OUTPUT
+            echo "date=$date" >> $GITHUB_OUTPUT
+            echo "tag=$tag" >> $GITHUB_OUTPUT
+            echo "previous_tag=$previous_tag" >> $GITHUB_OUTPUT
           else
             echo "note_exists=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Mettre à jour le CHANGELOG
         run: |
-          DATE="$(date -u +"%Y-%m-%d %H:%M UTC")"
-          SHA="$(git rev-parse HEAD)"
-
-          echo "## Commit $SHA — $DATE" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          echo "## Release ${{ steps.note.outputs.tag }}" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
 
           if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
-            echo "- **Changements** : ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
-            echo "- **Effet immédiat** : ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
-            echo "- **Prochaine étape** : ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
+            echo "- **Titre** : ${{ steps.note.outputs.title }}" >> CHANGELOG.md
+            echo "- **Résumé** : ${{ steps.note.outputs.summary }}" >> CHANGELOG.md
+            echo "- **Date** : ${{ steps.note.outputs.date }}" >> CHANGELOG.md
+            echo "- **Tag précédent** : ${{ steps.note.outputs.previous_tag }}" >> CHANGELOG.md
           else
             echo "- Mise à jour sans note fournie." >> CHANGELOG.md
           fi
