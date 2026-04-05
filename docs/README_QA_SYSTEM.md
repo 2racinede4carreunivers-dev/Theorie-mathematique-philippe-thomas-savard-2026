@@ -1,12 +1,12 @@
 # Système de Génération de Questions/Réponses Intelligent
-
+ 
 ## Théorie Mathématique Philippe Thomas Savard 2026
 
-Ce système génère automatiquement des questions et réponses basées sur le contenu de votre documentation mathématique. Il apprend de vos validations pour améliorer la qualité des futures générations.
+Ce système génère automatiquement des questions et réponses basées sur le contenu de la documentation mathématique contenue dans le dépôt du GitHub. Il apprend des validations et documents explicatifs pour améliorer la qualité des chapitres de la théorie déjà existants et de ceux qui sont a venirs. Facilitant les contributeurs qui souhaitent contribuer a l'information du dépôt et de sa théorie qui a l'aide du système peuvent simplement contribuer en mettant en route le build du workflow dans Actions du GitHub et ainsi contribué. Ils ont un impacte de cette manière sur le contenu de la banque de questions et de réponses et par conséquent sur la théorie en ajoutant celles-ci a la banque évolutive. Bienvenu aux contributeurs !
 
 ---
 
-## 📁 Structure des fichiers
+##  Structure des fichiers
 
 ```
 votre-depot/
@@ -27,7 +27,7 @@ votre-depot/
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### 1. Ajouter les fichiers à votre dépôt
 
@@ -37,7 +37,7 @@ Copiez tous les fichiers dans votre dépôt en respectant la structure ci-dessus
 
 1. Allez dans **Settings** → **Secrets and variables** → **Actions**
 2. Créez un nouveau secret nommé `EMERGENT_LLM_KEY`
-3. Collez votre clé Emergent: `sk-emergent-c20D27d2bDa5755870`
+3. Collez votre clé Emergent: '...'
 
 ### 3. Le workflow est déjà intégré
 
@@ -46,7 +46,7 @@ Il suffit de remplacer votre `build.yml` actuel par celui fourni.
 
 ---
 
-## 🔄 Flux de travail
+##  Flux de travail
 
 ### Génération automatique
 
@@ -85,16 +85,16 @@ python scripts/qa_validator.py --export
 
 ### Amélioration continue
 
-Plus vous validez de Q&R, plus le système apprend:
-- Les patterns de questions qui fonctionnent bien
-- Les concepts clés de votre théorie
-- Le style de réponses que vous préférez
+Plus l'utilisateur valide de Q&R, plus le système apprend:
+- Les patterns de questions qui fonctionnent bien.
+- Les concepts clés de la théorie.
+- Le style de réponses recherché.
 
 Ces informations sont utilisées pour améliorer les futures générations.
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Modifier le ratio de questions (`scripts/qa_config.py`)
 
@@ -129,7 +129,7 @@ MATH_CATEGORIES = [
 
 ---
 
-## 📊 Base de données
+##  Base de données
 
 La banque SQLite (`qa_bank/qa_bank.db`) contient:
 
@@ -143,7 +143,7 @@ La banque SQLite (`qa_bank/qa_bank.db`) contient:
 
 ---
 
-## 🔑 Clé API
+##  Clé API
 
 Le système utilise la **clé Emergent** qui donne accès à OpenAI GPT-4o.
 
@@ -155,7 +155,7 @@ Pour vérifier votre solde ou recharger:
 
 ---
 
-## 📝 Exemple de Q&R générée
+##  Exemple de Q&R générée
 
 ### Question (Mathématique)
 > Expliquez le théorème principal de la théorie "L'Univers est au Carré" et démontrez comment il relie les concepts géométriques aux structures algébriques.
@@ -167,7 +167,7 @@ Pour vérifier votre solde ou recharger:
 
 ---
 
-## 🆘 Dépannage
+##  Dépannage
 
 ### Le workflow ne se déclenche pas
 - Vérifiez que le nom du workflow dans `workflow_run.workflows` correspond exactement
@@ -184,14 +184,14 @@ ERREUR: Aucune clé API trouvée
 
 ---
 
-## 📜 Licence
+##  Licence
 
 Ce système fait partie de la documentation de la Théorie Mathématique Philippe Thomas Savard 2026.
 Licence: Apache-2.0 (comme le dépôt principal)
 
 ---
 
-## 🙏 Crédits
+##  Crédits
 
 - **Auteur de la théorie**: Philippe Thomas Savard
 - **Système Q&R**: Généré avec l'aide d'Emergent AI
