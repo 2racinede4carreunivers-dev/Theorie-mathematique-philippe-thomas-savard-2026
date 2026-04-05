@@ -58,3 +58,8 @@ Cette première version marque le début du développement public du projet, off
 ## Commit e85a22b11d80d7a487c386f162a25635dbe873bd — 2026-04-05 13:19 UTC
 - Mise à jour sans note fournie.
 
+
+## Release 
+
+- Mise à jour sans note fournie.
+
