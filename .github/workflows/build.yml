@@ -215,26 +215,6 @@ jobs:
           mkdir -p qa_bank
           mkdir -p qa_output
 
-      - name: Vérification de la banque existante
-        run: |
-          if [ -f qa_bank/qa_bank.db ]; then
-            echo "✅ Banque existante trouvée ($(du -h qa_bank/qa_bank.db | cut -f1))"
-            python3 -c "
-import sqlite3
-conn = sqlite3.connect('qa_bank/qa_bank.db')
-cursor = conn.cursor()
-cursor.execute('SELECT COUNT(*) FROM qa_validated')
-validated = cursor.fetchone()[0]
-cursor.execute('SELECT COUNT(*) FROM qa_pending')
-pending = cursor.fetchone()[0]
-print(f'   - Q&R validées: {validated}')
-print(f'   - Q&R en attente: {pending}')
-conn.close()
-"
-          else
-            echo "ℹ️ Aucune banque existante, création d'une nouvelle"
-          fi
-
       - name: Télécharger les PDF compilés
         uses: actions/download-artifact@v4
         with:
