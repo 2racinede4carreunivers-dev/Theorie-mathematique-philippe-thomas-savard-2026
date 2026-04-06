@@ -1,21 +1,16 @@
-# Workflow automatique quotidien - Génération Q&R
-# Théorie Mathématique Philippe Thomas Savard 2026
+# Workflow automatique quotidien - Generation Q&R
+# Theorie Mathematique Philippe Thomas Savard 2026
 #
-# Fréquence: 3 fois par jour (6h, 12h, 18h UTC)
-# Tâche: Génère 1 question/réponse à chaque exécution
+# Frequence: 3 fois par jour (6h, 12h, 18h UTC)
+# Tache: Genere 1 question/reponse a chaque execution
 
-name: Auto Q&R Quotidien (1 question x3/jour)
+name: Auto QR Quotidien
 
 on:
   schedule:
-    # 6h00 UTC (1h00 Québec en hiver, 2h00 en été)
     - cron: '0 6 * * *'
-    # 12h00 UTC (7h00 Québec en hiver, 8h00 en été)
     - cron: '0 12 * * *'
-    # 18h00 UTC (13h00 Québec en hiver, 14h00 en été)
     - cron: '0 18 * * *'
-  
-  # Permet aussi le déclenchement manuel
   workflow_dispatch:
 
 permissions:
@@ -30,205 +25,47 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configuration Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Installation des dépendances
+      - name: Installation des dependances
         run: |
           python -m pip install --upgrade pip
           pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
 
-      - name: Vérification de la banque existante
+      - name: Verification de la banque existante
         run: |
+          mkdir -p qa_bank
           if [ -f qa_bank/qa_bank.db ]; then
-            echo "✅ Banque existante trouvée"
-            python3 -c "
-import sqlite3
-conn = sqlite3.connect('qa_bank/qa_bank.db')
-cursor = conn.cursor()
-cursor.execute('SELECT COUNT(*) FROM qa_validated')
-validated = cursor.fetchone()[0]
-print(f'   - Q&R validées: {validated}')
-conn.close()
-"
+            echo "Banque existante trouvee"
           else
-            echo "ℹ️ Création d'une nouvelle banque"
-            mkdir -p qa_bank
+            echo "Nouvelle banque sera creee"
           fi
 
-      - name: Génération automatique de 1 Q&R
+      - name: Generation automatique de 1 QR
         env:
           EMERGENT_LLM_KEY: ${{ secrets._CLE }}
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          python3 << 'EOF'
-import os
-import sys
-import json
-import asyncio
-from datetime import datetime
-from pathlib import Path
+          python3 scripts/auto_generate_qa.py
 
-# Ajouter scripts au path
-sys.path.insert(0, 'scripts')
-
-from qa_database import QADatabase
-from qa_config import DATABASE_CONFIG
-
-# Import Emergent
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-async def generate_single_qa():
-    api_key = os.environ.get("EMERGENT_LLM_KEY")
-    if not api_key:
-        print("❌ Clé API non trouvée")
-        return False
-    
-    commit_sha = os.environ.get("GITHUB_SHA", "auto")[:8]
-    timestamp = datetime.now().strftime('%Y%m%d-%H%M')
-    run_id = f"auto-{commit_sha}-{timestamp}"
-    
-    print(f"🤖 Génération automatique de 1 Q&R - {run_id}")
-    
-    # Lire le contenu des fichiers .tex et .thy
-    content_parts = []
-    for ext in ['.tex', '.thy']:
-        for f in Path('.').rglob(f'*{ext}'):
-            if '.git' not in str(f):
-                try:
-                    text = f.read_text(encoding='utf-8', errors='ignore')[:3000]
-                    content_parts.append(f"=== {f.name} ===\n{text}\n")
-                except:
-                    pass
-    
-    content = '\n'.join(content_parts)[:10000]
-    
-    if not content:
-        print("❌ Aucun contenu trouvé")
-        return False
-    
-    # Initialiser la banque
-    db = QADatabase(DATABASE_CONFIG["db_path"])
-    
-    # Obtenir le contexte des Q&R validées
-    context = db.get_context_for_generation()
-    validated_count = len(context.get('validated_examples', []))
-    print(f"   - Q&R validées existantes: {validated_count}")
-    
-    context_prompt = ""
-    if validated_count > 0:
-        context_prompt = "\nExemples de Q&R validées (inspire-toi du style mais pose une question DIFFÉRENTE):\n"
-        for ex in context['validated_examples'][:3]:
-            context_prompt += f"Q: {ex['question'][:80]}...\n"
-    
-    # Déterminer le type de question basé sur l'heure
-    hour = datetime.now().hour
-    if hour < 10:
-        question_type = "mathématique sur les DÉFINITIONS ou AXIOMES"
-        category = "mathematique"
-        subcategory = "definition"
-    elif hour < 16:
-        question_type = "mathématique sur les THÉORÈMES ou DÉMONSTRATIONS"
-        category = "mathematique"
-        subcategory = "theoreme"
-    else:
-        question_type = "philosophique ou ontologique sur la SIGNIFICATION de la théorie"
-        category = "philosophique"
-        subcategory = "ontologie"
-    
-    print(f"   - Type de question: {question_type}")
-    
-    # Générer 1 Q&R
-    chat = LlmChat(
-        api_key=api_key,
-        session_id=run_id,
-        system_message=f"""Tu es un expert en mathématiques spécialisé dans la théorie "L'Univers est au Carré" de Philippe Thomas Savard.
-Génère UNE SEULE question {question_type} et sa réponse détaillée basée sur le contenu fourni.
-La question doit être ORIGINALE et DIFFÉRENTE des exemples fournis.
-Réponds UNIQUEMENT en JSON valide avec ce format:
-{{"question": "...", "answer": "...", "category": "{category}", "subcategory": "{subcategory}", "difficulty": "intermediaire"}}"""
-    ).with_model("openai", "gpt-4o")
-    
-    prompt = f"""Analyse ce contenu mathématique et génère UNE question {question_type} originale avec sa réponse détaillée.
-{context_prompt}
-
-CONTENU DE LA THÉORIE:
-{content}
-
-IMPORTANT: La question doit être NOUVELLE et ne pas répéter les exemples ci-dessus.
-Réponds en JSON uniquement."""
-
-    try:
-        response = await chat.send_message(UserMessage(text=prompt))
-        
-        # Parser la réponse
-        import re
-        response = re.sub(r'```json\s*', '', response)
-        response = re.sub(r'```\s*', '', response)
-        
-        json_match = re.search(r'\{[\s\S]*\}', response)
-        if json_match:
-            qa = json.loads(json_match.group())
-            
-            # Ajouter à la banque ET auto-valider
-            qa_id = db.add_pending_qa(
-                question=qa.get("question", ""),
-                answer=qa.get("answer", ""),
-                category=qa.get("category", category),
-                subcategory=qa.get("subcategory", subcategory),
-                difficulty=qa.get("difficulty", "intermediaire"),
-                language="fr",
-                source_commit=commit_sha,
-                run_id=run_id
-            )
-            
-            if qa_id:
-                # Auto-validation
-                db.validate_qa(qa_id, quality_score=0.8)
-                print(f"✅ Q&R générée et validée (ID: {qa_id})")
-                print(f"   Q: {qa.get('question', '')[:100]}...")
-                return True
-            else:
-                print("⚠️ Q&R similaire déjà existante, ignorée")
-                return True
-                
-    except Exception as e:
-        print(f"❌ Erreur: {e}")
-        import traceback
-        traceback.print_exc()
-        return False
-    
-    return False
-
-# Exécuter
-success = asyncio.run(generate_single_qa())
-sys.exit(0 if success else 1)
-EOF
-
-      - name: Commit et push de la banque mise à jour
+      - name: Commit et push de la banque mise a jour
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # S'assurer d'avoir les derniers changements
-          git pull --rebase || git pull
-          
+          git pull --rebase || git pull || true
           if [ -f qa_bank/qa_bank.db ]; then
             git add qa_bank/qa_bank.db
             HOUR=$(date -u +%H)
-            git diff --staged --quiet || git commit -m "🤖 Auto: +1 Q&R $(date +%Y-%m-%d) ${HOUR}h UTC"
-            git push || echo "Push échoué, réessai..." && git pull --rebase && git push
+            git diff --staged --quiet || git commit -m "Auto: +1 QR $(date +%Y-%m-%d) ${HOUR}h UTC"
+            git push || (git pull --rebase && git push) || true
           fi
 
-      - name: Résumé
+      - name: Resume
         run: |
-          echo "## 🤖 Génération Q&R Automatique" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Generation QR Automatique" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
-          echo "**Heure UTC:** $(date -u +%H:%M)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ 1 question/réponse générée et ajoutée à la banque" >> $GITHUB_STEP_SUMMARY
+          echo "1 question/reponse generee et ajoutee a la banque" >> $GITHUB_STEP_SUMMARY
