@@ -1,3 +1,133 @@
+# Théorie Mathématique Philippe Thomas Savard — 2026
+*Formalisation, démonstrations, documentation et génération IA.*
+
+Bienvenue sur le site officiel du projet **Théorie Mathématique Philippe Thomas Savard — 2026**.  
+Ce dépôt rassemble l’ensemble des travaux mathématiques, logiques, computationnels et documentaires liés à la théorie, ainsi que les outils permettant leur compilation, leur vérification et leur diffusion.
+
+---
+
+##  Présentation du projet
+
+Ce projet vise à :
+
+- formaliser la théorie mathématique dans **Isabelle/HOL**  
+- produire automatiquement les documents scientifiques en **LaTeX**  
+- générer un système intelligent de **Questions/Réponses** basé sur IA  
+- fournir un pipeline complet, reproductible et attesté  
+- documenter chaque aspect de la théorie et de son architecture  
+
+Le dépôt est conçu pour être **transparent**, **traçable**, **scientifique**, et **pédagogique**.
+
+---
+
+##  Structure du dépôt
+
+###  1. Théories Isabelle/HOL
+Dossier : `src/hol/`
+
+Contient les fichiers `.thy` définissant :
+
+- les axiomes  
+- les structures mathématiques  
+- les méthodes de démonstration  
+- les théorèmes formalisés  
+
+La compilation est automatisée via GitHub Actions.
+
+---
+
+###  2. Documents LaTeX
+Dossier : `src/tex/`
+
+Contient les documents scientifiques principaux :
+
+- *Espace de Philippot*  
+- *Géométrie du spectre premier*  
+- *Philosophy geometry of prime number*  
+- *Postulat de l’univers carré*  
+- etc.
+
+Les PDF générés sont déposés dans `src/pdf/`.
+
+---
+
+###  3. Système IA de Questions/Réponses
+Dossiers : `scripts/`, `qa_output/`, `qa_bank/`
+
+Fonctionnalités :
+
+- extraction automatique des contenus  
+- génération IA des Q&R  
+- base de données SQLite  
+- validation interactive  
+- configuration modulaire  
+
+Le script principal est : `scripts/qa_generator.py`.
+
+---
+
+###  4. Documentation
+Dossier : `docs/`
+
+Inclut :
+
+- guides de compilation  
+- architecture du projet  
+- documentation du système IA  
+- guide HOL  
+- guide sécurité  
+
+Ce dossier sert également de **racine GitHub Pages**.
+
+---
+
+###  5. Pipelines GitHub Actions
+Dossier : `.github/workflows/`
+
+- `build.yml` → pipeline principal  
+- compilation Isabelle  
+- compilation LaTeX  
+- génération des PDF  
+- génération des Q&R  
+- attestations SLSA  
+- mise à jour automatique du CHANGELOG  
+
+---
+
+###  6. Archives
+Dossier : `archive/`
+
+Contient :
+
+- rapports d’attestation  
+- métadonnées de build  
+- versions compressées  
+- anciennes bases de données  
+
+---
+
+###  7. Illustrations
+Dossier : `assets/images/`
+
+Images scientifiques utilisées dans les documents et la documentation.
+
+---
+
+##  Pipeline de compilation
+
+### Compilation Isabelle
+```bash
+isabelle build -v -d src/hol Univers_Au_Carre
+
+Compilation LaTeX
+Automatique via GitHub Actions.
+
+Génération IA des Q&R
+bash
+cd scripts
+python qa_generator.py
+ Sécurité
+
 # Système de Génération de Questions/Réponses Intelligent
  
 ## Théorie Mathématique Philippe Thomas Savard 2026
@@ -196,3 +326,30 @@ Licence: Apache-2.0 (comme le dépôt principal)
 - **Auteur de la théorie**: Philippe Thomas Savard
 - **Système Q&R**: Généré avec l'aide d'Emergent AI
 - **LLM**: OpenAI GPT-4o via Emergent Universal Key
+
+
+
+📄 Licence
+Le projet est distribué sous licence Apach 2.0.
+
+🧭 Objectif global
+Ce dépôt constitue un environnement complet pour :
+
+formaliser la théorie
+
+produire les documents
+
+vérifier les démonstrations
+
+générer des contenus pédagogiques
+
+assurer la reproductibilité scientifique
+
+🎉 Bienvenue dans la théorie 2026
+
+Les workflows automatisés
+Les 3 workflows automatisés sont toujours en place et fonctionnent:
+
+Quotidien (10h UTC): 3 Q&R auto-générées et auto-validées
+Hebdomadaire (vendredi 14h UTC): Propositions .tex/.thy
+Mensuel (1er du mois 9h UTC): Rapport de maintenance
