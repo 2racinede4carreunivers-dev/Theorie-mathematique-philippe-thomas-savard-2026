@@ -58,11 +58,15 @@ jobs:
       - name: Install Isabelle 2024
         run: |
           echo "Telechargement Isabelle 2024..."
-          curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz             "https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz" ||           curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz             "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" ||           (echo "Echec telechargement" && exit 1)
-          
+          curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
+            "https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz" || \
+          curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
+            "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" || \
+          (echo "Echec telechargement" && exit 1)
+
           echo "Verification du fichier..."
           file Isabelle2024_linux.tar.gz
-          
+
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
           echo "$PWD/isabelle/bin" >> $GITHUB_PATH
@@ -73,8 +77,23 @@ jobs:
           isabelle build -v -d src/hol Univers_Au_Carre
 
       ###########################################################################
-      # 🟦 SECTION LATEX — VERSION ROBUSTE ET CORRIGÉE
+      # 🟦 SECTION LATEX — AJOUT DU SUPPORT PNG (CORRECTION)
       ###########################################################################
+
+      - name: Préparer l’accès aux images PNG
+        run: |
+          echo "Configuration TEXINPUTS pour les images..."
+          export TEXINPUTS="./assets/images//:"
+
+          echo "Création d'un fichier graphics.cfg pour graphicx..."
+          mkdir -p texmf/tex/latex/local
+          cat << 'EOF' > texmf/tex/latex/local/graphics.cfg
+\DeclareGraphicsExtensions{.png,.jpg,.pdf}
+\graphicspath{{../../assets/images/}{../../../assets/images/}{./assets/images/}}
+EOF
+
+          export TEXMFHOME="$PWD/texmf"
+          echo "TEXMFHOME=$TEXMFHOME"
 
       - name: Nettoyer les anciens PDF
         run: |
@@ -83,6 +102,9 @@ jobs:
 
       - name: Compiler tous les fichiers LaTeX
         run: |
+          export TEXINPUTS="./assets/images//:"
+          export TEXMFHOME="$PWD/texmf"
+
           for file in src/tex/*.tex; do
             echo "Compilation de $file"
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
@@ -145,7 +167,7 @@ jobs:
             src/pdf/*.pdf
 
   ###########################################################################
-  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
+  # 🟩 JOB HOL
   ###########################################################################
 
   hol_verification:
@@ -170,7 +192,7 @@ jobs:
           curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
             "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" || \
           (echo "Echec telechargement" && exit 1)
-          
+
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
           echo "$PWD/isabelle/bin" >> $GITHUB_PATH
@@ -193,7 +215,7 @@ jobs:
           path: ~/.isabelle/Isabelle2024/heaps/
 
   ###########################################################################
-  # 🟪 NOUVEAU JOB : GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
+  # 🟪 JOB Q&R
   ###########################################################################
 
   generate_qa:
@@ -266,14 +288,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f qa_output/*.json ]; then
             TOTAL=$(cat qa_output/*.json 2>/dev/null | python3 -c "import sys,json; data=json.load(sys.stdin); print(data.get('total_questions', 0))" 2>/dev/null || echo "0")
             echo "**Questions générées:** $TOTAL" >> $GITHUB_STEP_SUMMARY
           else
             echo "**Questions générées:** En attente de configuration EMERGENT_LLM_KEY" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
           echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
@@ -291,6 +313,8 @@ jobs:
           retention-days: 30
           if-no-files-found: warn
 
+  ###########################################################################
+  # 🟦 JOB RELEASE
   ###########################################################################
 
   release:
@@ -314,6 +338,10 @@ jobs:
         with:
           name: build-metadata
           path: .
+
+  ###########################################################################
+  # 🟧 JOB CHANGELOG
+  ###########################################################################
 
   update_changelog:
     runs-on: ubuntu-latest
