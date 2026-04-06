@@ -118,4 +118,12 @@
 > - Seul l’admin peut bypass  
 > - Règles appliquées à `main`
 >
+
 > ---
+
+Les workflows automatisés
+Les 3 workflows automatisés sont toujours en place et fonctionnent:
+
+Quotidien (10h UTC): 3 Q&R auto-générées et auto-validées
+Hebdomadaire (vendredi 14h UTC): Propositions .tex/.thy
+Mensuel (1er du mois 9h UTC): Rapport de maintenance
