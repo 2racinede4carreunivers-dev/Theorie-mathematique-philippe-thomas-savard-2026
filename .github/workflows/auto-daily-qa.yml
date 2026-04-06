@@ -1,15 +1,19 @@
 # Workflow automatique quotidien - Génération Q&R
 # Théorie Mathématique Philippe Thomas Savard 2026
 #
-# Fréquence: 1 fois par jour à 10h00 UTC
-# Tâche: Génère 3 questions/réponses et les ajoute à la banque
+# Fréquence: 3 fois par jour (6h, 12h, 18h UTC)
+# Tâche: Génère 1 question/réponse à chaque exécution
 
-name: Auto Q&R Quotidien (3 questions)
+name: Auto Q&R Quotidien (1 question x3/jour)
 
 on:
   schedule:
-    # Tous les jours à 10h00 UTC
-    - cron: '0 10 * * *'
+    # 6h00 UTC (1h00 Québec en hiver, 2h00 en été)
+    - cron: '0 6 * * *'
+    # 12h00 UTC (7h00 Québec en hiver, 8h00 en été)
+    - cron: '0 12 * * *'
+    # 18h00 UTC (13h00 Québec en hiver, 14h00 en été)
+    - cron: '0 18 * * *'
   
   # Permet aussi le déclenchement manuel
   workflow_dispatch:
@@ -18,7 +22,7 @@ permissions:
   contents: write
 
 jobs:
-  generate_daily_qa:
+  generate_single_qa:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,6 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configuration Python 3.11
         uses: actions/setup-python@v5
@@ -55,7 +60,7 @@ conn.close()
             mkdir -p qa_bank
           fi
 
-      - name: Génération automatique de 3 Q&R
+      - name: Génération automatique de 1 Q&R
         env:
           EMERGENT_LLM_KEY: ${{ secrets._CLE }}
           GITHUB_SHA: ${{ github.sha }}
@@ -77,16 +82,17 @@ from qa_config import DATABASE_CONFIG
 # Import Emergent
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
-async def generate_daily_qa():
+async def generate_single_qa():
     api_key = os.environ.get("EMERGENT_LLM_KEY")
     if not api_key:
         print("❌ Clé API non trouvée")
         return False
     
     commit_sha = os.environ.get("GITHUB_SHA", "auto")[:8]
-    run_id = f"auto-{commit_sha}-{datetime.now().strftime('%Y%m%d')}"
+    timestamp = datetime.now().strftime('%Y%m%d-%H%M')
+    run_id = f"auto-{commit_sha}-{timestamp}"
     
-    print(f"🤖 Génération automatique de 3 Q&R - {run_id}")
+    print(f"🤖 Génération automatique de 1 Q&R - {run_id}")
     
     # Lire le contenu des fichiers .tex et .thy
     content_parts = []
@@ -99,7 +105,7 @@ async def generate_daily_qa():
                 except:
                     pass
     
-    content = '\n'.join(content_parts)[:12000]
+    content = '\n'.join(content_parts)[:10000]
     
     if not content:
         print("❌ Aucun contenu trouvé")
@@ -115,34 +121,46 @@ async def generate_daily_qa():
     
     context_prompt = ""
     if validated_count > 0:
-        context_prompt = "\nExemples de Q&R validées (inspire-toi du style):\n"
+        context_prompt = "\nExemples de Q&R validées (inspire-toi du style mais pose une question DIFFÉRENTE):\n"
         for ex in context['validated_examples'][:3]:
             context_prompt += f"Q: {ex['question'][:80]}...\n"
     
-    # Générer 3 Q&R
+    # Déterminer le type de question basé sur l'heure
+    hour = datetime.now().hour
+    if hour < 10:
+        question_type = "mathématique sur les DÉFINITIONS ou AXIOMES"
+        category = "mathematique"
+        subcategory = "definition"
+    elif hour < 16:
+        question_type = "mathématique sur les THÉORÈMES ou DÉMONSTRATIONS"
+        category = "mathematique"
+        subcategory = "theoreme"
+    else:
+        question_type = "philosophique ou ontologique sur la SIGNIFICATION de la théorie"
+        category = "philosophique"
+        subcategory = "ontologie"
+    
+    print(f"   - Type de question: {question_type}")
+    
+    # Générer 1 Q&R
     chat = LlmChat(
         api_key=api_key,
         session_id=run_id,
-        system_message="""Tu es un expert en mathématiques spécialisé dans la théorie "L'Univers est au Carré" de Philippe Thomas Savard.
-Génère EXACTEMENT 3 questions et leurs réponses de haute qualité basées sur le contenu fourni.
-Les questions doivent couvrir des aspects DIFFÉRENTS de la théorie.
+        system_message=f"""Tu es un expert en mathématiques spécialisé dans la théorie "L'Univers est au Carré" de Philippe Thomas Savard.
+Génère UNE SEULE question {question_type} et sa réponse détaillée basée sur le contenu fourni.
+La question doit être ORIGINALE et DIFFÉRENTE des exemples fournis.
 Réponds UNIQUEMENT en JSON valide avec ce format:
-{"questions": [
-  {"question": "...", "answer": "...", "category": "mathematique", "subcategory": "theoreme|definition|demonstration|application", "difficulty": "intermediaire"},
-  {"question": "...", "answer": "...", "category": "mathematique", "subcategory": "...", "difficulty": "..."},
-  {"question": "...", "answer": "...", "category": "philosophique", "subcategory": "ontologie", "difficulty": "..."}
-]}"""
+{{"question": "...", "answer": "...", "category": "{category}", "subcategory": "{subcategory}", "difficulty": "intermediaire"}}"""
     ).with_model("openai", "gpt-4o")
     
-    prompt = f"""Analyse ce contenu mathématique et génère EXACTEMENT 3 questions originales avec leurs réponses détaillées.
-- 2 questions mathématiques/techniques
-- 1 question philosophique/ontologique
+    prompt = f"""Analyse ce contenu mathématique et génère UNE question {question_type} originale avec sa réponse détaillée.
 {context_prompt}
 
-CONTENU:
+CONTENU DE LA THÉORIE:
 {content}
 
-Réponds en JSON uniquement avec le format spécifié."""
+IMPORTANT: La question doit être NOUVELLE et ne pas répéter les exemples ci-dessus.
+Réponds en JSON uniquement."""
 
     try:
         response = await chat.send_message(UserMessage(text=prompt))
@@ -152,41 +170,42 @@ Réponds en JSON uniquement avec le format spécifié."""
         response = re.sub(r'```json\s*', '', response)
         response = re.sub(r'```\s*', '', response)
         
-        json_match = re.search(r'\{[\s\S]*"questions"[\s\S]*\}', response)
+        json_match = re.search(r'\{[\s\S]*\}', response)
         if json_match:
-            data = json.loads(json_match.group())
-            questions = data.get("questions", [])
+            qa = json.loads(json_match.group())
             
-            added = 0
-            for qa in questions:
-                qa_id = db.add_pending_qa(
-                    question=qa.get("question", ""),
-                    answer=qa.get("answer", ""),
-                    category=qa.get("category", "mathematique"),
-                    subcategory=qa.get("subcategory", "general"),
-                    difficulty=qa.get("difficulty", "intermediaire"),
-                    language="fr",
-                    source_commit=commit_sha,
-                    run_id=run_id
-                )
-                
-                if qa_id:
-                    # Auto-validation
-                    db.validate_qa(qa_id, quality_score=0.8)
-                    added += 1
-                    print(f"✅ Q&R {added}/3: {qa.get('question', '')[:60]}...")
+            # Ajouter à la banque ET auto-valider
+            qa_id = db.add_pending_qa(
+                question=qa.get("question", ""),
+                answer=qa.get("answer", ""),
+                category=qa.get("category", category),
+                subcategory=qa.get("subcategory", subcategory),
+                difficulty=qa.get("difficulty", "intermediaire"),
+                language="fr",
+                source_commit=commit_sha,
+                run_id=run_id
+            )
             
-            print(f"\n🎉 {added} Q&R générées et validées automatiquement!")
-            return added > 0
+            if qa_id:
+                # Auto-validation
+                db.validate_qa(qa_id, quality_score=0.8)
+                print(f"✅ Q&R générée et validée (ID: {qa_id})")
+                print(f"   Q: {qa.get('question', '')[:100]}...")
+                return True
+            else:
+                print("⚠️ Q&R similaire déjà existante, ignorée")
+                return True
                 
     except Exception as e:
         print(f"❌ Erreur: {e}")
+        import traceback
+        traceback.print_exc()
         return False
     
     return False
 
 # Exécuter
-success = asyncio.run(generate_daily_qa())
+success = asyncio.run(generate_single_qa())
 sys.exit(0 if success else 1)
 EOF
 
@@ -195,10 +214,14 @@ EOF
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
+          # S'assurer d'avoir les derniers changements
+          git pull --rebase || git pull
+          
           if [ -f qa_bank/qa_bank.db ]; then
             git add qa_bank/qa_bank.db
-            git diff --staged --quiet || git commit -m "🤖 Auto: +3 Q&R quotidiennes $(date +%Y-%m-%d)"
-            git push || echo "Rien à pousser"
+            HOUR=$(date -u +%H)
+            git diff --staged --quiet || git commit -m "🤖 Auto: +1 Q&R $(date +%Y-%m-%d) ${HOUR}h UTC"
+            git push || echo "Push échoué, réessai..." && git pull --rebase && git push
           fi
 
       - name: Résumé
@@ -206,5 +229,6 @@ EOF
           echo "## 🤖 Génération Q&R Automatique" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "**Heure UTC:** $(date -u +%H:%M)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ 3 questions/réponses générées et ajoutées à la banque" >> $GITHUB_STEP_SUMMARY
+          echo "✅ 1 question/réponse générée et ajoutée à la banque" >> $GITHUB_STEP_SUMMARY
