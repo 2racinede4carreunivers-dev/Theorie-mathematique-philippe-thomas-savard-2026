@@ -3,6 +3,7 @@
 
 Ce dépôt utilise un pipeline GitHub Actions entièrement automatisé pour compiler, certifier et attester les **19 documents scientifiques** du projet :
 
+
 - 7 fichiers LaTeX (`.tex`)
 - 5 fichiers Isabelle/HOL (`.thy`)
 - 7 fichiers PDF générés (`.pdf`)
