@@ -1,0 +1,17 @@
+# Dépendances pour le système de génération de Q&R
+# Théorie Mathématique Philippe Thomas Savard 2026
+
+# Intégration LLM (OpenAI via Emergent)
+emergentintegrations
+
+# Base de données et utilitaires
+# sqlite3 est inclus dans Python standard
+
+# Traitement de texte
+pathlib2>=2.3.0
+
+# Gestion des fichiers PDF (optionnel, pour extraction de texte)
+# pypdf2>=3.0.0
+
+# Note: Pour installer emergentintegrations:
+# pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/

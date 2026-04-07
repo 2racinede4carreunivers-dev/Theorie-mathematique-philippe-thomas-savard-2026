@@ -1,0 +1,346 @@
+name: Build Isabelle + LaTeX + Release intelligente
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      generate_qa:
+        description: 'Générer les Questions/Réponses'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      qa_language:
+        description: 'Langue des Q&R'
+        required: false
+        default: 'fr'
+        type: choice
+        options:
+          - fr
+          - en
+          - both
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install minimal TeX Live + pygments + français
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-lang-french \
+            python3-pygments
+
+      - name: Install Isabelle 2024
+        run: |
+          wget https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz
+          tar -xzf Isabelle2024_linux.tar.gz
+          mv Isabelle2024 isabelle
+          echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+
+      - name: Build Isabelle session Univers_Au_Carre
+        run: |
+          echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
+          isabelle build -v -d src/hol Univers_Au_Carre
+
+      ###########################################################################
+      # 🟦 SECTION LATEX — VERSION ROBUSTE ET CORRIGÉE
+      ###########################################################################
+
+      - name: Nettoyer les anciens PDF
+        run: |
+          mkdir -p src/pdf
+          rm -f src/pdf/*.pdf
+
+      - name: Compiler tous les fichiers LaTeX
+        run: |
+          for file in src/tex/*.tex; do
+            echo "Compilation de $file"
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+          done
+
+      - name: Copier tous les PDF générés
+        run: |
+          find . -name "*.pdf" -exec cp {} src/pdf/ \;
+
+      ###########################################################################
+
+      - name: Generate attestation report (SHA-256 des PDF)
+        run: |
+          cd src/pdf
+          if ls *.pdf >/dev/null 2>&1; then
+            sha256sum *.pdf > ../../attestation_report.txt
+          else
+            echo "Aucun PDF généré." > ../../attestation_report.txt
+          fi
+
+      - name: Generate build metadata
+        run: |
+          echo "Build provenance" > build_metadata.txt
+          echo "Commit SHA : $(git rev-parse HEAD)" >> build_metadata.txt
+          echo "Branche : $(git rev-parse --abbrev-ref HEAD)" >> build_metadata.txt
+          echo "Date : $(date -u)" >> build_metadata.txt
+          echo "" >> build_metadata.txt
+          echo "PDF générés :" >> build_metadata.txt
+          ls src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun PDF" >> build_metadata.txt
+          echo "" >> build_metadata.txt
+          echo "SHA-256 des PDF :" >> build_metadata.txt
+          sha256sum src/pdf/*.pdf >> build_metadata.txt 2>/dev/null || echo "Aucun hash" >> build_metadata.txt
+
+      - name: Upload PDF artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-documents
+          path: src/pdf/*.pdf
+
+      - name: Upload attestation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: attestation-report
+          path: attestation_report.txt
+
+      - name: Upload build metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-metadata
+          path: build_metadata.txt
+
+      - name: Generate build provenance (SLSA v1 pour .tex, .thy, .pdf)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            src/tex/*.tex
+            src/hol/*.thy
+            src/pdf/*.pdf
+
+  ###########################################################################
+  # 🟩 NOUVEAU JOB : ANALYSE LOGIQUE HOL + RAPPORTS COMPLETS
+  ###########################################################################
+
+  hol_verification:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Isabelle 2024
+        run: |
+          wget https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz
+          tar -xzf Isabelle2024_linux.tar.gz
+          mv Isabelle2024 isabelle
+          echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+
+      - name: Vérification complète du corpus HOL + Rapport HTML
+        run: |
+          echo "Analyse logique complète du corpus HOL"
+          isabelle build -D src/hol -v -o browser_info
+
+      - name: Upload HOL report (HTML complet)
+        uses: actions/upload-artifact@v4
+        with:
+          name: hol-report
+          path: isabelle/browser_info/
+
+      - name: Upload HOL session log
+        uses: actions/upload-artifact@v4
+        with:
+          name: hol-session-log
+          path: ~/.isabelle/Isabelle2024/heaps/
+
+  ###########################################################################
+  # 🟪 NOUVEAU JOB : GÉNÉRATION INTELLIGENTE DE QUESTIONS/RÉPONSES
+  ###########################################################################
+
+  generate_qa:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event.inputs.generate_qa != 'false' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configuration Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Installation des dépendances Q&R
+        run: |
+          python -m pip install --upgrade pip
+          pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          if [ -f scripts/requirements.txt ]; then
+            pip install -r scripts/requirements.txt
+          fi
+
+      - name: Vérification de la clé API
+        run: |
+          if [ -z "${{ secrets.EMERGENT_LLM_KEY }}" ]; then
+            echo "⚠️  EMERGENT_LLM_KEY non configuré - Génération Q&R désactivée"
+            echo "qa_enabled=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Clé API Emergent configurée"
+            echo "qa_enabled=true" >> $GITHUB_OUTPUT
+          fi
+        id: check_key
+
+      - name: Création des répertoires Q&R
+        run: |
+          mkdir -p qa_bank
+          mkdir -p qa_output
+
+      - name: Télécharger les PDF compilés
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-documents
+          path: src/pdf/
+        continue-on-error: true
+
+      - name: Génération des Questions/Réponses
+        if: steps.check_key.outputs.qa_enabled == 'true'
+        env:
+          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+          GITHUB_SHA: ${{ github.sha }}
+          GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
+        run: |
+          echo "🧠 Démarrage de la génération Q&R..."
+          echo "   Commit: $GITHUB_SHA"
+          echo "   Langue: $GENERATION_LANGUAGE"
+          cd scripts
+          python qa_generator.py
+
+      - name: Résumé de la génération Q&R
+        run: |
+          echo "## 📚 Génération Q&R - Théorie Savard" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f qa_output/*.json ]; then
+            TOTAL=$(cat qa_output/*.json 2>/dev/null | python3 -c "import sys,json; data=json.load(sys.stdin); print(data.get('total_questions', 0))" 2>/dev/null || echo "0")
+            echo "**Questions générées:** $TOTAL" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Questions générées:** En attente de configuration EMERGENT_LLM_KEY" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
+          echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. Examinez les Q&R dans le fichier Markdown" >> $GITHUB_STEP_SUMMARY
+          echo "3. Utilisez \`python qa_validator.py --interactive\` pour valider" >> $GITHUB_STEP_SUMMARY
+          echo "4. Committez la banque mise à jour" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Q&R générées
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-generated-${{ github.sha }}
+          path: |
+            qa_output/
+            qa_bank/qa_bank.db
+          retention-days: 30
+          if-no-files-found: warn
+
+  ###########################################################################
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download attestation report
+        uses: actions/download-artifact@v4
+        with:
+          name: attestation-report
+          path: .
+
+      - name: Download build metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: build-metadata
+          path: .
+
+  update_changelog:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Lire la note si elle existe
+        id: note
+        run: |
+          NOTE_FILE=".git/.note"
+          if [ -f "$NOTE_FILE" ]; then
+            echo "note_exists=true" >> $GITHUB_OUTPUT
+            source "$NOTE_FILE"
+            echo "q1=$q1" >> $GITHUB_OUTPUT
+            echo "q2=$q2" >> $GITHUB_OUTPUT
+            echo "q3=$q3" >> $GITHUB_OUTPUT
+          else
+            echo "note_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Mettre à jour le CHANGELOG
+        run: |
+          DATE="$(date -u +"%Y-%m-%d %H:%M UTC")"
+          SHA="$(git rev-parse HEAD)"
+
+          echo "## Commit $SHA — $DATE" >> CHANGELOG.md
+
+          if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
+            echo "- **Changements** : ${{ steps.note.outputs.q1 }}" >> CHANGELOG.md
+            echo "- **Effet immédiat** : ${{ steps.note.outputs.q2 }}" >> CHANGELOG.md
+            echo "- **Prochaine étape** : ${{ steps.note.outputs.q3 }}" >> CHANGELOG.md
+          else
+            echo "- Mise à jour sans note fournie." >> CHANGELOG.md
+          fi
+
+          echo "" >> CHANGELOG.md
+
+      - name: Supprimer la note après utilisation
+        run: |
+          if [ -f ".git/.note" ]; then
+            rm .git/.note
+          fi
+
+      - name: Commit et push du CHANGELOG mis à jour
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add CHANGELOG.md
+          git commit -m "Mise à jour automatique du CHANGELOG"
+          git push
