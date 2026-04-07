@@ -85,12 +85,9 @@ jobs:
           echo "Configuration TEXINPUTS pour les images..."
           export TEXINPUTS="./assets/images//:"
 
-          echo "Création d'un fichier graphics.cfg pour graphicx..."
+          echo "Creation d'un fichier graphics.cfg pour graphicx..."
           mkdir -p texmf/tex/latex/local
-          cat << 'EOF' > texmf/tex/latex/local/graphics.cfg
-\DeclareGraphicsExtensions{.png,.jpg,.pdf}
-\graphicspath{{../../assets/images/}{../../../assets/images/}{./assets/images/}}
-EOF
+          printf '%s\n%s\n' '\DeclareGraphicsExtensions{.png,.jpg,.pdf}' '\graphicspath{{../../assets/images/}{../../../assets/images/}{./assets/images/}}' > texmf/tex/latex/local/graphics.cfg
 
           export TEXMFHOME="$PWD/texmf"
           echo "TEXMFHOME=$TEXMFHOME"
@@ -269,7 +266,7 @@ EOF
       - name: Génération des Questions/Réponses
         if: steps.check_key.outputs.qa_enabled == 'true'
         env:
-          EMERGENT_LLM_KEY: ${{ secrets._CLE}}
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
           GITHUB_SHA: ${{ github.sha }}
           GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
         run: |

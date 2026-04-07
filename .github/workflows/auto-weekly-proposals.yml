@@ -1,16 +1,15 @@
 # Workflow automatique hebdomadaire - Propositions .tex/.thy
-# Théorie Mathématique Philippe Thomas Savard 2026
+# Theorie Mathematique Philippe Thomas Savard 2026
 #
-# Fréquence: Chaque vendredi à 14h00 UTC
-# Tâche: Analyse la banque Q&R et propose des améliorations pour 1 fichier .tex ou .thy
+# Frequence: Chaque vendredi a 14h00 UTC
+# Tache: Analyse la banque Q&R et propose des ameliorations pour 1 fichier .tex ou .thy
 
 name: Auto Propositions Hebdomadaires
 
 on:
   schedule:
-    # Chaque vendredi à 14h00 UTC
     - cron: '0 14 * * 5'
-  
+
   workflow_dispatch:
 
 permissions:
@@ -31,169 +30,32 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installation des dépendances
+      - name: Installation des dependances
         run: |
           python -m pip install --upgrade pip
           pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
 
-      - name: Génération des propositions hebdomadaires
+      - name: Generation des propositions hebdomadaires
         env:
           EMERGENT_LLM_KEY: ${{ secrets._CLE }}
         run: |
-          python3 << 'EOF'
-import os
-import sys
-import json
-import asyncio
-import sqlite3
-from datetime import datetime
-from pathlib import Path
-
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-async def generate_weekly_proposal():
-    api_key = os.environ.get("EMERGENT_LLM_KEY")
-    if not api_key:
-        print("❌ Clé API non trouvée")
-        return False
-    
-    date_str = datetime.now().strftime('%Y-%m-%d')
-    print(f"📝 Génération des propositions hebdomadaires - {date_str}")
-    
-    # Lire les Q&R validées de la semaine
-    qa_content = ""
-    if os.path.exists('qa_bank/qa_bank.db'):
-        conn = sqlite3.connect('qa_bank/qa_bank.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            SELECT question, answer, category, subcategory 
-            FROM qa_validated 
-            ORDER BY created_at DESC 
-            LIMIT 21
-        ''')
-        rows = cursor.fetchall()
-        conn.close()
-        
-        if rows:
-            qa_content = "\n\n".join([
-                f"Q: {r[0]}\nR: {r[1]}\nCatégorie: {r[2]}/{r[3]}" 
-                for r in rows
-            ])
-            print(f"   - {len(rows)} Q&R récentes trouvées")
-    
-    if not qa_content:
-        print("⚠️ Pas assez de Q&R pour générer des propositions")
-        return False
-    
-    # Lister les fichiers .tex et .thy
-    files_info = []
-    for ext in ['.tex', '.thy']:
-        for f in Path('.').rglob(f'*{ext}'):
-            if '.git' not in str(f):
-                try:
-                    content = f.read_text(encoding='utf-8', errors='ignore')
-                    files_info.append({
-                        'path': str(f),
-                        'name': f.name,
-                        'type': ext,
-                        'preview': content[:2000]
-                    })
-                except:
-                    pass
-    
-    if not files_info:
-        print("❌ Aucun fichier .tex ou .thy trouvé")
-        return False
-    
-    print(f"   - {len(files_info)} fichiers .tex/.thy trouvés")
-    
-    # Choisir un fichier (rotation basée sur la semaine)
-    week_num = datetime.now().isocalendar()[1]
-    file_index = week_num % len(files_info)
-    target_file = files_info[file_index]
-    
-    print(f"   - Fichier sélectionné: {target_file['name']}")
-    
-    # Générer la proposition
-    chat = LlmChat(
-        api_key=api_key,
-        session_id=f"proposal-{date_str}",
-        system_message="""Tu es un expert en mathématiques et en rédaction scientifique.
-Ta tâche est d'analyser les Q&R récentes et de proposer des améliorations pour un fichier .tex ou .thy.
-Tes propositions doivent être:
-- Précises et applicables
-- Basées sur les nouvelles informations des Q&R
-- Respectueuses du style et de la structure existante du fichier"""
-    ).with_model("openai", "gpt-4o")
-    
-    prompt = f"""Analyse les Q&R récentes de la banque et propose des améliorations pour le fichier "{target_file['name']}".
-
-## Q&R RÉCENTES (nouvelles connaissances):
-{qa_content[:6000]}
-
-## FICHIER À AMÉLIORER ({target_file['type']}):
-{target_file['preview']}
-
-## TA TÂCHE:
-1. Identifie les concepts des Q&R qui pourraient enrichir ce fichier
-2. Propose 2-3 améliorations concrètes (nouvelles sections, clarifications, preuves)
-3. Pour chaque proposition, donne le code {target_file['type']} exact à ajouter ou modifier
-
-Réponds en Markdown structuré."""
-
-    try:
-        response = await chat.send_message(UserMessage(text=prompt))
-        
-        # Sauvegarder la proposition
-        proposals_dir = Path('proposals')
-        proposals_dir.mkdir(exist_ok=True)
-        
-        proposal_file = proposals_dir / f"proposal_{date_str}_{target_file['name']}.md"
-        
-        proposal_content = f"""# Proposition d'amélioration - {date_str}
-
-## Fichier ciblé: `{target_file['path']}`
-
-## Basé sur: {len(rows)} Q&R récentes de la banque
-
----
-
-{response}
-
----
-
-*Généré automatiquement par le workflow hebdomadaire*
-"""
-        
-        proposal_file.write_text(proposal_content, encoding='utf-8')
-        print(f"✅ Proposition sauvegardée: {proposal_file}")
-        
-        return True
-        
-    except Exception as e:
-        print(f"❌ Erreur: {e}")
-        return False
-
-# Exécuter
-success = asyncio.run(generate_weekly_proposal())
-sys.exit(0 if success else 1)
-EOF
+          python3 scripts/auto_weekly_proposals.py
 
       - name: Commit et push des propositions
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           if [ -d proposals ]; then
             git add proposals/
-            git diff --staged --quiet || git commit -m "📝 Auto: Proposition hebdomadaire $(date +%Y-%m-%d)"
-            git push || echo "Rien à pousser"
+            git diff --staged --quiet || git commit -m "Auto: Proposition hebdomadaire $(date +%Y-%m-%d)"
+            git push || echo "Rien a pousser"
           fi
 
-      - name: Résumé
+      - name: Resume
         run: |
-          echo "## 📝 Propositions Hebdomadaires" >> $GITHUB_STEP_SUMMARY
+          echo "## Propositions Hebdomadaires" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Proposition d'amélioration générée dans \`proposals/\`" >> $GITHUB_STEP_SUMMARY
+          echo "Proposition amelioration generee dans proposals/" >> $GITHUB_STEP_SUMMARY
