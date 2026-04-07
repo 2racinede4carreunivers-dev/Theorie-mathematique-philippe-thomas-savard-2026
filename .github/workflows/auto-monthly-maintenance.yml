@@ -1,16 +1,15 @@
-# Workflow automatique mensuel - Maintenance du dépôt
-# Théorie Mathématique Philippe Thomas Savard 2026
+# Workflow automatique mensuel - Maintenance du depot
+# Theorie Mathematique Philippe Thomas Savard 2026
 #
-# Fréquence: Le 1er de chaque mois à 9h00 UTC
-# Tâches: Maintenance, relecture, corrections simples, rapport de cohérence
+# Frequence: Le 1er de chaque mois a 9h00 UTC
+# Taches: Maintenance, relecture, corrections simples, rapport de coherence
 
 name: Auto Maintenance Mensuelle
 
 on:
   schedule:
-    # Le 1er de chaque mois à 9h00 UTC
     - cron: '0 9 1 * *'
-  
+
   workflow_dispatch:
 
 permissions:
@@ -31,224 +30,32 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installation des dépendances
+      - name: Installation des dependances
         run: |
           python -m pip install --upgrade pip
           pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
 
-      - name: Maintenance et analyse du dépôt
+      - name: Maintenance et analyse du depot
         env:
           EMERGENT_LLM_KEY: ${{ secrets._CLE }}
         run: |
-          python3 << 'EOF'
-import os
-import sys
-import json
-import asyncio
-import sqlite3
-from datetime import datetime
-from pathlib import Path
-import subprocess
-
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-
-async def monthly_maintenance():
-    api_key = os.environ.get("EMERGENT_LLM_KEY")
-    if not api_key:
-        print("❌ Clé API non trouvée")
-        return False
-    
-    date_str = datetime.now().strftime('%Y-%m')
-    print(f"🔧 Maintenance mensuelle - {date_str}")
-    
-    # 1. Analyse de la structure du dépôt
-    print("\n1. Analyse de la structure du dépôt...")
-    
-    structure = {
-        'tex_files': list(Path('.').rglob('*.tex')),
-        'thy_files': list(Path('.').rglob('*.thy')),
-        'pdf_files': list(Path('.').rglob('*.pdf')),
-        'md_files': list(Path('.').rglob('*.md')),
-        'py_files': list(Path('scripts').rglob('*.py')) if Path('scripts').exists() else [],
-    }
-    
-    for key, files in structure.items():
-        structure[key] = [str(f) for f in files if '.git' not in str(f)]
-    
-    print(f"   - Fichiers .tex: {len(structure['tex_files'])}")
-    print(f"   - Fichiers .thy: {len(structure['thy_files'])}")
-    print(f"   - Fichiers .pdf: {len(structure['pdf_files'])}")
-    print(f"   - Fichiers .md: {len(structure['md_files'])}")
-    print(f"   - Scripts Python: {len(structure['py_files'])}")
-    
-    # 2. Statistiques de la banque Q&R
-    print("\n2. Statistiques de la banque Q&R...")
-    qa_stats = {'validated': 0, 'pending': 0, 'concepts': 0}
-    
-    if os.path.exists('qa_bank/qa_bank.db'):
-        conn = sqlite3.connect('qa_bank/qa_bank.db')
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT COUNT(*) FROM qa_validated')
-        qa_stats['validated'] = cursor.fetchone()[0]
-        
-        cursor.execute('SELECT COUNT(*) FROM qa_pending')
-        qa_stats['pending'] = cursor.fetchone()[0]
-        
-        cursor.execute('SELECT COUNT(*) FROM key_concepts')
-        qa_stats['concepts'] = cursor.fetchone()[0]
-        
-        conn.close()
-    
-    print(f"   - Q&R validées: {qa_stats['validated']}")
-    print(f"   - Q&R en attente: {qa_stats['pending']}")
-    print(f"   - Concepts clés: {qa_stats['concepts']}")
-    
-    # 3. Commits du mois dernier
-    print("\n3. Activité du mois...")
-    try:
-        result = subprocess.run(
-            ['git', 'log', '--oneline', '--since=1 month ago'],
-            capture_output=True, text=True
-        )
-        commits = result.stdout.strip().split('\n') if result.stdout.strip() else []
-        print(f"   - Commits ce mois: {len(commits)}")
-    except:
-        commits = []
-    
-    # 4. Vérification des fichiers récemment modifiés
-    print("\n4. Fichiers modifiés récemment...")
-    try:
-        result = subprocess.run(
-            ['git', 'diff', '--name-only', 'HEAD~10'],
-            capture_output=True, text=True
-        )
-        modified_files = result.stdout.strip().split('\n') if result.stdout.strip() else []
-        modified_files = [f for f in modified_files if f]
-        print(f"   - Fichiers modifiés: {len(modified_files)}")
-    except:
-        modified_files = []
-    
-    # 5. Lecture et analyse des fichiers pour corrections simples
-    print("\n5. Analyse pour corrections simples...")
-    
-    files_to_review = []
-    for tex_file in structure['tex_files'][:5]:
-        try:
-            content = Path(tex_file).read_text(encoding='utf-8', errors='ignore')
-            files_to_review.append({
-                'path': tex_file,
-                'preview': content[:1500],
-                'size': len(content)
-            })
-        except:
-            pass
-    
-    # 6. Générer le rapport avec l'IA
-    print("\n6. Génération du rapport de maintenance...")
-    
-    chat = LlmChat(
-        api_key=api_key,
-        session_id=f"maintenance-{date_str}",
-        system_message="""Tu es un assistant de maintenance pour un dépôt de documentation mathématique.
-Ta tâche est de:
-1. Analyser la structure du dépôt
-2. Identifier les problèmes potentiels
-3. Proposer des corrections SIMPLES (typos, formatage, liens cassés)
-4. NE PAS modifier le contenu mathématique
-Sois concis et pratique."""
-    ).with_model("openai", "gpt-4o")
-    
-    prompt = f"""Génère un rapport de maintenance mensuelle pour ce dépôt mathématique.
-
-## STRUCTURE DU DÉPÔT:
-- Fichiers .tex: {structure['tex_files']}
-- Fichiers .thy: {structure['thy_files']}
-- Fichiers .pdf: {structure['pdf_files']}
-
-## STATISTIQUES BANQUE Q&R:
-- Q&R validées: {qa_stats['validated']}
-- Q&R en attente: {qa_stats['pending']}
-
-## ACTIVITÉ:
-- Commits ce mois: {len(commits)}
-- Fichiers modifiés récemment: {modified_files[:10]}
-
-## APERÇU DES FICHIERS .TEX (pour vérification):
-{json.dumps([{'path': f['path'], 'size': f['size']} for f in files_to_review], indent=2)}
-
-## TA TÂCHE:
-1. Résumé de l'état du dépôt (2-3 lignes)
-2. Points positifs (2-3 points)
-3. Points d'attention (2-3 points)
-4. Recommandations pour le mois prochain (2-3 actions)
-
-Réponds en Markdown structuré, format rapport professionnel."""
-
-    try:
-        response = await chat.send_message(UserMessage(text=prompt))
-        
-        # Sauvegarder le rapport
-        reports_dir = Path('maintenance_reports')
-        reports_dir.mkdir(exist_ok=True)
-        
-        report_file = reports_dir / f"rapport_maintenance_{date_str}.md"
-        
-        report_content = f"""# Rapport de Maintenance Mensuelle
-
-**Période:** {date_str}
-**Date de génération:** {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}
-
----
-
-## Statistiques du dépôt
-
-| Catégorie | Nombre |
-|-----------|--------|
-| Fichiers .tex | {len(structure['tex_files'])} |
-| Fichiers .thy | {len(structure['thy_files'])} |
-| Fichiers .pdf | {len(structure['pdf_files'])} |
-| Q&R validées | {qa_stats['validated']} |
-| Commits ce mois | {len(commits)} |
-
----
-
-{response}
-
----
-
-*Rapport généré automatiquement par le workflow de maintenance mensuelle*
-"""
-        
-        report_file.write_text(report_content, encoding='utf-8')
-        print(f"✅ Rapport sauvegardé: {report_file}")
-        
-        return True
-        
-    except Exception as e:
-        print(f"❌ Erreur: {e}")
-        return False
-
-# Exécuter
-success = asyncio.run(monthly_maintenance())
-sys.exit(0 if success else 1)
-EOF
+          python3 scripts/auto_monthly_maintenance.py
 
       - name: Commit et push du rapport
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           if [ -d maintenance_reports ]; then
             git add maintenance_reports/
-            git diff --staged --quiet || git commit -m "🔧 Auto: Rapport maintenance $(date +%Y-%m)"
-            git push || echo "Rien à pousser"
+            git diff --staged --quiet || git commit -m "Auto: Rapport maintenance $(date +%Y-%m)"
+            git push || echo "Rien a pousser"
           fi
 
-      - name: Résumé
+      - name: Resume
         run: |
-          echo "## 🔧 Maintenance Mensuelle" >> $GITHUB_STEP_SUMMARY
+          echo "## Maintenance Mensuelle" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Rapport de maintenance généré dans \`maintenance_reports/\`" >> $GITHUB_STEP_SUMMARY
+          echo "Rapport de maintenance genere dans maintenance_reports/" >> $GITHUB_STEP_SUMMARY
