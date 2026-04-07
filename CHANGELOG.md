@@ -133,3 +133,8 @@ Cette première version marque le début du développement public du projet, off
 
 - Mise à jour sans note fournie.
 
+
+## Release 
+
+- Mise à jour sans note fournie.
+
