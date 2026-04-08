@@ -102,6 +102,12 @@ jobs:
           export TEXINPUTS="./assets/images//:"
           export TEXMFHOME="$PWD/texmf"
 
+          # 🔵 AJOUT EXPLICITE DU FICHIER RENOMMÉ
+          echo "Compilation forcée du fichier geometrie-spectre-premier.tex"
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
+
           for file in src/tex/*.tex; do
             echo "Compilation de $file"
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
