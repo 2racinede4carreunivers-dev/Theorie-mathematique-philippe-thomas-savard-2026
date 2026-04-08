@@ -115,9 +115,18 @@ jobs:
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
           done
 
-      - name: Copier tous les PDF générés
+      - name: Copier les PDF generes par LaTeX
         run: |
-          find . -name "*.pdf" -exec cp {} src/pdf/ \;
+          # Copier UNIQUEMENT les PDF compiles depuis src/tex (pas les PDF d'Isabelle)
+          for texfile in src/tex/*.tex; do
+            basename=$(basename "$texfile" .tex)
+            if [ -f "${basename}.pdf" ]; then
+              cp "${basename}.pdf" src/pdf/
+              echo "  Copie: ${basename}.pdf"
+            fi
+          done
+          echo "PDF dans src/pdf/:"
+          ls -la src/pdf/*.pdf 2>/dev/null || echo "  Aucun PDF"
 
       ###########################################################################
 
@@ -161,13 +170,29 @@ jobs:
           name: build-metadata
           path: build_metadata.txt
 
-      - name: Generate build provenance (SLSA v1 pour .tex, .thy, .pdf)
+      - name: Generate build provenance (SLSA v1 - 19 fichiers de la theorie)
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: |
-            src/tex/*.tex
-            src/hol/*.thy
-            src/pdf/*.pdf
+            src/tex/postulat_de_univers_carre.tex
+            src/tex/geometrie-spectre-premier.tex
+            src/tex/geometry_prime_spectrum.tex
+            src/tex/mecanique_harmonique_du_chaos_discret.tex
+            src/tex/pilosophy_geometry_of_prime_number.tex
+            src/tex/espace_de_philippot.tex
+            src/tex/teleosemantique_philosophie_esprit_analogiste.tex
+            src/hol/postulat_carre.thy
+            src/hol/methode_spectral.thy
+            src/hol/methode_de_philippot.thy
+            src/hol/mecanique_discret.thy
+            src/hol/espace_philippot.thy
+            src/pdf/postulat_de_univers_carre.pdf
+            src/pdf/geometrie_du_spectre_premier.pdf
+            src/pdf/geometry_prime_spectrum.pdf
+            src/pdf/mecanique_harmonique_du_chaos_discret.pdf
+            src/pdf/pilosophy_geometry_of_prime_number.pdf
+            src/pdf/espace_de_philippot.pdf
+            src/pdf/teleosemantique_philosophie_esprit_analogiste.pdf
 
   ###########################################################################
   # 🟩 JOB HOL
