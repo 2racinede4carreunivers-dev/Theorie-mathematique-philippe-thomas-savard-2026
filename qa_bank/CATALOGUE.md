@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-07 18:20 UTC
-**Total Q&R:** 27
+**Derniere mise a jour:** 2026-04-08 06:28 UTC
+**Total Q&R:** 28
 
 ---
 
@@ -13,6 +13,16 @@
 *Categorie: mathematique/theoreme | Score: 0.8*
 
 > Selon la théorie 'L'Univers est au Carré', le rectangle initial $ABCD$ a des dimensions $AB = CD = \sqrt{2} - 1$ et $AD = BC = 1$. Son périmètre est $2(\sqrt{2} - 1) + 2(1) = \sqrt{8}$. Le postulat du squaring affirme que le carré du périmètre, soit $(\sqrt{8})^2 = 8$, détermine le rectangle transformé $A'B'C'D'$ avec les dimensions $A'B' = C'D' = 4 - \sqrt{8}$ et $A'D' = B'C' = \sqrt{8}$. Le périmètre vérifie ainsi: $2(4-\sqrt{8}) + 2\sqrt{8} = 8$. Pour le carré maximal inscrit, l'analyse géométrique dans le rectangle $A'B'C'D'$ implique que le côté du carré est de taille $\min(A'B', A'D')$, soit $4-\sqrt{8}$, assurant que le nouveau carré respecte le postulat du périmètre transformé restant constant.
+
+---
+
+### Source: `mecanique_harmonique_du_chaos_discret.tex`
+
+**1. [intermediaire] Dans la section 'Exemple d'invariance géométrique et lien avec la formalisation Isabelle/HOL', comment la longueur de base du triangle inscrit est-elle définie, et quel rôle joue-t-elle dans la mécanique harmonique du chaos discret?**
+
+*Categorie: mathematique/definition | Score: 0.8*
+
+> Dans le fichier 'mecanique_harmonique_du_chaos_discret.tex', la longueur de base du triangle inscrit est définie par l'expression \(\texttt{base\_length}\ n\ p = \texttt{dist2}\ (\texttt{P1}\ n\ p)\ (\texttt{P2}\ n\ p)\). Cette définition fait partie intégrante du concept d'invariance géométrique central à la mécanique harmonique du chaos discret. Elle aide à relier les configurations géométriques associées aux unités admissibles \(u(p) = \sqrt{p} + 1\). En conjonction avec d'autres mesures comme la hauteur correspondante et le rapport demi-base/hauteur, elle permet de formaliser dans Isabelle/HOL la relation stable entre les longueurs, élément essentiel de l'invariance géométrique et de la loi universelle que capture cette théorie.
 
 ---
 
