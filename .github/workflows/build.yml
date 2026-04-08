@@ -102,11 +102,10 @@ jobs:
           export TEXINPUTS="./assets/images//:"
           export TEXMFHOME="$PWD/texmf"
 
-          # 🔵 AJOUT EXPLICITE DU FICHIER RENOMMÉ
-          echo "Compilation forcée du fichier geometrie-spectre-premier.tex"
-          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
-          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
-          pdflatex -shell-escape -interaction=nonstopmode "src/tex/geometrie-spectre-premier.tex" || true
+          echo "Compilation forcée du fichier analyse_hypothese_riemann_savard.tex"
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
 
           for file in src/tex/*.tex; do
             echo "Compilation de $file"
@@ -117,7 +116,6 @@ jobs:
 
       - name: Copier les PDF generes par LaTeX
         run: |
-          # Copier UNIQUEMENT les PDF compiles depuis src/tex (pas les PDF d'Isabelle)
           for texfile in src/tex/*.tex; do
             basename=$(basename "$texfile" .tex)
             if [ -f "${basename}.pdf" ]; then
@@ -175,7 +173,7 @@ jobs:
         with:
           subject-path: |
             src/tex/postulat_de_univers_carre.tex
-            src/tex/geometrie-spectre-premier.tex
+            src/tex/analyse_hypothese_riemann_savard.tex
             src/tex/geometry_prime_spectrum.tex
             src/tex/mecanique_harmonique_du_chaos_discret.tex
             src/tex/pilosophy_geometry_of_prime_number.tex
@@ -187,7 +185,7 @@ jobs:
             src/hol/mecanique_discret.thy
             src/hol/espace_philippot.thy
             src/pdf/postulat_de_univers_carre.pdf
-            src/pdf/geometrie_du_spectre_premier.pdf
+            src/pdf/analyse_hypothese_riemann_savard.pdf
             src/pdf/geometry_prime_spectrum.pdf
             src/pdf/mecanique_harmonique_du_chaos_discret.pdf
             src/pdf/pilosophy_geometry_of_prime_number.pdf
@@ -217,9 +215,9 @@ jobs:
           echo "Telechargement Isabelle 2024..."
           curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
             "https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz" || \
-          curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
+            curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
             "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" || \
-          (echo "Echec telechargement" && exit 1)
+            (echo "Echec telechargement" && exit 1)
 
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
@@ -326,9 +324,9 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
-          echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
+          echo "1. Téléchargez l'artifact `qa-generated`" >> $GITHUB_STEP_SUMMARY
           echo "2. Examinez les Q&R dans le fichier Markdown" >> $GITHUB_STEP_SUMMARY
-          echo "3. Utilisez \`python qa_validator.py --interactive\` pour valider" >> $GITHUB_STEP_SUMMARY
+          echo "3. Utilisez `python qa_validator.py --interactive` pour valider" >> $GITHUB_STEP_SUMMARY
           echo "4. Committez la banque mise à jour" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Q&R générées
