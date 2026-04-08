@@ -1450,6 +1450,43 @@ ordonne, soit 1/2, en raison de la double valeur objective attribuee.
 
 Voici l'exemple pour la comparaison chaotique asymetrique :
 
+\section*{Comparaison asymétrique chaotique (3, 23) (41, 29, 31)}
+
+3 : Somme suite A = 9/2 \\
+\hspace*{1.5em}Somme suite B = -53 \
+
+\[0.5em]
+
+23 : Somme suite A = 830 \\
+\hspace*{1.5em}Somme suite B = 1598 \
+
+\[0.5em]
+
+41 : Somme suite A = 13310 \\
+\hspace*{1.5em}Somme suite B = 26558 \
+
+\[0.5em]
+
+29 : Somme suite A = 1662 \\
+\hspace*{1.5em}Somme suite B = 3262 \
+
+\[0.5em]
+
+31 : Somme suite A = 3326 \\
+\hspace*{1.5em}Somme suite B = 6590 \
+
+\[1em]
+
+
+
+\[
+\frac{(9/2 - 830) - (13310 - 1662 - 3326)}
+     {(-53 - 1598) - (26558 - 3262 - 6590)}
+= 0.4983112709
+\]
+
+\paragraph{Comparaison asymétrique chaotique.}
+La comparaison asymétrique chaotique nous permet d'observer que le rapport recherché, soit 1/2, demeure la norme lorsque la comparaison est effectuée d'une manière chaotique, ce qui correspond à l'ordre le plus naturel des nombres premiers. Cette méthode de comparaison permet de déterminer, lorsque les blocs A et B de l'équation servent à comparer des groupes débalancés de nombres premiers $A \neq B$ et que l'ordre n'est pas successif croissant chronologique, que la valeur du rapport spectral recherché est bien 1/2.
 
 \[
 \text{Chaotique :}\qquad
@@ -1462,17 +1499,6 @@ R_{\mathrm{chaos}}(A,B)
 \[
 R_{\mathrm{chaos}}(A,B) \;=\; 0.5 \;+\; \text{faible reste}.
 \]
-
-\textbf{Resume explicatif (Chaotique).} \\
-Dans le cas chaotique, les blocs A et B ne respectent plus la structure ordonnee :
-leurs longueurs diffèrent et leurs puissances ne sont plus alignees. Cette absence
-d'organisation cree une compensation arithmetique qui rapproche le rapport de $0.5$,
-mais avec un leger residu. Le resultat n'est donc pas structurel : il provient d'un
-desequilibre interne entre les blocs, revelant un comportement irregulier et non lineaire.
-
-\begin{tcolorbox}[colback=red!5,colframe=red!75,title={\textbf{Attention : Incoherence algebrique}}]
-Ce qui est \textbf{incoherent} puisque les equations sont des valeurs prealablement identifiees à la somme des Suites A et B. L'equation spectrale est \textbf{numeriquement valide} mais \textbf{algebriquement incoherente}.
-\end{tcolorbox}
 
 \subsubsection{Exemples numeriques demontrant l'incoherence}
 
