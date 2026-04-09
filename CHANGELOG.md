@@ -183,3 +183,44 @@ Cette première version marque le début du développement public du projet, off
 
 - Mise à jour sans note fournie.
 
+## Structure du dépôt
+**Date :** …
+
+### Note ajoutée
+Le dépôt est maintenant structurellement mis en place et complet quant à son fonctionnement ainsi qu’à son organisation interne.
+
+Une dernière fonction est actuellement en développement : elle sera intégrée au workflow GitHub Actions et permettra de générer automatiquement une animation présentant la théorie *L’Univers est au Carré*.
+
+### Améliorations du workflow
+Le workflow comprend désormais :
+
+1. **Compilation, certification et attestation SLSA**  
+   - Attestation SLSA automatisée pour les 19 fichiers `.tex`, `.pdf` et `.thy` présents dans le dépôt.  
+   - Vérification complète de l’intégrité et de la reproductibilité.
+
+2. **Génération quotidienne de contenu**  
+   - Production automatisée de **1 question et 1 réponse**, trois fois par jour.  
+   - Génération assurée par l’IA via la clé API Emergent.sh universelle.
+
+3. **Suggestions hebdomadaires**  
+   - Une fois par semaine (vendredi), le workflow génère automatiquement une **suggestion intelligente** concernant les fichiers `.thy`, `.tex` et `.pdf`.
+
+4. **Automate de maintenance autonome**  
+   - Un troisième automate, également basé sur la clé API Emergent.sh universelle, assure :  
+     - le contrôle de la maintenance du dépôt,  
+     - la suppression ou l’archivage automatique des fichiers arrivés à échéance,  
+     - la réorganisation de l’arborescence,  
+     - la correction minimale et autonome du code lorsque nécessaire.
+
+### Documentation et ressources
+Le dépôt inclut maintenant :
+
+- Un fichier **CHANGELOG.md** pour le carnet de mise à jour.  
+- Une **release** GitHub associée.  
+- Un fichier **SECURITY.md** pour encadrer les contributions selon les permissions de la licence.  
+- Plusieurs fichiers Markdown servant de **guides d’utilisation** pour reproduire les résultats.  
+- Une **banque de questions et réponses** évolutive, générée automatiquement par le workflow.  
+  - Cette banque s’améliore continuellement grâce à l’apprentissage progressif des réponses générées.
+
+### Message aux visiteurs
+Bienvenue à tous les visiteurs du dépôt !
