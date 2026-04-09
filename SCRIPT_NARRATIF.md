@@ -9,9 +9,9 @@ Presentation video/diaporama - 15 a 18 minutes
 INTRODUCTION
 ------------------------------------------------------------
 
-Philippe Thomas Savard, un libre penseur autodidacte originaire de Lévis, au Québec, incarne parfaitement l'idée que la curiosité personnelle et le questionnement inébranlable peuvent mener à des découvertes mathématiques remarquables. Avec un parcours qui échappe aux sentiers battus du monde académique traditionnel, Savard s'est rapidement distingué par son intérêt profond et singulier pour les nombres. Ce cheminement autodidacte, marqué par la passion et l'insatiable désir de comprendre, l'a conduit à élaborer une théorie mathématique originale, que nous explorerons dans ce documentaire.
+Philippe Thomas Savard, un libre penseur autodidacte originaire de Lévis, au Canada, incarne parfaitement l'idée que la curiosité personnelle et le questionnement inébranlable peuvent mener à des découvertes mathématiques remarquables. Avec un parcours qui échappe aux sentiers battus du monde académique traditionnel, Savard s'est rapidement distingué par son intérêt profond et singulié pour les nombres. Ce cheminement autodidacte, marqué par la passion et l'insatiable désir de comprendre, l'a conduit à élaborer une théorie mathématique originale, que nous explorerons dans ce documentaire.
 
-Au cœur de sa théorie, baptisée "L'Univers est au Carré", se trouve le désir ardent de Savard de dénoncer ce qu'il appelle les agissements frauduleux de l'antinomisme. Pour l'auteur, il s'agit d'une opposition manifeste à ceux qui, selon lui, travestissent les vérités mathématiques. Cette lutte idéologique est la source première qui a motivé Savard à proposer une nouvelle perspective sur la distribution des nombres premiers. Sa théorie se présente comme un travail rigoureux, où chaque méthode est tissée de manière à révéler de nouvelles structures grâce à des outils sophistiqués, formalisés et validés à l'aide du logiciel Isabelle/HOL.
+Au cœur de sa théorie, baptisée "L'Univers est au Carré", se trouve le désir ardent de Savard de dénoncer ce qu'il appelle les agissements frauduleux de ceux qui s'auto proclame policier de ce qui existe et n'existe pas et les communauté universitaire ou il agissent. Pour l'auteur, il s'agit d'une opposition manifeste à ceux qui, cherche par défaut de le faire eux même, a déshériter la connaissance de chacun. Cette lutte idéologique est la source première qui a motivé Savard à proposer une nouvelle perspective sur la distribution des nombres premiers. Sa théorie se présente comme un travail rigoureux, où chaque méthode est tissée de manière à révéler de nouvelles structures grâce à des outils sophistiqués, formalisés et validés à l'aide du logiciel Isabelle/HOL et d'un corpus de même nature.
 
 Les cinq chapitres de cette théorie offrent une exploration systématique et innovante des nombres premiers. Le premier chapitre, "Géométrie du spectre des nombres premiers", dévoile comment Savard a redessiné le paysage mathématique pour illustrer une nouvelle vision des nombres primitifs. Cette approche prépare le terrain pour le second chapitre, "Mécanique harmonique du chaos discret", dans lequel l'auteur applique des méthodes mathématiques originales pour comprendre l'imprévisible harmonie du chaos. Ces travaux convergent vers le troisième chapitre, "Postulat de l'univers est au carré", où Savard propose un postulat central à sa théorie, résumant l'idée que l'univers mathématique peut être reconceptualisé à travers la simplicité d'un carré.
 
@@ -25,6 +25,36 @@ CHAPITRE 1 - LA GEOMETRIE DU SPECTRE DES NOMBRES PREMIERS
 ------------------------------------------------------------
 
 La géométrie du spectre des nombres premiers est une exploration qui trouve son origine dans une observation simple, mais profondément significative : lorsqu'on examine les relations entre des nombres entiers successifs, un rapport constant émerge. Ce rapport se révèle être un fondement crucial pour l'élaboration des méthodes ultérieures, ouvrant ainsi une perspective unique sur la compréhension de la nature des nombres premiers.
+
+Voici un exemple des deux suite A et B qui sert a déterminer les nombres premiers a l'aide de celles-ci: 
+
+Pour (29) 10 termes, 10ième nombre premier suite A et B:
+
+Suite A:
+1er   2e   3e   4e    5e    6e    7e     8e     9e     10e
+ 2  +  4 +  8 + 16 +  32 +  64 + 128 +  256 +  384 +  768 = 1662
+
+Suite B:
+1er   2e   3e   4e    5e    6e     7e     8e     9e      10e
+ 2  +  4 +  8 + 16 +  32 + 128 +  256 +  512 +  768 +  1536 = 3262
+
+ Le digamma pour les 4 cas d'exception 29, 31, 37 et 41 peut s'apliquer bien que la même approche est aussi possible pour ces 4 cas d'exeptions.
+
+ Digamma : 8ième position suite A---> 256
+
+ Déterminer le Digamma calculé:
+
+ Digamma calculé= Somme suite A - 8ième position suite A---> 1662 - 256 = 1406 Digamma calculé.
+
+ Déterminer le nombre premier 29 10 termes 10 ième nombre premier
+
+ (somme B-Digamma calculé)/(6ième position (zêta))=Nombre premier    (3262-1406)/64=29 10ième nombre premier 
+ 2, 3, 5, 7, 11, 13, 17, 19, 23, 29  29 es bien le 10ième.
+
+ Les rapport spectraux peuvent impliquer un comparaison de nombres premiers symétriques: (1*1) pouvant allées jusqu'a n par n quantité de n nombres premiers et ou n est symétrique a n en terme de quantié de nombres premiers comparés. Le deuxième cas de comparaison de nombres premiers a deux possibilitées? La première étant asymétrique ordonnée et la deuxième également asymétrique mais elle est dite chaotique. 
+ Pour que la comparaison soit dite chaotique ordonnée la comparaison en elle-même doit être débalancé? Le débalencement qui est le premier point obligatoire a respecter doit également respecté pour que la comparaison soit qualifié de asymétrique ordonnée elle doit également être croissante chronologique et que les deux blocs qui sont débalancé les blocs A et B il faut que B= A + 1 terme qui est un nombre premier obligatoirement. 
+
+ Exemple de comparaison asymétrique ordonnée ((2-(3-5))) ou encore (2-3-5-7-11)-(13-17-19-23-29-31) ou l'on voit clairement que B = A + 1 provoquant le débalancement entre les deux bloc. Une telle comparaison qui respectre ces critères nous permet pour résultat une valeur autre que le rapport spectral attendu? La raison pour laquel l'auteur mentionne le rapport spectral attendu n'est pas au rendez-vous est qu'il s'agit d'un cas ou l'ordinal des infinis entre en ligne de compte. Dans un cas ou des infinis sont comparés pour leur position exacte objective l'ensemble des nombres entiers plus 1 n'égale pas un plus l'ensemble des nombres entiers.
 
 Au cœur de cette exploration se trouve la méthode du produit alternatif. Cette méthode novatrice conjugue les propriétés géométriques de figures distinctes. Lorsqu'un observateur applique cette méthode, il découvre que le produit entre le périmètre d'une figure et le diamètre d'une autre figure est invariablement égal au produit inverse. Une telle symétrie ne se borne pas à révéler une simple correspondance ; elle démontre comment les surfaces planes sont capables de contenir des volumes. Cette propriété laisse entrevoir un univers où les dimensions euclidiennes se rencontrent de manière élégante et inattendue, aiguisant notre compréhension des formes et des structures numériques.
 
