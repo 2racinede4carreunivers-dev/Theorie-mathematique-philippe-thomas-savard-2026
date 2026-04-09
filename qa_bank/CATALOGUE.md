@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-09 06:29 UTC
-**Total Q&R:** 31
+**Derniere mise a jour:** 2026-04-09 12:32 UTC
+**Total Q&R:** 32
 
 ---
 
@@ -63,6 +63,16 @@
 *Categorie: mathematique/definition | Score: 0.8*
 
 > La 'Source' form, telle que définie dans l'Apache License 2.0, est la forme préférée pour faire des modifications. Cela inclut, mais ne se limite pas au code source de logiciels, au texte source de documentation et aux fichiers de configuration. Dans le contexte des documents mathématiques tels que 'pilosophy_geometry_of_prime_number.tex', cela signifie que le document LaTeX est considéré comme la 'Source' puisque c'est le format préféré pour éditer et mettre à jour le contenu. La 'Source' form permet de faire des ajustements efficaces et pertinents au contenu du document afin de le maintenir à jour ou de l'améliorer.
+
+---
+
+### Source: `postulat_carre.thy`
+
+**1. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
+
+*Categorie: mathematique/comparaison | Score: 0.8*
+
+> Dans le fichier 'postulat_carre.thy', le 'eq_ratio_height' et le 'eq_ratio_trunc' sont deux définitions formelles qui décrivent des rapports géométriques en relation avec un nombre premier p. 'eq_ratio_height' établit un rapport entre la hauteur h et le côté s, égal à 'sqrt (real p) + 1', alors que 'eq_ratio_trunc' caractérise un rapport entre la troncature t et le même côté s, égal à 'sqrt (real p)'. Cette distinction est cruciale car 'eq_ratio_height' inclut une addition de 1 dans la relation, ce qui implique une augmentation relative de la dimension associée, tandis que 'eq_ratio_trunc' est une simple transposition de l'expression racine carrée du nombre premier p. Cette différence illustre comment des transformations géométriques et des proportions numériques différentes peuvent être appliquées dans le contexte de l'Univers est au Carré pour obtenir des structures distinctes.
 
 ---
 
