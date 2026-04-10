@@ -113,6 +113,40 @@ Ce volume est égal à un dixième du volume d’un ellipsoïde construit selon 
 
 Ainsi, dans cet espace, la pyramide peut être interprétée comme une \emph{décomposition plane} d’un ellipsoïde volumétriquement équivalent.
 
+\section*{5. Relations exactes validées dans HOL}
+
+Le fichier \texttt{espace\_philippot.thy} formalise maintenant trois lois métriques
+simples qui condensent la géométrie du chapitre :
+\[
+\bigl(\mathrm{cote}(L_{\mathrm{ref}},n)\bigr)^2 = n\,L_{\mathrm{ref}}^2,
+\qquad
+\bigl(\mathrm{hauteur}(n)\bigr)^2 = n,
+\qquad
+\bigl(\mathrm{rayon}(n)\bigr)^2 = \frac{\sqrt{n}}{10}.
+\]
+
+Ces identités montrent que la structure est pilotée par des carrés exacts :
+le carré d’un côté croît linéairement avec l’indice $n$, la hauteur suit la
+spirale de Théodore, et le rayon est obtenu par une seconde racine appliquée
+à cette hauteur.
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+$n$ & $\mathrm{hauteur}(n)$ & $\mathrm{rayon}(n)^2$ & $\mathrm{rayon}(n)$ \\
+\hline
+1 & $1$ & $0.1$ & $\sqrt{0.1} \approx 0.316227766$ \\
+2 & $\sqrt{2}$ & $\dfrac{\sqrt{2}}{10}$ & $\sqrt{\dfrac{\sqrt{2}}{10}} \approx 0.376060310$ \\
+3 & $\sqrt{3}$ & $\dfrac{\sqrt{3}}{10}$ & $\sqrt{\dfrac{\sqrt{3}}{10}} \approx 0.416179146$ \\
+4 & $2$ & $0.2$ & $\sqrt{0.2} \approx 0.447213595$ \\
+\hline
+\end{tabular}
+\end{center}
+
+La table confirme numériquement ce que le script HOL établit formellement :
+le passage de la hauteur au rayon n’est pas une simple analogie graphique,
+mais une loi exacte sur laquelle repose la métrique de l’Espace de Philippôt.
+
 \section*{Conclusion}
 
 L’Espace de Philippôt unifie la spirale de Théodore, les disques racinaires, les nombres hypercomplexes géométriques et les volumes pyramidaux et ellipsoïdaux dans une structure cohérente. Cette construction constitue un pivot essentiel de la théorie \emph{L’univers est au carré}, en révélant des correspondances profondes entre géométrie discrète, surfaces circulaires et volumes continus.

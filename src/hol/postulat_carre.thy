@@ -190,6 +190,39 @@ lemma aire_rectangle:
   shows "area3 = s3 * h3"
   using area_def_3 .
 
+lemma hauteur_exacte:
+  shows "h3 = s3 * (sqrt 3 + 1)"
+proof -
+  have "h3 = s3 * (h3 / s3)"
+    using s3_pos by (simp add: field_simps)
+  also have "... = s3 * (sqrt 3 + 1)"
+    using ratio_height_3 by simp
+  finally show ?thesis .
+qed
+
+lemma troncature_exacte:
+  shows "t3 = s3 * sqrt 3"
+proof -
+  have "t3 = s3 * (t3 / s3)"
+    using s3_pos by (simp add: field_simps)
+  also have "... = s3 * sqrt 3"
+    using ratio_trunc_3 by simp
+  finally show ?thesis .
+qed
+
+lemma diagonale_tronquee_carree:
+  shows "s3 * s3 + t3 * t3 = 6"
+proof -
+  have "(sqrt (s3 * s3 + t3 * t3))\<^sup>2 = (sqrt 6)\<^sup>2"
+    using diag_trunc_3 by simp
+  thus ?thesis by simp
+qed
+
+lemma aire_exacte:
+  shows "area3 = s3 * s3 * (sqrt 3 + 1)"
+  using area_def_3 hauteur_exacte
+  by (simp add: algebra_simps)
+
 end
 end
 
