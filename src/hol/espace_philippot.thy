@@ -47,6 +47,18 @@ lemma cote_formule_exacte:
   "cote Lref n = sqrt (real n * (Lref^2))"
   by (simp add: cote_def)
 
+lemma cote_carre_exact:
+  "(cote Lref n)\<^sup>2 = real n * (Lref^2)"
+  by (simp add: cote_def)
+
+lemma cote1_carre_exact:
+  "(cote1 n)\<^sup>2 = real n * (L1_ref^2)"
+  by (simp add: cote1_def cote_def)
+
+lemma cote2_carre_exact:
+  "(cote2 n)\<^sup>2 = real n * (L2_ref^2)"
+  by (simp add: cote2_def cote_def)
+
 
 section "Hauteurs, rayons et spirale de Theodore"
 
@@ -72,6 +84,14 @@ definition rayon :: "nat \<Rightarrow> real"
 
 lemma rayon_def_simplifie:
   "rayon n = sqrt (sqrt (real n) / 10)"
+  by (simp add: rayon_def hauteur_def)
+
+lemma hauteur_carre_exact:
+  "(hauteur n)\<^sup>2 = real n"
+  by (simp add: hauteur_def)
+
+lemma rayon_carre_exact:
+  "(rayon n)\<^sup>2 = sqrt (real n) / 10"
   by (simp add: rayon_def hauteur_def)
 
 text "

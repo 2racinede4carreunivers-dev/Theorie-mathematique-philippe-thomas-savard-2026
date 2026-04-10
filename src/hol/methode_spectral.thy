@@ -175,6 +175,30 @@ lemma prime_equation_identity:
   unfolding prime_equation_def digamma_calc_def
   by simp
 
+lemma SB_affine_en_SA:
+  "SB n = 2 * SA n - 62"
+  unfolding SA_def SB_def by simp
+
+lemma ecart_spectral_constant:
+  "SB n - 2 * SA n = -62"
+  unfolding SA_def SB_def by simp
+
+lemma digamma_affine_en_SA:
+  "digamma_calc n p = 2 * SA n - (62 + 64 * real p)"
+  unfolding digamma_calc_def SA_def SB_def by simp
+
+lemma difference_SA_succ:
+  "SA (Suc n) - SA n = (13 / 8) * 2 ^ n"
+  unfolding SA_def by simp
+
+lemma difference_SB_succ:
+  "SB (Suc n) - SB n = (13 / 4) * 2 ^ n"
+  unfolding SB_def by simp
+
+lemma ratio_incremental_un_demi:
+  "SA (Suc n) - SA n = (SB (Suc n) - SB n) / 2"
+  using difference_SA_succ difference_SB_succ by simp
+
 
 (****************************************************************)
 (* Postulat spectral 1/2 (régime positif) *)

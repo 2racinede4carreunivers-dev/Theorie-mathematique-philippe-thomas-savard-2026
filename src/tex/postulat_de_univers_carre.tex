@@ -2,7 +2,7 @@
 
 % --- Packages essentiels ---
 \usepackage[T1]{fontenc}
-\usepackage[french]{babel}
+\usepackage[provide=*,french]{babel}
 \usepackage{amsmath, amssymb}
 \usepackage{geometry}
 \usepackage{graphicx}
@@ -620,6 +620,43 @@ Ces trois équations définissent la figure élevée au carré associée à l’
 \[
 \text{l’hexagone carré}.
 \]
+
+\subsection*{Validation formelle du cas $p=3$}
+
+Le fichier Isabelle/HOL \texttt{postulat\_carre.thy} permet de passer d’une description
+verbale du cas $p=3$ à quatre identités exactes. Si $s$ désigne le côté de référence,
+on obtient désormais :
+\[
+h = s(\sqrt{3}+1), \qquad
+t = s\sqrt{3}, \qquad
+s^2+t^2 = 6, \qquad
+\mathrm{Aire} = s^2(\sqrt{3}+1).
+\]
+
+Pour l’exemple normalisé $s=1$, ces relations deviennent :
+\[
+h = \sqrt{3}+1 \approx 2.732050808,
+\qquad
+t = \sqrt{3} \approx 1.732050808,
+\]
+\[
+d = \sqrt{6} \approx 2.449489743,
+\qquad
+\mathrm{Aire} = \sqrt{3}+1 \approx 2.732050808.
+\]
+
+On vérifie alors directement la cohérence algébrique du modèle :
+\[
+1^2 + (\sqrt{3})^2 = 4,
+\qquad
+4 + 2 = 6,
+\qquad
+\sqrt{6}^{\,2} = 6.
+\]
+
+Cette reformulation isole la structure mathématique essentielle du chapitre :
+un rapport exact, une troncature exacte, une diagonale exacte et une aire exacte,
+sans recours à une interprétation philosophique supplémentaire.
 
 \begin{figure}[h!]
     \centering
