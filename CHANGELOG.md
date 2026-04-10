@@ -224,3 +224,8 @@ Le dépôt inclut maintenant :
 
 ### Message aux visiteurs
 Bienvenue à tous les visiteurs du dépôt !
+
+## Release 
+
+- Mise à jour sans note fournie.
+
