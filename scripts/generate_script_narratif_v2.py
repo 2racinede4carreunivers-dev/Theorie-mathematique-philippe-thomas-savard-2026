@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+UIJ #!/usr/bin/env python3
 """
 Generateur du script narratif V2 - Version pragmatique
 Centree sur les methodes, la logique de demonstration, les axiomatisations
