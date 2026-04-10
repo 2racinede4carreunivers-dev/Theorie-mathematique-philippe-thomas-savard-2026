@@ -51,10 +51,79 @@ Suite B:
  (somme B-Digamma calculé)/(6ième position (zêta))=Nombre premier    (3262-1406)/64=29 10ième nombre premier 
  2, 3, 5, 7, 11, 13, 17, 19, 23, 29  29 es bien le 10ième.
 
- Les rapport spectraux peuvent impliquer un comparaison de nombres premiers symétriques: (1*1) pouvant allées jusqu'a n par n quantité de n nombres premiers et ou n est symétrique a n en terme de quantié de nombres premiers comparés. Le deuxième cas de comparaison de nombres premiers a deux possibilitées? La première étant asymétrique ordonnée et la deuxième également asymétrique mais elle est dite chaotique. 
- Pour que la comparaison soit dite chaotique ordonnée la comparaison en elle-même doit être débalancé? Le débalencement qui est le premier point obligatoire a respecter doit également respecté pour que la comparaison soit qualifié de asymétrique ordonnée elle doit également être croissante chronologique et que les deux blocs qui sont débalancé les blocs A et B il faut que B= A + 1 terme qui est un nombre premier obligatoirement. 
+ Les rapports spectraux peuvent impliquer une comparaison de nombres premiers disposés de manière symétrique, c’est‑à‑dire selon une structure du type (1 × 1) pouvant s’étendre jusqu’à n × n, où la quantité de nombres premiers comparés dans chaque ensemble demeure strictement équivalente.
 
- Exemple de comparaison asymétrique ordonnée ((2-(3-5))) ou encore (2-3-5-7-11)-(13-17-19-23-29-31) ou l'on voit clairement que B = A + 1 provoquant le débalancement entre les deux bloc. Une telle comparaison qui respectre ces critères nous permet pour résultat une valeur autre que le rapport spectral attendu? La raison pour laquel l'auteur mentionne le rapport spectral attendu n'est pas au rendez-vous est qu'il s'agit d'un cas ou l'ordinal des infinis entre en ligne de compte. Dans un cas ou des infinis sont comparés pour leur position exacte objective l'ensemble des nombres entiers plus 1 n'égale pas un plus l'ensemble des nombres entiers.
+Le second type de comparaison entre nombres premiers présente, quant à lui, deux formes distinctes :  
+1. l’asymétrie ordonnée,  
+2. l’asymétrie chaotique, également asymétrique mais dépourvue d’ordre chronologique.
+
+Pour qu’une comparaison soit qualifiée d’asymétrique ordonnée, deux conditions fondamentales doivent être respectées.  
+La première est le déséquilibre structurel entre les deux blocs comparés : le bloc B doit impérativement contenir un terme de plus que le bloc A, et ce terme supplémentaire doit être un nombre premier.  
+La seconde condition exige que les deux blocs soient organisés selon un ordre strictement croissant et chronologique.
+
+Un exemple de comparaison asymétrique ordonnée est :  
+- (2 - (3 - 5)),  
+ou encore :  
+- (2 - 3 - 5 - 7 - 11) - (13 - 17 - 19 - 23 - 29 - 31).  
+
+Dans ces deux cas, on observe clairement que B = A + 1, ce qui crée le déséquilibre requis. Une comparaison respectant ces critères produit alors une valeur spectrale différente du rapport attendu.
+
+La raison en est liée à la nature même des ordinaux infinis. Lorsque l’on compare des ensembles infinis en leur attribuant une position objective, l’ensemble des entiers plus un élément n’est pas équivalent à un élément ajouté à l’ensemble des entiers. Cette dissymétrie fondamentale se reflète dans le résultat spectral.
+
+L’auteur interprète cette observation comme une conséquence profonde pouvant éclairer certaines incohérences apparentes de notre environnement matériel.  
+Dans une comparaison asymétrique ordonnée, le rapport spectral obtenu diffère du rapport attendu précisément parce que l’on attribue deux fois une valeur objective à la même entité.
+
+En effet :  
+- les suites A et B possèdent déjà une valeur définie par leur construction,  
+- puis on leur attribue une seconde valeur objective en les ordonnant chronologiquement,  
+ce qui produit un rapport spectral distinct de 1/2.
+
+Cette situation est interprétée comme une analogie du rapport entre l’univers matériel et la réalité qui l’entoure. Lorsque nous attribuons une qualité objective à l’univers matériel, puis que nous organisons mentalement cette réalité — c’est‑à‑dire lorsque notre esprit en produit une représentation cartographique — nous effectuons une seconde mise en relation.  
+Or, cette seconde relation demeure du même rapport que la première, car elle appartient toujours à la sphère de l’entité définie, et non à un univers immatériel supposé être la cause de l’environnement matériel.
+
+La comparaison asymétrique chaotique, fondée sur la nature chaotique de la répartition des nombres premiers dans l’ensemble des entiers, confirme que ce qui relève d’une entité définie reste en rapport direct avec celle‑ci. L’organisation mentale que nous produisons n’altère pas ce rapport : elle ne fait que refléter l’état structuré de notre intelligence.
+
+Exemple de comparaison chaotique (2,3) et (5,7,11)
+
+((((3.25/2×2^1 )-2)-((3.25/2×2^2 )-2))-(((3.25/2×2^3 )-2)-((3.25/2×2^4 )-2)-((3.25/2×2^5 )-2))) /
+((((6.5/2×2^1 )-66)-((6.5/2×2^2 )-66))-(((6.5/2×2^3 )-66)-((6.5/2×2^4 )-66)-((6.5/2×2^5 )-66))) =
+
+((5/4 - 9/2) - (11 - 24 - 50)) /
+((-119/2 - -53) - (-40 - -14 - 38)) =
+
+59.75 / 57.5 = 1.039130435
+ 
+La comparaison chaotique :
+
+## Comparaison asymétrique chaotique (3 , 23) (41 , 29 , 31)
+
+3 :  
+Somme suite A = 9/2  
+Somme suite B = -53  
+
+23 :  
+Somme suite A = 830  
+Somme suite B = 1598  
+
+41 :  
+Somme suite A = 13310  
+Somme suite B = 26558  
+
+29 :  
+Somme suite A = 1662  
+Somme suite B = 3262  
+
+31 :  
+Somme suite A = 3326  
+Somme suite B = 6590  
+
+((9/2 - 830) - (13310 - 1662 - 3326)) /  
+((-53 - 1598) - (26558 - 3262 - 6590))  
+= 0.4983112709
+
+(3.25/2 × n^2) - 2 = Somme suite A  
+Quand n est un nombre entier strictement positif.
+
 
 Au cœur de cette exploration se trouve la méthode du produit alternatif. Cette méthode novatrice conjugue les propriétés géométriques de figures distinctes. Lorsqu'un observateur applique cette méthode, il découvre que le produit entre le périmètre d'une figure et le diamètre d'une autre figure est invariablement égal au produit inverse. Une telle symétrie ne se borne pas à révéler une simple correspondance ; elle démontre comment les surfaces planes sont capables de contenir des volumes. Cette propriété laisse entrevoir un univers où les dimensions euclidiennes se rencontrent de manière élégante et inattendue, aiguisant notre compréhension des formes et des structures numériques.
 
