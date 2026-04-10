@@ -8,8 +8,7 @@ import asyncio
 import sys
 import os
 
-sys.path.insert(0, '/app/repo_savard/scripts')
-os.environ.setdefault("EMERGENT_LLM_KEY", "sk-emergent-c20D27d2bDa5755870")
+sys.path.insert(0, str(os.path.dirname(os.path.abspath(__file__))))
 
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 
@@ -203,7 +202,7 @@ async def main():
     script_lines.append("=" * 60)
 
     # Sauvegarder
-    output_path = "/app/repo_savard/SCRIPT_NARRATIF.md"
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'SCRIPT_NARRATIF.md')
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write('\n'.join(script_lines))
 
