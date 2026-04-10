@@ -1069,6 +1069,51 @@ Calculated Digamma: \(1662 - 256 = 1406\).\\
 
 \bigskip
 
+\subsection*{Exact affine law certified in Isabelle/HOL}
+
+The revised HOL development now isolates the algebraic core of the spectral method:
+\[
+SA(n)=\frac{13}{8}2^n-2,
+\qquad
+SB(n)=\frac{13}{4}2^n-66,
+\qquad
+SB(n)=2\,SA(n)-62.
+\]
+
+As a consequence, the calculated digamma satisfies the exact identity
+\[
+\mathrm{digamma}(n,p)=SB(n)-64p=2\,SA(n)-(62+64p).
+\]
+
+The ratio $\tfrac12$ is therefore not only visible in tables: it is built into the
+increment law of the two sequences,
+\[
+SA(n+1)-SA(n)=\frac{13}{8}2^n,
+\qquad
+SB(n+1)-SB(n)=\frac{13}{4}2^n,
+\]
+so that
+\[
+SA(n+1)-SA(n)=\frac{SB(n+1)-SB(n)}{2}.
+\]
+
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$n$ & $SA(n)$ & $SB(n)$ & $SB(n)-2SA(n)$ \\
+\midrule
+10 & 1662 & 3262 & $-62$ \\
+11 & 3326 & 6590 & $-62$ \\
+12 & 6654 & 13246 & $-62$ \\
+13 & 13310 & 26558 & $-62$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This exact constant shift gives a more formal mathematical interpretation of the
+prime spectrum: the second sequence is an affine image of the first, and the
+digamma term simply translates this affine law toward the target prime number.
+
 \subsection*{Example for Prime Number 23 (9th Prime Number)}
 
 2+3+4+8+16+32+64+128+192+384 = 830 Sum 1st sequence (23).\\
