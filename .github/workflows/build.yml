@@ -79,6 +79,7 @@ jobs:
           echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
           isabelle build -v -d src/hol Univers_Au_Carre
 
+
       ###########################################################################
       # 🟦 SECTION LATEX — AJOUT DU SUPPORT PNG (CORRECTION)
       ###########################################################################
