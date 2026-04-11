@@ -41,6 +41,30 @@ begin
 
 (* 6. License                                                *)
 
+section "A priori et raison pure : le produit carre d un rectangle"
+
+text "
+Dans une perspective a priori, independamment de toute mesure empirique,
+il est possible de considerer le rectangle comme une figure primitive
+dont la structure peut etre analysee par la seule raison.
+
+Si l on effectue le produit carre d un rectangle, c est-a-dire si l on
+eleve son perimetre au carre pour construire une nouvelle figure de
+perimetre egal a ce carre, alors la figure obtenue est elle-meme un carre.
+Cette operation abstraite, fondee uniquement sur la relation entre
+perimetre et aire, montre que le rectangle possede en lui une structure
+carree latente.
+
+Ainsi, le rectangle eleve au carre devient un carre, et cette transformation
+conceptuelle peut etre appliquee a toute figure geometrique. Toute figure
+peut etre consideree comme un carre potentiel, revele par l operation
+d elevation au carre.
+
+Dans ce sens, le postulat affirme que toute structure geometrique peut
+etre ramenee a une forme carree fondamentale : l univers est au carre.
+"
+
+
 section "Unified Squared Rectangle and Prime Postulate"
 
 locale postulat_carre =
@@ -213,7 +237,7 @@ qed
 lemma diagonale_tronquee_carree:
   shows "s3 * s3 + t3 * t3 = 6"
 proof -
-  have "(sqrt (s3 * s3 + t3 * t3))\<^sup>2 = (sqrt 6)\<^sup>2"
+  have "(sqrt (s3 * s3 + t3 * t3)) ^ 2 = (sqrt 6) ^ 2"
     using diag_trunc_3 by simp
   thus ?thesis by simp
 qed
@@ -224,7 +248,118 @@ lemma aire_exacte:
   by (simp add: algebra_simps)
 
 end
+
+
+section "Systeme des trois equations : Octogone carre et Hexagone carre"
+
+(********************************************************************)
+(*  Locale : octogone_carre_equations                               *)
+(********************************************************************)
+
+locale octogone_carre_equations =
+  fixes d_rect_comp :: real      (* diagonale rectangle complementaire *)
+    and d_carre     :: real      (* diagonale carre inscrit *)
+    and d_rect      :: real      (* diagonale rectangle complet *)
+    and area_carre  :: real      (* aire carre inscrit *)
+    and area_rect_c :: real      (* aire rectangle complementaire *)
+    and area_rect   :: real      (* aire rectangle complet *)
+  assumes
+
+    (* Aires exactes *)
+    area_carre_def:
+      "area_carre = (4 - sqrt 8) ^ 2" and
+
+    area_rect_def:
+      "area_rect = (4 - sqrt 8) * sqrt 8" and
+
+    area_rect_c_def:
+      "area_rect_c = area_rect - area_carre" and
+
+    (* Diagonales exactes *)
+    d_carre_def:
+      "d_carre = sqrt 32 - 4" and
+
+    d_rect_comp_def:
+      "d_rect_comp = 2 * (sqrt (1/3) + sqrt (1/6)) powr (-1)" and
+
+    d_rect_def:
+      "d_rect = 3.061467459" and
+
+    (* Valeurs numeriques des aires *)
+    area_carre_num:
+      "area_carre = 1.372583002" and
+
+    area_rect_c_num:
+      "area_rect_c = 1.941225497" and
+
+    (* Systeme des trois equations de l octogone carre *)
+
+    eq1_octogone_carre:
+      "(d_rect_comp * sqrt (sqrt 2 + 1)) ^ 2 =
+         area_rect_c + (sqrt 8) ^ 2" and
+
+    eq2_octogone_carre:
+      "(d_carre * sqrt (sqrt 2 + 2)) ^ 2 =
+         area_carre + (sqrt 8) ^ 2" and
+
+    eq3_octogone_carre:
+      "(d_rect * ((sqrt 2 + 1) / 2) powr (1/2)) ^ 2 =
+         area_rect + (sqrt 8) ^ 2"
+begin
+
 end
+
+
+(********************************************************************)
+(*  Locale : hexagone_carre_equations                               *)
+(********************************************************************)
+
+locale hexagone_carre_equations =
+  fixes d_rect_comp :: real
+    and d_carre     :: real
+    and d_rect      :: real
+    and area_carre  :: real
+    and area_rect_c :: real
+    and area_rect   :: real
+  assumes
+
+    (* Aires exactes pour unite sqrt(3)+1 *)
+    area_carre_num:
+      "area_carre = 0.8965754715 * 0.8965754715" and
+
+    area_rect_c_num:
+      "area_rect_c = 2 * (0.8965754715 * 1.552914271)" and
+
+    area_rect_num:
+      "area_rect = (sqrt 6) * 0.8965754715" and
+
+    (* Diagonales exactes *)
+    d_carre_def:
+      "d_carre = 1.793150943" and
+
+    d_rect_comp_def:
+      "d_rect_comp = (3 - sqrt 3)" and
+
+    d_rect_def:
+      "d_rect = 2.608418597" and
+
+    (* Systeme des trois equations de l hexagone carre *)
+
+    eq1_hexagone_carre:
+      "(d_carre * sqrt (sqrt 3 + 1)) ^ 2 =
+         2 * (0.8965754715 * 1.552914271) + (sqrt 6) ^ 2" and
+
+    eq2_hexagone_carre:
+      "((3 - sqrt 3) * sqrt (sqrt 3 + 3)) ^ 2 =
+         2 * 0.8038475761 + (sqrt 6) ^ 2" and
+
+    eq3_hexagone_carre:
+      "(d_rect * ((2 / (4 - sqrt 3)) * sqrt 3) powr (1/2)) ^ 2 =
+         2 * (0.8965754715 * sqrt 6) + (sqrt 6) ^ 2"
+begin
+
+end
+
 
 (* ========================================================= *)
 (* Apache License 2.0                                        *)
