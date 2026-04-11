@@ -160,10 +160,10 @@ lemma exemple_3x3_spectral:
 
 section "Section du Digamma calcule."
 
-definition digamma_calc :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition digamma_calc :: "nat => nat => real" where
   "digamma_calc n p = SB n - 64 * real p"
 
-definition prime_equation :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition prime_equation :: "nat => nat => real" where
   "prime_equation n p = (SB n - digamma_calc n p) / 64"
 
 lemma digamma_calc_equation_alt:
@@ -197,8 +197,16 @@ lemma difference_SB_succ:
 
 lemma ratio_incremental_un_demi:
   "SA (Suc n) - SA n = (SB (Suc n) - SB n) / 2"
-  using difference_SA_succ difference_SB_succ by simp
-
+proof -
+  have A: "SA (Suc n) - SA n = (13 / 8) * 2 ^ n"
+    using difference_SA_succ by simp
+  have B: "SB (Suc n) - SB n = (13 / 4) * 2 ^ n"
+    using difference_SB_succ by simp
+  from B have "(SB (Suc n) - SB n) / 2 = (13 / 8) * 2 ^ n"
+    by (simp add: field_simps)
+  with A show ?thesis
+    by simp
+qed
 
 (****************************************************************)
 (* Postulat spectral 1/2 (régime positif) *)

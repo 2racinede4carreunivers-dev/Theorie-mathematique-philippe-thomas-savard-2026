@@ -359,6 +359,7 @@ locale hexagone_carre_equations =
 begin
 
 end
+end
 
 
 (* ========================================================= *)
