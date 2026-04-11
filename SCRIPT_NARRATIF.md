@@ -1,8 +1,10 @@
-SCRIPT NARRATIF V2 - VERSION PRAGMATIQUE
-L'UNIVERS EST AU CARRE
-Theorie mathematique de Philippe Thomas Savard
-Presentation video/diaporama - 15 a 18 minutes
+Questionnement de la théorie de l'univers est au carré:
 
+Comment la théorie 'L'Univers est au Carré', avec ses concepts de transformation géométrique et de validation formelle, remet-elle en question notre vision conventionnelle de l'univers comme un espace de dimensions interagissant linéairement, et quelles implications cela a-t-il sur la nature même du savoir scientifique et notre compréhension philosophique de la réalité ?
+
+
+
+La théorie 'L'Univers est au Carré' propose une interprétation de l'univers où les transformations géométriques, telles que la quadrature, servent de moyen pour révéler les propriétés cachées des structures fondamentales. Ce concept suggère que l'univers pourrait être compris en termes de transformations non linéaires qui échappent à la perception conventionnelle. En introduisant la formalisation rigoureuse via des outils comme Isabelle/HOL, la théorie insiste sur une épistémologie où la vérité scientifique dépend autant de l'élégance des transformations géométriques que de leur démonstration formelle. Ce changement de paradigme pourrait conduire à une vision où le savoir n'est plus une simple accumulation de faits linéaires mais une compréhension profonde des interactions complexes entre les concepts mathématiques, redéfinissant ainsi notre compréhension philosophique des lois régissant la réalité et notre place dans l'univers.
 ============================================================
 
 ------------------------------------------------------------
@@ -119,13 +121,364 @@ Somme suite B = 6590
 
 ((9/2 - 830) - (13310 - 1662 - 3326)) /  
 ((-53 - 1598) - (26558 - 3262 - 6590))  
+
 = 0.4983112709
 
 (3.25/2 × n^2) - 2 = Somme suite A  
 Quand n est un nombre entier strictement positif.
 
+Axiomatisation de la géométrie du spectre des nombres premies:
+
+«Quand n>=1 et que n <=-1 tous les n ramènent a un nombre premier P. Tous les valeur de n sont la conséquence de la quantité de termes dans les suites A et B. Tous les P entre eux respecte le rapport spectral 1/k. Ce rapport spectral est numériquement valide algébriquement incohérent» -:«Philippe Thomas Savard le dix avril deux milles vingt-six».
+
+Dans la géométrie du spectre des nombres premiers il y a également un section traitant du sujet de l'écart entre les premiers. Cette section mets de l'avant une méthode qui inclut la somme des suites A et B pour déteminer cette écart? Trois cas sont ainsi démontré et dans le document de la géométrie du spectre des nombres premiers la démonstrationest également valider par le script HOL d'isabelle. Ces trois cas rapportés dans le document officiel permet d'enlever le voile sur trois cas particuliés: Le premier le cas ou les nombres premier et leurs écart est considérés entre deux premiers positif. Le deuxième cas est pour un écarts entre nombres premiers qui sont tous deux négatifs. Le troisième cas le plus particulié des trois et le plus révélateur pour l'auteur et sa conclusion portant sur l'énigme de Riemann. Cette écart inclut l'écart mixte soit entre deux nombres premiers qui sont un négatif et un positif. 
+Dans cette écart paritculié qu'est l'écart mixte il est intéressant d'observer une particularité certaine? L'inclusion du zéros dans la valeur rapporté par la méthode. Ce zéro additionne 1 a la réoponse final. 
+
+Observation de l'auteur sur l'écart mixte qu'il y a entre -31 et 17:
+
+1. Pour déterminer la quatité de termes entre deux premiers il est simple d'effectuer l'opération suivante: 
+
+ex 1 23 7 : 
+7 - 22 = -15 nombres 
+22, 21, 20 ,19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8 = -15 nombres
+
+Dans l'écart mixte si l'on considère -31 et 17
+
+ex -31 et 17:
+-31-16=-47 nombres 
+
+-30, -29 ....-1 = -30 nombres et 1,2,3,4...16=16 nombres 16<>17 nombres 
+
+# Version corrigée du segment narratif
+
+L’écart et la méthode utilisée conduisent à un total de –47 nombres, ce qui inclut le zéro. La méthode appliquée aux écarts positifs et négatifs demeure identique à celle utilisée pour l’écart mixte, à la différence qu’il n’est pas nécessaire de soustraire 1 au résultat. L’auteur en conclut intuitivement que le zéro est effectivement inclus dans l’écart mixte.
+
+Selon l’encyclopédie libre Wikipédia : « Des travaux plus récents se sont focalisés sur le calcul explicite d’endroits où se trouvent beaucoup de zéros (dans l’espoir de trouver un contre-exemple) et de placer des bornes supérieures sur la proportion de zéros se trouvant ailleurs que sur la droite critique (dans l’espoir de la réduire à zéro). » — Article sur l’hypothèse de Riemann, Wikipédia.
+
+L’auteur apprécie cette affirmation, qui laisse entrevoir la possibilité d’élaborer un contre-exemple comportant un nombre réduit de zéros afin de valider l’hypothèse de Riemann. Philippe Thomas Savard perçoit une possibilité similaire dans l’écart mixte. En effet, l’écart mixte ajoute systématiquement 1 à chaque écart, tout en permettant les mêmes combinaisons que les écarts positifs et négatifs pour les écarts entre nombres premiers. L’écart mixte autorise également des combinaisons symétriques telles que –2 et 2, –3 et 3, –5 et 5, ce qui fait qu’il contient davantage de nombres premiers que les écarts positifs ou négatifs, en raison de ces combinaisons identiques. De plus, chaque écart entre nombres premiers dans l’écart mixte ajoute 1.
+
+Puisque la fonction zêta permet de déterminer la position de tous les nombres premiers — ce qui est également le cas de la méthode *inlut*, validée par Isabelle dans *methode_spectral.thy* — l’écart mixte permet, comme la fonction zêta, de considérer l’ensemble des zéros de la droite critique dans un rectangle. Ce rectangle possède une aire totale. L’auteur propose de considérer un intervalle donné, allant de 0 à un nombre premier d’une valeur déterminée. Le rectangle peut alors être tronqué d’une partie représentant l’ensemble des zéros de la droite critique.
+
+L’auteur, dans un premier temps par intuition, propose d’utiliser l’écart mixte pour le même intervalle considéré. Puisque l’écart mixte ajoute 1 à chaque écart entre deux nombres premiers dans l’intervalle, cette addition répétée produit une valeur relative plus grande que la valeur maximale initiale du rectangle tronqué représentant les zéros de la droite critique. Ainsi, la droite critique apparaît courbée : la valeur maximale relative augmente, et comme l’intervalle contient davantage de nombres premiers, la droite critique se déforme. L’auteur affirme que si l’aire comprise entre la droite critique courbée et la droite critique habituelle est égale à l’aire restante du rectangle tronqué, alors cette égalité constituerait une démonstration valide permettant de conclure à la véracité de la conjecture de la fonction zêta.
+
+<img src="./assets/images/quadrature_parabole_zero_critique.png" alt="Quadrature parabole zéro critique" style="max-width: 100%; height: auto;">
+
+Cette figure est particulièrement démonstrative. Selon les calculs issus du schéma de la pesée d’Archimède, reproduit selon les dimensions de la règle de Philippot, il est possible de vérifier que l’aire de la parabole correspond à celle de la section restante multipliée par 4/3. L’aire obtenue est donc identique à celle de la parabole. Cependant, le produit issu du théorème de Thalès, selon lequel :  
+c = Aire du triangle × longueur OH,  
+donne une valeur quatre fois plus petite que celle obtenue pour l’aire du triangle × longueur OH dans le cas précédent. L’auteur en conclut que, puisque la pesée est exprimée en valeur relative, il est possible que le calcul de Thalès soit valide et que le rapport des aires le soit également.
+
+Cela rejoint la conclusion obtenue dans *La géométrie du spectre des nombres premiers*, où il est démontré qu’il est toujours possible d’obtenir le rapport spectral 1/2 à l’aide de la méthode validée par Isabelle dans *methode_spectral.thy*. Cette méthode est également valide pour d’autres rapports. Bien que la validation Isabelle ne couvre pas tous les rapports vérifiés par l’auteur, celui-ci a confirmé les rapports 1/2, 1/12, 1/20, 1/50, 1/100 et 1/1000. Tous révèlent des nombres premiers. Par exemple, 227, 49ᵉ nombre premier, apparaît à la fois dans le rapport 1/3 et dans le rapport 1/2 : pour un même nombre premier à la même position, le rapport est bien celui recherché (1/2). En revanche, si les deux nombres premiers mis en relation ne sont pas à la même position — par exemple 227 en rapport 1/3 et 173 en rapport 1/4 — alors le rapport devient différent de 1/2.
+
+Le facteur 4 issu du calcul de Thalès, intégré dans l’écart mixte, inclut toutes les combinaisons identiques position pour position dans l’écart mixte, ce qui explique pourquoi l’aire de la parabole est égale à la partie restante des zéros de la droite critique. Cela est valide puisqu’il est effectivement possible de démontrer qu’il peut exister une proportion réelle de 1/2. Toutefois, l’écart mixte, qui en est l’équivalent, occupe au final une droite critique représentée par l’aire d’un rectangle deux fois plus grand, démontrant que les combinaisons de positions identiques ramènent à 1/2. Les autres combinaisons, quant à elles, sont également deux fois plus grandes et ne présentent pas un rapport de 1/2 entre elles.
+
+C’est pourquoi, à la question de l’hypothèse de Riemann formulée par Philippe Thomas Savard :  
+« Est-ce que tous les zéros non triviaux de la fonction zêta de Bernhard Riemann ont tous pour partie réelle 1/2 »,  
+
+la réponse qu’il propose est : **non**.
+
+
+Schizophrénie universitaire type.
+
+## Analyse de la quantité de nombres entre deux nombres premiers  
+### Étude de trois cas distincts : (+,+), (-,-) et (-,+)
+
+Cette section présente une analyse structurée de la quantité de nombres compris entre deux nombres premiers, selon trois configurations de polarité :  
+1. deux nombres premiers positifs (+,+),  
+2. deux nombres premiers négatifs (-,-),  
+3. un nombre premier négatif et un positif (-,+).  
+
+Chaque exemple applique la même méthode :  
+- calcul de la **somme de la suite A** pour le nombre premier immédiatement adjacent,  
+- calcul de la **somme de la suite B** pour le nombre premier étudié,  
+- calcul du **Digamma calculé**,  
+- combinaison algébrique des résultats pour obtenir la **quantité exacte de nombres entre les deux bornes**.
+
+---
+
+## 1. Cas (+,+) : Quantité de nombres entre 23 et 7
+
+### 1.1. Somme de la suite A pour 11  
+Le nombre premier suivant 7 est 11 (7 est le 4ᵉ nombre premier, 11 est le 5ᵉ).  
+
+
+\[
+\text{Suite A}(11) = \left(\frac{3.25}{2} \times 2^5\right) - 2 = 50
+\]
+
+
+
+### 1.2. Somme de la suite B pour 23  
+
+
+\[
+\text{Suite B}(23) = \left(\frac{6.5}{2} \times 2^9\right) - 66 = 1598
+\]
+
+
+
+### 1.3. Digamma calculé pour 23  
+
+
+\[
+\text{Digamma}(23) = \left(\frac{1598}{64} - 23\right)\times 64 = 126
+\]
+
+
+
+### 1.4. Quantité de nombres entre 23 et 7  
+
+
+\[
+50 - (1598 - 126) = -1442
+\]
+
+
+
+### 1.5. Digamma calculé pour 7  
+Somme de la suite B pour 7 :  
+
+
+\[
+\text{Suite B}(7) = \left(\frac{6.5}{2} \times 2^4\right) - 66 = -14
+\]
+
+
+
+Digamma :  
+
+
+\[
+\text{Digamma}(7) = \left(\frac{-14}{64} - 7\right)\times 64 = -464
+\]
+
+
+
+Combinaison finale :  
+
+
+\[
+\frac{-1442 - (-464)}{64} = -15
+\]
+
+
+
+Il y a donc **15 nombres entre 7 et 23**, soit :  
+
+
+\[
+8,9,10,11,12,13,14,15,16,17,18,19,20,21,22
+\]
+
+
+
+---
+
+## 2. Cas (-,-) : Quantité de nombres entre -19 et -5
+
+### 2.1. Somme de la suite A pour -7  
+
+
+\[
+\text{Suite A}(-7) = (3.25 \times 2^{-7}) - 2 = -\frac{10110}{5120}
+\]
+
+
+
+### 2.2. Somme de la suite B pour -3  
+
+
+\[
+\text{Suite B}(-3) = (6.5 \times 2^{-3}) - 66 = -\frac{20860}{320}
+\]
+
+
+
+### 2.3. Digamma calculé pour -3  
+
+
+\[
+\text{Digamma}(-3) = \left(\frac{-20860/320}{64} - (-5)\right)\times 64 = \frac{81540}{320}
+\]
+
+
+
+### 2.4. Combinaison intermédiaire  
+
+
+\[
+-\frac{10110}{5120} - \left(-\frac{20860}{320} - \frac{81540}{320}\right)
+= \frac{1628290}{5120}
+\]
+
+
+
+### 2.5. Digamma calculé pour -19  
+Somme de la suite B :  
+
+
+\[
+\text{Suite B}(-19) = (6.5 \times 2^{-8}) - 66 = -\frac{337790}{5120}
+\]
+
+
+
+Digamma :  
+
+
+\[
+\text{Digamma}(-19) = \left(\frac{-337790/5120}{64} - (-11)\right)\times 64
+= \frac{5888130}{5120}
+\]
+
+
+
+### 2.6. Quantité de nombres entre -19 et -5  
+
+
+\[
+\frac{1628290/5120 - 5888130/5120}{64} = -13
+\]
+
+
+
+Il y a donc **13 nombres entre -19 et -5**, soit :  
+
+
+\[
+-18,-17,-16,-15,-14,-13,-12,-11,-10,-9,-8,-7,-6
+\]
+
+
+
+---
+
+## 3. Cas (-,+) : Quantité de nombres entre -31 et 17
+
+### 3.1. Somme de la suite A pour -29  
+
+
+\[
+\text{Suite A}(-29) = (3.25 \times 2^{-10}) - 2 = -\frac{40895}{20480}
+\]
+
+
+
+### 3.2. Somme de la suite B pour 17  
+
+
+\[
+\text{Suite B}(17) = (6.5 \times 2^8) - 66 = 350
+\]
+
+
+
+### 3.3. Digamma calculé pour 17  
+
+
+\[
+\text{Digamma}(17) = \left(\frac{350}{64} - 17\right)\times 64 = -738
+\]
+
+
+
+Combinaison :  
+
+
+\[
+-\frac{40895}{20480} - (350 - 738)
+= -\frac{22323135}{20480}
+\]
+
+
+
+### 3.4. Digamma calculé pour -31  
+
+
+\[
+\text{Suite B}(-31) = (6.5 \times 2^{-11}) - 66 = -\frac{1351615}{20480}
+\]
+
+
+
+
+
+\[
+\text{Digamma}(-31) = \left(\frac{-1351615/20480}{64} - (-31)\right)\times 64
+= \frac{39280705}{20480}
+\]
+
+
+
+### 3.5. Quantité de nombres entre -31 et 17  
+
+
+\[
+\frac{-22323135/20480 - 39280705/20480}{64} = -47
+\]
+
+
+
+Il y a donc **47 nombres entre -31 et 17**.
+
+---
+
+## Remarque importante
+
+Les trois exemples montrent que :
+
+- Dans les cas **(+,+)** et **(-,-)**, la méthode fournit directement la quantité correcte de nombres entre les deux bornes, **sans nécessiter l’ajout de 1**.
+- Dans le cas **(-,+)**, la présence du zéro comme point de transition modifie la structure de l’écart.  
+  Si l’on ne considère pas zéro comme une unité comptable, le résultat obtenu serait surestimé d’une unité.
+
+Ces observations confirment que la polarité des bornes influence la structure interne de l’écart et doit être prise en compte dans l’interprétation finale.
+
+# Version corrigée du segment narratif
+
+L’écart et la méthode utilisée conduisent à un total de –47 nombres, ce qui inclut le zéro. La méthode appliquée aux écarts positifs et négatifs demeure identique à celle utilisée pour l’écart mixte, à la différence qu’il n’est pas nécessaire de soustraire 1 au résultat. L’auteur en conclut intuitivement que le zéro est effectivement inclus dans l’écart mixte.
+
+Selon l’encyclopédie libre Wikipédia : « Des travaux plus récents se sont focalisés sur le calcul explicite d’endroits où se trouvent beaucoup de zéros (dans l’espoir de trouver un contre-exemple) et de placer des bornes supérieures sur la proportion de zéros se trouvant ailleurs que sur la droite critique (dans l’espoir de la réduire à zéro). » — Article sur l’hypothèse de Riemann, Wikipédia.
+
+L’auteur apprécie cette affirmation, qui laisse entrevoir la possibilité d’élaborer un contre-exemple comportant un nombre réduit de zéros afin de valider l’hypothèse de Riemann. Philippe Thomas Savard perçoit une possibilité similaire dans l’écart mixte. En effet, l’écart mixte ajoute systématiquement 1 à chaque écart, tout en permettant les mêmes combinaisons que les écarts positifs et négatifs pour les écarts entre nombres premiers. L’écart mixte autorise également des combinaisons symétriques telles que –2 et 2, –3 et 3, –5 et 5, ce qui fait qu’il contient davantage de nombres premiers que les écarts positifs ou négatifs, en raison de ces combinaisons identiques. De plus, chaque écart entre nombres premiers dans l’écart mixte ajoute 1.
+
+Puisque la fonction zêta permet de déterminer la position de tous les nombres premiers — ce qui est également le cas de la méthode *inlut*, validée par Isabelle dans *methode_spectral.thy* — l’écart mixte permet, comme la fonction zêta, de considérer l’ensemble des zéros de la droite critique dans un rectangle. Ce rectangle possède une aire totale. L’auteur propose de considérer un intervalle donné, allant de 0 à un nombre premier d’une valeur déterminée. Le rectangle peut alors être tronqué d’une partie représentant l’ensemble des zéros de la droite critique.
+
+L’auteur, dans un premier temps par intuition, propose d’utiliser l’écart mixte pour le même intervalle considéré. Puisque l’écart mixte ajoute 1 à chaque écart entre deux nombres premiers dans l’intervalle, cette addition répétée produit une valeur relative plus grande que la valeur maximale initiale du rectangle tronqué représentant les zéros de la droite critique. Ainsi, la droite critique apparaît courbée : la valeur maximale relative augmente, et comme l’intervalle contient davantage de nombres premiers, la droite critique se déforme. L’auteur affirme que si l’aire comprise entre la droite critique courbée et la droite critique habituelle est égale à l’aire restante du rectangle tronqué, alors cette égalité constituerait une démonstration valide permettant de conclure à la véracité de la conjecture de la fonction zêta.
+
+<img src="./assets/images/quadrature_parabole_zero_critique.png" alt="Quadrature parabole zéro critique" style="max-width: 100%; height: auto;">
+
+Cette figure est particulièrement démonstrative. Selon les calculs issus du schéma de la pesée d’Archimède, reproduit selon les dimensions de la règle de Philippot, il est possible de vérifier que l’aire de la parabole correspond à celle de la section restante multipliée par 4/3. L’aire obtenue est donc identique à celle de la parabole. Cependant, le produit issu du théorème de Thalès, selon lequel :  
+c = Aire du triangle × longueur OH,  
+donne une valeur quatre fois plus petite que celle obtenue pour l’aire du triangle × longueur OH dans le cas précédent. L’auteur en conclut que, puisque la pesée est exprimée en valeur relative, il est possible que le calcul de Thalès soit valide et que le rapport des aires le soit également.
+
+Cela rejoint la conclusion obtenue dans *La géométrie du spectre des nombres premiers*, où il est démontré qu’il est toujours possible d’obtenir le rapport spectral 1/2 à l’aide de la méthode validée par Isabelle dans *methode_spectral.thy*. Cette méthode est également valide pour d’autres rapports. Bien que la validation Isabelle ne couvre pas tous les rapports vérifiés par l’auteur, celui-ci a confirmé les rapports 1/2, 1/12, 1/20, 1/50, 1/100 et 1/1000. Tous révèlent des nombres premiers. Par exemple, 227, 49ᵉ nombre premier, apparaît à la fois dans le rapport 1/3 et dans le rapport 1/2 : pour un même nombre premier à la même position, le rapport est bien celui recherché (1/2). En revanche, si les deux nombres premiers mis en relation ne sont pas à la même position — par exemple 227 en rapport 1/3 et 173 en rapport 1/4 — alors le rapport devient différent de 1/2.
+
+Le facteur 4 issu du calcul de Thalès, intégré dans l’écart mixte, inclut toutes les combinaisons identiques position pour position dans l’écart mixte, ce qui explique pourquoi l’aire de la parabole est égale à la partie restante des zéros de la droite critique. Cela est valide puisqu’il est effectivement possible de démontrer qu’il peut exister une proportion réelle de 1/2. Toutefois, l’écart mixte, qui en est l’équivalent, occupe au final une droite critique représentée par l’aire d’un rectangle deux fois plus grand, démontrant que les combinaisons de positions identiques ramènent à 1/2. Les autres combinaisons, quant à elles, sont également deux fois plus grandes et ne présentent pas un rapport de 1/2 entre elles.
+
+C’est pourquoi, à la question de l’hypothèse de Riemann formulée par Philippe Thomas Savard :  
+« Est-ce que tous les zéros non triviaux de la fonction zêta de Bernhard Riemann ont tous pour partie réelle 1/2 »,  
+
+la réponse qu’il propose est : **non**.
+
+Schizophrénie universitaire type.
+
+Expliquez la notion de 'téléosémantique' dans le contexte de la géométrie du spectre des nombres premiers.
+
+La « téléosémantique » dans ce contexte se réfère à l'idée que chaque aspect de la géométrie des nombres premiers porte une signification prédéterminée, destinée à explorer les connexions entre structure mathématique et signification dans le traitement des connaissances 
+numériques.
+intermédiaire] Dans le chapitre 'Réflexions sur l'esprit géométrique', comment la 'pulsion de vie' est-elle liée à la perception de la géométrie des nombres premiers ?
+
+La 'pulsion de vie' est décrite comme une force impliquée qui pousse à comprendre des concepts abstraits et géométriques, liant l'énergie vitale à notre capacité de saisir la complexité des spectres numériques.
 
 Au cœur de cette exploration se trouve la méthode du produit alternatif. Cette méthode novatrice conjugue les propriétés géométriques de figures distinctes. Lorsqu'un observateur applique cette méthode, il découvre que le produit entre le périmètre d'une figure et le diamètre d'une autre figure est invariablement égal au produit inverse. Une telle symétrie ne se borne pas à révéler une simple correspondance ; elle démontre comment les surfaces planes sont capables de contenir des volumes. Cette propriété laisse entrevoir un univers où les dimensions euclidiennes se rencontrent de manière élégante et inattendue, aiguisant notre compréhension des formes et des structures numériques.
+
+Périmètre du carré A * diamètre du carré B= Diamètre du carré A * périmètre carré B
+
+Le produit alternatif asymétrique pour sa part est :
+
+Aire A * Aire C= Aire B * Aire D
+=Volume de la pièce
+
+Pour l'auteur il s'agit du volume du tesseract qui se replie perpétuellent. 
 
 Suivant cette réalisation, l'analyse se poursuit avec l'application de l'analyse numérique métrique. En s'inspirant de la granulométrie, cette approche adopte une technique de tamisage rigoureuse. Les nombres sont ainsi passés au crible à travers deux séquences distinctes, permettant à l'analyse d'effectuer des comparaisons entre figures géométriques dont les aires conservent toujours le même rapport. Ce rapport, non modifié par la complexité croissante des nombres, met en lumière une structure sous-jacente ordonnée parmi ce qui semble, à première vue, être un ensemble chaotique et désordonné.
 
@@ -135,7 +488,23 @@ La méthode de Philippot introduit ensuite une dimension itérative à cette ét
 
 En parvenant à l'axiomatisation finale, une série d'affirmations cruciales est proposée. Pour une plage de n définie, un nombre premier se déduit invariablement. Les valeurs que ces n adoptent, en fonction de la quantité de termes dans les suites, témoignent d'un rapport spectral constant. Si, sur le plan purement numérique, ce rapport est valide, il révèle pourtant une incohérence algebrique. Cette apparente contradiction souligne une asymétrie intentionnellement ordonnée : bien que les nombres premiers, dans leur positionnement au sein de l'univers des entiers, puissent apparaître de façon désordonnée, cet ordre apparent est le fruit d'une logique sous-jacente que l'observateur choisit d'imposer.
 
-C'est ici qu'intervient l'auteur en tant que libre penseur, un analogiste qui perçoit les mathématiques comme une forme de grammaire sophistiquée. Ancré dans une pensée synthétique, où chaque cause contient préalablement son effet, il explore et démontre des connexions où l'effet est inévitablement imbriqué avec sa cause, révélant un univers où la beauté des nombres premiers se marie à une syntaxe géométrique complexe et méticuleuse. Cette vision élargit notre compréhension des nombres, transformant ainsi notre conception classique d'une suite de constantes mathématiques en une danse harmonieuse de relations géométriques et numériques.
+# Paragraphe corrigé et enrichi
+
+La section d’axiomatisation du fichier HOL *methode_spectral.thy* prolonge les principes exposés dans les chapitres précédents en leur donnant une formulation logique et formelle. Elle ne se limite pas à une simple transcription des idées : elle structure, dans le langage d’Isabelle/HOL, l’ensemble des intuitions analytiques, spectrales et géométriques qui sous‑tendent la méthode de l’auteur. Les axiomes et lemmes qui y sont présentés visent à montrer que les exemples numériques, géométriques et combinatoires développés dans la méthode spectrale ne sont pas des artefacts isolés, mais les manifestations cohérentes d’une architecture conceptuelle unifiée.
+
+Sur le plan analytique, l’axiomatisation introduit un type abstrait pour les zéros non triviaux de la fonction ζ, ainsi que des fonctions donnant leur partie réelle et imaginaire. Une relation abstraite `prime_position_from_zero` encode l’idée classique — issue des formules explicites de Riemann et von Mangoldt — selon laquelle les zéros de ζ déterminent la position des nombres premiers. L’axiome `explicit_formula_axiom` formalise ce principe en affirmant que pour tout entier naturel n, il existe un zéro de ζ qui contribue à la détermination de la position du n‑ième nombre premier. Cette abstraction analytique sert de point d’ancrage conceptuel à la vision de l’auteur concernant la fonction ζ.
+
+Sur le plan spectral, la section formalise la structure propre à la méthode de Philippôt : un type d’indices spectraux, des suites A et B dont la somme encode la valeur spectrale de n, un premier spectral associé à chaque indice, et un rapport spectral `1/k` entre nombres premiers spectraux. L’axiome `rapport_spectral_forme` impose que ce rapport soit toujours de la forme `1/k`, numériquement cohérent mais algébriquement « incohérent », reflétant l’asymétrie ordonnée et la nature chaotique mais structurée de la distribution des nombres premiers dans la méthode spectrale. Ces axiomes condensent les observations empiriques de la méthode en une structure logique autonome.
+
+Un axiome de concordance, `concordance_spectrale`, relie ensuite les deux mondes : pour chaque indice spectral n, il existe un zéro de ζ — représenté par `zero_associe n` — qui intervient dans la détermination de la position du nombre premier associé via la quantité de termes A_suite n + B_suite n. Cette correspondance établit un pont conceptuel entre la géométrie du spectre des nombres premiers et la théorie analytique classique, montrant que les deux approches, bien que distinctes, peuvent être mises en relation dans un cadre axiomatique cohérent.
+
+Enfin, une axiomatisation géométrique modélise la droite critique comme une aire totale T, tronquée en une sous‑aire Tn plus dense en zéros, et met en correspondance cette troncature avec un intervalle tronqué de nombres premiers. L’égalité entre l’aire restante T_rest et une aire géométrique dérivée des écarts mixtes est interprétée comme une condition géométrique équivalente — sur le plan conceptuel — à la conjecture de Riemann. L’axiome `all_zeros_on_critical_line` exprime alors que cette égalité implique que tous les zéros non triviaux satisfont Re(ρ) = 1/2.
+
+Ainsi, cette section ne constitue pas une démonstration de la conjecture de Riemann, mais une mise en forme logique, géométrique et spectrale de la vision de l’auteur. Elle montre comment les exemples de la méthode spectrale, validés par Isabelle, s’inscrivent dans une architecture conceptuelle où les structures analytiques, spectrales et géométriques convergent vers une même intuition centrale.
+
+<img src="./assets/images/quadrature_parabole_zero_critique.png" alt="Quadrature parabole zéro critique" style="max-width: 100%; height: auto;">
+
+C'est ici qu'intervient l'auteur en tant que libre penseur, un analogiste qui perçoit les mathématiques comme grammaire. Ancré dans une pensée synthétique, où chaque cause connait préalablement son effet, il explore et démontre des connexions où l'effet est inévitablement imbriqué avec sa cause, révélant un univers où la beauté des nombres premiers se marie à une syntaxe géométrique complexe et méticuleuse. Cette vision élargit notre compréhension des nombres, transformant ainsi notre conception classique d'une suite de constantes mathématiques en une danse harmonieuse de relations géométriques et numériques.
 
 
 ------------------------------------------------------------
@@ -152,7 +521,7 @@ Le concept clé de cette démarche est l'invariance géométrique, une idée cen
 
 Progressant vers une compréhension plus abstraite, la démarche s'illustre à travers l'utilisation de trois matrices successives. Dans la première, les dimensions géométriques réelles sont scrupuleusement capturées, formant le socle concret de l'analyse. Ensuite, en transition vers la deuxième matrice, les mesures sont remplacées par des variables symboliques, apportant une vision purement logique de la configuration initiale. Enfin, la troisième matrice intervient pour normaliser le système avec des coefficients premiers ; libérant ainsi la structure des particularités individuelles, elle dévoile la charpente arithmétique profonde en jeu. C'est à travers cette séquence méthodique que l'auteur parvient à décoder le langage structurel du chaos organisé.
 
-Pour conclure cette démarche, le lecteur est guidé vers une formalisation rigoureuse dans le fichier Isabelle/HOL. Ici, l'axiome fondamental de l'étude est solidifié, illustrant que le rapport entre demi-base et hauteur possède une liaison indissoluble avec la racine du nombre premier sélectionné. L'unité géométrique issue de la figure s'aligne sans faille avec l'unité abstraite théorique pour chaque unité explorée. Par son approche méthodique, l'auteur établit ainsi un pont entre l'empirique et le conceptuel, célébrant l'unité dans la diversité.
+Pour conclure cette démarche, le lecteur est guidé vers une formalisation rigoureuse dans le fichier Isabelle/HOL. Ici, l'axiome fondamental de l'étude est solidifié, illustrant que le rapport entre demi-base et hauteur possède une liaison indissoluble avec la racine du nombre premier sélectionné. L'unité géométrique issue de la figure s'aligne sans faille avec l'unité abstraite théorique pour chaque unité explorée. Par son approche méthodique, l'auteur établit ainsi un pont entre l'empirique et le conceptuel.
 
 En filigrane de cette exploration conceptuelle se dessine une pensée philosophique plus profonde. L'auteur décrit ce travail comme une traduction de la "pulsion de vie", ce fantasme de l'objet qui transcende son existence par ses propres raisons d'être. La constance des lois géométriques au sein du chaos discret devient ainsi l'incarnation mathématique de cette pulsion, exprimant une rigueur et une régularité universelles au sein des fluctuations apparentes du monde. L'invariance géométrique, telle qu'examinée dans cette étude, cristallise une vérité intemporelle, résonnant parfaitement avec le désir humain de comprendre et d'ordonner l'inexploré.
 
@@ -167,9 +536,179 @@ Le voyage commence par l'examen d'un rectangle initial, dont les proportions s'e
 
 Ensuite, nous en venons à la méthode du squaring, l'épicentre de la théorie. En procédant à l'élévation au carré du périmètre de ce rectangle, l'auteur engage un processus qui extrapole la figure initiale en une nouvelle forme géométrique. Cet acte, bien que simple en apparence, est aux fondations de l'approche isossophique : il permet de porter le périmètre à un nouvel ordre de complexité, projetant par extension une nouvelle réalité géométrique.
 
+<img src="./assets/images/postulat_de_univers_carre.png"
+     alt="Postulat de l’Univers au Carré"
+     style="max-width: 100%; height: auto;">
+
+     Système de trois équation du postulat de l'univers est au carré démontrant qu'un octogone carré emerge de la première transition du rectangle élevé au carré:
+
+    1° (2(√(1/3)+√(1/6) )^(-1)×√(√2+1) )^2 = 1.941225497 + 〖√8〗^2
+
+    2° ((√32 - 4) × √(√2 + 2))^2 = (1.372583002) + 〖√8〗^2  
+    Octogone carré = 〖3.061467459〗^2
+
+    3° ((3.061467459 × ((√2 + 1)/2 )^(1/2) ))^2 = (√128 - 8) + 〖√8〗^2
+
+# Postulat de l’Univers est au Carré  
+### (Version narrative et géométrique)
+
+Le postulat de l’Univers est au Carré repose sur une construction géométrique simple mais profondément structurée.  
+On considère d’abord un rectangle initial \(ABCD\) dont les côtés sont :
+
+- \(AB = CD = \sqrt{2} - 1\)
+- \(AD = BC = 1\)
+
+Son périmètre vaut alors :
+
+
+\[
+2(\sqrt{2}-1) + 2(1) = \sqrt{8}.
+\]
+
+
+
+---
+
+## 1. Élévation au carré du rectangle
+
+On élève ensuite ce rectangle au carré :  
+le périmètre \(\sqrt{8}\) devient \((\sqrt{8})^2 = 8\).  
+On obtient un nouveau rectangle \(A'B'C'D'\) dont les côtés sont :
+
+- \(A'B' = C'D' = 4 - \sqrt{8}\)
+- \(A'D' = B'C' = \sqrt{8}\)
+
+et qui vérifie :
+
+
+\[
+2(4-\sqrt{8}) + 2\sqrt{8} = 8.
+\]
+
+
+
+---
+
+## 2. Le carré maximal inscrit
+
+Dans tout rectangle, il existe un carré maximal inscrit.  
+Dans \(A'B'C'D'\), ce carré \(A'B'EF\) a pour côté :
+
+
+\[
+4 - \sqrt{8},
+\]
+
+
+et son aire vaut :
+
+
+\[
+(4 - \sqrt{8})^2 = 1.372583002.
+\]
+
+
+
+L’aire du rectangle complet est :
+
+
+\[
+(4 - \sqrt{8}) \cdot \sqrt{8} = \sqrt{128} - 8.
+\]
+
+
+
+Le rapport entre l’aire du rectangle et celle du carré inscrit est :
+
+
+\[
+\frac{\sqrt{128} - 8}{1.372583002} = \sqrt{2} + 1,
+\]
+
+
+qui devient **l’unité symbolique** du postulat.
+
+---
+
+## 3. Décomposition interne : carré + rectangle
+
+Le rectangle élevé au carré contient :
+
+- un carré \(A'B'EF\) d’aire \(1.372583002\)
+- un rectangle \(EFC'D'\) d’aire \(1.941225497\)
+- l’aire totale \(\sqrt{128} - 8\)
+
+Les diagonales des trois figures sont :
+
+- carré \(A'B'EF\) : \(\sqrt{32} - 4\)
+- rectangle \(EFC'D'\) : \(2(\sqrt{1/3} + \sqrt{1/6})^{-1}\)
+- rectangle complet \(A'B'C'D'\) : \(3.061467459\)
+
+Cette dernière diagonale correspond exactement au périmètre d’un **octogone régulier inscrit dans un disque de diamètre 1**, ce qui introduit la notion d’**octogone carré**.
+
+---
+
+## 4. Les trois équations fondamentales du postulat
+
+Ces trois équations relient les diagonales, les aires et l’unité \(\sqrt{2}+1\), révélant une seconde figure élevée au carré : **l’octogone carré**.
+
+### 1°
+
+
+\[
+\left( 2(\sqrt{1/3} + \sqrt{1/6})^{-1} \cdot \sqrt{\sqrt{2}+1} \right)^2
+= 1.941225497 + (\sqrt{8})^2
+\]
+
+
+
+### 2°
+
+
+\[
+\left( (\sqrt{32}-4)\cdot \sqrt{\sqrt{2}+2} \right)^2
+= 1.372583002 + (\sqrt{8})^2
+\]
+
+
+
+
+\[
+\text{Octogone carré} = (3.061467459)^2
+\]
+
+
+
+### 3°
+
+
+\[
+\left( 3.061467459 \cdot \left( \frac{\sqrt{2}+1}{2} \right)^{1/2} \right)^2
+= (\sqrt{128}-8) + (\sqrt{8})^2
+\]
+
+
+
+---
+
+## 5. Conclusion
+
+Le postulat montre qu’un rectangle élevé au carré engendre :
+
+- un carré inscrit,
+- un rectangle complémentaire,
+- et une structure diagonale équivalente à un octogone régulier élevé au carré.
+
+Cette triple équation constitue la base géométrique du **Postulat de l’Univers est au Carré**, reliant périmètres, aires, diagonales et unités spectrales dans une même architecture mathématique.
+
+
+La deuxième équation de la séries de trois permet l'observation que la valeur obtenu est bien un octogone carré.
+
 Dans cette nouvelle figure, un carré maximal est inscrit. Le choix même de cet emplacement, la sélection de ce carré particulier, est stratégique. Le rapport calculé entre l'aire de ce carré et celle du rectangle qui l'entoure devient une unité fondamentale. Cette unité symbolique incarne un équilibre, une manière de quantifier l'interaction et la transformation entre les deux figures.
 
-Pour pousser l'analyse plus loin, l'auteur développe un système de trois équations. Ces équations conduisent à la détermination d'une autre figure, un polygone qui n’est pas un carré, mais qui conserve le caractère symbolique du périmètre élevé au carré. En analysant ce système d'équations, une des figures en résultant se manifeste comme un octogone régulier inscrit dans un cercle. Cet octogone, avec ses lignes et courbes harmonieuses, permet d'explorer une autre dimension de l'espace géométrique.
+Pour pousser l'analyse plus loin, l'auteur développe un système de trois équations. Ces équations conduisent à la détermination d'une autre figure, un polygone qui n’est pas un carré, mais qui conserve le caractère symbolique du périmètre élevé au carré. En analysant ce système d'équations, une des figures en résultant se manifeste comme un octogone régulier inscrit dans un cercle. Cet octogone dans le système d'équations mis en évidence dans le postulat de l'univers est au carré nous permet de manière claire d'établir que la valeur est belle et bien un octogone élevé au carré. Cette affirmation est validé par le script HOL d'isabelle postulat_carre.thy.
+
+
 
 Au cœur de la théorie, on adopte une échelle de mesure particulière, choisissant d'harmoniser les calculs entre aires circulaires et volumes. Ce choix n'est pas simplement un ajustement pratique, mais un axiome essentiel qui garantit l'unité et la cohérence des résultats. En ajustant cette échelle, on ouvre des perspectives nouvelles et révélatrices sur les relations géométriques fondamentales.
 
