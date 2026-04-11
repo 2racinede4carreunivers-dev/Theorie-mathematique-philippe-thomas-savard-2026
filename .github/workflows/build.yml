@@ -67,9 +67,6 @@ jobs:
             "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" || \
           (echo "Echec telechargement" && exit 1)
 
-          echo "Verification du fichier..."
-          file Isabelle2024_linux.tar.gz
-
           tar -xzf Isabelle2024_linux.tar.gz
           mv Isabelle2024 isabelle
           echo "$PWD/isabelle/bin" >> $GITHUB_PATH
@@ -78,7 +75,6 @@ jobs:
         run: |
           echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
           isabelle build -v -d src/hol Univers_Au_Carre
-
 
       ###########################################################################
       # 🟦 SECTION LATEX — AJOUT DU SUPPORT PNG (CORRECTION)
@@ -198,7 +194,7 @@ jobs:
             src/pdf/teleosemantique_philosophie_esprit_analogiste.pdf
 
   ###########################################################################
-  # 🟩 JOB HOL
+  # 🟩 JOB HOL — SECTION CORRIGÉE
   ###########################################################################
 
   hol_verification:
@@ -231,13 +227,15 @@ jobs:
       - name: Vérification complète du corpus HOL + Rapport HTML
         run: |
           echo "Analyse logique complète du corpus HOL"
-          isabelle build -D src/hol -v -o browser_info
+          isabelle build -D src/hol -v \
+            -o browser_info \
+            -o browser_info_output=browser_info
 
       - name: Upload HOL report (HTML complet)
         uses: actions/upload-artifact@v4
         with:
           name: hol-report
-          path: isabelle/browser_info/
+          path: browser_info/**
 
       - name: Upload HOL session log
         uses: actions/upload-artifact@v4
