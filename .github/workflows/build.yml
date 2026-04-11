@@ -227,15 +227,13 @@ jobs:
       - name: Vérification complète du corpus HOL + Rapport HTML
         run: |
           echo "Analyse logique complète du corpus HOL"
-          isabelle build -D src/hol -v \
-            -o browser_info \
-            -o browser_info_output=browser_info
+          isabelle build -D src/hol -v -o browser_info
 
       - name: Upload HOL report (HTML complet)
         uses: actions/upload-artifact@v4
         with:
           name: hol-report
-          path: browser_info/**
+          path: ~/.isabelle/Isabelle2024/browser_info/**
 
       - name: Upload HOL session log
         uses: actions/upload-artifact@v4
