@@ -77,7 +77,7 @@ jobs:
           isabelle build -v -d src/hol Univers_Au_Carre
 
       ###########################################################################
-      # 🟦 SECTION LATEX — AJOUT DU SUPPORT PNG (CORRECTION)
+      # 🟦 SECTION LATEX — SUPPORT PNG
       ###########################################################################
 
       - name: Préparer l’accès aux images PNG
@@ -116,6 +116,7 @@ jobs:
 
       - name: Copier les PDF generes par LaTeX
         run: |
+          mkdir -p src/pdf
           for texfile in src/tex/*.tex; do
             basename=$(basename "$texfile" .tex)
             if [ -f "${basename}.pdf" ]; then
@@ -155,6 +156,12 @@ jobs:
         with:
           name: pdf-documents
           path: src/pdf/*.pdf
+
+      - name: Upload HOL theories artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: hol-theories
+          path: src/hol/*.thy
 
       - name: Upload attestation report
         uses: actions/upload-artifact@v4
@@ -316,7 +323,7 @@ jobs:
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if [ -f qa_output/*.json ]; then
+          if ls qa_output/*.json >/dev/null 2>&1; then
             TOTAL=$(cat qa_output/*.json 2>/dev/null | python3 -c "import sys,json; data=json.load(sys.stdin); print(data.get('total_questions', 0))" 2>/dev/null || echo "0")
             echo "**Questions générées:** $TOTAL" >> $GITHUB_STEP_SUMMARY
           else
