@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-13 12:33 UTC
-**Total Q&R:** 68
+**Derniere mise a jour:** 2026-04-13 18:27 UTC
+**Total Q&R:** 69
 
 ---
 
@@ -112,7 +112,17 @@
 
 ### Source: `methode_spectral.thy`
 
-**1. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
+**1. [intermediaire] Comment la méthode d'écart spectral décrite pour le rapport 1/3 se compare-t-elle à l'approche utilisée pour les valeurs spectrales exactes pour le rapport 1/4 dans le fichier 'methode_spectral.thy' ?**
+
+*Categorie: mathematique/comparaison | Score: 0.8*
+
+> La méthode d'écart spectral pour le rapport 1/3 se concentre sur l'écart entre deux nombres premiers en utilisant une équation spécifique : (A_next - (B_high - D_high) - D_low) / 729. Cette méthode, formalisée par la fonction 'gap_equation_1_3', permet de calculer exactement la quantité de nombres entiers entre deux nombres premiers, tels que démontré dans le lemme 'gap_equation_1_3_for_primes', et validé dans l'exemple utilisant les valeurs SA_179_val, SB_227_val, D_227_val, et D_173_val pour aboutir à un résultat de -53.
+
+En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier présente des définitions spécifiques telles que 'SA_883_val = 75/4', 'SB_947_val = 5260628', et 'D_947_val = 1381716', mais sans une équation formelle comparable à 'gap_equation_1_3'. L'approche pour le rapport 1/4 semble être plus orientée vers des définitions de valeurs statiques et précises plutôt qu'une équation formelle généralisée, comme c'est le cas pour le rapport 1/3. Ainsi, la comparaison montre que le rapport 1/3 utilise une équation générale tandis que le rapport 1/4 repose sur des définitions de valeurs spectrales établies.
+
+---
+
+**2. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
 
 *Categorie: mathematique/theoreme | Score: 0.8*
 
