@@ -1,50 +1,42 @@
-# PRD - Banque Q&R Evolutive Intelligente
-## Theorie Mathematique Philippe Thomas Savard 2026
+# PRD - Theorie mathematique Philippe Thomas Savard
 
-### Enonce du Probleme
-Concevoir une banque de questions/reponses evolutive et intelligente pour un depot GitHub de documentation mathematique. Le systeme genere automatiquement des Q&R a partir des fichiers .tex, .thy et .pdf via une API LLM, integre dans les workflows CI/CD GitHub Actions.
+## Probleme original
+Creer une banque de questions et reponses (Q&R) evolutive et intelligente stockee dans une base de donnees SQLite, utilisant une API LLM (Emergent LLM Key / GPT-4o) pour generer du contenu base sur des documents de theorie mathematique (LaTeX, Isabelle/HOL, PDF). Integrer la generation et la validation dans les workflows GitHub Actions (CI/CD) de maniere 100% autonome avec des taches planifiees (cron).
 
-### Architecture
-```
-/repo_savard/
-├── .github/workflows/
-│   ├── build.yml                      (CI principal: Isabelle + LaTeX + Q&R)
-│   ├── auto-daily-qa.yml             (Cron 3x/jour: 6h, 12h, 18h UTC)
-│   ├── auto-weekly-proposals.yml     (Cron vendredi 14h UTC)
-│   └── auto-monthly-maintenance.yml  (Cron 1er du mois 9h UTC)
-├── scripts/
-│   ├── qa_database.py, qa_generator.py, qa_validator.py, qa_config.py, qa_wolfram.py
-│   ├── auto_generate_qa.py           (Script quotidien v2 - sections aleatoires, 10 angles)
-│   ├── auto_weekly_proposals.py      (Script hebdomadaire)
-│   ├── auto_monthly_maintenance.py   (Script mensuel)
-│   └── generate_script_narratif.py   (Generateur script video)
-├── qa_bank/
-│   ├── qa_bank.db                    (Base SQLite)
-│   └── CATALOGUE.md                  (Catalogue lisible des Q&R)
-├── SCRIPT_NARRATIF.md                (Script narratif video - 5 chapitres)
-└── src/ (tex/, hol/, pdf/)
-```
+## Architecture
+- Depot GitHub : `Theorie-mathematique-philippe-thomas-savard-2026`
+- Sources : `src/tex/` (10 LaTeX), `src/hol/` (5 Isabelle/HOL), `src/pdf/` (14 PDF)
+- Bases de donnees : `qa_bank/qa_bank.db` (Q&R), `qa_bank/corpus.db` (extraction)
+- Scripts : `scripts/auto_generate_qa.py`, `scripts/generate_corpus_db.py`
+- CI/CD : `.github/workflows/build.yml`, `auto-daily-qa.yml`
+- Application : `Ia_geo_spec_prem_app_deplo/` (3 IAs collaboratives)
 
-### Ce qui est implemente
-- [x] Base de donnees SQLite avec schema complet
-- [x] Generateur Q&R avec LLM (qa_generator.py)
-- [x] Validateur CLI interactif (qa_validator.py)
-- [x] Integration dans build.yml (job generate_qa)
-- [x] Workflow quotidien (3x/jour, rotation 12 fichiers) - FONCTIONNE
-- [x] Workflow hebdomadaire (propositions .tex/.thy) - YAML corrige
-- [x] Workflow mensuel (rapport maintenance) - YAML corrige
-- [x] Scripts Python autonomes pour tous les workflows cron
-- [x] Correction SSL pour telechargement Isabelle
-- [x] Correction heredoc YAML dans build.yml (printf)
-- [x] Correction espace secrets._CLE dans build.yml
-- [x] Push direct vers GitHub via token
-- [x] Q&R variees v2 (sections aleatoires, 10 angles, toutes questions existantes)
-- [x] Catalogue CATALOGUE.md auto-genere et consultable sur GitHub
-- [x] Correction sous-module orphelin repo_savard (warning Actions)
-- [x] Attestation SLSA limitee aux 19 fichiers de la theorie (plus de PDF Isabelle)
-- [x] Script narratif complet (intro + 5 chapitres, ~3500 mots, ~23 min)
+## Ce qui a ete implemente
 
-### Backlog
-- [ ] P1: Surveiller les cron jobs automatiques
-- [ ] P2: Ameliorations futures selon retours utilisateur
-- [ ] P3: Potentiel diaporama/video automatise dans Actions
+### Phase 1 - Infrastructure CI/CD
+- Workflows GitHub Actions (build, cron quotidien Q&R, propositions hebdomadaires, maintenance mensuelle)
+- Scripts Python autonomes dans `scripts/`
+- Correction syntaxe YAML (inline Python → scripts autonomes)
+- Attestation SLSA ciblee sur les 19 fichiers theoriques
+
+### Phase 2 - Qualite du contenu
+- Script narratif V2 pragmatique (`SCRIPT_NARRATIF.md`)
+- Nettoyage massif du depot (254 Mo → 56 Mo)
+- README complet + Release v1.0.0
+
+### Phase 3 - Intelligence documentaire
+- Job `generate_corpus_db` dans `build.yml` pour extraction automatique texte/structures
+- `corpus.db` avec tables : files, hol_structure, tex_structure, pdf_structure, concepts
+- `auto_generate_qa.py` V3 exploitant `corpus.db` pour Q&R riches en equations/preuves
+
+### Phase 4 - Arborescences avec schemas (2026-04-13)
+- 4 fichiers Mermaid.js dans `src/arborescences_corpus/` :
+  - `arborescence_hol.md` : dependances HOL, locales, axiomes
+  - `arborescence_latex.md` : relations documents, references croisees HOL
+  - `arborescence_pdf.md` : pipeline compilation, correspondances source/PDF
+  - `arborescence_globale.md` : flux CI/CD complet, interdependances 3 couches
+- Commit : `43a7a63` pousse sur `main`
+
+## Backlog
+- P1 : Surveiller qualite generation quotidienne Q&R avec corpus.db
+- P2 : Ameliorer l'application web des 3 IAs collaboratives
