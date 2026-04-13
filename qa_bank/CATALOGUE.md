@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-13 06:39 UTC
-**Total Q&R:** 67
+**Derniere mise a jour:** 2026-04-13 12:33 UTC
+**Total Q&R:** 68
 
 ---
 
@@ -140,7 +140,15 @@
 
 ### Source: `postulat_carre.thy`
 
-**1. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
+**1. [avance] Comment est démontré formellement que l'aire du carré inscrit dans le 'locale' octogone_carre_equations est définie par l'équation 'area_carre = (4 - sqrt 8) ^ 2' et quelles propriétés géométriques sont utilisées dans cette preuve?**
+
+*Categorie: mathematique/demonstration | Score: 0.8*
+
+> La démonstration de l'aire du carré inscrit dans le locale 'octogone_carre_equations' repose sur l'équation donnée par 'area_carre = (4 - sqrt 8) ^ 2'. Pour comprendre cette démonstration, nous devons considérer les propriétés géométriques des diagonales internes du carré. Le terme '(4 - sqrt 8)' se réfère à la transformation géométrique qui ajuste les dimensions du carré en fonction des autres paramètres de l'octogone. La valeur de l'aire vient alors du carré de cette transformation, car géométriquement, l'aire d'un carré est le carré de la longueur de ses côtés. Cette équation est corroborée par la vérification numérique 'area_carre_num' où l'aire calculée s'évalue à '1.372583002'. Pour établir ceci formellement, les définitions des diagonales, comme celle donnée par 'd_carre = sqrt 32 - 4', sont combinées aux transformations algébriques explicites des dimensions des figures, en unissant les propriétés de la racine carrée et des simplifications algébriques implicites à la géométrie de l'octogone.
+
+---
+
+**2. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
 
 *Categorie: mathematique/comparaison | Score: 0.8*
 
