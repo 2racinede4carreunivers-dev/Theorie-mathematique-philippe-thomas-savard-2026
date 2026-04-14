@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-14 06:32 UTC
-**Total Q&R:** 70
+**Derniere mise a jour:** 2026-04-14 12:31 UTC
+**Total Q&R:** 71
 
 ---
 
@@ -82,7 +82,15 @@
 
 ### Source: `mecanique_discret.thy`
 
-**1. [avance] Comment le lemme 'geometric_unit_eq_unit' dans 'mecanique_discret.thy' démontre-t-il que l'unité géométrique pour un 'p' admissible est équivalente à 'sqrt(p) + 1' et quelles sont les étapes essentielles de cette preuve?**
+**1. [avance] Comment est démontré le rapport géométrique fondamental (b(n,p) / 2) / h(n,p) = sqrt(p) dans le contexte de la mécanique harmonique du chaos discret, spécifiquement pour les triangles inscrits dans les carrés emboîtés tel que décrit dans 'mecanique_discret.thy'?**
+
+*Categorie: mathematique/demonstration | Score: 0.8*
+
+> Pour démontrer le rapport géométrique fondamental (b(n,p) / 2) / h(n,p) = sqrt(p), il est essentiel d'analyser les propriétés géométriques des triangles inscrits dans les carrés emboîtés. Ces triangles isocèles sont construits avec le sommet en C(n) = (1.5^n, 1.5^n) et une base constituée des points P1(n,p) = (b(n,p), 0) et P2(n,p) = (0, b(n,p)). Lorsqu'on trace la diagonale AC(n), elle divise le triangle en deux triangles rectangles. La démonstration commence par observer que pour l'un de ces triangles rectangles, la demi-base est b(n,p)/2 et la hauteur est h(n,p). En utilisant la définition de l'admissible_unit, on considère p comme un nombre premier tel que p > 1, garantissant ainsi que sqrt(p) est bien défini. Ensuite, en appliquant les propriétés trigonométriques des triangles rectangles, on détermine que tan(theta(p)) = b(n,p) / (2h(n,p)), ce qui est égal à sqrt(p) par hypothèse. Donc, par définition de la tangente, tan(theta(p)) est directement égal à la ratio donné. En mettant cela en relation avec les formules données, tan(theta(p)) = sqrt(p) implique directement que b(n,p) / (2 * h(n,p)) est égale à sqrt(p), validant ainsi le rapport géométrique fondamental proposé.
+
+---
+
+**2. [avance] Comment le lemme 'geometric_unit_eq_unit' dans 'mecanique_discret.thy' démontre-t-il que l'unité géométrique pour un 'p' admissible est équivalente à 'sqrt(p) + 1' et quelles sont les étapes essentielles de cette preuve?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
