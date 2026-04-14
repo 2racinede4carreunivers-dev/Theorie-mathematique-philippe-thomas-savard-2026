@@ -1,0 +1,105 @@
+theory geometrie_spectre_premier
+  imports Complex_Main
+begin
+
+text "Formalisation de base de la methode spectrale (Pour tout rapport spectral)."
+
+(* ------------------------------------------------------------------------- *)
+(* 1. Constantes et suites A et B                                            *)
+(* ------------------------------------------------------------------------- *)
+
+(* Constante Zeta : 6ieme terme de la suite A pour tout rapport spectral *)
+definition Z :: real where
+  "Z = 64"
+
+(* Somme de la suite A en fonction de n *)
+definition SA :: "nat \<Rightarrow> real" where
+  "SA n = (3.25 / 2) * (2 ^ n) - 2"
+
+(* Somme de la suite B en fonction de n *)
+definition SB :: "nat \<Rightarrow> real" where
+  "SB n = (6.5 / 2) * (2 ^ n) - 66"
+
+(* Definition du digamma D en fonction de n et de P *)
+definition D :: "nat \<Rightarrow> real \<Rightarrow> real" where
+  "D n P = SB n - SA n - Z * P"
+
+(* Digamma calcule, avec le signe + *)
+definition Dc :: "nat \<Rightarrow> real \<Rightarrow> real" where
+  "Dc n P = SA n + D n P"
+
+(* Formule de reconstruction du nombre premier *)
+definition P_reconstruit :: "nat \<Rightarrow> real \<Rightarrow> real" where
+  "P_reconstruit n P = (SB n - Dc n P) / Z"
+
+lemma reconstruction_P:
+  fixes n :: nat
+  fixes P :: real
+  shows "P_reconstruit n P = P"
+proof -
+  have "P_reconstruit n P = (SB n - (SA n + (SB n - SA n - Z * P))) / Z"
+    unfolding P_reconstruit_def Dc_def D_def by simp
+  also have "... = (SB n - SA n - SB n + SA n + Z * P) / Z"
+    by simp
+  also have "... = (Z * P) / Z"
+    by simp
+  also have "... = P"
+    unfolding Z_def by simp
+  finally show ?thesis .
+qed
+
+(* ------------------------------------------------------------------------- *)
+(* 2. Placeholders nécessaires pour la méthode spectrale finale              *)
+(* ------------------------------------------------------------------------- *)
+
+(* P-ième nombre premier (positif ou négatif) *)
+consts p_index :: "int \<Rightarrow> nat"
+
+(* Nombre premier suivant dans l’ordre croissant *)
+consts next_prime :: "int \<Rightarrow> int"
+
+(* Somme de la suite B associée à un P-ième *)
+definition B_sum :: "int \<Rightarrow> real" where
+  "B_sum P = SB (p_index P)"
+
+(* Digamma calculé associé à un P-ième *)
+definition digamma_P :: "int \<Rightarrow> real" where
+  "digamma_P P = Dc (p_index P) (real_of_int P)"
+
+(* Zêta 6ième position de la suite A pour le rapport spectral correspondant *)
+definition zeta_A6_spectral :: "int \<Rightarrow> int \<Rightarrow> real" where
+  "zeta_A6_spectral P1 P2 = Z"
+
+(* ------------------------------------------------------------------------- *)
+(* 3. Quantité de termes entre deux nombres premiers                         *)
+(* ------------------------------------------------------------------------- *)
+
+definition RA_between_P :: "int \<Rightarrow> int \<Rightarrow> real" where
+  "RA_between_P P1 P2 =
+     (let Ps :: int = next_prime P1;
+          B2 = B_sum P2;
+          dg2 = digamma_P P2
+      in real_of_int Ps - (B2 - dg2))"
+
+definition Q_primes_between :: "int \<Rightarrow> int \<Rightarrow> real" where
+  "Q_primes_between P1 P2 =
+     (let RA = RA_between_P P1 P2;
+          dg1 = digamma_P P1;
+          zA6 = zeta_A6_spectral P1 P2
+      in (RA - dg1) / zA6)"
+
+(* Cas mixte (-,+) : inclusion du zéro \<Rightarrow> +1 *)
+definition Q_primes_between_mixed :: "int \<Rightarrow> int \<Rightarrow> real" where
+  "Q_primes_between_mixed P1 P2 =
+     Q_primes_between P1 P2 + 1"
+
+datatype sign_case = PosPos | NegNeg | NegPos
+
+definition Q_primes_between_case :: "sign_case \<Rightarrow> int \<Rightarrow> int \<Rightarrow> real" where
+  "Q_primes_between_case sc P1 P2 =
+     (case sc of
+        PosPos \<Rightarrow> Q_primes_between P1 P2
+      | NegNeg \<Rightarrow> Q_primes_between P1 P2
+      | NegPos \<Rightarrow> Q_primes_between_mixed P1 P2)"
+
+end
