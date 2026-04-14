@@ -80,7 +80,7 @@ jobs:
       # 🟦 SECTION LATEX — SUPPORT PNG
       ###########################################################################
 
-      - name: Préparer l’accès aux images PNG
+      - name: Préparer l'accès aux images PNG
         run: |
           echo "Configuration TEXINPUTS pour les images..."
           export TEXINPUTS="./assets/images//:"
@@ -249,7 +249,7 @@ jobs:
           path: ~/.isabelle/Isabelle2024/heaps/
 
   ###########################################################################
-  # 🟪 JOB Q&R
+  # 🟪 JOB Q&R — Génération des Questions/Réponses uniquement
   ###########################################################################
 
   generate_qa:
@@ -300,6 +300,12 @@ jobs:
           path: src/pdf/
         continue-on-error: true
 
+      - name: Telecharger les theories HOL
+        uses: actions/download-artifact@v4
+        with:
+          name: hol-theories
+          path: src/hol/
+
       - name: Génération des Questions/Réponses
         if: steps.check_key.outputs.qa_enabled == 'true'
         env:
@@ -332,9 +338,9 @@ jobs:
 
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
-          echo "1. Téléchargez l'artifact `qa-generated`" >> $GITHUB_STEP_SUMMARY
+          echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
           echo "2. Examinez les Q&R dans le fichier Markdown" >> $GITHUB_STEP_SUMMARY
-          echo "3. Utilisez `python qa_validator.py --interactive` pour valider" >> $GITHUB_STEP_SUMMARY
+          echo "3. Utilisez \`python qa_validator.py --interactive\` pour valider" >> $GITHUB_STEP_SUMMARY
           echo "4. Committez la banque mise à jour" >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Q&R générées
@@ -377,6 +383,12 @@ jobs:
         with:
           name: pdf-documents
           path: src/pdf/
+
+      - name: Telecharger les theories HOL
+        uses: actions/download-artifact@v4
+        with:
+          name: hol-theories
+          path: src/hol/
 
       - name: Generation du corpus SQLite complet
         env:
