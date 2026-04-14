@@ -97,15 +97,20 @@ jobs:
           mkdir -p src/pdf
           rm -f src/pdf/*.pdf
 
-      - name: Compiler tous les fichiers LaTeX
+        - name: Compiler tous les fichiers LaTeX
         run: |
           export TEXINPUTS="./assets/images//:"
           export TEXMFHOME="$PWD/texmf"
 
-          echo "Compilation forcée du fichier analyse_hypothese_riemann_savard.tex"
+          echo "Compilation forcee du fichier analyse_hypothese_riemann_savard.tex (src/tex)"
           pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
           pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
           pdflatex -shell-escape -interaction=nonstopmode "src/tex/analyse_hypothese_riemann_savard.tex" || true
+
+          echo "Compilation forcee du fichier analyse_hypothese_riemann_savard.tex (src/tex/tex-2)"
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/tex-2/analyse_hypothese_riemann_savard.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/tex-2/analyse_hypothese_riemann_savard.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/tex-2/analyse_hypothese_riemann_savard.tex" || true
 
           for file in src/tex/*.tex; do
             echo "Compilation de $file"
@@ -113,6 +118,14 @@ jobs:
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
           done
+
+          for file in src/tex/tex-2/*.tex; do
+            echo "Compilation de $file"
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+            pdflatex -shell-escape -interaction=nonstopmode "$file" || true
+          done
+
 
       - name: Copier les PDF generes par LaTeX
         run: |

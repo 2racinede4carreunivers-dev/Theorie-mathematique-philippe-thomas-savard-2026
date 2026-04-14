@@ -1,5 +1,5 @@
 theory geometrie_spectre_premier
-  imports Complex_Main
+  imports Main
 begin
 
 text "Formalisation de base de la methode spectrale (rapport 1/2)."
