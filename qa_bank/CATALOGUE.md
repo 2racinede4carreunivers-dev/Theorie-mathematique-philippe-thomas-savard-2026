@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-15 06:33 UTC
-**Total Q&R:** 73
+**Derniere mise a jour:** 2026-04-15 12:32 UTC
+**Total Q&R:** 74
 
 ---
 
@@ -614,7 +614,15 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ### Source: `teleosemantique_philosophie_esprit_analogiste.tex`
 
-**1. [avance] Quel est le théorème principal concernant l'esprit de finesse tel qu'il est présenté dans la section 'L'esprit de finesse : une carte intérieure du réel' du fichier 'teleosemantique_philosophie_esprit_analogiste.tex'?**
+**1. [expert] Dans l'extrait du fichier PDF 'teleosemantique_philosophie_esprit_analogiste.pdf', on traite de concepts abstraits liés à l'idioschizophrénie et à ses influences psychologiques. Un concept mathématique précis abordé est 'Doctus cum libro' qui se réfère à l'incapacité de penser par soi-même avec une dépendance aux œuvres externes. Dans le cadre de la formalisation de ce concept, si on considère un modèle mathématique représentant la dépendance cognitive par une suite géométrique de raison r, comment calculer le terme général de cette suite si la somme des trois premiers termes est égale à 21 et le premier terme est 3?**
+
+*Categorie: mathematique/calcul | Score: 0.8*
+
+> Pour calculer le terme général d'une suite géométrique en analysant la situation mentionnée, nous utilisons la formule d'un terme général de suite géométrique : a_n = a_1 * r^(n-1), où a_n est le terme général, a_1 est le premier terme, et r est la raison. Nous savons que la somme des trois premiers termes de la suite est 21. Cela nous donne l'équation : a_1 + a_1 * r + a_1 * r^2 = 21. Remplaçons a_1 par 3, nous obtenons 3 + 3r + 3r^2 = 21. En simplifiant, nous avons r^2 + r + 1 = 7. Par conséquent, la tâche consiste à résoudre l'équation quadratique r^2 + r - 6 = 0. Utilisons la formule quadratique r = (-b ± √(b^2 - 4ac)) / 2a pour trouver r. Ici, a = 1, b = 1, c = -6. Le discriminant est b^2 - 4ac = 1 + 24 = 25, donc r = (-1 ± 5) / 2. Ceci donne les solutions r = 2 et r = -3. Le terme général de la suite lorsqu'on choisit r = 2 est a_n = 3 * 2^(n-1).
+
+---
+
+**2. [avance] Quel est le théorème principal concernant l'esprit de finesse tel qu'il est présenté dans la section 'L'esprit de finesse : une carte intérieure du réel' du fichier 'teleosemantique_philosophie_esprit_analogiste.tex'?**
 
 *Categorie: mathematique/theoreme | Score: 0.8*
 
