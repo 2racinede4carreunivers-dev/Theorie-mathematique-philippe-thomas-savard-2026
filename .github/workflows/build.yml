@@ -97,7 +97,7 @@ jobs:
           mkdir -p src/pdf
           rm -f src/pdf/*.pdf
 
-        - name: Compiler tous les fichiers LaTeX
+      - name: Compiler tous les fichiers LaTeX
         run: |
           export TEXINPUTS="./assets/images//:"
           export TEXMFHOME="$PWD/texmf"
