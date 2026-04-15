@@ -126,7 +126,7 @@ jobs:
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
           done
 
-        - name: Copier les PDF generes par LaTeX
+      - name: Copier les PDF generes par LaTeX
         run: |
           mkdir -p src/pdf
 
