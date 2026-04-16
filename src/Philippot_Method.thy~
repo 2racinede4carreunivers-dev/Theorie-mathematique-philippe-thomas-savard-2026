@@ -1,0 +1,52 @@
+theory Philippot_Method
+  imports Complex_Main
+begin
+
+locale philippot_step1_7terms =
+  fixes k :: real
+  assumes k_gt1: "k > 1"
+begin
+
+definition suite7 :: "nat \<Rightarrow> real" where
+  "suite7 n = (1 / k) ^ (n + 1)"
+
+definition Rs7 :: real where
+  "Rs7 = (1 - (1 / k) ^ 7) / (k - 1)"
+
+lemma somme_7_termes:
+  shows "(\<Sum>n<7. suite7 n) = Rs7"
+proof -
+  have A: "(\<Sum>n<7. suite7 n) = (\<Sum>n<7. (1 / k) ^ (n + 1))"
+    by (simp add: suite7_def)
+
+  have B: "(\<Sum>n<7. (1 / k) ^ (n + 1)) = (1 / k) * (\<Sum>n<7. (1 / k) ^ n)"
+    by (simp add: power_Suc sum_distrib_left)
+
+  from k_gt1 have k_not1: "k \<noteq> 1" and k_not0: "k \<noteq> 0"
+    by auto
+
+  have C: "(\<Sum>n<7. (1 / k) ^ n) =
+         (1 - (1 / k) ^ 7) / (1 - 1 / k)"
+  proof -
+    have "(\<Sum>n<7. (1 / k) ^ n) =
+          ((1 / k) ^ 7 - 1) / ((1 / k) - 1)"
+      using k_not1 by (simp add: geometric_sum)
+    also have "... = (1 - (1 / k) ^ 7) / (1 - 1 / k)"
+      by (simp add: field_simps)
+    finally show ?thesis .
+  qed
+
+  have "(\<Sum>n<7. suite7 n) =
+        (1 / k) * ((1 - (1 / k) ^ 7) / (1 - 1 / k))"
+    using A B C by simp
+
+  also have "... = (1 - (1 / k) ^ 7) / (k - 1)"
+    using k_not0 k_not1 by (simp add: field_simps)
+
+  finally show ?thesis
+    by (simp add: Rs7_def)
+qed
+
+end  (* \<leftarrow> fermeture correcte de la locale *)
+
+end  (* \<leftarrow> fermeture correcte de la théorie *)
