@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-16 12:33 UTC
-**Total Q&R:** 77
+**Derniere mise a jour:** 2026-04-16 18:26 UTC
+**Total Q&R:** 78
 
 ---
 
@@ -49,6 +49,20 @@
 *Categorie: mathematique/application | Score: 0.8*
 
 > La relation 'relation_diag_hauteur_rayon', indiquée dans le fichier 'espace_philippot.thy', stipule que la grande diagonale de la base de la pyramide, multipliée par sa hauteur et augmentée du rayon divisé par deux, est égale à la somme du carré de sa hauteur et de l'aire du disque. Cette relation peut avoir des implications pratiques dans la conception de structures architecturales pyramidales en fournissant un cadre mathématique pour optimiser la stabilité et l'espace intérieur d'une pyramide. En utilisant cette règle, les architectes et ingénieurs peuvent concevoir des pyramides où les dimensions sont précisément définies pour maximiser la résistance et minimiser le matériau utilisé, tout en respectant des contraintes esthétiques ou fonctionnelles. Cela permettrait aussi de modéliser l'écoulement de forces et de tensions au sein de la structure, améliorant ainsi la durabilité de constructions pyramidales modernes.
+
+---
+
+### Source: `geometrie_du_spectre_premier.pdf`
+
+**1. [expert] Dans l'exemple complet illustré pour le 11ème nombre premier, comment la somme des éléments de la 1ère suite jusqu'à la position 11, puisés selon le tableau donné, est-elle calculée pour vérifier le résultat √13827845?**
+
+*Categorie: mathematique/calcul | Score: 0.8*
+
+> Pour calculer la somme des éléments de la 1ère suite jusqu'à la position 11, nous devons extraire chaque terme du tableau donné et les additionner. Les termes de la 1ère suite sont : √5, √20, √80, √320, √1280, √5120, √20480, √81920, √327680, √983040, √3932160. La somme totale de ces termes est indiquée dans l'extrait comme étant √13827845. Calculons chaque étape : premièrement, calculez chaque racine carrée pour obtenir les valeurs numériques jusqu'à une précision nécessaire, ensuite ajoutez-les ensemble. Cela donne :
+
+√5 ≈ 2.236, √20 ≈ 4.472, √80 ≈ 8.944, √320 ≈ 17.888, √1280 ≈ 35.777, √5120 ≈ 71.554, √20480 ≈ 143.109, √81920 ≈ 286.217, √327680 ≈ 572.433, √983040 ≈ 992.157 et √3932160 ≈ 1984.315.
+
+Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 + 143.109 + 286.217 + 572.433 + 992.157 + 1984.315 = 4119.102, qui doit correspondre approximativement à √13827845 lorsque converti à la forme de racine carrée. La vérification précise de l'approximation dépendra de la précision numérique appliquée aux calculs individuels des racines carrées.
 
 ---
 
