@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-16 06:34 UTC
-**Total Q&R:** 76
+**Derniere mise a jour:** 2026-04-16 12:33 UTC
+**Total Q&R:** 77
 
 ---
 
@@ -72,7 +72,15 @@
 
 ### Source: `geometry_prime_spectrum.tex`
 
-**1. [debutant] Quelle est l'hypothèse axiomatique sous-jacente pour garantir la validité de l'équation des nombres premiers dans le cas positif, telle qu'énoncée dans ce fichier?**
+**1. [avance] Comment la relation entre le ratio spectral constant RsP_1_3 égal à 1/3, et RsP_1_4 égal à 1/4, est-elle établie à travers les différences entre A_1_3, B_1_3 et A_1_4, B_1_4, et quelles sont les implications pour les séquences négatives définies par SA_neg_eq et SB_neg_eq?**
+
+*Categorie: mathematique/relation | Score: 0.8*
+
+> Dans les sections du document 'geometry_prime_spectrum.tex' sur les rapports spectraux constants, nous avons deux démonstrations distinctes pour RsP_1_3 et RsP_1_4. Pour RsP_1_3, la différence entre A_1_3 et B_1_3 est exprimée par les équations RsP_1_3 n1 n2 = (...) / (...), ce qui aboutit à un ratio de 1/3. Ce résultat est obtenu en divisant (73/108) par (219/108), après simplification des termes selon les puissances de 3. De manière similaire, pour RsP_1_4, à travers la démonstration RsP_1_4 n1 n2 = (...) / (...), on obtient un ratio de 1/4 en simplifiant (241/192) par (964/192) avec des puissances de 4. Ces ratios sont obtenus via des différences de séries géométriques, entraînant des relations constantes malgré les différences structurelles des équations de base. En étendant cette idée aux séquences négatives (definées par SA_neg_eq et SB_neg_eq), les structures d'équations diffèrent mais conservent la cohérence mathématique, montrant comment les méthodes peuvent être généralisées à un contexte négatif pour obtenir RsP_neg à 1/2, comme indiqué par l'axiome spectral_ratio_neg_un_demi.
+
+---
+
+**2. [debutant] Quelle est l'hypothèse axiomatique sous-jacente pour garantir la validité de l'équation des nombres premiers dans le cas positif, telle qu'énoncée dans ce fichier?**
 
 *Categorie: mathematique/fondement | Score: 0.8*
 
@@ -80,7 +88,7 @@
 
 ---
 
-**2. [debutant] Dans l'extrait de la section 'Axiomatization' de 'geometry_prime_spectrum.tex', quelle est la signification de l'axiome selon lequel 'Le rapport spectral \( \frac{1}{k} \) est numériquement valide mais algébriquement incohérent' ?**
+**3. [debutant] Dans l'extrait de la section 'Axiomatization' de 'geometry_prime_spectrum.tex', quelle est la signification de l'axiome selon lequel 'Le rapport spectral \( \frac{1}{k} \) est numériquement valide mais algébriquement incohérent' ?**
 
 *Categorie: mathematique/fondement | Score: 0.8*
 
