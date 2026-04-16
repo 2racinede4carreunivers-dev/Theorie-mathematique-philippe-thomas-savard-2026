@@ -5,7 +5,7 @@ Creer une banque de questions et reponses (Q&R) evolutive et intelligente stocke
 
 ## Architecture
 - Depot GitHub : `Theorie-mathematique-philippe-thomas-savard-2026`
-- Sources : `src/tex/` (10 LaTeX), `src/hol/` (5 Isabelle/HOL), `src/pdf/` (14 PDF)
+- Sources : `src/tex/` (10 LaTeX), `src/hol/` (5+1 Isabelle/HOL), `src/pdf/` (14 PDF)
 - Bases de donnees : `qa_bank/qa_bank.db` (Q&R), `qa_bank/corpus.db` (extraction)
 - Scripts : `scripts/auto_generate_qa.py`, `scripts/generate_corpus_db.py`
 - CI/CD : `.github/workflows/build.yml`, `auto-daily-qa.yml`
@@ -16,27 +16,38 @@ Creer une banque de questions et reponses (Q&R) evolutive et intelligente stocke
 ### Phase 1 - Infrastructure CI/CD
 - Workflows GitHub Actions (build, cron quotidien Q&R, propositions hebdomadaires, maintenance mensuelle)
 - Scripts Python autonomes dans `scripts/`
-- Correction syntaxe YAML (inline Python → scripts autonomes)
-- Attestation SLSA ciblee sur les 19 fichiers theoriques
+- Correction syntaxe YAML
 
 ### Phase 2 - Qualite du contenu
-- Script narratif V2 pragmatique (`SCRIPT_NARRATIF.md`)
-- Nettoyage massif du depot (254 Mo → 56 Mo)
+- Script narratif V2 pragmatique
+- Nettoyage massif du depot (254 Mo -> 56 Mo)
 - README complet + Release v1.0.0
 
 ### Phase 3 - Intelligence documentaire
-- Job `generate_corpus_db` dans `build.yml` pour extraction automatique texte/structures
-- `corpus.db` avec tables : files, hol_structure, tex_structure, pdf_structure, concepts
-- `auto_generate_qa.py` V3 exploitant `corpus.db` pour Q&R riches en equations/preuves
+- Job `generate_corpus_db` dans `build.yml`
+- `corpus.db` avec extraction complete
+- `auto_generate_qa.py` V3 exploitant `corpus.db`
 
 ### Phase 4 - Arborescences avec schemas (2026-04-13)
-- 4 fichiers Mermaid.js dans `src/arborescences_corpus/` :
-  - `arborescence_hol.md` : dependances HOL, locales, axiomes
-  - `arborescence_latex.md` : relations documents, references croisees HOL
-  - `arborescence_pdf.md` : pipeline compilation, correspondances source/PDF
-  - `arborescence_globale.md` : flux CI/CD complet, interdependances 3 couches
-- Commit : `43a7a63` pousse sur `main`
+- 4 fichiers Mermaid.js dans `src/arborescences_corpus/`
+- Commit : `43a7a63`
+
+### Phase 5 - Generalisation Philippot_Method.thy (2026-04-13)
+- Nouvelle theorie `Philippot_Method.thy` ajoutee au depot
+- ROOT mis a jour pour inclure la theorie
+- Contenu :
+  - Conservation de toutes les locales existantes (3-7 termes, len>=8)
+  - Formule unifiee : explicit_sum(p, s) = Rs - accumulated(p, s)
+  - Position de substitution : p = n-2 (3-7 termes), p = 6 (8+ termes)
+  - Identites algebriques : factorisation, paire de queue simplifiee
+  - Lemme telescopique par induction
+  - Invariance du rapport spectral 1/k
+  - Theoremes de validation pour toutes longueurs et etapes
+  - Forme fermee de l'accumulation
+  - Certaines preuves algebriques marquees `sorry` (necessitent sledgehammer)
+- Commit : `702e49b`
 
 ## Backlog
+- P1 : Completer les preuves `sorry` dans Philippot_Method.thy via sledgehammer
 - P1 : Surveiller qualite generation quotidienne Q&R avec corpus.db
 - P2 : Ameliorer l'application web des 3 IAs collaboratives
