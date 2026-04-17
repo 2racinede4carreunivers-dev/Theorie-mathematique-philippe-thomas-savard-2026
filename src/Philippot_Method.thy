@@ -475,10 +475,11 @@ lemma power_decompose_plus2:
   shows "k ^ a = k ^ (a - 2) * k ^ 2"
 proof -
   have "a = (a - 2) + 2"
-    using assms by simp
+    using assms by auto
   then show ?thesis
-    by (simp add: power_add)
+    by (auto add: power_add)
 qed
+
 
 
 
@@ -489,7 +490,7 @@ text "
 
 lemma diff_factor_pow2:
   fixes k :: real and a :: nat
-  assumes "a >= 2"
+  assumes "a \<ge> 2"
   shows "k ^ a - k ^ (a - 2) = k ^ (a - 2) * (k ^ 2 - 1)"
 proof -
   have "k ^ a = k ^ (a - 2) * k ^ 2"
@@ -513,7 +514,7 @@ text "
 
 lemma power_pred_decompose:
   fixes k :: real and a :: nat
-  assumes "a >= 2"
+  assumes "a \<ge> 2"
   shows "k ^ (a - 1) = k * k ^ (a - 2)"
 proof -
   have "a - 1 = Suc (a - 2)" using assms by simp
@@ -527,7 +528,7 @@ text "
 
 lemma diff_pow_pos:
   fixes k :: real and a :: nat
-  assumes "k > 1" "a >= 2"
+  assumes "k > 1" "a \<ge> 2"
   shows "k ^ a - k ^ (a - 2) > 0"
 proof -
   have "k ^ (a - 2) * (k ^ 2 - 1) > 0"
@@ -558,26 +559,26 @@ text "
 
 lemma tail_pair_simplified:
   fixes k :: real and a :: nat
-  assumes "k > 1" "a >= 2"
+  assumes "k > 1" "a \<ge> 2"
   shows "1 / (k ^ a - k ^ (a - 2)) + 1 / (k ^ (a + 1) - k ^ (a - 1))
        = 1 / (k ^ (a - 1) * (k - 1))"
 proof -
   (* Conditions de non-nullite *)
   have k_pos: "k > 0" using assms(1) by simp
-  have k_neq0: "k ~= 0" using k_pos by simp
+  have k_neq0: "k \<noteq> 0" using k_pos by simp
   have km1_pos: "k - 1 > 0" using assms(1) by simp
   have kp1_pos: "k + 1 > 0" using assms(1) by simp
-  have kp1_neq0: "k + 1 ~= 0" using kp1_pos by simp
-  have kpow_pos: "!!n. k ^ n > 0" using k_pos by simp
+  have kp1_neq0: "k + 1 \<noteq> 0" using kp1_pos by simp
+  have kpow_pos: "\<And>n. k ^ n > 0" using k_pos by simp
   have ksq_m1_pos: "k ^ 2 - 1 > 0"
     using assms(1) by (simp add: power2_eq_square)
-  have ksq_m1_neq0: "k ^ 2 - 1 ~= 0" using ksq_m1_pos by simp
+  have ksq_m1_neq0: "k ^ 2 - 1 \<noteq> 0" using ksq_m1_pos by simp
 
   (* Etape 1 : Factoriser les denominateurs *)
   have d1: "k ^ a - k ^ (a - 2) = k ^ (a - 2) * (k ^ 2 - 1)"
     using diff_factor_pow2[OF assms(2)] .
 
-  have a1_ge2: "a + 1 >= 2" using assms(2) by simp
+  have a1_ge2: "a + 1 \<ge> 2" using assms(2) by simp
   have d2: "k ^ (a + 1) - k ^ (a - 1) = k ^ (a - 1) * (k ^ 2 - 1)"
   proof -
     have "k ^ (a + 1) - k ^ ((a + 1) - 2) = k ^ ((a + 1) - 2) * (k ^ 2 - 1)"
@@ -586,9 +587,9 @@ proof -
     ultimately show ?thesis by simp
   qed
 
-  have d1_neq0: "k ^ a - k ^ (a - 2) ~= 0"
+  have d1_neq0: "k ^ a - k ^ (a - 2) \<noteq> 0"
     using diff_pow_pos[OF assms] by simp
-  have d2_neq0: "k ^ (a + 1) - k ^ (a - 1) ~= 0"
+  have d2_neq0: "k ^ (a + 1) - k ^ (a - 1) \<noteq> 0"
     using diff_pow_pos[OF assms(1) a1_ge2] by simp
 
   (* Etape 2 : Reecriture avec les facteurs *)
@@ -643,11 +644,11 @@ text "
 "
 
 lemma k_pos: "k > 0" using k_gt1 by simp
-lemma k_neq0: "k ~= 0" using k_pos by simp
+lemma k_neq0: "k \<noteq> 0" using k_pos by simp
 lemma km1_pos: "k - 1 > 0" using k_gt1 by simp
-lemma km1_neq0: "k - 1 ~= 0" using km1_pos by simp
+lemma km1_neq0: "k - 1 \<noteq> 0" using km1_pos by simp
 lemma kpow_pos: "k ^ n > 0" using k_pos by simp
-lemma kpow_neq0: "k ^ n ~= 0" using kpow_pos by simp
+lemma kpow_neq0: "k ^ n \<noteq> 0" using kpow_pos by simp
 
 (* ----- Definitions fondamentales ----- *)
 
@@ -666,8 +667,8 @@ text "
     - Pour n >= 8      : sub_pos n = 6
 "
 
-definition sub_pos :: "nat => nat" where
-  "sub_pos n = (if n >= 8 then 6 else n - 2)"
+definition sub_pos :: "nat \<Rightarrow> nat" where
+  "sub_pos n = (if n \<ge> 8 then 6 else n - 2)"
 
 text "
   accumulated : substitution accumulee aux etapes precedentes.
@@ -678,9 +679,9 @@ text "
   La garde (s <= 1) empeche le debordement de la soustraction nat.
 "
 
-definition accumulated :: "nat => nat => real" where
-  "accumulated p s = (if s <= 1 then 0
-                      else (sum (%i. 1 / k ^ i) {p .. p + (s - 2)}))"
+definition accumulated :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+  "accumulated p s = (if s \<le> 1 then 0
+                      else (\<Sum>i = p .. p + (s - 2). 1 / k ^ i))"
 
 text "
   formula : valeur theorique de la somme a l'etape s.
@@ -689,7 +690,7 @@ text "
                = 1/(k-1) - Sum_{i=p}^{p+s-2} 1/k^i
 "
 
-definition formula :: "nat => nat => real" where
+definition formula :: "nat \<Rightarrow> nat \<Rightarrow> real" where
   "formula p s = Rs - accumulated p s"
 
 text "
@@ -704,9 +705,9 @@ text "
   Nombre total de termes : (p-1) + 1 + 2 = p + 2
 "
 
-definition explicit_sum :: "nat => nat => real" where
+definition explicit_sum :: "nat \<Rightarrow> nat \<Rightarrow> real" where
   "explicit_sum p s =
-     (sum (%i. 1 / k ^ i) {1 .. p - 1})
+     (\<Sum>i = 1 .. p - 1. 1 / k ^ i)
    + 1 / k ^ (p + s - 1)
    + 1 / (k ^ (p + s) - k ^ (p + s - 2))
    + 1 / (k ^ (p + s + 1) - k ^ (p + s - 1))"
@@ -733,7 +734,7 @@ lemma terms_count_6: "sub_pos 6 + 2 = 6"
 lemma terms_count_7: "sub_pos 7 + 2 = 7"
   by (simp add: sub_pos_def)
 
-lemma terms_count_ge8: "n >= 8 ==> sub_pos n + 2 = 8"
+lemma terms_count_ge8: "n \<ge> 8 \<Longrightarrow> sub_pos n + 2 = 8"
   by (simp add: sub_pos_def)
 
 text "
@@ -745,7 +746,7 @@ lemma sub_pos_4: "sub_pos 4 = 2" by (simp add: sub_pos_def)
 lemma sub_pos_5: "sub_pos 5 = 3" by (simp add: sub_pos_def)
 lemma sub_pos_6: "sub_pos 6 = 4" by (simp add: sub_pos_def)
 lemma sub_pos_7: "sub_pos 7 = 5" by (simp add: sub_pos_def)
-lemma sub_pos_ge8: "n >= 8 ==> sub_pos n = 6" by (simp add: sub_pos_def)
+lemma sub_pos_ge8: "n \<ge> 8 \<Longrightarrow> sub_pos n = 6" by (simp add: sub_pos_def)
 
 text "
   Valeurs de l'accumulation pour les premieres etapes.
@@ -796,7 +797,7 @@ text "
 "
 
 lemma accumulated_recurrence:
-  assumes "s >= 1"
+  assumes "s \<ge> 1"
   shows "accumulated p (Suc s) = accumulated p s + 1 / k ^ (p + s - 1)"
 proof (cases "s = 1")
   case True
@@ -804,12 +805,12 @@ proof (cases "s = 1")
     by (simp add: accumulated_def)
 next
   case False
-  then have s_ge2: "s >= 2" using assms by simp
+  then have s_ge2: "s \<ge> 2" using assms by simp
   then have "accumulated p s =
-               (sum (%i. 1 / k ^ i) {p .. p + (s - 2)})"
+               (\<Sum> i = p .. p + (s - 2). 1 / k ^ i)"
     by (simp add: accumulated_def)
   moreover have "accumulated p (Suc s) =
-                   (sum (%i. 1 / k ^ i) {p .. p + (Suc s - 2)})"
+                   (\<Sum> i = p .. p + (Suc s - 2). 1 / k ^ i)"
     using s_ge2 by (simp add: accumulated_def)
   moreover have "p + (Suc s - 2) = p + (s - 1)"
     by simp
@@ -819,7 +820,7 @@ qed
 
 
 lemma telescoping:
-  assumes "p >= 1" "s >= 1"
+  assumes "p \<ge> 1" "s \<ge> 1"
   shows "(k - 1) * accumulated p s = 1 / k ^ (p - 1) - 1 / k ^ (p + s - 2)"
 using assms(2)
 proof (induction s)
@@ -837,7 +838,7 @@ next
     ultimately show ?thesis by simp
   next
     case False
-    then have s_ge1: "s >= 1" by simp
+    then have s_ge1: "s \<ge> 1" by simp
     (* Hypothese de recurrence *)
     have IH: "(k - 1) * accumulated p s = 1 / k ^ (p - 1) - 1 / k ^ (p + s - 2)"
       using Suc.IH s_ge1 by simp
@@ -907,11 +908,11 @@ text "
 "
 
 theorem main_equivalence:
-  assumes "p >= 1" "s >= 1"
+  assumes "p \<ge> 1" "s \<ge> 1"
   shows "explicit_sum p s = formula p s"
 proof -
   let ?a = "p + s"
-  have a_ge2: "?a >= 2" using assms by simp
+  have a_ge2: "?a \<ge> 2" using assms by simp
 
   (* 1. Simplification de la paire de queue *)
   have tail: "1 / (k ^ ?a - k ^ (?a - 2)) + 1 / (k ^ (?a + 1) - k ^ (?a - 1))
@@ -927,26 +928,26 @@ proof -
 
   (* 3. Prefixe geometrique *)
   have prefix_sum:
-    "(sum (%i. 1 / k ^ i) {1..p - 1}) = (1 - 1 / k ^ (p - 1)) / (k - 1)"
+    "(\<Sum>i = 1..p - 1. 1 / k ^ i) = (1 - 1 / k ^ (p - 1)) / (k - 1)"
     using km1_neq0 kpow_neq0
     sorry
 
   (* 4. Assemblage et comparaison avec la formule *)
   have "explicit_sum p s
-      = (sum (%i. 1 / k ^ i) {1..p - 1})
+      = (\<Sum>i = 1..p - 1. 1 / k ^ i)
       + 1 / k ^ (p + s - 1)
       + 1 / (k ^ (p + s) - k ^ (p + s - 2))
       + 1 / (k ^ (p + s + 1) - k ^ (p + s - 1))"
     by (simp add: explicit_sum_def)
 
   (* La paire de queue se simplifie *)
-  also have "... = (sum (%i. 1 / k ^ i) {1..p - 1})
+  also have "... = (\<Sum>i = 1..p - 1. 1 / k ^ i)
                  + 1 / k ^ (p + s - 1)
                  + 1 / (k ^ (p + s - 1) * (k - 1))"
     using tail by (simp add: algebra_simps)
 
   (* Combiner mobile + queue *)
-  also have "... = (sum (%i. 1 / k ^ i) {1..p - 1})
+  also have "... = (\<Sum>i = 1..p - 1. 1 / k ^ i)
                  + 1 / (k ^ (p + s - 2) * (k - 1))"
     using mobile_plus_tail by simp
 
@@ -998,23 +999,23 @@ text "
 "
 
 theorem philippot_valid_3terms:
-  "ALL s >= 1. explicit_sum 1 s = formula 1 s"
+  "\<forall>s \<ge> 1. explicit_sum 1 s = formula 1 s"
   using main_equivalence by simp
 
 theorem philippot_valid_4terms:
-  "ALL s >= 1. explicit_sum 2 s = formula 2 s"
+  "\<forall>s \<ge> 1. explicit_sum 2 s = formula 2 s"
   using main_equivalence by simp
 
 theorem philippot_valid_5terms:
-  "ALL s >= 1. explicit_sum 3 s = formula 3 s"
+  "\<forall>s \<ge> 1. explicit_sum 3 s = formula 3 s"
   using main_equivalence by simp
 
 theorem philippot_valid_6terms:
-  "ALL s >= 1. explicit_sum 4 s = formula 4 s"
+  "\<forall>s \<ge> 1. explicit_sum 4 s = formula 4 s"
   using main_equivalence by simp
 
 theorem philippot_valid_7terms:
-  "ALL s >= 1. explicit_sum 5 s = formula 5 s"
+  "\<forall>s \<ge> 1. explicit_sum 5 s = formula 5 s"
   using main_equivalence by simp
 
 text "
@@ -1024,10 +1025,10 @@ text "
 "
 
 theorem philippot_valid_3_to_7:
-  assumes "3 <= n" "n <= 7" "s >= 1"
+  assumes "3 \<le> n" "n \<le> 7" "s \<ge> 1"
   shows "explicit_sum (sub_pos n) s = formula (sub_pos n) s"
 proof -
-  have "sub_pos n >= 1"
+  have "sub_pos n \<ge> 1"
     using assms(1) assms(2) by (simp add: sub_pos_def)
   then show ?thesis using main_equivalence assms(3) by simp
 qed
@@ -1053,7 +1054,7 @@ text "
 "
 
 theorem philippot_valid_ge8:
-  assumes "n >= 8" "s >= 1"
+  assumes "n \<ge> 8" "s \<ge> 1"
   shows "explicit_sum (sub_pos n) s = formula (sub_pos n) s"
 proof -
   have "sub_pos n = 6" using sub_pos_ge8[OF assms(1)] .
@@ -1113,10 +1114,10 @@ text "
 "
 
 theorem philippot_methode_complete:
-  assumes "n >= 3" "s >= 1"
+  assumes "n \<ge> 3" "s \<ge> 1"
   shows "explicit_sum (sub_pos n) s = formula (sub_pos n) s"
 proof -
-  have p_ge1: "sub_pos n >= 1"
+  have p_ge1: "sub_pos n \<ge> 1"
     using assms(1) by (simp add: sub_pos_def)
   show ?thesis using main_equivalence[OF p_ge1 assms(2)] .
 qed
@@ -1145,7 +1146,7 @@ text "
 "
 
 lemma spectral_ratio_invariance:
-  assumes "s >= 2"
+  assumes "s \<ge> 2"
   shows "(1 / k ^ (p + s - 1)) / (1 / k ^ (p + s - 2)) = 1 / k"
 proof -
   have "k ^ (p + s - 1) = k * k ^ (p + s - 2)"
@@ -1179,7 +1180,7 @@ text "
 "
 
 lemma accumulated_closed_form:
-  assumes "p >= 1" "s >= 1"
+  assumes "p \<ge> 1" "s \<ge> 1"
   shows "accumulated p s = (1 / k ^ (p - 1) - 1 / k ^ (p + s - 2)) / (k - 1)"
 proof -
   have "(k - 1) * accumulated p s = 1 / k ^ (p - 1) - 1 / k ^ (p + s - 2)"
@@ -1192,12 +1193,12 @@ text "
 "
 
 lemma accumulated_step1_closed:
-  assumes "p >= 1"
+  assumes "p \<ge> 1"
   shows "accumulated p 1 = 0"
   by (simp add: accumulated_def)
 
 lemma formula_step1:
-  assumes "p >= 1"
+  assumes "p \<ge> 1"
   shows "formula p 1 = Rs"
   by (simp add: formula_def accumulated_step1)
 
@@ -1237,7 +1238,7 @@ text "
 "
 
 lemma coherence_step1_all:
-  assumes "n >= 3"
+  assumes "n \<ge> 3"
   shows "formula (sub_pos n) 1 = Rs"
   by (simp add: formula_def accumulated_step1)
 
@@ -1262,7 +1263,7 @@ lemma coherence_step2_7terms:
   by (simp add: formula_def accumulated_step2 sub_pos_def)
 
 lemma coherence_step2_ge8:
-  assumes "n >= 8"
+  assumes "n \<ge> 8"
   shows "formula (sub_pos n) 2 = Rs - 1 / k ^ 6"
   using assms by (simp add: formula_def accumulated_step2 sub_pos_def)
 
@@ -1275,7 +1276,7 @@ lemma coherence_step3_7terms:
   by (simp add: formula_def accumulated_step3 sub_pos_def)
 
 lemma coherence_step3_ge8:
-  assumes "n >= 8"
+  assumes "n \<ge> 8"
   shows "formula (sub_pos n) 3 = Rs - (1 / k ^ 6 + 1 / k ^ 7)"
   using assms by (simp add: formula_def accumulated_step3 sub_pos_def)
 
