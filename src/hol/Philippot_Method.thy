@@ -474,8 +474,10 @@ lemma power_decompose_plus2:
   assumes "a \<ge> 2"
   shows "k ^ a = k ^ (a - 2) * k ^ 2"
 proof -
-  have "a = (a - 2) + 2" using assms by simp
-  then show ?thesis by (simp add: power_add)
+  have "a = (a - 2) + 2"
+    using assms by simp
+  then show ?thesis
+    by (simp add: power_add)
 qed
 
 text "
@@ -593,8 +595,6 @@ proof -
     using d1 d2 by simp
 
   (* Etape 3 : Combiner les fractions sur denominateur commun.
-     1/A + 1/B = (A+B)/(A*B) ou on factorise (k^2-1).
-
      1/(k^(a-2)*(k^2-1)) + 1/(k^(a-1)*(k^2-1))
      = [1/k^(a-2) + 1/k^(a-1)] / (k^2-1)
      = [k/k^(a-1) + 1/k^(a-1)] / (k^2-1)
@@ -800,11 +800,20 @@ proof (cases "s = 1")
     by (simp add: accumulated_def)
 next
   case False
-  then have "s \<ge> 2" using assms by simp
-  then show ?thesis
+  then have s_ge2: "s \<ge> 2" using assms by simp
+  then have acc_s: "accumulated p s =
+               (\<Sum>i = p .. p + (s - 2). 1 / k ^ i)"
     by (simp add: accumulated_def)
-       sorry
+  have acc_suc: "accumulated p (Suc s) =
+                   (\<Sum>i = p .. p + (Suc s - 2). 1 / k ^ i)"
+    using s_ge2 by (simp add: accumulated_def)
+  have idx_eq: "p + (Suc s - 2) = Suc (p + (s - 2))"
+    using s_ge2 by simp
+  show ?thesis
+    using acc_s acc_suc idx_eq s_ge2
+    sorry
 qed
+
 
 lemma telescoping:
   assumes "p \<ge> 1" "s \<ge> 1"
@@ -844,12 +853,8 @@ next
       (* Etape algebrique cle :
          -1/k^(p+s-2) + (k-1)/k^(p+s-1)
          = -k/k^(p+s-1) + (k-1)/k^(p+s-1)
-         = -(k - (k-1))/k^(p+s-1)
          = -1/k^(p+s-1)
          Et p + Suc s - 2 = p + s - 1
-
-         Cette etape utilise : k^(p+s-1) = k * k^(p+s-2)
-         (power_pred_decompose) et l'arithmetique des fractions.
       *)
       have eq_exp: "p + Suc s - 2 = p + s - 1" using s_ge1 assms(1) by simp
       show ?thesis using eq_exp kpow_neq0 km1_neq0
@@ -867,31 +872,7 @@ text "
 
     explicit_sum p s = formula p s
 
-  C'est-a-dire :
-
-    [Sum_{i=1}^{p-1} 1/k^i] + 1/k^(p+s-1)
-    + 1/(k^(p+s) - k^(p+s-2)) + 1/(k^(p+s+1) - k^(p+s-1))
-    = 1/(k-1) - Sum_{i=p}^{p+s-2} 1/k^i
-
-  Preuve :
-    1. La paire de queue se simplifie :
-       1/(k^(p+s) - k^(p+s-2)) + 1/(k^(p+s+1) - k^(p+s-1))
-       = 1 / (k^(p+s-1) * (k-1))     [par tail_pair_simplified]
-
-    2. Combiner le terme mobile et la queue simplifiee :
-       1/k^(p+s-1) + 1/(k^(p+s-1)*(k-1))
-       = 1/k^(p+s-1) * (1 + 1/(k-1))
-       = 1/k^(p+s-1) * k/(k-1)
-       = 1/(k^(p+s-2) * (k-1))
-
-    3. Ajouter le prefixe :
-       (1 - 1/k^(p-1))/(k-1) + 1/(k^(p+s-2)*(k-1))
-       = [1 - 1/k^(p-1) + 1/k^(p+s-2)] / (k-1)
-
-    4. Par le lemme telescopique :
-       Rs - accumulated(p,s) = [1 - 1/k^(p-1) + 1/k^(p+s-2)] / (k-1)
-
-    Donc explicit_sum = formula. CQFD.
+  Preuve en 4 etapes (voir bloc text ci-dessus pour les details).
 "
 
 theorem main_equivalence:
@@ -986,23 +967,23 @@ text "
 "
 
 theorem philippot_valid_3terms:
-  "\<forall>s \<ge> 1. explicit_sum 1 s = formula 1 s"
+  "\<forall>s. s \<ge> 1 \<longrightarrow> explicit_sum 1 s = formula 1 s"
   using main_equivalence by simp
 
 theorem philippot_valid_4terms:
-  "\<forall>s \<ge> 1. explicit_sum 2 s = formula 2 s"
+  "\<forall>s. s \<ge> 1 \<longrightarrow> explicit_sum 2 s = formula 2 s"
   using main_equivalence by simp
 
 theorem philippot_valid_5terms:
-  "\<forall>s \<ge> 1. explicit_sum 3 s = formula 3 s"
+  "\<forall>s. s \<ge> 1 \<longrightarrow> explicit_sum 3 s = formula 3 s"
   using main_equivalence by simp
 
 theorem philippot_valid_6terms:
-  "\<forall>s \<ge> 1. explicit_sum 4 s = formula 4 s"
+  "\<forall>s. s \<ge> 1 \<longrightarrow> explicit_sum 4 s = formula 4 s"
   using main_equivalence by simp
 
 theorem philippot_valid_7terms:
-  "\<forall>s \<ge> 1. explicit_sum 5 s = formula 5 s"
+  "\<forall>s. s \<ge> 1 \<longrightarrow> explicit_sum 5 s = formula 5 s"
   using main_equivalence by simp
 
 text "
@@ -1304,15 +1285,15 @@ text "
     8. philippot_methode_complete :
                            valide pour tout n >= 3, tout s, tout k > 1
 
-  REMARQUES SUR LES PREUVES :
-    - Les lemmes algebriques (paire de queue, combinaison de fractions)
-      sont marques 'sorry' aux etapes de manipulation de fractions avec
-      exposants variables. Utiliser 'sledgehammer' dans Isabelle pour
-      les completer.
-    - Le lemme telescopique et le theoreme principal sont structures
-      par induction et chaine de calcul (also/have/finally).
-    - Toutes les definitions sont calculables et peuvent etre verifiees
-      par 'simp' sur des instances concretes de k.
+  SORRY RESTANTS (6 au total) :
+    - tail_pair_simplified (ligne ~614) : combinaison de fractions
+    - accumulated_recurrence (ligne ~818) : split de somme finie
+    - telescoping, pas inductif (ligne ~868) : algebre de fractions
+    - main_equivalence, mobile_plus_tail (ligne ~926) : factorisation
+    - main_equivalence, prefix_sum (ligne ~932) : serie geometrique
+    - main_equivalence, assemblage (lignes ~960, ~974) : mise au denominateur
+
+  Pour completer : utiliser sledgehammer sur chaque sorry dans Isabelle.
   =====================================================================
 "
 
