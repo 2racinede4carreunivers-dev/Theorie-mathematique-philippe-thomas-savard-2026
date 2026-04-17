@@ -73,8 +73,8 @@ jobs:
 
       - name: Build Isabelle session Univers_Au_Carre
         run: |
-    echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol et src/hol/hol-2"
-    isabelle build -v -d src/hol -d src/hol/hol-2 Univers_Au_Carre
+          echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol et src/hol/hol-2"
+          isabelle build -v -d src/hol -d src/hol/hol-2 Univers_Au_Carre
 
 
       ###########################################################################
