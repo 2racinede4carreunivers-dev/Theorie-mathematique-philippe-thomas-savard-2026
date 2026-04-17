@@ -4,6 +4,7 @@ begin
 
 section "Cotes de la pyramide selon la spirale de Theodore"
 
+
 text "
   Chaque cote possede une longueur de reference Lref a la position 1^(1/2).
   La longueur a la position n^(1/2) est donnee par la formule :
