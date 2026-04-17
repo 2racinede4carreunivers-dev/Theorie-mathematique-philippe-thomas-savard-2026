@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-17 06:33 UTC
-**Total Q&R:** 79
+**Derniere mise a jour:** 2026-04-17 18:19 UTC
+**Total Q&R:** 80
 
 ---
 
@@ -174,7 +174,15 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ### Source: `methode_spectral.thy`
 
-**1. [intermediaire] Comment la méthode d'écart spectral décrite pour le rapport 1/3 se compare-t-elle à l'approche utilisée pour les valeurs spectrales exactes pour le rapport 1/4 dans le fichier 'methode_spectral.thy' ?**
+**1. [avance] Comment la démonstration du lemme 'gap_m31_17' illustre-t-elle l'utilisation des valeurs spectrales exactes pour calculer l'écart mixte entre -31 et 17?**
+
+*Categorie: mathematique/demonstration | Score: 0.8*
+
+> La démonstration du lemme 'gap_m31_17' utilise la définition de 'gap_mix_val' pour illustrer le calcul d'un écart mixte entre deux valeurs spectrales, ici -31 et 17. Les valeurs spectrales exactes définies pour ces points incluent 'SA_m29_val = -40895 / 20480', 'SB_p17_val = 350', 'D_p17_val = -738', et 'D_m31_val = 39280705 / 20480'. La formule du 'gap_mix_val' est donnée par '(A_next - (B_high - D_high) - D_low) / 64'. En substituant les valeurs exactes dans la formule, on trouve que le résultat de ce calcul est -47, ce qui est confirmé par l'emploi du 'unfolding' qui remplace les définitions avant de simplifier par 'simp'. Chaque étape montre l'importance de l'exactitude des valeurs spectrales dans les calculs mathématiques complexes de la théorie.
+
+---
+
+**2. [intermediaire] Comment la méthode d'écart spectral décrite pour le rapport 1/3 se compare-t-elle à l'approche utilisée pour les valeurs spectrales exactes pour le rapport 1/4 dans le fichier 'methode_spectral.thy' ?**
 
 *Categorie: mathematique/comparaison | Score: 0.8*
 
@@ -184,7 +192,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**2. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
+**3. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
 
 *Categorie: mathematique/theoreme | Score: 0.8*
 
