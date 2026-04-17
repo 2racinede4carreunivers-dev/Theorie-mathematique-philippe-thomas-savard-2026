@@ -2,3 +2,4 @@ session geometrie_spectre_premier = HOL +
   options [document = false]
   theories
     geometrie_spectre_premier
+    philippot_methode
