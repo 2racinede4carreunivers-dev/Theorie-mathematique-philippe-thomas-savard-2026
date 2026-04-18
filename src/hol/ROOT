@@ -6,5 +6,5 @@ session Univers_Au_Carre = HOL +
     mecanique_discret
     postulat_carre
     espace_philippot
-    philippot_methode_officiel
+    Philippot_Method
     geometrie_spectre_premier
