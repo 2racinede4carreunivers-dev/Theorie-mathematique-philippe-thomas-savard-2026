@@ -8,6 +8,7 @@ text "
   On considere un rapport spectral 1/k avec k > 1, k ~= 0, k ~= -1.
   La valeur de reference Rs est definie par :
 
+
     Rs = 1 / (k - 1)
 
   Pour 4 termes, les trois etapes sont definies comme suit :
