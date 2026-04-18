@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-17 18:19 UTC
-**Total Q&R:** 80
+**Derniere mise a jour:** 2026-04-18 06:22 UTC
+**Total Q&R:** 81
 
 ---
 
@@ -156,7 +156,15 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ### Source: `methode_de_philippot.thy`
 
-**1. [expert] Comment la formalisation dans Isabelle/HOL valide-t-elle la structure et la véracité de la règle de substitution pour les suites à l'étape 2 décrites dans 'methode_de_philippot.thy', spécifiquement pour les valeurs de substitution dans les définitions 'pos_substitution' et 'suite_reglementaire_etape2_petit'?**
+**1. [avance] Quel est le rôle de la fonction 'suite_reglementaire_etape1' et quelles sont ses implications concernant les suites à l'étape 1?**
+
+*Categorie: mathematique/theoreme | Score: 0.8*
+
+> La fonction 'suite_reglementaire_etape1' est définie pour vérifier si une liste rationnelle donnée respecte la structure attendue des suites à l'étape 1 dans la théorie 'L'Univers est au Carré'. L'énoncé précis de cette fonction est : elle vérifie que la longueur de la liste est égale à 'n', que 'n' est supérieur ou égal à 3, et que chaque élément jusqu'à l'avant-dernier suit une progression de '1 / (2^i)'. De plus, il impose que l'avant-dernier élément soit '2/3' du précédent, et le dernier soit la moitié de l'avant-dernier. Ces contraintes structurent les suites comme étant des progressions géométriques transformées par un facteur de réduction vers la fin, ce qui modélise une décroissance exponentielle et ses ajustements nécessaires. Ces suites sont centrales pour la formalisation des structures itératives décrites dans le fichier 'methode_de_philippot.thy' de la théorie.
+
+---
+
+**2. [expert] Comment la formalisation dans Isabelle/HOL valide-t-elle la structure et la véracité de la règle de substitution pour les suites à l'étape 2 décrites dans 'methode_de_philippot.thy', spécifiquement pour les valeurs de substitution dans les définitions 'pos_substitution' et 'suite_reglementaire_etape2_petit'?**
 
 *Categorie: mathematique/structure_hol | Score: 0.8*
 
@@ -164,7 +172,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**2. [expert] Dans la définition des suites de l'étape 3 pour un nombre de termes 'n', que signifie l'équation 'sum_list xs = 1 - valeur_substituee_etape3 n', spécifiquement pour n = 5, et quels sont les termes impliqués?**
+**3. [expert] Dans la définition des suites de l'étape 3 pour un nombre de termes 'n', que signifie l'équation 'sum_list xs = 1 - valeur_substituee_etape3 n', spécifiquement pour n = 5, et quels sont les termes impliqués?**
 
 *Categorie: mathematique/formule | Score: 0.8*
 
