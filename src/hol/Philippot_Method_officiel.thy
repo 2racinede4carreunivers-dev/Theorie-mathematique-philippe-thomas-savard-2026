@@ -1,4 +1,4 @@
-theory Philippot_Method
+theory philippot_method_officiel
   imports Complex_Main
 begin
 
