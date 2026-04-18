@@ -13,6 +13,7 @@ text "
 
   Pour 4 termes, les trois etapes sont definies comme suit :
 
+
     Etape 1 (4 termes) :
       S1 k = 1/k^1 + 1/k^2 + 1/(k^3 - k^1) + 1/(k^4 - k^2)
            = Rs
