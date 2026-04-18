@@ -1,4 +1,4 @@
-theory philippot_method_officiel
+theory infini_parti
   imports Complex_Main
 begin
 
