@@ -1,8 +1,10 @@
-espace_philippot.thy
-geometrie_spectre_premier.thy
-mecanique_discret.thy
-methode_de_philippot.thy
-methode_spectral.thy
-Philippot_Method_officiel.thy
-postulat_carre.thy
-ROOT
+session Univers_Au_Carre = HOL +
+  options [document = false]
+  theories
+    methode_spectral
+    methode_de_philippot
+    mecanique_discret
+    postulat_carre
+    espace_philippot
+    philippot_methode_officiel
+    geometrie_spectre_premier
