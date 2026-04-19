@@ -418,7 +418,26 @@ IMPORTANT:
 
     try:
         print("  Appel API...")
-        response = await chat.send_message(UserMessage(text=prompt))
+        response = None
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
+            try:
+                response = await chat.send_message(UserMessage(text=prompt))
+                break
+            except Exception as api_err:
+                err_str = str(api_err)
+                if ("502" in err_str or "503" in err_str or "429" in err_str
+                        or "BadGateway" in err_str or "timeout" in err_str.lower()):
+                    wait = 15 * attempt
+                    print(f"  Erreur API temporaire (tentative {attempt}/{max_retries}): {err_str[:80]}")
+                    print(f"  Nouvel essai dans {wait}s...")
+                    import time
+                    time.sleep(wait)
+                else:
+                    raise
+        if response is None:
+            print(f"  Echec apres {max_retries} tentatives.")
+            return False
 
         response = re.sub(r'```json\s*', '', response)
         response = re.sub(r'```\s*', '', response)
