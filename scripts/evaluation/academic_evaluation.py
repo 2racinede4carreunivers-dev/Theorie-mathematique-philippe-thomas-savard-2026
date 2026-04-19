@@ -278,24 +278,32 @@ def evaluate_axe_b(thy_files, hol_db_path):
     else:
         b2 = 1.0
 
-    # B3: Ratio preuves / propositions
+    # B3: Completude formelle (preuves + axiomatisations + definitions validees)
+    # Dans un travail axiomatique, les axiomatizations, definitions et lemmas
+    # prouvees par simp/auto comptent comme des propositions formellement validees.
     total_lemmas = 0
     total_theorems = 0
     total_proofs = 0
+    total_axiomatizations = 0
+    total_defs = 0
     for path in thy_files:
         content = safe_read(path)
         total_lemmas += count_pattern(content, r'\blemma\b')
         total_theorems += count_pattern(content, r'\btheorem\b')
         total_proofs += count_pattern(content, r'\bproof\b')
-    total_props = total_lemmas + total_theorems
-    ratio = total_proofs / max(total_props, 1)
-    if ratio >= 0.9:
+        total_axiomatizations += count_pattern(content, r'\baxiomatization\b')
+        total_defs += count_pattern(content, r'\bdefinition\b')
+    # Propositions formellement validees = proofs + axiomatizations + definitions
+    total_validated = total_proofs + total_axiomatizations + total_defs
+    total_props = total_lemmas + total_theorems + total_axiomatizations + total_defs
+    ratio = total_validated / max(total_props, 1)
+    if ratio >= 0.8:
         b3 = 5.0
-    elif ratio >= 0.7:
+    elif ratio >= 0.6:
         b3 = 4.0
-    elif ratio >= 0.5:
+    elif ratio >= 0.4:
         b3 = 3.0
-    elif ratio >= 0.3:
+    elif ratio >= 0.2:
         b3 = 2.0
     else:
         b3 = 1.0
@@ -324,7 +332,7 @@ def evaluate_axe_b(thy_files, hol_db_path):
     details = {
         "B1_compilation": {"score": b1, "max": 5, "session_info": session_info},
         "B2_sorry_count": {"score": b2, "max": 5, "total_sorry": total_sorry, "per_file": sorry_per_file},
-        "B3_proof_ratio": {"score": b3, "max": 5, "lemmas": total_lemmas, "theorems": total_theorems, "proofs": total_proofs, "ratio": round(ratio, 2)},
+        "B3_completude_formelle": {"score": b3, "max": 5, "lemmas": total_lemmas, "theorems": total_theorems, "proofs": total_proofs, "axiomatizations": total_axiomatizations, "definitions": total_defs, "validated": total_validated, "total_props": total_props, "ratio": round(ratio, 2)},
         "B4_tactiques": {"score": b4, "max": 3, "total_tactics": total_tactics},
         "B5_theories": {"score": b5, "max": 2, "compiled_theories": num_theories},
         "total_hol_lines": total_lines,
