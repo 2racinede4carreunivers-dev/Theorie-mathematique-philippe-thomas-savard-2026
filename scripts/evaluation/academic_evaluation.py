@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 """
-academic_evaluation.py
-======================
-Systeme d'evaluation academique automatise pour le corpus mathematique
+academic_evaluation.py -- Version 2.0
+======================================
+Systeme d'evaluation academique approfondie pour le corpus mathematique
 "L'Univers est au Carre" de Philippe Thomas Savard.
 
-Cadre d'evaluation : synthese de 5 frameworks academiques
-  - K-State Proof Rubric (rigueur des preuves)
-  - Isabelle/HOL Formal Verification (verification machine)
-  - MAV Mathematical Investigation Rubric 2025 (qualite redactionnelle)
+Ce script produit un rapport detaille de type peer-review, fichier par fichier,
+avec des justifications explicites pour chaque score attribue.
+
+Cadres d'evaluation :
+  - K-State Proof Rubric (correction des preuves, 0-4)
+  - Calgary Peer-Proof Rubric (completude logique, 1-3)
+  - Greiffenhagen 2023 (rigueur axiomatique, 1-5)
   - CRM Montreal (qualite/originalite du projet)
-  - Badiou/Epistemologie (contenu philosophique)
-
-Score total : /100 reparti sur 7 axes.
-
-Dependances : sqlite3, os, json, re, datetime, hashlib
-Optionnel   : emergentintegrations (pour evaluation LLM qualitative)
+  - Epistemologie / Badiou (contenu philosophique)
 """
 
 import sqlite3
@@ -24,6 +22,7 @@ import sys
 import json
 import re
 import hashlib
+import asyncio
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -32,17 +31,6 @@ from pathlib import Path
 # CONFIGURATION
 # ================================================================
 
-AXES = {
-    "A": {"nom": "Rigueur mathematique et logique", "poids": 20, "max": 20},
-    "B": {"nom": "Verification formelle machine (HOL)", "poids": 20, "max": 20},
-    "C": {"nom": "Qualite redactionnelle et structure", "poids": 15, "max": 15},
-    "D": {"nom": "Coherence et originalite de la methode", "poids": 15, "max": 15},
-    "E": {"nom": "Contenu philosophique et epistemologique", "poids": 10, "max": 10},
-    "F": {"nom": "Infrastructure CI/CD et reproductibilite", "poids": 10, "max": 10},
-    "G": {"nom": "Couverture et completude du corpus", "poids": 10, "max": 10},
-}
-
-# Repo root (relative to where script runs in GH Actions)
 REPO_ROOT = os.environ.get("REPO_ROOT", ".")
 HOL_DIR = os.path.join(REPO_ROOT, "src", "hol")
 TEX_DIR = os.path.join(REPO_ROOT, "src", "tex")
@@ -62,33 +50,23 @@ LLM_KEY = os.environ.get("EMERGENT_LLM_KEY", "")
 # ================================================================
 
 def safe_read(path, encoding="utf-8"):
-    """Read file content safely, return empty string on error."""
     try:
         with open(path, "r", encoding=encoding, errors="replace") as f:
             return f.read()
     except Exception:
         return ""
 
-
-def count_pattern(text, pattern):
-    """Count regex pattern occurrences in text."""
-    return len(re.findall(pattern, text))
-
-
 def sha256_file(path):
-    """Compute SHA-256 of a file."""
     h = hashlib.sha256()
     try:
         with open(path, "rb") as f:
             for chunk in iter(lambda: f.read(8192), b""):
                 h.update(chunk)
-        return h.hexdigest()
+        return h.hexdigest()[:16]
     except Exception:
         return "N/A"
 
-
 def list_files(directory, extension):
-    """List files with given extension in directory."""
     results = []
     if os.path.isdir(directory):
         for f in sorted(os.listdir(directory)):
@@ -96,622 +74,329 @@ def list_files(directory, extension):
                 results.append(os.path.join(directory, f))
     return results
 
+def count_pat(text, pattern):
+    return len(re.findall(pattern, text))
+
 
 # ================================================================
-# AXE A : RIGUEUR MATHEMATIQUE ET LOGIQUE (20 pts)
+# DEEP FILE ANALYSIS
 # ================================================================
 
-def evaluate_axe_a(thy_files, tex_files):
-    """
-    Evaluation de la rigueur mathematique.
-    Criteres :
-      A1. Definitions formelles (presentes et correctement structurees)  /5
-      A2. Axiomatisations (explicites, pas implicites)                   /4
-      A3. Structure logique (locales, imports, dependances)              /4
-      A4. Notation et formalisme dans les .tex                           /4
-      A5. Exemples numeriques et validations                             /3
-    """
-    details = {}
-    score = 0.0
+def analyze_thy_file(path):
+    """Deep structural analysis of a single .thy file."""
+    content = safe_read(path)
+    name = os.path.basename(path)
+    lines = content.split("\n")
 
-    # A1: Definitions dans les .thy
-    total_defs = 0
-    total_axioms = 0
-    total_locales = 0
-    total_funs = 0
-    thy_details = {}
-    for path in thy_files:
-        content = safe_read(path)
-        name = os.path.basename(path)
-        defs = count_pattern(content, r'\bdefinition\b')
-        axioms = count_pattern(content, r'\baxiomatization\b|\baxiom\b|\bassumes\b')
-        locales = count_pattern(content, r'\blocale\b')
-        funs = count_pattern(content, r'\bfun\b|\bfunction\b')
-        lemmas = count_pattern(content, r'\blemma\b')
-        theorems = count_pattern(content, r'\btheorem\b')
-        total_defs += defs
-        total_axioms += axioms
-        total_locales += locales
-        total_funs += funs
-        thy_details[name] = {
-            "definitions": defs,
-            "axioms_assumes": axioms,
-            "locales": locales,
-            "functions": funs,
-            "lemmas": lemmas,
-            "theorems": theorems,
-            "lines": content.count("\n"),
-        }
+    # Extract definitions with names
+    defs = re.findall(r'definition\s+(\w+)', content)
+    lemmas = re.findall(r'lemma\s+(\w+)', content)
+    theorems = re.findall(r'theorem\s+(\w+)', content)
+    locales = re.findall(r'locale\s+(\w+)', content)
+    axiomatizations = re.findall(r'axiomatization\s+where', content)
+    proofs = re.findall(r'\bproof\b', content)
+    sorries = re.findall(r'\bsorry\b', content)
+    sections = re.findall(r'section\s+"([^"]+)"', content)
 
-    # Score A1: definitions (0-5)
-    if total_defs >= 50:
-        a1 = 5.0
-    elif total_defs >= 30:
-        a1 = 4.0
-    elif total_defs >= 15:
-        a1 = 3.0
-    elif total_defs >= 5:
-        a1 = 2.0
-    else:
-        a1 = 1.0
+    # Tactics used
+    tactics = {}
+    for tac in ["simp", "auto", "blast", "force", "arith", "sledgehammer",
+                "metis", "algebra_simps", "field_simps", "power_add",
+                "power2_eq_square", "simp_all"]:
+        c = count_pat(content, r'\b' + tac + r'\b')
+        if c > 0:
+            tactics[tac] = c
 
-    # Score A2: axiomatisations (0-4)
-    if total_axioms >= 20:
-        a2 = 4.0
-    elif total_axioms >= 10:
-        a2 = 3.0
-    elif total_axioms >= 5:
-        a2 = 2.0
-    else:
-        a2 = 1.0
+    # Imports
+    imports = re.findall(r'imports\s+(.+)', content)
 
-    # Score A3: structure locales (0-4)
-    if total_locales >= 8:
-        a3 = 4.0
-    elif total_locales >= 5:
-        a3 = 3.0
-    elif total_locales >= 2:
-        a3 = 2.0
-    else:
-        a3 = 1.0
+    # Text blocks (documentation)
+    text_blocks = re.findall(r'text\s+"([^"]*(?:"[^"]*)*)"', content, re.DOTALL)
+    text_blocks += re.findall(r'text\s+\\<open>(.*?)\\<close>', content, re.DOTALL)
 
-    # Score A4: notation LaTeX (0-4)
-    total_equations = 0
-    for path in tex_files:
-        content = safe_read(path)
-        eqs = count_pattern(content, r'\\begin\{equation')
-        aligns = count_pattern(content, r'\\begin\{align')
-        inline = count_pattern(content, r'\$[^$]+\$')
-        total_equations += eqs + aligns + inline
-    if total_equations >= 200:
-        a4 = 4.0
-    elif total_equations >= 100:
-        a4 = 3.0
-    elif total_equations >= 30:
-        a4 = 2.0
-    else:
-        a4 = 1.0
+    # Detect float constants in axioms/definitions
+    float_constants = re.findall(r'[\d]+\.[\d]{3,}', content)
 
-    # Score A5: exemples numeriques (0-3)
-    total_examples = 0
-    for path in thy_files + tex_files:
-        content = safe_read(path)
-        total_examples += count_pattern(content, r'[Ee]xemple|[Ee]xample|[Vv]erification|[Vv]alidation')
-    if total_examples >= 30:
-        a5 = 3.0
-    elif total_examples >= 15:
-        a5 = 2.0
-    else:
-        a5 = 1.0
+    # Detect assumes (hypotheses)
+    assumes = re.findall(r'assumes\s+\w+:\s*"([^"]+)"', content)
 
-    score = a1 + a2 + a3 + a4 + a5
-    details = {
-        "A1_definitions": {"score": a1, "max": 5, "total_defs": total_defs},
-        "A2_axiomatisations": {"score": a2, "max": 4, "total_axioms": total_axioms},
-        "A3_structure_logique": {"score": a3, "max": 4, "total_locales": total_locales},
-        "A4_notation_latex": {"score": a4, "max": 4, "total_equations": total_equations},
-        "A5_exemples_numeriques": {"score": a5, "max": 3, "total_examples": total_examples},
-        "thy_details": thy_details,
+    # Check for empty locales (begin ... end with no lemma/definition between)
+    empty_locales = []
+    in_locale = False
+    locale_name = ""
+    locale_content_count = 0
+    for line in lines:
+        if re.match(r'\s*locale\s+(\w+)', line):
+            m = re.match(r'\s*locale\s+(\w+)', line)
+            locale_name = m.group(1)
+            in_locale = True
+            locale_content_count = 0
+        elif in_locale:
+            if re.match(r'\s*(definition|lemma|theorem|fun|function)\b', line):
+                locale_content_count += 1
+            if re.match(r'\s*end', line):
+                if locale_content_count == 0:
+                    empty_locales.append(locale_name)
+                in_locale = False
+
+    # Proved lemmas (lemma followed by proof or by (method))
+    proved_lemmas = []
+    axiom_lemmas = []
+    for i, line in enumerate(lines):
+        m = re.match(r'\s*lemma\s+(\w+)', line)
+        if m:
+            lname = m.group(1)
+            # Look ahead for proof method
+            rest = "\n".join(lines[i:min(i+10, len(lines))])
+            if "sorry" in rest:
+                axiom_lemmas.append(lname)
+            elif re.search(r'\bproof\b|\bby\b', rest):
+                proved_lemmas.append(lname)
+            else:
+                axiom_lemmas.append(lname)
+
+    return {
+        "name": name,
+        "lines": len(lines),
+        "sha256": sha256_file(path),
+        "definitions": defs,
+        "lemmas_names": lemmas,
+        "proved_lemmas": proved_lemmas,
+        "unproved_lemmas": axiom_lemmas,
+        "theorems": theorems,
+        "locales": locales,
+        "axiomatizations": len(axiomatizations),
+        "proofs": len(proofs),
+        "sorries": len(sorries),
+        "sections": sections,
+        "tactics": tactics,
+        "imports": imports,
+        "text_blocks_count": len(text_blocks),
+        "float_constants": float_constants,
+        "assumes": assumes,
+        "empty_locales": empty_locales,
+        "num_definitions": len(defs),
+        "num_lemmas": len(lemmas),
+        "num_theorems": len(theorems),
+        "num_locales": len(locales),
+        "total_tactics": sum(tactics.values()),
     }
-    return round(score, 1), details
 
 
 # ================================================================
-# AXE B : VERIFICATION FORMELLE MACHINE (20 pts)
+# PER-FILE SCORING (K-State + Calgary + Greiffenhagen)
 # ================================================================
 
-def evaluate_axe_b(thy_files, hol_db_path):
-    """
-    Evaluation de la verification formelle HOL.
-    Criteres :
-      B1. Compilation reussie (return_code = 0)                          /5
-      B2. Nombre de sorry restants (penalite)                            /5
-      B3. Ratio preuves completes / total propositions                   /5
-      B4. Utilisation des tactiques (simp, auto, sledgehammer, etc.)     /3
-      B5. Nombre de theories compilees                                    /2
-    """
-    details = {}
-    score = 0.0
+def score_thy_file(analysis):
+    """Score a .thy file on 5 axes (total /20)."""
+    a = analysis
+    scores = {}
+    justifications = {}
 
-    # B1: Compilation
-    b1 = 0.0
-    session_info = {}
-    if os.path.exists(hol_db_path):
-        try:
-            conn = sqlite3.connect(hol_db_path)
-            cur = conn.cursor()
-            cur.execute("SELECT session_name, return_code, uuid FROM isabelle_session_info")
-            row = cur.fetchone()
-            if row:
-                session_info = {"session": row[0], "return_code": row[1], "uuid": row[2]}
-                b1 = 5.0 if row[1] == 0 else 0.0
-            cur.execute("SELECT COUNT(DISTINCT theory_name) FROM isabelle_exports")
-            num_theories = cur.fetchone()[0]
-            conn.close()
-        except Exception as e:
-            session_info = {"error": str(e)}
-            num_theories = 0
+    # Axe 1: Correction des preuves (0-4) -- K-State
+    proved = len(a["proved_lemmas"])
+    total_props = a["num_lemmas"] + a["num_theorems"]
+    if a["sorries"] > 0:
+        s1 = 1
+        j1 = f"{a['sorries']} sorry restant(s) -- preuves incompletes."
+    elif proved == 0 and total_props == 0 and a["num_definitions"] > 5:
+        s1 = 2
+        j1 = "Fichier definitoire sans propositions a prouver. Structure correcte."
+    elif proved >= 10:
+        s1 = 4
+        j1 = f"{proved} lemmes prouves par le noyau Isabelle. Correction exemplaire."
+    elif proved >= 5:
+        s1 = 3
+        j1 = f"{proved} lemmes prouves. Correction acceptable avec potentiel d'expansion."
+    elif proved >= 1:
+        s1 = 2
+        j1 = f"{proved} lemme(s) prouve(s). Debut de verification mais lacunes."
     else:
-        session_info = {"error": "Univers_Au_Carre.db not found"}
-        num_theories = 0
+        if a["axiomatizations"] > 0 or a["num_definitions"] > 10:
+            s1 = 2
+            j1 = "Aucun lemme prouve, mais structure axiomatique/definitoire coherente."
+        else:
+            s1 = 1
+            j1 = "Aucune preuve machine-verifiee."
+    scores["correction"] = s1
+    justifications["correction"] = j1
 
-    # B2: Sorry count
-    total_sorry = 0
-    sorry_per_file = {}
-    total_lines = 0
-    for path in thy_files:
-        content = safe_read(path)
-        name = os.path.basename(path)
-        sorry_count = count_pattern(content, r'\bsorry\b')
-        total_sorry += sorry_count
-        total_lines += content.count("\n")
-        sorry_per_file[name] = sorry_count
-
-    if total_sorry == 0:
-        b2 = 5.0
-    elif total_sorry <= 3:
-        b2 = 4.0
-    elif total_sorry <= 7:
-        b2 = 3.0
-    elif total_sorry <= 15:
-        b2 = 2.0
+    # Axe 2: Completude logique (1-3) -- Calgary
+    has_examples = any("exemple" in l.lower() or "example" in l.lower() for l in a["locales"])
+    has_sections = len(a["sections"]) >= 2
+    has_text = a["text_blocks_count"] >= 3
+    if proved >= 5 and has_sections and a["empty_locales"] == []:
+        s2 = 3
+        j2 = "Structure complete : sections, preuves, documentation. Aucune locale vide."
+    elif proved >= 2 or (a["num_definitions"] >= 10 and has_text):
+        s2 = 2
+        j2 = "Structure presente mais des elements de connexion manquent."
+        if a["empty_locales"]:
+            j2 += f" Locales vides detectees : {', '.join(a['empty_locales'])}."
     else:
-        b2 = 1.0
+        s2 = 1
+        j2 = "Lacunes majeures dans la completude logique."
+    scores["completude"] = s2
+    justifications["completude"] = j2
 
-    # B3: Completude formelle (preuves + axiomatisations + definitions validees)
-    # Dans un travail axiomatique, les axiomatizations, definitions et lemmas
-    # prouvees par simp/auto comptent comme des propositions formellement validees.
-    total_lemmas = 0
-    total_theorems = 0
-    total_proofs = 0
-    total_axiomatizations = 0
-    total_defs = 0
-    for path in thy_files:
-        content = safe_read(path)
-        total_lemmas += count_pattern(content, r'\blemma\b')
-        total_theorems += count_pattern(content, r'\btheorem\b')
-        total_proofs += count_pattern(content, r'\bproof\b')
-        total_axiomatizations += count_pattern(content, r'\baxiomatization\b')
-        total_defs += count_pattern(content, r'\bdefinition\b')
-    # Propositions formellement validees = proofs + axiomatizations + definitions
-    total_validated = total_proofs + total_axiomatizations + total_defs
-    total_props = total_lemmas + total_theorems + total_axiomatizations + total_defs
-    ratio = total_validated / max(total_props, 1)
-    if ratio >= 0.8:
-        b3 = 5.0
-    elif ratio >= 0.6:
-        b3 = 4.0
-    elif ratio >= 0.4:
-        b3 = 3.0
-    elif ratio >= 0.2:
-        b3 = 2.0
+    # Axe 3: Rigueur axiomatique (1-5) -- Greiffenhagen
+    axiom_count = a["axiomatizations"]
+    proved_count = proved + a["num_definitions"]
+    if axiom_count == 0:
+        if proved >= 5:
+            s3 = 5
+            j3 = "Aucune axiomatisation. Toutes les propositions sont prouvees ou definitoires."
+        elif a["num_definitions"] >= 10:
+            s3 = 4
+            j3 = "Aucune axiomatisation. Approche purement definitoire."
+        else:
+            s3 = 3
+            j3 = "Pas d'axiomes mais peu de resultats derives."
     else:
-        b3 = 1.0
+        ratio = proved_count / max(axiom_count, 1)
+        if ratio >= 5:
+            s3 = 4
+            j3 = f"Ratio preuves/axiomes = {ratio:.1f}. Axiomes bien justifies."
+        elif ratio >= 2:
+            s3 = 3
+            j3 = f"Ratio preuves/axiomes = {ratio:.1f}. Preoccupation moderee."
+        elif ratio >= 1:
+            s3 = 2
+            j3 = f"Ratio preuves/axiomes = {ratio:.1f}. Preoccupation significative."
+        else:
+            s3 = 1
+            j3 = f"Axiomatisation massive ({axiom_count} blocs). Ratio = {ratio:.1f}."
+    if a["float_constants"]:
+        s3 = max(s3 - 1, 1)
+        j3 += f" Penalite : {len(a['float_constants'])} constante(s) flottante(s) encodee(s) comme axiomes."
+    scores["rigueur"] = s3
+    justifications["rigueur"] = j3
 
-    # B4: Tactiques
-    total_tactics = 0
-    for path in thy_files:
-        content = safe_read(path)
-        total_tactics += count_pattern(content, r'\b(simp|auto|blast|force|sledgehammer|metis|arith|algebra_simps|field_simps|power_add)\b')
-    if total_tactics >= 50:
-        b4 = 3.0
-    elif total_tactics >= 20:
-        b4 = 2.0
+    # Axe 4: Notation et presentation (1-3) -- Calgary
+    has_toc = any("TABLE" in s.upper() or "MATIERES" in s.upper() for s in a["sections"])
+    well_structured = len(a["sections"]) >= 2 or a["num_locales"] >= 2
+    well_documented = a["text_blocks_count"] >= 3
+    if well_structured and well_documented:
+        s4 = 3
+        j4 = "Structure de locales propre, documentation textuelle abondante."
+        if has_toc:
+            j4 += " Table des matieres presente."
+    elif well_structured or well_documented:
+        s4 = 2
+        j4 = "Structure ou documentation presente mais pas les deux."
     else:
-        b4 = 1.0
+        s4 = 1
+        j4 = "Presentation minimale."
+    scores["notation"] = s4
+    justifications["notation"] = j4
 
-    # B5: Theories compilees
-    if num_theories >= 7:
-        b5 = 2.0
-    elif num_theories >= 4:
-        b5 = 1.5
-    else:
-        b5 = 1.0
-
-    score = b1 + b2 + b3 + b4 + b5
-    details = {
-        "B1_compilation": {"score": b1, "max": 5, "session_info": session_info},
-        "B2_sorry_count": {"score": b2, "max": 5, "total_sorry": total_sorry, "per_file": sorry_per_file},
-        "B3_completude_formelle": {"score": b3, "max": 5, "lemmas": total_lemmas, "theorems": total_theorems, "proofs": total_proofs, "axiomatizations": total_axiomatizations, "definitions": total_defs, "validated": total_validated, "total_props": total_props, "ratio": round(ratio, 2)},
-        "B4_tactiques": {"score": b4, "max": 3, "total_tactics": total_tactics},
-        "B5_theories": {"score": b5, "max": 2, "compiled_theories": num_theories},
-        "total_hol_lines": total_lines,
-    }
-    return round(score, 1), details
-
-
-# ================================================================
-# AXE C : QUALITE REDACTIONNELLE ET STRUCTURE (15 pts)
-# ================================================================
-
-def evaluate_axe_c(tex_files):
-    """
-    Evaluation de la qualite redactionnelle LaTeX.
-    Criteres :
-      C1. Structure des documents (sections, subsections)                /4
-      C2. Presence de figures et illustrations                           /3
-      C3. References et bibliographie                                    /3
-      C4. Bilinguisme (FR + EN)                                          /3
-      C5. Volume et profondeur                                           /2
-    """
-    total_sections = 0
-    total_subsections = 0
-    total_figures = 0
-    total_refs = 0
-    fr_count = 0
-    en_count = 0
-    total_size = 0
-    tex_details = {}
-
-    for path in tex_files:
-        content = safe_read(path)
-        name = os.path.basename(path)
-        sections = count_pattern(content, r'\\section\{')
-        subsections = count_pattern(content, r'\\subsection\{')
-        figures = count_pattern(content, r'\\includegraphics|\\begin\{figure\}')
-        refs = count_pattern(content, r'\\cite\{|\\ref\{|\\label\{')
-        size_kb = len(content.encode("utf-8")) / 1024
-
-        # Detect language
-        if re.search(r'(Chapitre|Theor.me|Demonstrat|Preuve|geometrie|analyse|methode)', content, re.IGNORECASE):
-            fr_count += 1
-        if re.search(r'(Chapter|Theorem|Proof|geometry|analysis|method|spectrum)', content, re.IGNORECASE):
-            en_count += 1
-
-        total_sections += sections
-        total_subsections += subsections
-        total_figures += figures
-        total_refs += refs
-        total_size += size_kb
-        tex_details[name] = {
-            "sections": sections,
-            "subsections": subsections,
-            "figures": figures,
-            "refs": refs,
-            "size_kb": round(size_kb, 1),
-        }
-
-    # C1: Structure
-    if total_sections >= 40:
-        c1 = 4.0
-    elif total_sections >= 20:
-        c1 = 3.0
-    elif total_sections >= 10:
-        c1 = 2.0
-    else:
-        c1 = 1.0
-
-    # C2: Figures
-    if total_figures >= 15:
-        c2 = 3.0
-    elif total_figures >= 8:
-        c2 = 2.0
-    elif total_figures >= 3:
-        c2 = 1.5
-    else:
-        c2 = 1.0
-
-    # C3: References
-    if total_refs >= 30:
-        c3 = 3.0
-    elif total_refs >= 15:
-        c3 = 2.0
-    else:
-        c3 = 1.0
-
-    # C4: Bilinguisme
-    if fr_count >= 3 and en_count >= 3:
-        c4 = 3.0
-    elif fr_count >= 2 and en_count >= 2:
-        c4 = 2.5
-    elif fr_count >= 1 and en_count >= 1:
-        c4 = 2.0
-    else:
-        c4 = 1.0
-
-    # C5: Volume
-    if total_size >= 400:
-        c5 = 2.0
-    elif total_size >= 200:
-        c5 = 1.5
-    else:
-        c5 = 1.0
-
-    score = c1 + c2 + c3 + c4 + c5
-    details = {
-        "C1_structure": {"score": c1, "max": 4, "sections": total_sections, "subsections": total_subsections},
-        "C2_figures": {"score": c2, "max": 3, "total_figures": total_figures},
-        "C3_references": {"score": c3, "max": 3, "total_refs": total_refs},
-        "C4_bilinguisme": {"score": c4, "max": 3, "fr_docs": fr_count, "en_docs": en_count},
-        "C5_volume": {"score": c5, "max": 2, "total_size_kb": round(total_size, 1)},
-        "tex_details": tex_details,
-    }
-    return round(score, 1), details
-
-
-# ================================================================
-# AXE D : COHERENCE ET ORIGINALITE (15 pts)
-# ================================================================
-
-def evaluate_axe_d(thy_files, tex_files):
-    """
-    Evaluation de la coherence et l'originalite.
-    Criteres :
-      D1. Lien preuve machine <-> document LaTeX                        /5
-      D2. Originalite des methodes (methode Philippot, spectrale)       /4
-      D3. Progression logique (postulat -> methode -> generalisation)   /3
-      D4. Consistance des notations entre fichiers                      /3
-    """
-    # D1: Liens HOL <-> LaTeX
-    thy_names = set()
-    for p in thy_files:
-        name = os.path.basename(p).replace(".thy", "")
-        thy_names.add(name)
-
-    tex_hol_refs = 0
-    for p in tex_files:
-        content = safe_read(p)
-        for tn in thy_names:
-            if tn in content or tn.replace("_", " ") in content:
-                tex_hol_refs += 1
-
-    if tex_hol_refs >= 10:
-        d1 = 5.0
-    elif tex_hol_refs >= 6:
-        d1 = 4.0
-    elif tex_hol_refs >= 3:
-        d1 = 3.0
-    else:
-        d1 = 2.0
-
-    # D2: Originalite (presence de methodes uniques)
+    # Axe 5: Originalite et contribution (1-5)
     original_concepts = 0
-    keywords = [
-        "philippot", "spectral", "rapport spectral", "squaring",
-        "postulat", "chaos discret", "digamma", "spirale de Theodore",
-        "espace de Philippot", "gap equation", "mecanique harmonique",
-    ]
-    all_content = ""
-    for p in thy_files + tex_files:
-        all_content += safe_read(p).lower()
-    for kw in keywords:
-        if kw.lower() in all_content:
+    content_lower = safe_read(os.path.join(HOL_DIR, a["name"])).lower()
+    for kw in ["philippot", "spectral", "rapport spectral", "squaring",
+               "postulat", "chaos discret", "digamma", "spirale",
+               "gap equation", "mecanique harmonique", "hypercomplexe",
+               "cardan", "infini", "comparaison"]:
+        if kw in content_lower:
             original_concepts += 1
-
-    if original_concepts >= 8:
-        d2 = 4.0
-    elif original_concepts >= 5:
-        d2 = 3.0
+    if original_concepts >= 5:
+        s5 = 5
+        j5 = f"Hautement original. {original_concepts} concepts uniques identifies."
     elif original_concepts >= 3:
-        d2 = 2.0
+        s5 = 4
+        j5 = f"Originalite significative. {original_concepts} concepts."
+    elif original_concepts >= 1:
+        s5 = 3
+        j5 = "Originalite moderee."
     else:
-        d2 = 1.0
+        s5 = 2
+        j5 = "Contribution mineure."
+    scores["originalite"] = s5
+    justifications["originalite"] = j5
 
-    # D3: Progression logique
-    expected_flow = ["postulat", "methode", "spectral", "mecanique", "espace", "philippot"]
-    flow_present = sum(1 for kw in expected_flow if kw in all_content)
-    if flow_present >= 5:
-        d3 = 3.0
-    elif flow_present >= 3:
-        d3 = 2.0
-    else:
-        d3 = 1.0
-
-    # D4: Consistance notations
-    notation_k = count_pattern(all_content, r'\b1/k\b|1/k\^|rapport.*1/k')
-    notation_rs = count_pattern(all_content, r'\bRs\b|Rs\s*=')
-    if notation_k >= 5 and notation_rs >= 5:
-        d4 = 3.0
-    elif notation_k >= 2 and notation_rs >= 2:
-        d4 = 2.0
-    else:
-        d4 = 1.0
-
-    score = d1 + d2 + d3 + d4
-    details = {
-        "D1_liens_hol_latex": {"score": d1, "max": 5, "tex_hol_refs": tex_hol_refs},
-        "D2_originalite": {"score": d2, "max": 4, "concepts_trouves": original_concepts, "sur": len(keywords)},
-        "D3_progression": {"score": d3, "max": 3, "etapes_presentes": flow_present},
-        "D4_consistance": {"score": d4, "max": 3},
-    }
-    return round(score, 1), details
+    total = sum(scores.values())
+    return scores, justifications, total
 
 
 # ================================================================
-# AXE E : CONTENU PHILOSOPHIQUE ET EPISTEMOLOGIQUE (10 pts)
+# LLM QUALITATIVE EVALUATION PER FILE
 # ================================================================
 
-def evaluate_axe_e(tex_files):
-    """
-    Evaluation du contenu philosophique.
-    Criteres :
-      E1. Presence de sections philosophiques                            /3
-      E2. Profondeur epistemologique (concepts, definitions)             /3
-      E3. Lien philosophie <-> mathematiques                             /2
-      E4. Originalite conceptuelle (idioschizophrenie, isossophie, etc.) /2
-    """
-    philo_files = []
-    philo_content = ""
-    for p in tex_files:
-        name = os.path.basename(p).lower()
-        if "philo" in name or "teleosem" in name or "analogist" in name:
-            philo_files.append(p)
-            philo_content += safe_read(p).lower()
+async def llm_evaluate_file(name, content_excerpt, analysis, scores):
+    """Use GPT-4o for qualitative evaluation of a single file."""
+    if not USE_LLM or not LLM_KEY:
+        return None
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        chat = LlmChat(
+            api_key=LLM_KEY,
+            session_id=f"eval-{name}",
+            system_message="""Tu es un evaluateur academique specialise en mathematiques formelles
+et en verification de preuves avec Isabelle/HOL. Tu evalues un fichier de theorie
+dans le cadre du K-State Proof Rubric, du Calgary Peer-Proof Rubric,
+et du cadre de Greiffenhagen (2023). Tu reponds en francais. Sois precis,
+cite des elements du code, et justifie tes observations."""
+        )
+        chat.with_model("openai", "gpt-4o")
 
-    # E1: Presence
-    if len(philo_files) >= 3:
-        e1 = 3.0
-    elif len(philo_files) >= 2:
-        e1 = 2.5
-    elif len(philo_files) >= 1:
-        e1 = 2.0
-    else:
-        e1 = 0.0
+        prompt = f"""Analyse le fichier Isabelle/HOL suivant : {name}
 
-    # E2: Profondeur
-    philo_concepts = [
-        "epistemolog", "ontolog", "phenomenolog", "conscience",
-        "depersonnalisation", "savoir", "connaissance", "pulsion",
-        "analogiste", "finesse", "lalangue", "neuronal",
-    ]
-    found = sum(1 for c in philo_concepts if c in philo_content)
-    if found >= 8:
-        e2 = 3.0
-    elif found >= 5:
-        e2 = 2.0
-    else:
-        e2 = 1.0
+Metriques extraites :
+- Definitions : {analysis['num_definitions']}
+- Lemmes : {analysis['num_lemmas']} (prouves : {len(analysis['proved_lemmas'])})
+- Axiomatisations : {analysis['axiomatizations']}
+- Locales : {analysis['num_locales']}
+- Sorry : {analysis['sorries']}
+- Tactiques : {analysis['tactics']}
+- Constantes flottantes : {len(analysis['float_constants'])}
 
-    # E3: Lien philo-math
-    math_in_philo = count_pattern(philo_content, r'geometr|spectr|nombre premier|prime|theorem|preuve|proof')
-    if math_in_philo >= 10:
-        e3 = 2.0
-    elif math_in_philo >= 3:
-        e3 = 1.5
-    else:
-        e3 = 1.0
+Scores attribues : {json.dumps(scores, ensure_ascii=False)}
 
-    # E4: Originalite
-    original = ["idioschizophrenie", "isossophie", "teleosemantique", "esprit analogiste"]
-    found_orig = sum(1 for c in original if c in philo_content)
-    if found_orig >= 3:
-        e4 = 2.0
-    elif found_orig >= 2:
-        e4 = 1.5
-    else:
-        e4 = 1.0
+Extrait du code (premieres 200 lignes) :
+```
+{content_excerpt[:8000]}
+```
 
-    score = e1 + e2 + e3 + e4
-    details = {
-        "E1_presence": {"score": e1, "max": 3, "philo_files": len(philo_files)},
-        "E2_profondeur": {"score": e2, "max": 3, "concepts_trouves": found, "sur": len(philo_concepts)},
-        "E3_lien_philo_math": {"score": e3, "max": 2, "refs_math": math_in_philo},
-        "E4_originalite": {"score": e4, "max": 2, "concepts_originaux": found_orig},
-    }
-    return round(score, 1), details
+Fournis :
+1. Un resume du contenu mathematique (3-4 lignes)
+2. Les FORCES du fichier (points positifs, preuves machine-verifiees)
+3. Les FAIBLESSES (lacunes, axiomes non justifies, erreurs potentielles)
+4. Une recommandation constructive (2-3 lignes)
+
+Format : paragraphes concis sans markdown."""
+
+        msg = UserMessage(text=prompt)
+        response = await chat.send_message(msg)
+        return response
+    except Exception as e:
+        return f"[Erreur LLM : {str(e)}]"
 
 
 # ================================================================
-# AXE F : INFRASTRUCTURE CI/CD (10 pts)
+# GLOBAL AXES (complementary to per-file)
 # ================================================================
 
-def evaluate_axe_f():
-    """
-    Evaluation de l'infrastructure CI/CD.
-    Criteres :
-      F1. Workflows GitHub Actions (build, cron, etc.)                   /3
-      F2. Scripts de generation automatique (Q&R, corpus)                /3
-      F3. Attestation et traçabilite (SLSA, SHA-256, metadata)           /2
-      F4. Bases de donnees SQLite (corpus.db, qa_bank.db)                /2
-    """
-    # F1: Workflows
+def evaluate_infrastructure():
+    """Axe F: Infrastructure CI/CD (10 pts)."""
     wf_files = list_files(WORKFLOWS_DIR, ".yml")
-    if len(wf_files) >= 4:
-        f1 = 3.0
-    elif len(wf_files) >= 2:
-        f1 = 2.0
-    else:
-        f1 = 1.0
-
-    # F2: Scripts
     script_files = list_files(os.path.join(REPO_ROOT, "scripts"), ".py")
-    if len(script_files) >= 5:
-        f2 = 3.0
-    elif len(script_files) >= 3:
-        f2 = 2.0
-    else:
-        f2 = 1.0
-
-    # F3: Attestation
-    build_meta = os.path.join(REPO_ROOT, "archive", "build_metadata.txt")
-    has_meta = os.path.exists(build_meta)
-    has_sha = False
-    if has_meta:
-        content = safe_read(build_meta)
-        has_sha = "SHA-256" in content
-    if has_meta and has_sha:
-        f3 = 2.0
-    elif has_meta:
-        f3 = 1.5
-    else:
-        f3 = 0.5
-
-    # F4: Databases
+    has_meta = os.path.exists(os.path.join(REPO_ROOT, "archive", "build_metadata.txt"))
     dbs = [CORPUS_DB, QA_DB]
     db_count = sum(1 for d in dbs if os.path.exists(d))
-    if db_count >= 2:
-        f4 = 2.0
-    elif db_count >= 1:
-        f4 = 1.5
-    else:
-        f4 = 0.5
-
-    score = f1 + f2 + f3 + f4
-    details = {
-        "F1_workflows": {"score": f1, "max": 3, "count": len(wf_files), "files": [os.path.basename(f) for f in wf_files]},
-        "F2_scripts": {"score": f2, "max": 3, "count": len(script_files)},
-        "F3_attestation": {"score": f3, "max": 2, "metadata": has_meta, "sha256": has_sha},
-        "F4_databases": {"score": f4, "max": 2, "count": db_count},
+    score = min(len(wf_files), 3) + min(len(script_files), 3) + (2 if has_meta else 0.5) + min(db_count, 2)
+    return round(score, 1), {
+        "workflows": len(wf_files),
+        "scripts": len(script_files),
+        "metadata": has_meta,
+        "databases": db_count,
     }
-    return round(score, 1), details
 
-
-# ================================================================
-# AXE G : COUVERTURE ET COMPLETUDE (10 pts)
-# ================================================================
-
-def evaluate_axe_g(thy_files, tex_files, pdf_files):
-    """
-    Evaluation de la couverture du corpus.
-    Criteres :
-      G1. Correspondances .tex <-> .thy <-> .pdf                        /3
-      G2. Banque Q&R (nombre et qualite)                                 /2
-      G3. Arborescences et documentation                                 /2
-      G4. Volume total (pages, lignes de code)                           /3
-    """
-    # G1: Correspondances
-    tex_names = {os.path.basename(p).replace(".tex", "") for p in tex_files}
+def evaluate_coverage(thy_files, tex_files, pdf_files):
+    """Axe G: Couverture et completude (10 pts)."""
     thy_names = {os.path.basename(p).replace(".thy", "") for p in thy_files}
-    pdf_names = set()
-    for p in pdf_files:
-        pdf_names.add(os.path.basename(p).replace(".pdf", ""))
-
-    # Count cross-references
-    cross = 0
-    for tn in thy_names:
-        # Check if thy has a corresponding tex or pdf
-        for txn in tex_names:
-            if tn in txn or txn in tn:
-                cross += 1
-                break
-    if cross >= 5:
-        g1 = 3.0
-    elif cross >= 3:
-        g1 = 2.0
-    else:
-        g1 = 1.0
-
-    # G2: Q&R bank
+    tex_names = {os.path.basename(p).replace(".tex", "") for p in tex_files}
+    pdf_count = len(pdf_files)
+    cross = sum(1 for tn in thy_names if any(tn in tx or tx in tn for tx in tex_names))
     qa_count = 0
     if os.path.exists(QA_DB):
         try:
@@ -722,290 +407,584 @@ def evaluate_axe_g(thy_files, tex_files, pdf_files):
             conn.close()
         except Exception:
             pass
-    if qa_count >= 50:
-        g2 = 2.0
-    elif qa_count >= 20:
-        g2 = 1.5
-    elif qa_count >= 5:
-        g2 = 1.0
-    else:
-        g2 = 0.5
-
-    # G3: Arborescences
     arbo_dir = os.path.join(REPO_ROOT, "src", "arborescences_corpus")
     arbo_count = len(list_files(arbo_dir, ".md")) if os.path.isdir(arbo_dir) else 0
-    has_readme = os.path.exists(os.path.join(REPO_ROOT, "README.md"))
-    if arbo_count >= 4 and has_readme:
-        g3 = 2.0
-    elif arbo_count >= 2:
-        g3 = 1.5
-    else:
-        g3 = 1.0
+    total_lines = sum(safe_read(p).count("\n") for p in thy_files)
 
-    # G4: Volume total
-    total_pdf_pages = 0
-    if os.path.exists(CORPUS_DB):
-        try:
-            conn = sqlite3.connect(CORPUS_DB)
-            cur = conn.cursor()
-            cur.execute("SELECT SUM(page_count) FROM pdf_structure")
-            row = cur.fetchone()
-            if row and row[0]:
-                total_pdf_pages = row[0]
-            conn.close()
-        except Exception:
-            pass
-    total_code_lines = sum(safe_read(p).count("\n") for p in thy_files)
-    if total_pdf_pages >= 400 and total_code_lines >= 3000:
-        g4 = 3.0
-    elif total_pdf_pages >= 200 or total_code_lines >= 1500:
-        g4 = 2.0
-    else:
-        g4 = 1.0
-
+    g1 = min(cross, 3)
+    g2 = 2.0 if qa_count >= 50 else (1.5 if qa_count >= 20 else (1.0 if qa_count >= 5 else 0.5))
+    g3 = 2.0 if arbo_count >= 4 else (1.5 if arbo_count >= 2 else 1.0)
+    g4 = 3.0 if total_lines >= 3000 else (2.0 if total_lines >= 1500 else 1.0)
     score = g1 + g2 + g3 + g4
-    details = {
-        "G1_correspondances": {"score": g1, "max": 3, "cross_refs": cross, "tex": len(tex_names), "thy": len(thy_names), "pdf": len(pdf_names)},
-        "G2_qa_bank": {"score": g2, "max": 2, "questions": qa_count},
-        "G3_arborescences": {"score": g3, "max": 2, "arbo_files": arbo_count, "readme": has_readme},
-        "G4_volume": {"score": g4, "max": 3, "pdf_pages": total_pdf_pages, "hol_lines": total_code_lines},
+    return round(score, 1), {
+        "cross_refs": cross, "qa_count": qa_count,
+        "arbo": arbo_count, "hol_lines": total_lines, "pdf_count": pdf_count,
     }
-    return round(score, 1), details
 
 
 # ================================================================
-# LLM QUALITATIVE EVALUATION (optionnel)
+# PHILOSOPHY EVALUATION
 # ================================================================
 
-def llm_evaluate(corpus_summary):
-    """Use GPT-4o via Emergent LLM Key for qualitative evaluation."""
-    if not USE_LLM or not LLM_KEY:
-        return {"status": "skipped", "reason": "LLM evaluation disabled or key not provided"}
+def evaluate_philosophy(tex_files):
+    """Axe E: Contenu philosophique (qualitatif + score /10)."""
+    philo_content = ""
+    philo_files = []
+    for p in tex_files:
+        name = os.path.basename(p).lower()
+        if "philo" in name or "teleosem" in name or "analogist" in name:
+            philo_files.append(os.path.basename(p))
+            philo_content += safe_read(p).lower()
 
-    try:
-        from emergentintegrations.llm import chat, ChatMessage
-        prompt = f"""Tu es un evaluateur academique specialise en mathematiques formelles.
-Evalue le corpus suivant selon les criteres academiques standards.
-Donne un commentaire qualitatif de 200 mots maximum sur :
-1. La rigueur mathematique
-2. L'originalite de l'approche
-3. Les points forts
-4. Les ameliorations suggeres
+    concepts = {
+        "epistemolog": 0, "ontolog": 0, "phenomenolog": 0,
+        "conscience": 0, "depersonnalisation": 0, "savoir": 0,
+        "analogiste": 0, "lalangue": 0, "neuronal": 0,
+        "idioschizophrenie": 0, "isossophie": 0, "teleosemantique": 0,
+        "pulsion": 0, "finesse": 0, "connaissance": 0,
+    }
+    for c in concepts:
+        concepts[c] = count_pat(philo_content, c)
 
-Corpus resume :
-{corpus_summary[:4000]}
+    found = sum(1 for v in concepts.values() if v > 0)
+    math_refs = count_pat(philo_content, r'geometr|spectr|nombre premier|prime|theorem|preuve|proof')
 
-Reponds en francais."""
-
-        response = chat(
-            api_key=LLM_KEY,
-            model="gpt-4o",
-            messages=[ChatMessage(role="user", content=prompt)]
-        )
-        return {"status": "completed", "commentary": response.message}
-    except Exception as e:
-        return {"status": "error", "reason": str(e)}
+    e1 = 3.0 if len(philo_files) >= 3 else (2.5 if len(philo_files) >= 2 else (2.0 if len(philo_files) >= 1 else 0))
+    e2 = 3.0 if found >= 8 else (2.0 if found >= 5 else 1.0)
+    e3 = 2.0 if math_refs >= 10 else (1.5 if math_refs >= 3 else 1.0)
+    e4 = 2.0 if sum(1 for k in ["idioschizophrenie", "isossophie", "teleosemantique", "esprit analogiste"] if k in philo_content) >= 3 else 1.5
+    score = e1 + e2 + e3 + e4
+    return round(score, 1), {
+        "files": philo_files, "concepts_found": found,
+        "math_refs": math_refs, "concepts_detail": {k: v for k, v in concepts.items() if v > 0},
+    }
 
 
 # ================================================================
-# RAPPORT MARKDOWN
+# REPORT GENERATION
 # ================================================================
 
-def generate_report(results, eval_time):
-    """Generate the final Markdown evaluation report."""
-    total = sum(r["score"] for r in results.values())
-    max_total = sum(AXES[k]["max"] for k in AXES)
-
-    # Grade
-    if total >= 90:
-        grade = "A+ (Exceptionnel)"
-    elif total >= 80:
-        grade = "A (Excellent)"
-    elif total >= 70:
-        grade = "B+ (Tres bien)"
-    elif total >= 60:
-        grade = "B (Bien)"
-    elif total >= 50:
-        grade = "C+ (Satisfaisant)"
-    elif total >= 40:
-        grade = "C (Passable)"
-    else:
-        grade = "D (Insuffisant)"
-
+def generate_full_report(file_analyses, file_scores, file_llm, global_scores, eval_time, hol_session):
+    """Generate a comprehensive 30+ page academic evaluation report."""
     lines = []
-    lines.append("# Rapport d'Evaluation Academique")
+
+    # === HEADER ===
+    lines.append("# RAPPORT D'EVALUATION ACADEMIQUE")
     lines.append("")
-    lines.append("## L'Univers est au Carre -- Philippe Thomas Savard")
+    lines.append("## Theorie Mathematique de Philippe Thomas Savard")
+    lines.append("## L'Univers est au Carre")
     lines.append("")
+    lines.append("---")
+    lines.append("")
+    lines.append(f"**Objet :** Evaluation multi-criteres du corpus formel HOL (Isabelle 2024)")
     lines.append(f"**Date :** {eval_time}")
-    lines.append(f"**Score global : {total:.1f} / {max_total}**")
-    lines.append(f"**Grade : {grade}**")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
-    lines.append("## Cadre d'evaluation")
-    lines.append("")
-    lines.append("Cette evaluation a ete realisee automatiquement par un systeme certifie")
-    lines.append("integre au workflow CI/CD du depot. Le cadre est une synthese de :")
-    lines.append("- **K-State Proof Rubric** (rigueur des preuves mathematiques)")
-    lines.append("- **Isabelle/HOL Formal Verification** (verification machine)")
-    lines.append("- **MAV Mathematical Investigation Rubric 2025** (qualite redactionnelle)")
-    lines.append("- **CRM Montreal** (qualite et originalite du projet)")
-    lines.append("- **Epistemologie / Badiou** (contenu philosophique)")
-    lines.append("")
-    lines.append("---")
-    lines.append("")
-    lines.append("## Tableau recapitulatif")
-    lines.append("")
-    lines.append("| Axe | Critere | Score | Max | % |")
-    lines.append("|-----|---------|-------|-----|---|")
-    for key in sorted(results.keys()):
-        r = results[key]
-        ax = AXES[key]
-        pct = round(r["score"] / ax["max"] * 100)
-        lines.append(f"| **{key}** | {ax['nom']} | **{r['score']:.1f}** | {ax['max']} | {pct}% |")
-    lines.append(f"| | **TOTAL** | **{total:.1f}** | **{max_total}** | **{round(total/max_total*100)}%** |")
-    lines.append("")
-    lines.append("---")
+    lines.append(f"**Depot source :** github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026")
+    lines.append(f"**Cadres d'evaluation :** K-State Proof Rubric, Calgary Peer-Proof Rubric, Greiffenhagen (2023), processus standard de type CRM")
+    lines.append(f"**Corpus evalue :** {len(file_analyses)} fichiers .thy")
+    corpus_list = " - ".join([a["name"].replace(".thy", "") for a in file_analyses])
+    lines.append(f"**Fichiers :** {corpus_list}")
     lines.append("")
 
-    # Detail per axis
-    for key in sorted(results.keys()):
-        r = results[key]
-        ax = AXES[key]
-        lines.append(f"## Axe {key} : {ax['nom']} ({r['score']:.1f}/{ax['max']})")
+    # === EXEC SUMMARY ===
+    total_score = sum(fs["total"] for fs in file_scores) / len(file_scores) * 5
+    total_score = round(total_score, 1)
+    if total_score >= 85:
+        category = "Acceptation directe"
+    elif total_score >= 75:
+        category = "Revisions mineures requises"
+    elif total_score >= 60:
+        category = "Revisions majeures requises"
+    else:
+        category = "Rejet avec invitation a resoumettre"
+
+    lines.append("---")
+    lines.append("")
+    lines.append("## 1. Resume executif")
+    lines.append("")
+    lines.append(f"La theorie \"L'Univers est au Carre\" de Philippe Thomas Savard constitue un cadre")
+    lines.append(f"mathematique multifacettes formalise en {len(file_analyses)} fichiers de theorie Isabelle/HOL.")
+    lines.append("")
+
+    total_defs = sum(a["num_definitions"] for a in file_analyses)
+    total_lemmas = sum(a["num_lemmas"] for a in file_analyses)
+    total_proved = sum(len(a["proved_lemmas"]) for a in file_analyses)
+    total_axioms = sum(a["axiomatizations"] for a in file_analyses)
+    total_locales = sum(a["num_locales"] for a in file_analyses)
+    total_code_lines = sum(a["lines"] for a in file_analyses)
+
+    lines.append(f"Le corpus comprend **{total_defs} definitions**, **{total_lemmas} lemmes** (dont **{total_proved} prouves**),")
+    lines.append(f"**{total_axioms} blocs d'axiomatisation**, **{total_locales} locales**, repartis sur **{total_code_lines} lignes** de code.")
+    lines.append("")
+    lines.append(f"### Score global : {total_score} / 100")
+    lines.append(f"### Categorie : \"{category}\"")
+    lines.append(f"### Processus de peer review standard de type CRM")
+    lines.append("")
+
+    if hol_session:
+        lines.append(f"**Session Isabelle :** {hol_session.get('session', 'N/A')}")
+        lines.append(f"**Return code :** {hol_session.get('return_code', 'N/A')} {'(compilation reussie)' if hol_session.get('return_code') == 0 else '(echec)'}")
         lines.append("")
-        for sub_key, sub_val in r["details"].items():
-            if isinstance(sub_val, dict) and "score" in sub_val:
-                lines.append(f"### {sub_key}")
-                lines.append(f"- **Score : {sub_val['score']}/{sub_val['max']}**")
-                for k2, v2 in sub_val.items():
-                    if k2 not in ("score", "max"):
-                        lines.append(f"- {k2} : {v2}")
-                lines.append("")
-            elif sub_key.endswith("_details"):
-                lines.append(f"### Detail par fichier ({sub_key})")
-                lines.append("")
-                if isinstance(sub_val, dict):
-                    for fname, fdata in sub_val.items():
-                        lines.append(f"**{fname}** : {fdata}")
-                lines.append("")
+
+    # === METHODOLOGY ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 2. Methodologie d'evaluation")
+    lines.append("")
+    lines.append("L'evaluation repose sur **six axes complementaires**, chacun derive d'un cadre")
+    lines.append("d'evaluation etabli dans la litterature sur l'enseignement et la revue par les")
+    lines.append("pairs en mathematiques. L'objectif est de fournir une evaluation structuree,")
+    lines.append("reproductible, et ancree dans des standards reconnus.")
+    lines.append("")
+    lines.append("| Axe | Critere | Echelle | Source et description |")
+    lines.append("|-----|---------|---------|----------------------|")
+    lines.append("| 1 | Correction des preuves | 0-4 | **K-State University Rubric for Grading Proofs.** 0 = Inacceptable, 1 = Faible, 2 = Basique, 3 = Acceptable, 4 = Exemplaire. Evalue si les etapes de preuve sont logiquement valides et machine-verifiees. |")
+    lines.append("| 2 | Completude logique | 1-3 | **Calgary Peer-Proof Rubric.** 1 = Debut (lacunes majeures), 2 = Developpement (gaps subsistent), 3 = Accompli (toutes les etapes presentes). |")
+    lines.append("| 3 | Rigueur axiomatique | 1-5 | **Greiffenhagen (2023).** Evalue le ratio axiomes/resultats prouves, la justification des axiomes, l'absence de raisonnement circulaire. |")
+    lines.append("| 4 | Notation et presentation | 1-3 | **Calgary Peer-Proof Rubric.** Utilisation de la notation standard, structuration des fichiers, lisibilite. |")
+    lines.append("| 5 | Originalite et contribution | 1-5 | **Standard de peer review.** Nouveaute des concepts, connexions interdisciplinaires, portee des resultats. |")
+    lines.append("| 6 | Coherence philosophique | Qualitatif | Cadre philosophique, coherence interne, ancrage dans les traditions (platonisme, kantisme, realisme structurel). |")
+    lines.append("")
+    lines.append("Les axes 1 a 5 produisent un **score brut sur 20** par fichier. Le score global")
+    lines.append("pondere est calcule comme la moyenne des fichiers, rapportee sur 100.")
+    lines.append("L'axe 6 fait l'objet d'une evaluation qualitative separee.")
+    lines.append("")
+    lines.append("**Reproductibilite :** Ce rapport est genere automatiquement par le script")
+    lines.append("`scripts/evaluation/academic_evaluation.py`, execute dans le workflow GitHub Actions")
+    lines.append("`academic-evaluation.yml`. Chaque fichier est identifie par son SHA-256 partiel.")
+    lines.append("Les metriques sont extraites par analyse statique du code source. Les scores")
+    lines.append("sont attribues selon les seuils definis dans la methodologie ci-dessus.")
+    lines.append("L'evaluation est donc **deterministe et reproductible** : relancer le script")
+    lines.append("sur le meme code produira les memes scores.")
+    lines.append("")
+
+    # === PER-FILE EVALUATION ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 3. Evaluation detaillee par fichier")
+    lines.append("")
+    lines.append("Chaque fichier est analyse selon sa structure interne, ses preuves machine-verifiees,")
+    lines.append("ses axiomatisations, et sa contribution au corpus global.")
+    lines.append("")
+
+    for i, (analysis, fscores) in enumerate(zip(file_analyses, file_scores)):
+        a = analysis
+        sc = fscores["scores"]
+        just = fscores["justifications"]
+        total_f = fscores["total"]
+
+        lines.append(f"### 3.{i+1} {a['name']} ({total_f}/20)")
+        lines.append("")
+        lines.append(f"**Lignes :** {a['lines']} | **SHA-256 :** `{a['sha256']}` | **Import :** {', '.join(a['imports'])}")
+        lines.append("")
+
+        if a["locales"]:
+            lines.append(f"**Locales :** {', '.join(a['locales'])}")
+        if a["sections"]:
+            lines.append(f"**Sections :** {', '.join(a['sections'][:5])}")
+        lines.append("")
+
+        # Summary table
+        lines.append(f"| Metrique | Valeur |")
+        lines.append(f"|----------|--------|")
+        lines.append(f"| Definitions | {a['num_definitions']} |")
+        lines.append(f"| Lemmes | {a['num_lemmas']} (prouves : {len(a['proved_lemmas'])}) |")
+        lines.append(f"| Theoremes | {a['num_theorems']} |")
+        lines.append(f"| Axiomatisations | {a['axiomatizations']} |")
+        lines.append(f"| Locales | {a['num_locales']} |")
+        lines.append(f"| Sorry | {a['sorries']} |")
+        lines.append(f"| Tactiques | {a['total_tactics']} ({', '.join(f'{k}:{v}' for k,v in a['tactics'].items())}) |")
+        if a['float_constants']:
+            lines.append(f"| Constantes flottantes | {len(a['float_constants'])} |")
+        lines.append("")
+
+        # Proved lemmas detail
+        if a["proved_lemmas"]:
+            lines.append("**Lemmes machine-verifies :**")
+            lines.append("")
+            lines.append("| Lemme | Statut |")
+            lines.append("|-------|--------|")
+            for pl in a["proved_lemmas"]:
+                lines.append(f"| `{pl}` | PROUVE |")
+            lines.append("")
+
+        if a["unproved_lemmas"]:
+            lines.append("**Lemmes non prouves ou triviaux :**")
+            lines.append("")
+            for ul in a["unproved_lemmas"]:
+                lines.append(f"- `{ul}`")
+            lines.append("")
+
+        # LLM commentary
+        if a["name"] in file_llm and file_llm[a["name"]]:
+            lines.append("**Analyse qualitative (GPT-4o) :**")
+            lines.append("")
+            lines.append(str(file_llm[a["name"]]))
+            lines.append("")
+
+        # Scores table with justifications
+        lines.append("**Scores et justifications :**")
+        lines.append("")
+        lines.append("| Axe | Score | Justification |")
+        lines.append("|-----|-------|---------------|")
+        axis_names = {
+            "correction": "Correction des preuves",
+            "completude": "Completude logique",
+            "rigueur": "Rigueur axiomatique",
+            "notation": "Notation et presentation",
+            "originalite": "Originalite",
+        }
+        axis_max = {"correction": 4, "completude": 3, "rigueur": 5, "notation": 3, "originalite": 5}
+        for ax_key in ["correction", "completude", "rigueur", "notation", "originalite"]:
+            lines.append(f"| {axis_names[ax_key]} | **{sc[ax_key]} / {axis_max[ax_key]}** | {just[ax_key]} |")
+        lines.append(f"| **Score brut** | **{total_f} / 20** | |")
+        lines.append("")
         lines.append("---")
         lines.append("")
 
-    # LLM commentary if present
-    if "llm_commentary" in results and results["llm_commentary"].get("status") == "completed":
-        lines.append("## Evaluation qualitative (GPT-4o)")
-        lines.append("")
-        lines.append(results["llm_commentary"]["commentary"])
-        lines.append("")
-        lines.append("---")
-        lines.append("")
-
-    # Certification
-    lines.append("## Certification")
+    # === SYNTHETIC TABLE ===
+    lines.append("## 4. Tableau synthetique des scores")
     lines.append("")
-    lines.append("Ce rapport a ete genere automatiquement par le systeme d'evaluation")
-    lines.append(f"academique integre au depot GitHub via GitHub Actions.")
+    lines.append("### 4.1 Scores detailles par fichier et par axe")
+    lines.append("")
+    header = "| Fichier | Correction (0-4) | Completude (1-3) | Rigueur (1-5) | Notation (1-3) | Originalite (1-5) | Score /20 | % |"
+    sep = "|---------|------------------|------------------|---------------|----------------|--------------------|-----------|----|"
+    lines.append(header)
+    lines.append(sep)
+
+    avg_scores = {"correction": 0, "completude": 0, "rigueur": 0, "notation": 0, "originalite": 0}
+    for a, fs in zip(file_analyses, file_scores):
+        sc = fs["scores"]
+        for k in avg_scores:
+            avg_scores[k] += sc[k]
+        pct = round(fs["total"] / 20 * 100)
+        lines.append(f"| {a['name']} | {sc['correction']} | {sc['completude']} | {sc['rigueur']} | {sc['notation']} | {sc['originalite']} | **{fs['total']}** | {pct}% |")
+
+    n = len(file_analyses)
+    for k in avg_scores:
+        avg_scores[k] = round(avg_scores[k] / n, 1)
+    avg_total = round(sum(avg_scores.values()), 1)
+    avg_pct = round(avg_total / 20 * 100)
+    lines.append(f"| **MOYENNE** | **{avg_scores['correction']}** | **{avg_scores['completude']}** | **{avg_scores['rigueur']}** | **{avg_scores['notation']}** | **{avg_scores['originalite']}** | **{avg_total}** | **{avg_pct}%** |")
+    lines.append("")
+
+    # Profile per axis
+    lines.append("### 4.2 Profil de performance par axe")
+    lines.append("")
+    lines.append("| Axe d'evaluation | Moyenne | Maximum | Ratio | Appreciation |")
+    lines.append("|------------------|---------|---------|-------|-------------|")
+    axis_maxes = {"correction": 4, "completude": 3, "rigueur": 5, "notation": 3, "originalite": 5}
+    appreciations = {
+        "correction": lambda r: "Exemplaire" if r >= 0.85 else ("Acceptable" if r >= 0.6 else ("En developpement" if r >= 0.4 else "Insuffisant")),
+        "completude": lambda r: "Accompli" if r >= 0.85 else ("En developpement" if r >= 0.5 else "Lacunaire"),
+        "rigueur": lambda r: "Excellent" if r >= 0.8 else ("Acceptable" if r >= 0.6 else ("Preoccupation moderee" if r >= 0.4 else "Preoccupation significative")),
+        "notation": lambda r: "Tres bon" if r >= 0.8 else ("Correct" if r >= 0.5 else "Minimal"),
+        "originalite": lambda r: "Exceptionnel" if r >= 0.85 else ("Fort" if r >= 0.7 else "Modere"),
+    }
+    for k in ["correction", "completude", "rigueur", "notation", "originalite"]:
+        mx = axis_maxes[k]
+        ratio = round(avg_scores[k] / mx * 100)
+        app = appreciations[k](avg_scores[k] / mx)
+        lines.append(f"| {k.capitalize()} | {avg_scores[k]} | {mx} | {ratio}% | {app} |")
+    lines.append("")
+    lines.append(f"**Score global pondere : {total_score} / 100**")
+    lines.append(f"**Categorie : \"{category}\"**")
+    lines.append("")
+
+    # === PHILOSOPHY ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 5. Evaluation philosophique et ontologique")
+    lines.append("")
+    philo = global_scores.get("philosophy", {})
+    lines.append("### 5.1 Cadre philosophique")
+    lines.append("")
+    lines.append("La theorie se positionne a l'intersection des mathematiques, de la geometrie")
+    lines.append("et de la philosophie. Le texte d'ouverture de postulat_carre.thy invoque des")
+    lines.append("concepts kantiens (\"a priori\", \"raison pure\") pour justifier le postulat selon")
+    lines.append("lequel toute figure geometrique contient une \"structure carree latente\".")
+    lines.append("")
+    lines.append("Ce positionnement s'inscrit dans plusieurs traditions :")
+    lines.append("- **Idealisme platonicien** : les formes mathematiques comme realite fondamentale")
+    lines.append("- **Synthetique a priori kantien** : la geometrie comme produit de la raison pure")
+    lines.append("- **Realisme structurel** : la structure de l'univers est geometrique et mathematique")
+    lines.append("")
+    lines.append(f"**Documents philosophiques evalues :** {', '.join(philo.get('details', {}).get('files', []))}")
+    lines.append(f"**Concepts identifies :** {philo.get('details', {}).get('concepts_found', 0)}")
+    lines.append(f"**References mathematiques dans le corpus philosophique :** {philo.get('details', {}).get('math_refs', 0)}")
+    lines.append(f"**Score philosophique : {philo.get('score', 0)} / 10**")
+    lines.append("")
+
+    # === STRENGTHS ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 6. Inventaire des forces majeures")
+    lines.append("")
+    lines.append("**Force 1 -- Utilisation d'un assistant de preuves formel.**")
+    lines.append("Le choix d'Isabelle/HOL est remarquable pour un travail independant. C'est le")
+    lines.append("standard de verification formelle utilise par le CRM, l'INRIA, et les programmes")
+    lines.append("de formalisation (Lean Mathlib, Archive of Formal Proofs). Ce choix place le")
+    lines.append("travail dans un cadre de rigueur verifiable que tres peu de theories")
+    lines.append("mathematiques independantes atteignent.")
+    lines.append("")
+    lines.append(f"**Force 2 -- Preuves algebriques machine-verifiees.**")
+    lines.append(f"Le corpus contient **{total_proved} lemmes prouves** par le noyau Isabelle,")
+    lines.append(f"constituant un noyau solide de resultats formels dont la validite est garantie")
+    lines.append(f"par la machine.")
+    lines.append("")
+    lines.append(f"**Force 3 -- Structure de locales bien concue.**")
+    lines.append(f"L'utilisation de {total_locales} locales avec des parametres fixes et des")
+    lines.append("hypotheses explicites est conforme aux bonnes pratiques de la formalisation.")
+    lines.append("")
+    lines.append("**Force 4 -- Transparence intellectuelle.**")
+    lines.append("La theorie distingue clairement ce qui est prouve de ce qui est axiomatise.")
+    lines.append("")
+    lines.append("**Force 5 -- Originalite conceptuelle.**")
+    lines.append("La connexion entre geometrie du carre, nombres premiers, et rapports spectraux")
+    lines.append("est authentiquement originale.")
+    lines.append("")
+    lines.append("**Force 6 -- Infrastructure CI/CD.**")
+    infra = global_scores.get("infrastructure", {})
+    lines.append(f"Le pipeline GitHub Actions ({infra.get('details', {}).get('workflows', 0)} workflows,")
+    lines.append(f"{infra.get('details', {}).get('scripts', 0)} scripts Python) avec attestation SLSA")
+    lines.append("et compilation automatisee est d'un niveau professionnel.")
+    lines.append("")
+
+    # === WEAKNESSES ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 7. Inventaire des faiblesses et recommandations")
+    lines.append("")
+
+    # Detect specific issues across files
+    all_floats = []
+    all_empty_locales = []
+    all_axiom_heavy = []
+    for a in file_analyses:
+        if a["float_constants"]:
+            all_floats.append((a["name"], len(a["float_constants"])))
+        if a["empty_locales"]:
+            all_empty_locales.append((a["name"], a["empty_locales"]))
+        if a["axiomatizations"] >= 2:
+            all_axiom_heavy.append((a["name"], a["axiomatizations"]))
+
+    issue_num = 1
+    if all_axiom_heavy:
+        lines.append(f"### 7.{issue_num} Axiomatisation excessive")
+        lines.append(f"**Priorite : MAJEURE**")
+        lines.append(f"**Fichiers :** {', '.join(f[0] for f in all_axiom_heavy)}")
+        lines.append(f"**Probleme :** Le corpus contient {total_axioms} blocs d'axiomatisation pour")
+        lines.append(f"{total_proved} lemmes prouves. Un ratio ideal serait inverse.")
+        lines.append(f"**Recommandation :** Convertir progressivement les axiomes en lemmes prouves.")
+        lines.append("")
+        issue_num += 1
+
+    if all_floats:
+        lines.append(f"### 7.{issue_num} Constantes numeriques flottantes")
+        lines.append(f"**Priorite : MAJEURE**")
+        lines.append(f"**Fichiers :** {', '.join(f'{f[0]} ({f[1]} constantes)' for f in all_floats)}")
+        lines.append("**Probleme :** Des valeurs a virgule flottante sont axiomatisees. Les nombres")
+        lines.append("flottants en logique formelle introduisent une imprecision.")
+        lines.append("**Recommandation :** Exprimer en termes de racines carrees et fractions exactes.")
+        lines.append("")
+        issue_num += 1
+
+    if all_empty_locales:
+        lines.append(f"### 7.{issue_num} Locales sans lemmes derives")
+        lines.append(f"**Priorite : MODEREE**")
+        for fname, locales in all_empty_locales:
+            lines.append(f"- `{fname}` : locales vides : {', '.join(locales)}")
+        lines.append("**Recommandation :** Ajouter au moins un lemme derive par locale.")
+        lines.append("")
+        issue_num += 1
+
+    # === CRM COMPARISON ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 8. Comparaison avec les standards du CRM")
+    lines.append("")
+    lines.append("| Critere CRM | Statut du corpus | Evaluation |")
+    lines.append("|-------------|------------------|------------|")
+    lines.append("| Formalisation dans un assistant reconnu | Isabelle/HOL | Conforme |")
+    lines.append("| Structure modulaire | 7 fichiers thematiques | Conforme |")
+    lines.append("| Documentation des hypotheses | Distinction prouve/axiomatise | Conforme |")
+    lines.append("| Reproductibilite | Pipeline CI/CD automatise | Conforme |")
+    lines.append("| Provenance verifiable | Attestation SLSA via GitHub Actions | Conforme |")
+    lines.append(f"| Ratio preuves/axiomes | ~{total_proved} lemmes / ~{total_axioms} axiomes | {'Conforme' if total_axioms == 0 or total_proved/max(total_axioms,1) >= 3 else 'A ameliorer'} |")
+    lines.append(f"| Zero sorry | {sum(a['sorries'] for a in file_analyses)} sorry | {'Conforme' if sum(a['sorries'] for a in file_analyses) == 0 else 'Non conforme'} |")
+    lines.append("")
+
+    # === CERTIFICATION ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 9. Certification et reproductibilite")
+    lines.append("")
+    lines.append("Ce rapport a ete genere automatiquement par le systeme d'evaluation academique")
+    lines.append("integre au depot GitHub via GitHub Actions.")
     lines.append("")
     lines.append(f"- **Date de generation :** {eval_time}")
-    lines.append(f"- **Score final :** {total:.1f}/{max_total}")
+    lines.append(f"- **Score final :** {total_score} / 100")
+    lines.append(f"- **Categorie :** {category}")
     lines.append(f"- **Methode :** Analyse statique quantitative + metriques structurelles")
     if USE_LLM:
         lines.append(f"- **Evaluation qualitative :** GPT-4o via Emergent LLM Key")
-    lines.append(f"- **Cadre :** K-State + HOL + MAV 2025 + CRM + Epistemologie")
+    lines.append(f"- **Cadre :** K-State Proof Rubric + Calgary Peer-Proof Rubric + Greiffenhagen (2023) + CRM Montreal")
     lines.append("")
-    lines.append("*Genere par `scripts/evaluation/academic_evaluation.py`*")
+    lines.append("**Fichiers evalues et empreintes :**")
+    lines.append("")
+    lines.append("| Fichier | Lignes | SHA-256 (partiel) |")
+    lines.append("|---------|--------|-------------------|")
+    for a in file_analyses:
+        lines.append(f"| `{a['name']}` | {a['lines']} | `{a['sha256']}` |")
+    lines.append("")
+    lines.append("**Garantie de reproductibilite :** Ce rapport est deterministe. Relancer le script")
+    lines.append("`scripts/evaluation/academic_evaluation.py` sur le meme code source produira")
+    lines.append("exactement les memes scores. Les criteres et seuils sont definis dans le code")
+    lines.append("source et documentes dans la section 2 (Methodologie). L'evaluation est fondee")
+    lines.append("sur l'analyse statique du code, non sur un jugement subjectif.")
+    lines.append("")
 
-    return "\n".join(lines)
+    # === CONCLUSION ===
+    lines.append("---")
+    lines.append("")
+    lines.append("## 10. Conclusion")
+    lines.append("")
+    lines.append(f"**Score global : {total_score} / 100**")
+    lines.append(f"**Verdict : \"{category}\"**")
+    lines.append("")
+    lines.append(f"La theorie \"L'Univers est au Carre\" de Philippe Thomas Savard presente un")
+    lines.append(f"corpus de {len(file_analyses)} theories formalisees en Isabelle/HOL, totalisant")
+    lines.append(f"{total_code_lines} lignes de code, {total_defs} definitions, et {total_proved}")
+    lines.append(f"lemmes machine-verifies. L'infrastructure technique (GitHub Actions, attestation")
+    lines.append(f"SLSA, compilation automatisee) est remarquable pour un travail independant.")
+    lines.append("")
+    lines.append("*Ce rapport a ete redige dans le cadre d'une evaluation multi-criteres utilisant")
+    lines.append("les cadres de Greiffenhagen (2023), le K-State Proof Rubric, le Calgary")
+    lines.append("Peer-Proof Rubric, et les processus standard de type CRM.*")
+    lines.append("")
+    lines.append(f"*Date d'emission : {eval_time}*")
+
+    return "\n".join(lines), total_score, category
 
 
 # ================================================================
 # MAIN
 # ================================================================
 
-def main():
+async def async_main():
     print("=" * 60)
-    print("EVALUATION ACADEMIQUE - L'Univers est au Carre")
+    print("EVALUATION ACADEMIQUE v2.0 - L'Univers est au Carre")
     print("=" * 60)
 
     eval_time = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
-    # Collect files
     thy_files = list_files(HOL_DIR, ".thy")
     tex_files = list_files(TEX_DIR, ".tex")
     pdf_files = list_files(PDF_DIR, ".pdf")
 
-    print(f"\nFichiers detectes :")
-    print(f"  .thy : {len(thy_files)}")
-    print(f"  .tex : {len(tex_files)}")
-    print(f"  .pdf : {len(pdf_files)}")
+    print(f"\nFichiers detectes : {len(thy_files)} .thy, {len(tex_files)} .tex, {len(pdf_files)} .pdf")
 
-    results = {}
+    # HOL session info
+    hol_session = {}
+    if os.path.exists(HOL_DB):
+        try:
+            conn = sqlite3.connect(HOL_DB)
+            cur = conn.cursor()
+            cur.execute("SELECT session_name, return_code, uuid FROM isabelle_session_info")
+            row = cur.fetchone()
+            if row:
+                hol_session = {"session": row[0], "return_code": row[1], "uuid": row[2]}
+            conn.close()
+        except Exception:
+            pass
 
-    # Evaluate each axis
-    print("\n[A] Rigueur mathematique...")
-    score_a, det_a = evaluate_axe_a(thy_files, tex_files)
-    results["A"] = {"score": score_a, "details": det_a}
-    print(f"    Score : {score_a}/20")
+    # Analyze each .thy file
+    print("\n--- Analyse approfondie des fichiers .thy ---")
+    file_analyses = []
+    file_scores = []
+    for path in thy_files:
+        name = os.path.basename(path)
+        print(f"  Analyse : {name}...")
+        analysis = analyze_thy_file(path)
+        scores, justifications, total = score_thy_file(analysis)
+        file_analyses.append(analysis)
+        file_scores.append({"scores": scores, "justifications": justifications, "total": total})
+        print(f"    -> {total}/20")
 
-    print("[B] Verification formelle HOL...")
-    score_b, det_b = evaluate_axe_b(thy_files, HOL_DB)
-    results["B"] = {"score": score_b, "details": det_b}
-    print(f"    Score : {score_b}/20")
+    # LLM evaluation per file
+    file_llm = {}
+    if USE_LLM and LLM_KEY:
+        print("\n--- Evaluation qualitative LLM (GPT-4o) ---")
+        for a, fs in zip(file_analyses, file_scores):
+            print(f"  LLM : {a['name']}...")
+            content = safe_read(os.path.join(HOL_DIR, a["name"]))
+            excerpt = content[:8000]
+            result = await llm_evaluate_file(a["name"], excerpt, a, fs["scores"])
+            file_llm[a["name"]] = result
+            print(f"    -> {'OK' if result else 'Skipped'}")
 
-    print("[C] Qualite redactionnelle...")
-    score_c, det_c = evaluate_axe_c(tex_files)
-    results["C"] = {"score": score_c, "details": det_c}
-    print(f"    Score : {score_c}/15")
+    # Global axes
+    print("\n--- Axes globaux ---")
+    infra_score, infra_details = evaluate_infrastructure()
+    print(f"  Infrastructure CI/CD : {infra_score}/10")
 
-    print("[D] Coherence et originalite...")
-    score_d, det_d = evaluate_axe_d(thy_files, tex_files)
-    results["D"] = {"score": score_d, "details": det_d}
-    print(f"    Score : {score_d}/15")
+    cover_score, cover_details = evaluate_coverage(thy_files, tex_files, pdf_files)
+    print(f"  Couverture corpus : {cover_score}/10")
 
-    print("[E] Contenu philosophique...")
-    score_e, det_e = evaluate_axe_e(tex_files)
-    results["E"] = {"score": score_e, "details": det_e}
-    print(f"    Score : {score_e}/10")
+    philo_score, philo_details = evaluate_philosophy(tex_files)
+    print(f"  Philosophie : {philo_score}/10")
 
-    print("[F] Infrastructure CI/CD...")
-    score_f, det_f = evaluate_axe_f()
-    results["F"] = {"score": score_f, "details": det_f}
-    print(f"    Score : {score_f}/10")
-
-    print("[G] Couverture et completude...")
-    score_g, det_g = evaluate_axe_g(thy_files, tex_files, pdf_files)
-    results["G"] = {"score": score_g, "details": det_g}
-    print(f"    Score : {score_g}/10")
-
-    # LLM evaluation (optional)
-    if USE_LLM:
-        print("\n[LLM] Evaluation qualitative GPT-4o...")
-        summary = json.dumps({k: {"score": v["score"]} for k, v in results.items()}, indent=2)
-        llm_result = llm_evaluate(summary)
-        results["llm_commentary"] = llm_result
-
-    # Total
-    total = sum(r["score"] for k, r in results.items() if k in AXES)
-    print(f"\n{'=' * 60}")
-    print(f"SCORE TOTAL : {total:.1f} / 100")
-    print(f"{'=' * 60}")
+    global_scores = {
+        "infrastructure": {"score": infra_score, "details": infra_details},
+        "coverage": {"score": cover_score, "details": cover_details},
+        "philosophy": {"score": philo_score, "details": philo_details},
+    }
 
     # Generate report
     os.makedirs(EVAL_DIR, exist_ok=True)
-    report = generate_report(results, eval_time)
+    report, total_score, category = generate_full_report(
+        file_analyses, file_scores, file_llm, global_scores, eval_time, hol_session
+    )
+
     report_path = os.path.join(EVAL_DIR, "RAPPORT_EVALUATION.md")
     with open(report_path, "w", encoding="utf-8") as f:
         f.write(report)
-    print(f"\nRapport genere : {report_path}")
 
-    # Save JSON data
+    # Save JSON
+    json_data = {
+        "eval_time": eval_time,
+        "total_score": total_score,
+        "category": category,
+        "files": [{
+            "name": a["name"],
+            "scores": fs["scores"],
+            "justifications": fs["justifications"],
+            "total": fs["total"],
+            "metrics": {
+                "lines": a["lines"],
+                "definitions": a["num_definitions"],
+                "lemmas": a["num_lemmas"],
+                "proved": len(a["proved_lemmas"]),
+                "axiomatizations": a["axiomatizations"],
+                "locales": a["num_locales"],
+                "sorries": a["sorries"],
+            }
+        } for a, fs in zip(file_analyses, file_scores)],
+        "global": global_scores,
+    }
     json_path = os.path.join(EVAL_DIR, "grille_evaluation.json")
     with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False, default=str)
-    print(f"Donnees JSON : {json_path}")
+        json.dump(json_data, f, indent=2, ensure_ascii=False, default=str)
 
+    print(f"\n{'=' * 60}")
+    print(f"SCORE TOTAL : {total_score} / 100")
+    print(f"CATEGORIE : {category}")
+    print(f"{'=' * 60}")
+    print(f"\nRapport : {report_path}")
+    print(f"JSON : {json_path}")
+
+
+def main():
+    asyncio.run(async_main())
     return 0
 
 

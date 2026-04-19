@@ -1,365 +1,239 @@
 {
-  "A": {
-    "score": 20.0,
-    "details": {
-      "A1_definitions": {
-        "score": 5.0,
-        "max": 5,
-        "total_defs": 268
+  "eval_time": "2026-04-19 04:04 UTC",
+  "total_score": 74.3,
+  "category": "Revisions majeures requises",
+  "files": [
+    {
+      "name": "espace_philippot.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 3,
+        "rigueur": 3,
+        "notation": 3,
+        "originalite": 4
       },
-      "A2_axiomatisations": {
-        "score": 4.0,
-        "max": 4,
-        "total_axioms": 56
+      "justifications": {
+        "correction": "7 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 22.0. Axiomes bien justifies. Penalite : 4 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure de locales propre, documentation textuelle abondante.",
+        "originalite": "Originalite significative. 3 concepts."
       },
-      "A3_structure_logique": {
-        "score": 4.0,
-        "max": 4,
-        "total_locales": 19
+      "total": 16,
+      "metrics": {
+        "lines": 198,
+        "definitions": 15,
+        "lemmas": 7,
+        "proved": 7,
+        "axiomatizations": 1,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "geometrie_spectre_premier.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 3
       },
-      "A4_notation_latex": {
-        "score": 4.0,
-        "max": 4,
-        "total_equations": 1212
+      "justifications": {
+        "correction": "1 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Structure presente mais des elements de connexion manquent.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite moderee."
       },
-      "A5_exemples_numeriques": {
-        "score": 3.0,
-        "max": 3,
-        "total_examples": 329
+      "total": 13,
+      "metrics": {
+        "lines": 152,
+        "definitions": 13,
+        "lemmas": 1,
+        "proved": 1,
+        "axiomatizations": 0,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "infini_parti.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 1,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 4
       },
-      "thy_details": {
-        "espace_philippot.thy": {
-          "definitions": 15,
-          "axioms_assumes": 2,
-          "locales": 0,
-          "functions": 0,
-          "lemmas": 7,
-          "theorems": 0,
-          "lines": 197
-        },
-        "geometrie_spectre_premier.thy": {
-          "definitions": 13,
-          "axioms_assumes": 0,
-          "locales": 0,
-          "functions": 0,
-          "lemmas": 1,
-          "theorems": 0,
-          "lines": 151
-        },
-        "infini_parti.thy": {
-          "definitions": 23,
-          "axioms_assumes": 7,
-          "locales": 12,
-          "functions": 0,
-          "lemmas": 1,
-          "theorems": 0,
-          "lines": 510
-        },
-        "mecanique_discret.thy": {
-          "definitions": 69,
-          "axioms_assumes": 10,
-          "locales": 0,
-          "functions": 0,
-          "lemmas": 7,
-          "theorems": 0,
-          "lines": 650
-        },
-        "methode_de_philippot.thy": {
-          "definitions": 33,
-          "axioms_assumes": 1,
-          "locales": 1,
-          "functions": 1,
-          "lemmas": 3,
-          "theorems": 0,
-          "lines": 241
-        },
-        "methode_spectral.thy": {
-          "definitions": 96,
-          "axioms_assumes": 30,
-          "locales": 0,
-          "functions": 0,
-          "lemmas": 50,
-          "theorems": 2,
-          "lines": 1596
-        },
-        "postulat_carre.thy": {
-          "definitions": 19,
-          "axioms_assumes": 6,
-          "locales": 6,
-          "functions": 0,
-          "lemmas": 12,
-          "theorems": 0,
-          "lines": 450
-        }
+      "justifications": {
+        "correction": "1 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Lacunes majeures dans la completude logique.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 4 concepts."
+      },
+      "total": 13,
+      "metrics": {
+        "lines": 511,
+        "definitions": 23,
+        "lemmas": 1,
+        "proved": 1,
+        "axiomatizations": 0,
+        "locales": 12,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "mecanique_discret.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 3,
+        "rigueur": 3,
+        "notation": 2,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "7 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 25.0. Axiomes bien justifies. Penalite : 3 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 3 concepts."
+      },
+      "total": 15,
+      "metrics": {
+        "lines": 651,
+        "definitions": 68,
+        "lemmas": 7,
+        "proved": 7,
+        "axiomatizations": 3,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "methode_de_philippot.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "3 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Structure presente mais des elements de connexion manquent.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 3 concepts."
+      },
+      "total": 14,
+      "metrics": {
+        "lines": 242,
+        "definitions": 33,
+        "lemmas": 3,
+        "proved": 3,
+        "axiomatizations": 0,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "methode_spectral.thy",
+      "scores": {
+        "correction": 4,
+        "completude": 3,
+        "rigueur": 4,
+        "notation": 3,
+        "originalite": 5
+      },
+      "justifications": {
+        "correction": "50 lemmes prouves par le noyau Isabelle. Correction exemplaire.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 9.7. Axiomes bien justifies.",
+        "notation": "Structure de locales propre, documentation textuelle abondante.",
+        "originalite": "Hautement original. 5 concepts uniques identifies."
+      },
+      "total": 19,
+      "metrics": {
+        "lines": 1597,
+        "definitions": 96,
+        "lemmas": 50,
+        "proved": 50,
+        "axiomatizations": 15,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "postulat_carre.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 3
+      },
+      "justifications": {
+        "correction": "5 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure presente mais des elements de connexion manquent. Locales vides detectees : octogone_carre_equations, hexagone_carre_equations.",
+        "rigueur": "Aucune axiomatisation. Toutes les propositions sont prouvees ou definitoires. Penalite : 16 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite moderee."
+      },
+      "total": 14,
+      "metrics": {
+        "lines": 451,
+        "definitions": 19,
+        "lemmas": 8,
+        "proved": 5,
+        "axiomatizations": 0,
+        "locales": 6,
+        "sorries": 0
       }
     }
-  },
-  "B": {
-    "score": 20.0,
-    "details": {
-      "B1_compilation": {
-        "score": 5.0,
-        "max": 5,
-        "session_info": {
-          "session": "Univers_Au_Carre",
-          "return_code": 0,
-          "uuid": "dc403593-a634-4fc7-bfbc-346bbabd247e"
-        }
-      },
-      "B2_sorry_count": {
-        "score": 5.0,
-        "max": 5,
-        "total_sorry": 0,
-        "per_file": {
-          "espace_philippot.thy": 0,
-          "geometrie_spectre_premier.thy": 0,
-          "infini_parti.thy": 0,
-          "mecanique_discret.thy": 0,
-          "methode_de_philippot.thy": 0,
-          "methode_spectral.thy": 0,
-          "postulat_carre.thy": 0
-        }
-      },
-      "B3_completude_formelle": {
-        "score": 5.0,
-        "max": 5,
-        "lemmas": 81,
-        "theorems": 2,
-        "proofs": 16,
-        "axiomatizations": 20,
-        "definitions": 268,
-        "validated": 304,
-        "total_props": 371,
-        "ratio": 0.82
-      },
-      "B4_tactiques": {
-        "score": 3.0,
-        "max": 3,
-        "total_tactics": 120
-      },
-      "B5_theories": {
-        "score": 2.0,
-        "max": 2,
-        "compiled_theories": 7
-      },
-      "total_hol_lines": 3795
-    }
-  },
-  "C": {
-    "score": 14.0,
-    "details": {
-      "C1_structure": {
-        "score": 4.0,
-        "max": 4,
-        "sections": 67,
-        "subsections": 171
-      },
-      "C2_figures": {
-        "score": 3.0,
-        "max": 3,
-        "total_figures": 64
-      },
-      "C3_references": {
-        "score": 2.0,
-        "max": 3,
-        "total_refs": 28
-      },
-      "C4_bilinguisme": {
-        "score": 3.0,
-        "max": 3,
-        "fr_docs": 10,
-        "en_docs": 10
-      },
-      "C5_volume": {
-        "score": 2.0,
-        "max": 2,
-        "total_size_kb": 720.2
-      },
-      "tex_details": {
-        "analyse-hypothese-riemann.tex": {
-          "sections": 7,
-          "subsections": 18,
-          "figures": 14,
-          "refs": 7,
-          "size_kb": 119.6
-        },
-        "espace_de_philippot.tex": {
-          "sections": 0,
-          "subsections": 0,
-          "figures": 2,
-          "refs": 0,
-          "size_kb": 6.1
-        },
-        "geometrie_nombre_premier.tex": {
-          "sections": 7,
-          "subsections": 18,
-          "figures": 14,
-          "refs": 6,
-          "size_kb": 106.2
-        },
-        "geometry_prime_spectrum.tex": {
-          "sections": 7,
-          "subsections": 18,
-          "figures": 12,
-          "refs": 6,
-          "size_kb": 102.8
-        },
-        "mecanique_harmonique_du_chaos_discret.tex": {
-          "sections": 5,
-          "subsections": 10,
-          "figures": 2,
-          "refs": 1,
-          "size_kb": 49.6
-        },
-        "pilosophy_geometry_of_prime_number.tex": {
-          "sections": 10,
-          "subsections": 28,
-          "figures": 0,
-          "refs": 0,
-          "size_kb": 68.4
-        },
-        "postulat_de_univers_carre.tex": {
-          "sections": 3,
-          "subsections": 7,
-          "figures": 8,
-          "refs": 2,
-          "size_kb": 21.6
-        },
-        "prime_number_geometry.tex": {
-          "sections": 7,
-          "subsections": 18,
-          "figures": 12,
-          "refs": 6,
-          "size_kb": 101.7
-        },
-        "teleosemantics_mind_analogist_philosophy.tex": {
-          "sections": 10,
-          "subsections": 28,
-          "figures": 0,
-          "refs": 0,
-          "size_kb": 68.4
-        },
-        "teleosemantique_philosophie_esprit_analogiste.tex": {
-          "sections": 11,
-          "subsections": 26,
-          "figures": 0,
-          "refs": 0,
-          "size_kb": 75.9
-        }
-      }
-    }
-  },
-  "D": {
-    "score": 13.0,
-    "details": {
-      "D1_liens_hol_latex": {
-        "score": 5.0,
-        "max": 5,
-        "tex_hol_refs": 11
-      },
-      "D2_originalite": {
-        "score": 4.0,
-        "max": 4,
-        "concepts_trouves": 10,
-        "sur": 11
-      },
-      "D3_progression": {
-        "score": 3.0,
-        "max": 3,
-        "etapes_presentes": 6
-      },
-      "D4_consistance": {
-        "score": 1.0,
-        "max": 3
-      }
-    }
-  },
-  "E": {
-    "score": 9.0,
-    "details": {
-      "E1_presence": {
-        "score": 2.5,
-        "max": 3,
-        "philo_files": 2
-      },
-      "E2_profondeur": {
-        "score": 3.0,
-        "max": 3,
-        "concepts_trouves": 9,
-        "sur": 12
-      },
-      "E3_lien_philo_math": {
-        "score": 2.0,
-        "max": 2,
-        "refs_math": 25
-      },
-      "E4_originalite": {
-        "score": 1.5,
-        "max": 2,
-        "concepts_originaux": 2
-      }
-    }
-  },
-  "F": {
-    "score": 10.0,
-    "details": {
-      "F1_workflows": {
-        "score": 3.0,
-        "max": 3,
-        "count": 5,
-        "files": [
-          "academic-evaluation.yml",
-          "auto-daily-qa.yml",
-          "auto-monthly-maintenance.yml",
-          "auto-weekly-proposals.yml",
-          "build.yml"
-        ]
-      },
-      "F2_scripts": {
-        "score": 3.0,
-        "max": 3,
-        "count": 9
-      },
-      "F3_attestation": {
-        "score": 2.0,
-        "max": 2,
+  ],
+  "global": {
+    "infrastructure": {
+      "score": 10,
+      "details": {
+        "workflows": 5,
+        "scripts": 9,
         "metadata": true,
-        "sha256": true
-      },
-      "F4_databases": {
-        "score": 2.0,
-        "max": 2,
-        "count": 2
+        "databases": 2
       }
-    }
-  },
-  "G": {
-    "score": 6.5,
-    "details": {
-      "G1_correspondances": {
-        "score": 1.0,
-        "max": 3,
+    },
+    "coverage": {
+      "score": 5.5,
+      "details": {
         "cross_refs": 0,
-        "tex": 10,
-        "thy": 7,
-        "pdf": 10
-      },
-      "G2_qa_bank": {
-        "score": 0.5,
-        "max": 2,
-        "questions": 0
-      },
-      "G3_arborescences": {
-        "score": 2.0,
-        "max": 2,
-        "arbo_files": 4,
-        "readme": true
-      },
-      "G4_volume": {
-        "score": 3.0,
-        "max": 3,
-        "pdf_pages": 406,
-        "hol_lines": 3795
+        "qa_count": 0,
+        "arbo": 4,
+        "hol_lines": 3795,
+        "pdf_count": 10
+      }
+    },
+    "philosophy": {
+      "score": 9.0,
+      "details": {
+        "files": [
+          "teleosemantics_mind_analogist_philosophy.tex",
+          "teleosemantique_philosophie_esprit_analogiste.tex"
+        ],
+        "concepts_found": 10,
+        "math_refs": 25,
+        "concepts_detail": {
+          "phenomenolog": 3,
+          "conscience": 14,
+          "savoir": 53,
+          "analogiste": 19,
+          "lalangue": 6,
+          "neuronal": 4,
+          "isossophie": 5,
+          "pulsion": 14,
+          "finesse": 24,
+          "connaissance": 28
+        }
       }
     }
   }
