@@ -1,8 +1,0 @@
-theory Test_Philippot
-  imports Complex_Main
-begin
-
-type_synonym term  = real
-type_synonym suite = "real list"
-
-end

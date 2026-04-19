@@ -232,6 +232,8 @@ jobs:
             src/hol/methode_de_philippot.thy
             src/hol/mecanique_discret.thy
             src/hol/espace_philippot.thy
+            src/hol/geometrie_spectre_premier.thy
+            src/hol/infini_parti.thy
             src/pdf/postulat_de_univers_carre.pdf
             src/pdf/analyse_hypothese_riemann_savard.pdf
             src/pdf/geometry_prime_spectrum.pdf
