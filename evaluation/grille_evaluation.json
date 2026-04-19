@@ -5,17 +5,17 @@
       "A1_definitions": {
         "score": 5.0,
         "max": 5,
-        "total_defs": 258
+        "total_defs": 268
       },
       "A2_axiomatisations": {
         "score": 4.0,
         "max": 4,
-        "total_axioms": 73
+        "total_axioms": 56
       },
       "A3_structure_logique": {
         "score": 4.0,
         "max": 4,
-        "total_locales": 20
+        "total_locales": 19
       },
       "A4_notation_latex": {
         "score": 4.0,
@@ -25,18 +25,9 @@
       "A5_exemples_numeriques": {
         "score": 3.0,
         "max": 3,
-        "total_examples": 330
+        "total_examples": 329
       },
       "thy_details": {
-        "Philippot_Method.thy": {
-          "definitions": 26,
-          "axioms_assumes": 24,
-          "locales": 13,
-          "functions": 0,
-          "lemmas": 47,
-          "theorems": 9,
-          "lines": 1333
-        },
         "espace_philippot.thy": {
           "definitions": 15,
           "axioms_assumes": 2,
@@ -44,7 +35,25 @@
           "functions": 0,
           "lemmas": 7,
           "theorems": 0,
-          "lines": 196
+          "lines": 197
+        },
+        "geometrie_spectre_premier.thy": {
+          "definitions": 13,
+          "axioms_assumes": 0,
+          "locales": 0,
+          "functions": 0,
+          "lemmas": 1,
+          "theorems": 0,
+          "lines": 151
+        },
+        "infini_parti.thy": {
+          "definitions": 23,
+          "axioms_assumes": 7,
+          "locales": 12,
+          "functions": 0,
+          "lemmas": 1,
+          "theorems": 0,
+          "lines": 510
         },
         "mecanique_discret.thy": {
           "definitions": 69,
@@ -86,7 +95,7 @@
     }
   },
   "B": {
-    "score": 13.0,
+    "score": 20.0,
     "details": {
       "B1_compilation": {
         "score": 5.0,
@@ -98,37 +107,42 @@
         }
       },
       "B2_sorry_count": {
-        "score": 2.0,
+        "score": 5.0,
         "max": 5,
-        "total_sorry": 8,
+        "total_sorry": 0,
         "per_file": {
-          "Philippot_Method.thy": 8,
           "espace_philippot.thy": 0,
+          "geometrie_spectre_premier.thy": 0,
+          "infini_parti.thy": 0,
           "mecanique_discret.thy": 0,
           "methode_de_philippot.thy": 0,
           "methode_spectral.thy": 0,
           "postulat_carre.thy": 0
         }
       },
-      "B3_proof_ratio": {
-        "score": 1.0,
+      "B3_completude_formelle": {
+        "score": 5.0,
         "max": 5,
-        "lemmas": 126,
-        "theorems": 11,
-        "proofs": 34,
-        "ratio": 0.25
+        "lemmas": 81,
+        "theorems": 2,
+        "proofs": 16,
+        "axiomatizations": 20,
+        "definitions": 268,
+        "validated": 304,
+        "total_props": 371,
+        "ratio": 0.82
       },
       "B4_tactiques": {
         "score": 3.0,
         "max": 3,
-        "total_tactics": 225
+        "total_tactics": 120
       },
       "B5_theories": {
         "score": 2.0,
         "max": 2,
         "compiled_theories": 7
       },
-      "total_hol_lines": 4466
+      "total_hol_lines": 3795
     }
   },
   "C": {
@@ -241,7 +255,7 @@
       "D1_liens_hol_latex": {
         "score": 5.0,
         "max": 5,
-        "tex_hol_refs": 13
+        "tex_hol_refs": 11
       },
       "D2_originalite": {
         "score": 4.0,
@@ -327,7 +341,7 @@
         "max": 3,
         "cross_refs": 0,
         "tex": 10,
-        "thy": 6,
+        "thy": 7,
         "pdf": 10
       },
       "G2_qa_bank": {
@@ -345,7 +359,7 @@
         "score": 3.0,
         "max": 3,
         "pdf_pages": 406,
-        "hol_lines": 4466
+        "hol_lines": 3795
       }
     }
   }
