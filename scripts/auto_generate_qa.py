@@ -488,7 +488,9 @@ def main():
     random.seed(datetime.utcnow().strftime('%Y%m%d%H%M'))
     success = asyncio.run(generate_single_qa())
     print("=" * 60)
-    sys.exit(0 if success else 1)
+    if not success:
+        print("Aucune Q&R generee. Nouvel essai au prochain cron.")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
