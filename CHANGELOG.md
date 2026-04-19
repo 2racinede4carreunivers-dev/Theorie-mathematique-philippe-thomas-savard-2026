@@ -28,3 +28,8 @@ la LICENCE Apache 2.0. Bienvenu a tous!
 - Release v1.0.0 publiee
 
 ---
+
+## Release 
+
+- Mise à jour sans note fournie.
+
