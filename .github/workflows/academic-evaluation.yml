@@ -1,0 +1,73 @@
+name: Academic Evaluation
+on:
+  workflow_dispatch:
+    inputs:
+      use_llm:
+        description: "Activer l'evaluation qualitative LLM (GPT-4o)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pip --upgrade
+          if [ "${{ inputs.use_llm }}" = "true" ]; then
+            pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          fi
+
+      - name: Download build artifacts (corpus.db, HOL db)
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build.yml
+          name: corpus-db
+          path: qa_bank/
+        continue-on-error: true
+
+      - name: Download HOL session db
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build.yml
+          name: hol-session-db
+          path: archive/
+        continue-on-error: true
+
+      - name: Run Academic Evaluation
+        env:
+          REPO_ROOT: "."
+          CORPUS_DB: "qa_bank/corpus.db"
+          HOL_DB: "archive/Univers_Au_Carre.db"
+          USE_LLM: ${{ inputs.use_llm }}
+          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+        run: |
+          python scripts/evaluation/academic_evaluation.py
+
+      - name: Display report
+        run: cat evaluation/RAPPORT_EVALUATION.md
+
+      - name: Commit evaluation report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add evaluation/
+          git diff --cached --quiet || git commit -m "Evaluation academique $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
