@@ -1,10 +1,29 @@
 # Théorie Mathématique Philippe Thomas Savard — 2026
-*Formalisation, démonstrations, documentation et génération IA.*
 
-Bienvenue sur le site officiel du projet **Théorie Mathématique Philippe Thomas Savard — 2026**.  
+Avertisement :Ce dépôt a conotation scientifique et mathématique, est le fruit du travail d'un ouvrier qui n'a pas de formation académique reconnu dans la discipline des mathématiques et des sciences. Il est conçu par plaisir intellectuel et avec un intéret profond pour la discipline des mathématiques. IL ne doit être utilisé que pour les mêmes intérets et mêmes ambitions nous tenons a vous en avisé. Auteur: "Philippe Thomas Savard" Le dix-neuf
+avril deux-milles vingt-six 8:25.
+
+Bienvenue sur le site officiel du projet **Théorie Mathématique Philippe Thomas Savard — 20a26**.  
 Ce dépôt rassemble l’ensemble des travaux mathématiques, logiques, computationnels et documentaires liés à la théorie, ainsi que les outils permettant leur compilation, leur vérification et leur diffusion.
 
 ---
+
+## Prérequis techniques
+
+Pour utiliser ou reproduire l’environnement complet du projet, vous aurez besoin de :
+
+### Outils principaux
+- **Isabelle/HOL 2024+**
+- **TeXLive** ou **MiKTeX** (compilation LaTeX)
+- **Python 3.10+**
+- **pip** pour installer les dépendances
+- **Git** (gestion du dépôt)
+- **Wolfram Engine** (optionnel)
+
+### Dépendances Python
+```bash
+pip install -r scripts/requirements.txt
+
 
 ##  Présentation du projet
 
@@ -35,6 +54,43 @@ Contient les fichiers `.thy` définissant :
 La compilation est automatisée via GitHub Actions.
 
 ---
+
+
+---
+
+## 🧱 2. **Arborescence complète du dépôt**
+*(Très apprécié par les lecteurs et les contributeurs)*
+
+```md
+## Arborescence du dépôt
+
+Voici une vue simplifiée de la structure :
+
+├── src/
+│   ├── hol/               # Théories Isabelle/HOL
+│   ├── tex/               # Documents LaTeX
+│   └── pdf/               # PDF générés
+├── scripts/               # Système IA Q&R
+├── qa_bank/               # Base SQLite
+├── qa_output/             # Q&R générées
+├── docs/                  # Documentation + GitHub Pages
+├── assets/                # Images et illustrations
+├── archive/               # Archives et rapports
+├── .github/workflows/     # Pipelines CI/CD
+└── README.md
+
+## Reproductibilité scientifique
+
+Le projet suit les principes de reproductibilité :
+
+- **Build entièrement automatisé** via GitHub Actions  
+- **Attestations SLSA** pour garantir l’intégrité des artefacts  
+- **Versionnement strict** (SemVer)  
+- **Sources HOL et LaTeX compilables sans intervention manuelle**  
+- **Historique complet des générations IA** (Q&R, patterns, concepts)  
+
+Chaque version publiée peut être reconstruite à l’identique à partir du dépôt.
+
 
 ###  2. Documents LaTeX
 Dossier : `src/tex/`
@@ -156,6 +212,47 @@ votre-depot/
 ```
 
 ---
+
+## Tests et validation
+
+Le projet inclut plusieurs niveaux de validation :
+
+### 1. Validation formelle
+- Isabelle/HOL vérifie automatiquement les théorèmes et définitions.
+
+### 2. Validation documentaire
+- Compilation LaTeX sans erreur
+- Génération PDF reproductible
+
+### 3. Validation IA
+- Q&R générées automatiquement
+- Validation manuelle via `qa_validator.py`
+- Apprentissage progressif des patterns validés
+
+### 4. Validation CI/CD
+- Tous les workflows doivent réussir avant la publication d’une release.
+
+
+## Sécurité & Intégrité
+
+Ce dépôt utilise :
+
+- **Attestations SLSA** pour garantir l’intégrité des artefacts
+- **Secrets GitHub** pour les clés API
+- **Workflows isolés** pour la génération IA
+- **Contrôles de validation** pour éviter les contenus non désirés
+
+Pour signaler une vulnérabilité, consultez le fichier `SECURITY.md`.
+
+
+## Références
+
+Les concepts et démonstrations s’appuient sur :
+
+- la documentation officielle Isabelle/HOL
+- les ouvrages de géométrie algébrique et spectrale
+- les travaux originaux de Philippe Thomas Savard (2016–2026)
+- les publications associées (à venir)
 
 ##  Installation
 
@@ -296,6 +393,25 @@ Pour vérifier votre solde ou recharger:
 > [Démonstration formelle avec équations LaTeX]
 
 ---
+
+## Contribution
+
+Les contributions sont les bienvenues, notamment pour :
+
+- améliorer la documentation
+- proposer de nouvelles démonstrations
+- enrichir les fichiers LaTeX
+- valider ou rejeter des Q&R générées
+- proposer des extensions de la théorie
+
+### Comment contribuer
+1. Forkez le dépôt  
+2. Créez une branche (`feature/ma-fonctionnalite`)  
+3. Faites vos modifications  
+4. Ouvrez une Pull Request  
+
+Le système Q&R permet également de contribuer sans écrire de code.
+
 
 ##  Dépannage
 
