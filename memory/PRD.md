@@ -1,40 +1,26 @@
 # PRD - Theorie mathematique Philippe Thomas Savard
 
 ## Probleme original
-Creer une banque de Q&R evolutive et intelligente (SQLite + LLM GPT-4o) pour un corpus de theorie mathematique (LaTeX, Isabelle/HOL, PDF). CI/CD 100% autonome via GitHub Actions.
+Banque Q&R evolutive (SQLite + LLM GPT-4o) pour corpus mathematique (LaTeX, HOL, PDF). CI/CD GitHub Actions.
 
 ## Architecture
 - Depot : `Theorie-mathematique-philippe-thomas-savard-2026`
-- Sources : `src/tex/` (10), `src/hol/` (7 .thy), `src/pdf/` (11)
-- DBs : `qa_bank/qa_bank.db`, `qa_bank/corpus.db`
-- CI/CD : 5 workflows dans `.github/workflows/`
-- Evaluation : `scripts/evaluation/academic_evaluation.py`
+- Sources : `src/tex/` (10), `src/hol/` (7 .thy), `src/pdf/` (10+)
+- Evaluation : `scripts/evaluation/academic_evaluation.py` v2.0
+- CI/CD : 5 workflows dont `academic-evaluation.yml` (manuel)
 
 ## Implemente
-
-### Phase 1-3 (sessions precedentes)
-- Infrastructure CI/CD complete
-- corpus.db extraction, Q&R automatiques, nettoyage depot
-- Arborescences Mermaid.js, README, Release v1.0.0
-
-### Phase 4 (2026-04-13)
-- Arborescences Mermaid.js (4 fichiers)
-
-### Phase 5 (2026-04-13 - 2026-04-18)
-- Philippot_Method.thy : generalisation complete (n termes, n etapes, 1/k)
-- Versions v3-v6 : nettoyage Unicode complet, 100% ASCII
-
-### Phase 6 (2026-04-19) - Systeme d'evaluation academique
-- `scripts/evaluation/academic_evaluation.py` : 7 axes, score /100
-- `.github/workflows/academic-evaluation.yml` : declenchement manuel
-- `evaluation/RAPPORT_EVALUATION.md` : score preliminaire 85.5/100 (Grade A)
-- `evaluation/RAPPORT_PREPARATOIRE.md` : liste complete des criteres
-- `evaluation/grille_evaluation.json` : donnees brutes
-- Cadre : K-State + HOL + MAV 2025 + CRM + Epistemologie
-- Option LLM (GPT-4o) pour evaluation qualitative
+- Phase 1-3 : CI/CD, corpus.db, Q&R, nettoyage
+- Phase 4 : Arborescences Mermaid.js
+- Phase 5 : Philippot_Method.thy (remplace par infini_parti.thy)
+- Phase 6 : Evaluation academique v2.0 - rapport peer-review detaille
+  - 550+ lignes, fichier par fichier, 5 axes (K-State/Calgary/Greiffenhagen)
+  - Justifications explicites pour chaque score
+  - Methodologie, comparaison CRM, forces/faiblesses
+  - Score : 74.3/100 (7 fichiers .thy, 0 sorry)
+  - Option GPT-4o pour analyse qualitative
 
 ## Backlog
-- P0 : Completer les 8 sorry dans Philippot_Method.thy (gain +3-5 pts)
-- P1 : Generer plus de Q&R pour qa_bank (gain +1.5 pts)
-- P2 : Ajouter tactiques variees dans les .thy (gain +2 pts)
-- P3 : Score potentiel apres corrections : 93-95/100 (Grade A+)
+- P0 : Completer sorry dans Philippot_Method.thy pour le reintegrer
+- P1 : Reduire axiomatisations pour augmenter le score
+- P2 : Eliminer constantes flottantes
