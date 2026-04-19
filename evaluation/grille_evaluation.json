@@ -1,0 +1,352 @@
+{
+  "A": {
+    "score": 20.0,
+    "details": {
+      "A1_definitions": {
+        "score": 5.0,
+        "max": 5,
+        "total_defs": 258
+      },
+      "A2_axiomatisations": {
+        "score": 4.0,
+        "max": 4,
+        "total_axioms": 73
+      },
+      "A3_structure_logique": {
+        "score": 4.0,
+        "max": 4,
+        "total_locales": 20
+      },
+      "A4_notation_latex": {
+        "score": 4.0,
+        "max": 4,
+        "total_equations": 1212
+      },
+      "A5_exemples_numeriques": {
+        "score": 3.0,
+        "max": 3,
+        "total_examples": 330
+      },
+      "thy_details": {
+        "Philippot_Method.thy": {
+          "definitions": 26,
+          "axioms_assumes": 24,
+          "locales": 13,
+          "functions": 0,
+          "lemmas": 47,
+          "theorems": 9,
+          "lines": 1333
+        },
+        "espace_philippot.thy": {
+          "definitions": 15,
+          "axioms_assumes": 2,
+          "locales": 0,
+          "functions": 0,
+          "lemmas": 7,
+          "theorems": 0,
+          "lines": 196
+        },
+        "mecanique_discret.thy": {
+          "definitions": 69,
+          "axioms_assumes": 10,
+          "locales": 0,
+          "functions": 0,
+          "lemmas": 7,
+          "theorems": 0,
+          "lines": 650
+        },
+        "methode_de_philippot.thy": {
+          "definitions": 33,
+          "axioms_assumes": 1,
+          "locales": 1,
+          "functions": 1,
+          "lemmas": 3,
+          "theorems": 0,
+          "lines": 241
+        },
+        "methode_spectral.thy": {
+          "definitions": 96,
+          "axioms_assumes": 30,
+          "locales": 0,
+          "functions": 0,
+          "lemmas": 50,
+          "theorems": 2,
+          "lines": 1596
+        },
+        "postulat_carre.thy": {
+          "definitions": 19,
+          "axioms_assumes": 6,
+          "locales": 6,
+          "functions": 0,
+          "lemmas": 12,
+          "theorems": 0,
+          "lines": 450
+        }
+      }
+    }
+  },
+  "B": {
+    "score": 13.0,
+    "details": {
+      "B1_compilation": {
+        "score": 5.0,
+        "max": 5,
+        "session_info": {
+          "session": "Univers_Au_Carre",
+          "return_code": 0,
+          "uuid": "dc403593-a634-4fc7-bfbc-346bbabd247e"
+        }
+      },
+      "B2_sorry_count": {
+        "score": 2.0,
+        "max": 5,
+        "total_sorry": 8,
+        "per_file": {
+          "Philippot_Method.thy": 8,
+          "espace_philippot.thy": 0,
+          "mecanique_discret.thy": 0,
+          "methode_de_philippot.thy": 0,
+          "methode_spectral.thy": 0,
+          "postulat_carre.thy": 0
+        }
+      },
+      "B3_proof_ratio": {
+        "score": 1.0,
+        "max": 5,
+        "lemmas": 126,
+        "theorems": 11,
+        "proofs": 34,
+        "ratio": 0.25
+      },
+      "B4_tactiques": {
+        "score": 3.0,
+        "max": 3,
+        "total_tactics": 225
+      },
+      "B5_theories": {
+        "score": 2.0,
+        "max": 2,
+        "compiled_theories": 7
+      },
+      "total_hol_lines": 4466
+    }
+  },
+  "C": {
+    "score": 14.0,
+    "details": {
+      "C1_structure": {
+        "score": 4.0,
+        "max": 4,
+        "sections": 67,
+        "subsections": 171
+      },
+      "C2_figures": {
+        "score": 3.0,
+        "max": 3,
+        "total_figures": 64
+      },
+      "C3_references": {
+        "score": 2.0,
+        "max": 3,
+        "total_refs": 28
+      },
+      "C4_bilinguisme": {
+        "score": 3.0,
+        "max": 3,
+        "fr_docs": 10,
+        "en_docs": 10
+      },
+      "C5_volume": {
+        "score": 2.0,
+        "max": 2,
+        "total_size_kb": 720.2
+      },
+      "tex_details": {
+        "analyse-hypothese-riemann.tex": {
+          "sections": 7,
+          "subsections": 18,
+          "figures": 14,
+          "refs": 7,
+          "size_kb": 119.6
+        },
+        "espace_de_philippot.tex": {
+          "sections": 0,
+          "subsections": 0,
+          "figures": 2,
+          "refs": 0,
+          "size_kb": 6.1
+        },
+        "geometrie_nombre_premier.tex": {
+          "sections": 7,
+          "subsections": 18,
+          "figures": 14,
+          "refs": 6,
+          "size_kb": 106.2
+        },
+        "geometry_prime_spectrum.tex": {
+          "sections": 7,
+          "subsections": 18,
+          "figures": 12,
+          "refs": 6,
+          "size_kb": 102.8
+        },
+        "mecanique_harmonique_du_chaos_discret.tex": {
+          "sections": 5,
+          "subsections": 10,
+          "figures": 2,
+          "refs": 1,
+          "size_kb": 49.6
+        },
+        "pilosophy_geometry_of_prime_number.tex": {
+          "sections": 10,
+          "subsections": 28,
+          "figures": 0,
+          "refs": 0,
+          "size_kb": 68.4
+        },
+        "postulat_de_univers_carre.tex": {
+          "sections": 3,
+          "subsections": 7,
+          "figures": 8,
+          "refs": 2,
+          "size_kb": 21.6
+        },
+        "prime_number_geometry.tex": {
+          "sections": 7,
+          "subsections": 18,
+          "figures": 12,
+          "refs": 6,
+          "size_kb": 101.7
+        },
+        "teleosemantics_mind_analogist_philosophy.tex": {
+          "sections": 10,
+          "subsections": 28,
+          "figures": 0,
+          "refs": 0,
+          "size_kb": 68.4
+        },
+        "teleosemantique_philosophie_esprit_analogiste.tex": {
+          "sections": 11,
+          "subsections": 26,
+          "figures": 0,
+          "refs": 0,
+          "size_kb": 75.9
+        }
+      }
+    }
+  },
+  "D": {
+    "score": 13.0,
+    "details": {
+      "D1_liens_hol_latex": {
+        "score": 5.0,
+        "max": 5,
+        "tex_hol_refs": 13
+      },
+      "D2_originalite": {
+        "score": 4.0,
+        "max": 4,
+        "concepts_trouves": 10,
+        "sur": 11
+      },
+      "D3_progression": {
+        "score": 3.0,
+        "max": 3,
+        "etapes_presentes": 6
+      },
+      "D4_consistance": {
+        "score": 1.0,
+        "max": 3
+      }
+    }
+  },
+  "E": {
+    "score": 9.0,
+    "details": {
+      "E1_presence": {
+        "score": 2.5,
+        "max": 3,
+        "philo_files": 2
+      },
+      "E2_profondeur": {
+        "score": 3.0,
+        "max": 3,
+        "concepts_trouves": 9,
+        "sur": 12
+      },
+      "E3_lien_philo_math": {
+        "score": 2.0,
+        "max": 2,
+        "refs_math": 25
+      },
+      "E4_originalite": {
+        "score": 1.5,
+        "max": 2,
+        "concepts_originaux": 2
+      }
+    }
+  },
+  "F": {
+    "score": 10.0,
+    "details": {
+      "F1_workflows": {
+        "score": 3.0,
+        "max": 3,
+        "count": 5,
+        "files": [
+          "academic-evaluation.yml",
+          "auto-daily-qa.yml",
+          "auto-monthly-maintenance.yml",
+          "auto-weekly-proposals.yml",
+          "build.yml"
+        ]
+      },
+      "F2_scripts": {
+        "score": 3.0,
+        "max": 3,
+        "count": 9
+      },
+      "F3_attestation": {
+        "score": 2.0,
+        "max": 2,
+        "metadata": true,
+        "sha256": true
+      },
+      "F4_databases": {
+        "score": 2.0,
+        "max": 2,
+        "count": 2
+      }
+    }
+  },
+  "G": {
+    "score": 6.5,
+    "details": {
+      "G1_correspondances": {
+        "score": 1.0,
+        "max": 3,
+        "cross_refs": 0,
+        "tex": 10,
+        "thy": 6,
+        "pdf": 10
+      },
+      "G2_qa_bank": {
+        "score": 0.5,
+        "max": 2,
+        "questions": 0
+      },
+      "G3_arborescences": {
+        "score": 2.0,
+        "max": 2,
+        "arbo_files": 4,
+        "readme": true
+      },
+      "G4_volume": {
+        "score": 3.0,
+        "max": 3,
+        "pdf_pages": 406,
+        "hol_lines": 4466
+      }
+    }
+  }
+}
