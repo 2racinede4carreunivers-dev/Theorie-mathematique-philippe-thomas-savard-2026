@@ -23,10 +23,10 @@ DATE="${DATE:-$TODAY}"
 
 # --- Enregistrement dans .pending_note (fichier versionne) ---
 cat > "$NOTE_FILE" <<EOF
-TITLE=$TITLE
-SUMMARY=$SUMMARY
-DATE=$DATE
-HASH=$BUILD_HASH
+TITLE=${TITLE}
+SUMMARY=${SUMMARY}
+DATE=${DATE}
+HASH=${BUILD_HASH}
 EOF
 
 echo ""

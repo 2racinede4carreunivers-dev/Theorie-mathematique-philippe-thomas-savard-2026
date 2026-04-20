@@ -529,10 +529,9 @@ jobs:
         run: |
           if [ -f ".pending_note" ]; then
             echo "note_exists=true" >> $GITHUB_OUTPUT
-            source .pending_note
-            echo "title=$TITLE" >> $GITHUB_OUTPUT
-            echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
-            echo "date=$DATE" >> $GITHUB_OUTPUT
+            echo "title=$(grep '^TITLE=' .pending_note | cut -d= -f2-)" >> $GITHUB_OUTPUT
+            echo "summary=$(grep '^SUMMARY=' .pending_note | cut -d= -f2-)" >> $GITHUB_OUTPUT
+            echo "date=$(grep '^DATE=' .pending_note | cut -d= -f2-)" >> $GITHUB_OUTPUT
           else
             echo "note_exists=false" >> $GITHUB_OUTPUT
           fi
