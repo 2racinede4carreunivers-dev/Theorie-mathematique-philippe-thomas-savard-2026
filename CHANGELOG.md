@@ -28,3 +28,10 @@ la LICENCE Apache 2.0. Bienvenu a tous!
 - Release v1.0.0 publiee
 
 ---
+
+## 2026-04-20 -- Commit d43b917
+
+Message: Fix CHANGELOG job: git add .pending_note ne crash plus si absent
+
+---
+
