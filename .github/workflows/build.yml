@@ -128,6 +128,16 @@ jobs:
             pdflatex -shell-escape -interaction=nonstopmode "$file" || true
           done
 
+      - name: Compilation forcée du fichier spirale_inverse_temps.tex
+        run: |
+          export TEXINPUTS="./assets/images//:"
+          export TEXMFHOME="$PWD/texmf"
+
+          echo "Compilation forcée du fichier spirale_inverse_temps.tex"
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/spirale_inverse_temps.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/spirale_inverse_temps.tex" || true
+          pdflatex -shell-escape -interaction=nonstopmode "src/tex/spirale_inverse_temps.tex" || true
+
       - name: Copier les PDF generes par LaTeX
         run: |
           mkdir -p src/pdf
@@ -150,22 +160,15 @@ jobs:
             fi
           done
 
+          # Copie explicite pour spirale_inverse_temps (sécurité)
+          if [ -f "spirale_inverse_temps.pdf" ]; then
+            cp "spirale_inverse_temps.pdf" src/pdf/
+            echo "  Copie: spirale_inverse_temps.pdf"
+          fi
+
           echo "PDF dans src/pdf/:"
           ls -la src/pdf/*.pdf 2>/dev/null || echo "  Aucun PDF"
 
-
-      - name: Copier les PDF generes par LaTeX
-        run: |
-          mkdir -p src/pdf
-          for texfile in src/tex/*.tex; do
-            basename=$(basename "$texfile" .tex)
-            if [ -f "${basename}.pdf" ]; then
-              cp "${basename}.pdf" src/pdf/
-              echo "  Copie: ${basename}.pdf"
-            fi
-          done
-          echo "PDF dans src/pdf/:"
-          ls -la src/pdf/*.pdf 2>/dev/null || echo "  Aucun PDF"
 
       ###########################################################################
 
@@ -241,6 +244,8 @@ jobs:
             src/pdf/pilosophy_geometry_of_prime_number.pdf
             src/pdf/espace_de_philippot.pdf
             src/pdf/teleosemantique_philosophie_esprit_analogiste.pdf
+            src/tex/spirale_inverse_temps.tex
+            src/pdf/spirale_inverse_temps.pdf
 
   ###########################################################################
   # 🟩 JOB HOL — SECTION CORRIGÉE
