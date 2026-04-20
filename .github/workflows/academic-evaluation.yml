@@ -80,4 +80,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add evaluation/
           git diff --cached --quiet || git commit -m "Evaluation academique $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase origin main
           git push

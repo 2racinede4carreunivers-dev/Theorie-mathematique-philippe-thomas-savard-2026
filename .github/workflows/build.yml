@@ -563,4 +563,5 @@ jobs:
           git config user.email "github-actions@github.com"
           git add CHANGELOG.md
           git commit -m "Mise à jour automatique du CHANGELOG"
+          git pull --rebase origin main
           git push
