@@ -467,13 +467,6 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 > Cette relation sert à démontrer comment les calculs de base agissent comme pivot pour les transformations continues dans des séries géométriques, illustrant des progressions arithmétiques utilisées dans les vérifications d'algorithmes numériques.
 
 ---
-
-**18. [avance] Comment la 'troisième personne qui veut' conceptuellement relie l'idioschizophrénie aux idées mathématiques développées?**
-
-*Categorie: philosophique/relation | Score: 0.8*
-
-> La 'troisième personne qui veut' représente une forme d'auto-narration destinée à externaliser le raisonnement intérieur, permettant de relier consciemment le vécu schizophrénique avec les principes mathématiques par une distanciation critique et analytique.
-
 ---
 
 **19. [expert] Quelle est l'implication de la démonstration du théorème principal sur le spectre des nombres premiers dans la section 'Hypercube Movement Surface by Surface'?**
@@ -500,11 +493,6 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**22. [debutant] Quelle est l'importance de la formule '1 + 50 = 51', trouvée dans la section sur les séquences géométriques?**
-
-*Categorie: mathematique/formule | Score: 0.8*
-
-> Cette formule semble banale mais elle illustre un point d'entrée pour montrer comment les opérations simples peuvent être appliquées sur des systèmes plus complexes du spectre des nombres premiers, agissant comme base de comparaisons dans des séquences.
 
 ---
 
