@@ -538,30 +538,23 @@ jobs:
           COMMIT_MSG=$(git log -1 --pretty=%s)
           COMMIT_DATE=$(git log -1 --pretty=%ci | cut -d' ' -f1)
 
-          # Construire l'entree
-          ENTRY=""
-
-          if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
-            ENTRY="## ${{ steps.note.outputs.date }} -- ${{ steps.note.outputs.title }}
-
-**Commit :** \`$SHORT_SHA\`
-**Resume :** ${{ steps.note.outputs.summary }}
-
----
-"
-          else
-            ENTRY="## $COMMIT_DATE -- Commit $SHORT_SHA
-
-**Message :** $COMMIT_MSG
-
----
-"
-          fi
-
-          # Inserer l'entree apres la ligne "---" du header (ligne 3)
-          # On ajoute a la fin du fichier
-          echo "" >> CHANGELOG.md
-          echo "$ENTRY" >> CHANGELOG.md
+          {
+            echo ""
+            if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
+              echo "## ${{ steps.note.outputs.date }} -- ${{ steps.note.outputs.title }}"
+              echo ""
+              echo "Commit: $SHORT_SHA"
+              echo ""
+              echo "Resume: ${{ steps.note.outputs.summary }}"
+            else
+              echo "## $COMMIT_DATE -- Commit $SHORT_SHA"
+              echo ""
+              echo "Message: $COMMIT_MSG"
+            fi
+            echo ""
+            echo "---"
+            echo ""
+          } >> CHANGELOG.md
 
       - name: Supprimer la note apres utilisation
         run: |
