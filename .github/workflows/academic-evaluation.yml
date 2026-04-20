@@ -35,21 +35,31 @@ jobs:
             pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
           fi
 
-      - name: Download build artifacts (corpus.db, HOL db)
+      - name: Download corpus.db artifact
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: build.yml
-          name: corpus-db
+          name_is_regexp: true
+          name: "^corpus-db-"
           path: qa_bank/
         continue-on-error: true
 
-      - name: Download HOL session db
+      - name: Download HOL session log
         uses: dawidd6/action-download-artifact@v3
         with:
           workflow: build.yml
-          name: hol-session-db
+          name: hol-session-log
           path: archive/
         continue-on-error: true
+
+      - name: Locate downloaded artifacts
+        run: |
+          echo "=== Contenu qa_bank/ ==="
+          find qa_bank/ -type f 2>/dev/null || echo "vide"
+          echo "=== Contenu archive/ ==="
+          find archive/ -type f 2>/dev/null || echo "vide"
+          echo "=== Fallback: corpus.db deja dans le depot ==="
+          ls -la qa_bank/corpus.db 2>/dev/null || echo "pas de corpus.db local"
 
       - name: Run Academic Evaluation
         env:
