@@ -74,6 +74,18 @@ jobs:
       - name: Display report
         run: cat evaluation/RAPPORT_EVALUATION.md
 
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report
+          path: evaluation/RAPPORT_EVALUATION.md
+
+      - name: Upload evaluation data
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-data
+          path: evaluation/grille_evaluation.json
+
       - name: Commit evaluation report
         run: |
           git config user.name "github-actions[bot]"
