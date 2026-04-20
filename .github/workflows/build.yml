@@ -504,7 +504,7 @@ jobs:
           path: .
 
   ###########################################################################
-  # 🟧 JOB CHANGELOG
+  # JOB CHANGELOG
   ###########################################################################
 
   update_changelog:
@@ -518,50 +518,62 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Lire la note si elle existe
+      - name: Lire la note manuelle si presente
         id: note
         run: |
-          NOTE_FILE=".git/.note"
-          if [ -f "$NOTE_FILE" ]; then
+          if [ -f ".pending_note" ]; then
             echo "note_exists=true" >> $GITHUB_OUTPUT
-            source "$NOTE_FILE"
-            echo "title=$title" >> $GITHUB_OUTPUT
-            echo "summary=$summary" >> $GITHUB_OUTPUT
-            echo "date=$date" >> $GITHUB_OUTPUT
-            echo "tag=$tag" >> $GITHUB_OUTPUT
-            echo "previous_tag=$previous_tag" >> $GITHUB_OUTPUT
+            source .pending_note
+            echo "title=$TITLE" >> $GITHUB_OUTPUT
+            echo "summary=$SUMMARY" >> $GITHUB_OUTPUT
+            echo "date=$DATE" >> $GITHUB_OUTPUT
           else
             echo "note_exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Mettre à jour le CHANGELOG
+      - name: Mettre a jour le CHANGELOG
         run: |
-          echo "" >> CHANGELOG.md
-          echo "## Release ${{ steps.note.outputs.tag }}" >> CHANGELOG.md
-          echo "" >> CHANGELOG.md
+          COMMIT_SHA="${{ github.sha }}"
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          COMMIT_DATE=$(git log -1 --pretty=%ci | cut -d' ' -f1)
+
+          # Construire l'entree
+          ENTRY=""
 
           if [ "${{ steps.note.outputs.note_exists }}" = "true" ]; then
-            echo "- **Titre** : ${{ steps.note.outputs.title }}" >> CHANGELOG.md
-            echo "- **Résumé** : ${{ steps.note.outputs.summary }}" >> CHANGELOG.md
-            echo "- **Date** : ${{ steps.note.outputs.date }}" >> CHANGELOG.md
-            echo "- **Tag précédent** : ${{ steps.note.outputs.previous_tag }}" >> CHANGELOG.md
+            ENTRY="## ${{ steps.note.outputs.date }} -- ${{ steps.note.outputs.title }}
+
+**Commit :** \`$SHORT_SHA\`
+**Resume :** ${{ steps.note.outputs.summary }}
+
+---
+"
           else
-            echo "- Mise à jour sans note fournie." >> CHANGELOG.md
+            ENTRY="## $COMMIT_DATE -- Commit $SHORT_SHA
+
+**Message :** $COMMIT_MSG
+
+---
+"
           fi
 
+          # Inserer l'entree apres la ligne "---" du header (ligne 3)
+          # On ajoute a la fin du fichier
           echo "" >> CHANGELOG.md
+          echo "$ENTRY" >> CHANGELOG.md
 
-      - name: Supprimer la note après utilisation
+      - name: Supprimer la note apres utilisation
         run: |
-          if [ -f ".git/.note" ]; then
-            rm .git/.note
+          if [ -f ".pending_note" ]; then
+            rm .pending_note
+            git add .pending_note
           fi
 
-      - name: Commit et push du CHANGELOG mis à jour
+      - name: Commit et push du CHANGELOG
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
-          git commit -m "Mise à jour automatique du CHANGELOG"
-          git pull --rebase origin main
+          git diff --cached --quiet || git commit -m "CHANGELOG: mise a jour automatique"
           git push
