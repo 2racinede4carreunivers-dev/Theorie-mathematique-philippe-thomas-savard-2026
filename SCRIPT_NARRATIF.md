@@ -587,7 +587,7 @@ Matrice simplifé :
 | 1er terme | 2ième terme | 3ième terme | égalité |
 |-----------|-------------|-------------|---------|
 | 37x | +31x | 29x | =41x |
-| 19y | +17y | +13y | =23y |
+| 19Y | +17Y | +13Y | =23Y |
 | 7z | +5z | +3z | =11z |
 
 Matrice a dérive première démontré:
