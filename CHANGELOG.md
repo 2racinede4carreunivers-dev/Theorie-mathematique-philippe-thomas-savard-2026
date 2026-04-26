@@ -77,3 +77,10 @@ Resume: Le CHANGELOG est maintenant mis a jour les mise a jour seront maintenant
 
 ---
 
+
+## 2026-04-25 -- Commit 0808131
+
+Message:  Titre : Modification README/SECURITY/CHANGELOG .
+
+---
+
