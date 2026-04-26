@@ -126,3 +126,11 @@ Le mainteneur répondra **dans les délais les plus courts possibles**, selon la
 ---
 
 Merci de contribuer à la sécurité, la stabilité et la pérennité du projet *L’univers est au carré*.
+
+## Accès au logiciel web (3 IA spécialisées)
+
+Le logiciel web est accessible ici :  
+[🔗 Accéder à l’application web des 3 IA spécialisées](https://author-identity-fix.emergent.host/)
+Disponible pour les utilisateurs contributeurs pour être patagé modifié cloné a même le dépôt selon les permiessions de la LICENSE Apach 2.0.
+Mise a jour le vingt-cinq avril deux-miles vingt-six 22:10 Lévis Chadières Appalaches Canada.
+Philippe Thomas Savard

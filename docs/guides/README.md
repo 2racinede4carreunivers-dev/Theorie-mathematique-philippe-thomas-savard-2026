@@ -50,6 +50,12 @@ Contient les fichiers `.thy` définissant :
 - les structures mathématiques  
 - les méthodes de démonstration  
 - les théorèmes formalisés  
+- Code logiciel web emergent
+
+## Accès au logiciel web (3 IA spécialisées)
+
+Le logiciel web est accessible ici :  
+[🔗 Accéder à l’application web des 3 IA spécialisées](https://author-identity-fix.emergent.host/)
 
 La compilation est automatisée via GitHub Actions.
 
