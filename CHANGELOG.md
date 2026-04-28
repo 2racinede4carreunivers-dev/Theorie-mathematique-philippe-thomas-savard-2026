@@ -91,3 +91,10 @@ Message:  Titre : Modification nom de sauvegarde .png .
 
 ---
 
+
+## 2026-04-28 -- Commit 4ead299
+
+Message:  Titre : Mise a jour P.T.S. SCRIPT_NARRATIF.md .
+
+---
+
