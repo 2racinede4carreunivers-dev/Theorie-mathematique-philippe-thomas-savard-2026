@@ -105,3 +105,10 @@ Message: SCRIPT_NARRATIF.md V.E1 2.0 : restructure, enrichi, sans doublons
 
 ---
 
+
+## 2026-04-28 -- Commit 3f62a89
+
+Message: SCRIPT_NARRATIF.md V.E1 2.0 : ~1000 lignes, enrichi et complet
+
+---
+
