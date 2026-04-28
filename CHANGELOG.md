@@ -98,3 +98,10 @@ Message:  Titre : Mise a jour P.T.S. SCRIPT_NARRATIF.md .
 
 ---
 
+
+## 2026-04-28 -- Commit 6d90b80
+
+Message: SCRIPT_NARRATIF.md V.E1 2.0 : restructure, enrichi, sans doublons
+
+---
+
