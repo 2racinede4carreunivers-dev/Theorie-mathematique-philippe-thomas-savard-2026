@@ -119,3 +119,10 @@ Message:  Titre: Modification du SCRIPT_NARRATIF.md .
 
 ---
 
+
+## 2026-04-29 -- Commit 5126fbc
+
+Message:  Titre: mise a jour SCRIPT_NARRATIF_VP .
+
+---
+
