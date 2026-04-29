@@ -112,3 +112,10 @@ Message: SCRIPT_NARRATIF.md V.E1 2.0 : ~1000 lignes, enrichi et complet
 
 ---
 
+
+## 2026-04-28 -- Commit bb7ad28
+
+Message:  Titre: Modification du SCRIPT_NARRATIF.md .
+
+---
+
