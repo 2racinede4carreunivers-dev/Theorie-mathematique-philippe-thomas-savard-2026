@@ -33,6 +33,104 @@ ENABLE_PDF = os.environ.get("ENABLE_PDF", "true").lower() == "true"
 
 
 # ================================================================
+# LATEX TO SPEECH CONVERSION
+# ================================================================
+
+def latex_to_speech(formula):
+    """Convert LaTeX formula to spoken French text."""
+    f = formula.strip()
+    # Remove \[ \] wrappers
+    f = re.sub(r'^\\\[|\\\]$', '', f).strip()
+    # Remove \text{...} -> just the content
+    f = re.sub(r'\\text\{([^}]+)\}', r'\1', f)
+    # \frac{a}{b} -> a divise par b
+    f = re.sub(r'\\frac\{([^}]+)\}\{([^}]+)\}', r'\1 divise par \2', f)
+    # \left( \right) -> parentheses
+    f = re.sub(r'\\left[(\[]', '(', f)
+    f = re.sub(r'\\right[)\]]', ')', f)
+    # \times -> fois
+    f = f.replace('\\times', ' fois ')
+    # ^{n} or ^n -> exposant n
+    f = re.sub(r'\^\{([^}]+)\}', r' exposant \1', f)
+    f = re.sub(r'\^(\d+)', r' exposant \1', f)
+    # \sqrt -> racine carree de
+    f = re.sub(r'\\sqrt\{([^}]+)\}', r'racine carree de \1', f)
+    # Cleanup
+    f = re.sub(r'\s+', ' ', f).strip()
+    return f
+
+
+def enrich_text_for_tts(scene):
+    """Enrich scene text with spoken explanations of formulas, tables and images."""
+    parts = []
+
+    # Title
+    parts.append(f"Page {scene['num']}. {scene['title']}.")
+    parts.append("")
+
+    # Main text - process line by line
+    text = scene["text"]
+    # Clean markdown
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+    text = re.sub(r'\*(.+?)\*', r'\1', text)
+    text = re.sub(r'`(.+?)`', r'\1', text)
+    text = re.sub(r'#{1,3}\s*', '', text)
+
+    lines = text.split("\n")
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+
+        # Detect computation lines (indented, with = or + or -)
+        is_calc = (line.startswith("    ") or line.startswith("\t")) and re.search(r'[=+\-*/^]', stripped)
+        if is_calc:
+            # Convert formula to speech
+            spoken = stripped
+            # Replace math symbols
+            spoken = spoken.replace("^", " exposant ")
+            spoken = spoken.replace("*", " fois ")
+            spoken = spoken.replace("/", " divise par ")
+            spoken = spoken.replace("sqrt", "racine carree de ")
+            spoken = re.sub(r'\s+', ' ', spoken)
+            parts.append(f"Le calcul suivant est affiche : {spoken}.")
+        elif stripped.startswith("\\[") or stripped.startswith("$"):
+            spoken = latex_to_speech(stripped)
+            if spoken and len(spoken) > 5:
+                parts.append(f"La formule indique : {spoken}.")
+        else:
+            parts.append(stripped)
+
+    # Tables - narrate content
+    if scene.get("tables"):
+        parts.append("")
+        parts.append("Un tableau recapitulatif est presente a l'ecran. Voici son contenu.")
+        for table in scene["tables"]:
+            rows = [r for r in table.split("\n") if r.strip() and not re.match(r'^\|[-:]+', r)]
+            if len(rows) >= 1:
+                header_cells = [c.strip() for c in rows[0].split("|") if c.strip()]
+                if header_cells:
+                    parts.append(f"Les colonnes sont : {', '.join(header_cells)}.")
+                for row in rows[1:5]:
+                    cells = [c.strip() for c in row.split("|") if c.strip()]
+                    if cells:
+                        parts.append(f"Ligne de donnees : {', '.join(cells)}.")
+
+    # Images - describe
+    if scene.get("images"):
+        parts.append("")
+        for img in scene["images"]:
+            fname = os.path.basename(img).replace(".png", "").replace("_", " ").replace("-", " ")
+            parts.append(f"Une illustration est presentee a l'ecran : {fname}.")
+            parts.append("Prenez un instant pour observer cette figure qui illustre le propos.")
+
+    full_text = "\n".join(parts)
+    if len(full_text) > 3900:
+        full_text = full_text[:3900]
+    return full_text
+
+
+# ================================================================
 # SCENE PARSER
 # ================================================================
 
@@ -88,8 +186,10 @@ def parse_scenes(md_content):
         # Detect LaTeX formulas
         if stripped.startswith("\\[") or stripped.startswith("$"):
             current_formulas.append(stripped)
+            current_text.append(line)  # Keep in text too for HTML display
             continue
         if stripped.startswith("\\]"):
+            current_text.append(line)
             continue
 
         # Detect tables
@@ -223,29 +323,43 @@ def generate_html(scenes, audio_files=None):
 
         # Clean text for HTML
         text_html = ""
-        for para in text.split("\n\n"):
-            para = para.strip()
-            if not para:
+        in_latex = False
+        latex_block = []
+        for para in text.split("\n"):
+            para_s = para.strip()
+            if not para_s:
+                if not in_latex:
+                    text_html += "\n"
+                continue
+            # LaTeX block detection
+            if para_s.startswith("\\["):
+                in_latex = True
+                latex_block = [para_s]
+                continue
+            if para_s.startswith("\\]"):
+                in_latex = False
+                latex_content = "\n".join(latex_block)
+                text_html += f'<div class="formula">\\[{latex_content}\\]</div>\n'
+                latex_block = []
+                continue
+            if in_latex:
+                latex_block.append(para_s)
                 continue
             # Handle blockquotes
-            if para.startswith(">"):
-                para = para.lstrip("> ")
-                text_html += f'<blockquote>{para}</blockquote>\n'
-            elif para.startswith("- ") or para.startswith("* "):
-                items = para.split("\n")
-                text_html += "<ul>\n"
-                for item in items:
-                    item = re.sub(r'^[-*]\s*', '', item.strip())
-                    if item:
-                        text_html += f"  <li>{item}</li>\n"
-                text_html += "</ul>\n"
+            if para_s.startswith(">"):
+                para_s = para_s.lstrip("> ")
+                text_html += f'<blockquote>{para_s}</blockquote>\n'
+            elif para_s.startswith("- ") or para_s.startswith("* "):
+                item_text = re.sub(r'^[-*]\s*', '', para_s)
+                text_html += f"<li>{item_text}</li>\n"
             else:
                 # Bold
-                para = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', para)
+                para_s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', para_s)
                 # Italic
-                para = re.sub(r'\*(.+?)\*', r'<em>\1</em>', para)
+                para_s = re.sub(r'\*(.+?)\*', r'<em>\1</em>', para_s)
                 # Code
-                para = re.sub(r'`(.+?)`', r'<code>\1</code>', para)
+                para_s = re.sub(r'`(.+?)`', r'<code>\1</code>', para_s)
+                text_html += f"<p>{para_s}</p>\n"
                 text_html += f"<p>{para}</p>\n"
 
         # Tables
@@ -308,6 +422,7 @@ def generate_html(scenes, audio_files=None):
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>L'Univers est au Carre - Animation narrative</title>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 <style>
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{
@@ -463,12 +578,15 @@ li {{ margin-bottom: 5px; }}
   <button id="prev" onclick="navigate(-1)">Precedent</button>
   <span class="progress" id="progress">Page 1 / {total}</span>
   <button class="audio-btn" id="audio-btn" onclick="toggleAudio()">Ecouter</button>
+  <button class="audio-btn" id="autoplay-btn" onclick="toggleAutoPlay()">Lecture auto</button>
   <button id="next" onclick="navigate(1)">Suivant</button>
 </div>
 <script>
 let current = 1;
 const total = {total};
 let currentAudio = null;
+
+let autoPlay = false;
 
 function showSlide(n) {{
   document.querySelectorAll('.slide').forEach(s => s.style.display = 'none');
@@ -478,11 +596,22 @@ function showSlide(n) {{
     slide.style.animation = 'none';
     slide.offsetHeight;
     slide.style.animation = 'fadeIn 0.6s ease-in';
+    // Re-render MathJax for this slide
+    if (window.MathJax) MathJax.typeset([slide]);
   }}
   document.getElementById('progress').textContent = 'Page ' + n + ' / ' + total;
   document.getElementById('prev').disabled = (n <= 1);
   document.getElementById('next').disabled = (n >= total);
   if (currentAudio) {{ currentAudio.pause(); currentAudio = null; }}
+  // Auto-play audio if enabled
+  if (autoPlay && slide) {{
+    const audio = slide.querySelector('.scene-audio');
+    if (audio) {{
+      currentAudio = audio;
+      audio.play();
+      audio.onended = function() {{ navigate(1); }};
+    }}
+  }}
 }}
 
 function navigate(dir) {{
@@ -502,6 +631,22 @@ function toggleAudio() {{
   if (audio) {{
     currentAudio = audio;
     audio.play();
+  }}
+}}
+
+function toggleAutoPlay() {{
+  autoPlay = !autoPlay;
+  const btn = document.getElementById('autoplay-btn');
+  btn.textContent = autoPlay ? 'Arreter auto' : 'Lecture auto';
+  btn.style.background = autoPlay ? 'rgba(201,168,76,0.3)' : 'none';
+  if (autoPlay) {{
+    const slide = document.getElementById('slide-' + current);
+    const audio = slide ? slide.querySelector('.scene-audio') : null;
+    if (audio) {{
+      currentAudio = audio;
+      audio.play();
+      audio.onended = function() {{ navigate(1); }};
+    }}
   }}
 }}
 
@@ -556,7 +701,7 @@ async def generate_tts(scenes):
 
     for scene in scenes:
         num = scene["num"]
-        text = scene["text"][:4000]  # Limite 4096 chars
+        text = enrich_text_for_tts(scene)
         if not text.strip():
             continue
 
