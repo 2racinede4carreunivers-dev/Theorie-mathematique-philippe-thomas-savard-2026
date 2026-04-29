@@ -1,0 +1,80 @@
+name: Generate Animation
+on:
+  workflow_dispatch:
+    inputs:
+      enable_tts:
+        description: "Generer la narration audio TTS (voix feminine francaise)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      enable_pdf:
+        description: "Generer la version PDF"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pip --upgrade
+          pip install weasyprint
+          if [ "${{ inputs.enable_tts }}" = "true" ]; then
+            pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          fi
+
+      - name: Generate animation
+        env:
+          REPO_ROOT: "."
+          ENABLE_TTS: ${{ inputs.enable_tts }}
+          ENABLE_PDF: ${{ inputs.enable_pdf }}
+          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+        run: |
+          python scripts/generate_animation.py
+
+      - name: Upload HTML animation
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-html
+          path: animation_output/animation.html
+
+      - name: Upload PDF animation
+        if: ${{ inputs.enable_pdf == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-pdf
+          path: animation_output/animation.pdf
+        continue-on-error: true
+
+      - name: Upload audio files
+        if: ${{ inputs.enable_tts == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-audio
+          path: animation_output/audio/
+        continue-on-error: true
+
+      - name: Upload scene index
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-scenes-index
+          path: animation_output/scenes_index.json
