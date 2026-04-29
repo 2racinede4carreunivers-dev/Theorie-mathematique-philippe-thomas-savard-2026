@@ -44,6 +44,7 @@ INTRODUCTION
      alt="Illustration animation A-5"
      style="max-width: 100%; height: auto;">
 
+
 Cette illustration représente la fonction Zêta de Philippôt sous la forme d’un hypercube (tesseract) en rotation continue autour d’un axe fixe. Ce tesseract, qui se replie sur lui-même à 360 degrés, projette orthogonalement sa structure sur la zone quadrillée située au centre de la figure. Cette zone correspond au « taillis » de l’analyse numérique métrique, composée d’une succession de rectangles formés de paires de carrés dont les dimensions progressent selon un rapport constant de 2^(1/2). Les quatre cubes décalés — deux en hauteur et deux en profondeur — sont eux-mêmes divisés en pyramides graduées, dont les subdivisions reflètent les variations induites par la rotation et le repli du tesseract. La projection obtenue permet de positionner proportionnellement les valeurs issues des suites A et B, dont la convolution détermine l’ensemble des nombres premiers P. La somme des suites A et B se retrouve ainsi à la jonction des deux droites bordant les parallélogrammes, au sommet géométrique où se condense l’information spectrale.
 
 
