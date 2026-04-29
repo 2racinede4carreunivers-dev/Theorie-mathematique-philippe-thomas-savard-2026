@@ -126,3 +126,10 @@ Message:  Titre: mise a jour SCRIPT_NARRATIF_VP .
 
 ---
 
+
+## 2026-04-29 -- Commit 03946fd
+
+Message: Systeme d'animation narrative : script Python + workflow
+
+---
+
