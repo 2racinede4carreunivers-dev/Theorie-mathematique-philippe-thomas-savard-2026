@@ -113,6 +113,8 @@ a tous.
 
 ## Architecture globale du dépôt
 
+<div style="transform: scale(0.70); transform-origin: top left;">
+
 ```mermaid
 graph TD
     ROOT["repo_savard/"]
@@ -157,7 +159,6 @@ graph TD
     style CORPGEN fill:#ea580c,color:#fff
     style BUILD fill:#7c3aed,color:#fff
     style CRON fill:#7c3aed,color:#fff
-
 
 ------------------------------------------------------------
 CHAPITRE 1 - LA GEOMETRIE DU SPECTRE DES NOMBRES PREMIERS
