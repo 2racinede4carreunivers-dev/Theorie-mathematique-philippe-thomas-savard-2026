@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-28 12:46 UTC
-**Total Q&R:** 101
+**Derniere mise a jour:** 2026-04-29 12:43 UTC
+**Total Q&R:** 102
 
 ---
 
@@ -400,7 +400,15 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ### Source: `postulat_carre.thy`
 
-**1. [avance] Comment est démontré formellement que l'aire du carré inscrit dans le 'locale' octogone_carre_equations est définie par l'équation 'area_carre = (4 - sqrt 8) ^ 2' et quelles propriétés géométriques sont utilisées dans cette preuve?**
+**1. [intermediaire] Comment la méthode de squaring est-elle utilisée dans l'exemple numérique pour p = 3 pour démontrer la relation entre la hauteur, le tronquage et la diagonale dans le fichier 'postulat_carre.thy'?**
+
+*Categorie: mathematique/methode | Score: 0.8*
+
+> Dans l'exemple numérique pour p = 3, présent dans le fichier 'postulat_carre.thy', la méthode de squaring est utilisée pour établir des relations précises entre différents éléments géométriques. Les axiomes 'ratio_height_3', 'ratio_trunc_3', et 'diag_trunc_3' définissent les relations exactes: hauteur sur côté comme 'h3 / s3 = sqrt 3 + 1', tronquage sur côté comme 't3 / s3 = sqrt 3', et la diagonale tronquée comme 'sqrt (s3 * s3 + t3 * t3) = sqrt 6'. Ces relations montrent que la méthode de squaring permet d'exprimer la hauteur et le tronquage en termes de fonction du côté 's3', et de vérifier la consistance à travers la diagonale tronquée. Résultat, la méthode montre que ces relations respectent parfaitement les propriétés géométriques prédites par le postulat de squaring, démontrant ainsi l'aire exacte de 'area3 = s3 * s3 * (sqrt 3 + 1)', validée dans Isabelle/HOL.
+
+---
+
+**2. [avance] Comment est démontré formellement que l'aire du carré inscrit dans le 'locale' octogone_carre_equations est définie par l'équation 'area_carre = (4 - sqrt 8) ^ 2' et quelles propriétés géométriques sont utilisées dans cette preuve?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
@@ -408,7 +416,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**2. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
+**3. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
 
 *Categorie: mathematique/comparaison | Score: 0.8*
 
