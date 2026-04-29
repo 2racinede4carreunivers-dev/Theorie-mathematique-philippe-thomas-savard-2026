@@ -24,11 +24,20 @@ simple accumulation de faits lineaires, mais une comprehension profonde des inte
 complexes entre les concepts mathematiques, redefinissant ainsi notre comprehension
 philosophique des lois regissant la realite et notre place dans l'univers.
 
+![Surface riemannienne – représentation 3D](./assets/images/animation_A-3.png)
+
+Cette illustration présente une surface riemannienne représentée dans un espace cartésien tridimensionnel (x, y, z). La figure met en évidence la manière dont une surface courbe peut être visualisée comme un objet géométrique continu, dont la structure locale est définie par une métrique. Elle permet d’observer comment les variations de courbure influencent la forme globale de la surface, offrant ainsi une intuition visuelle sur les concepts fondamentaux utilisés dans l’étude des espaces riemanniens.
+
 ============================================================
 
 ------------------------------------------------------------
 INTRODUCTION
 ------------------------------------------------------------
+
+![Fonction Zêta de Philippôt – projection du tesseract](./assets/images/animation_A-5.png)
+
+Cette illustration représente la fonction Zêta de Philippôt sous la forme d’un hypercube (tesseract) en rotation continue autour d’un axe fixe. Ce tesseract, qui se replie sur lui-même à 360 degrés, projette orthogonalement sa structure sur la zone quadrillée située au centre de la figure. Cette zone correspond au « taillis » de l’analyse numérique métrique, composée d’une succession de rectangles formés de paires de carrés dont les dimensions progressent selon un rapport constant de 2^(1/2). Les quatre cubes décalés — deux en hauteur et deux en profondeur — sont eux-mêmes divisés en pyramides graduées, dont les subdivisions reflètent les variations induites par la rotation et le repli du tesseract. La projection obtenue permet de positionner proportionnellement les valeurs issues des suites A et B, dont la convolution détermine l’ensemble des nombres premiers P. La somme des suites A et B se retrouve ainsi à la jonction des deux droites bordant les parallélogrammes, au sommet géométrique où se condense l’information spectrale.
+
 
 Philippe Thomas Savard, un libre penseur autodidacte originaire de Levis, au Canada,
 incarne parfaitement l'idee que la curiosite personnelle et le questionnement
@@ -101,6 +110,53 @@ Cette transparence, cette rigueur et cette ouverture sont les marques d'un trava
 qui ne craint pas l'examen. Elles incarnent la conviction profonde de l'auteur :
 la connaissance n'a de valeur que si elle est partagee, verifiable et accessible
 a tous.
+
+## Architecture globale du dépôt
+
+```mermaid
+graph TD
+    ROOT["repo_savard/"]
+
+    ROOT --> SRC["src/"]
+    ROOT --> QA["qa_bank/"]
+    ROOT --> SCRIPTS["scripts/"]
+    ROOT --> GH[".github/workflows/"]
+    ROOT --> IA["Ia_geo_spec_prem_app_deplo/"]
+    ROOT --> DOCS["docs/"]
+
+    SRC --> TEX["tex/<br/><i>10 fichiers .tex</i>"]
+    SRC --> HOL["hol/<br/><i>5 fichiers .thy + ROOT</i>"]
+    SRC --> PDF["pdf/<br/><i>14 fichiers .pdf</i>"]
+    SRC --> ARB["arborescences_corpus/<br/><i>4 fichiers .md</i>"]
+
+    QA --> QADB["qa_bank.db"]
+    QA --> CORPUS["corpus.db"]
+    QA --> QCAT["CATALOGUE.md"]
+
+    SCRIPTS --> QAGEN["auto_generate_qa.py"]
+    SCRIPTS --> CORPGEN["generate_corpus_db.py"]
+
+    GH --> BUILD["build.yml"]
+    GH --> CRON["auto-daily-qa.yml"]
+
+    style ROOT fill:#4a4a4a,color:#fff
+    style SRC fill:#2563eb,color:#fff
+    style QA fill:#16a34a,color:#fff
+    style SCRIPTS fill:#ea580c,color:#fff
+    style GH fill:#7c3aed,color:#fff
+    style IA fill:#dc2626,color:#fff
+    style DOCS fill:#555,color:#fff
+    style TEX fill:#3b82f6,color:#fff
+    style HOL fill:#3b82f6,color:#fff
+    style PDF fill:#3b82f6,color:#fff
+    style ARB fill:#3b82f6,color:#fff
+    style QADB fill:#16a34a,color:#fff
+    style CORPUS fill:#16a34a,color:#fff
+    style QCAT fill:#16a34a,color:#fff
+    style QAGEN fill:#ea580c,color:#fff
+    style CORPGEN fill:#ea580c,color:#fff
+    style BUILD fill:#7c3aed,color:#fff
+    style CRON fill:#7c3aed,color:#fff
 
 
 ------------------------------------------------------------
