@@ -147,3 +147,10 @@ Message: Fix animation : PDF pagine propre + TTS enrichi des calculs
 
 ---
 
+
+## 2026-04-30 -- Commit a5c610a
+
+Message: Animation v3 : lecteur video, images plein ecran, narration enrichie
+
+---
+
