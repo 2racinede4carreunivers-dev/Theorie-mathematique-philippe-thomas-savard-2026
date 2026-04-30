@@ -140,3 +140,10 @@ Message: Animation v2 : narration enrichie des calculs, formules et tableaux
 
 ---
 
+
+## 2026-04-30 -- Commit 14dbf6c
+
+Message: Fix animation : PDF pagine propre + TTS enrichi des calculs
+
+---
+
