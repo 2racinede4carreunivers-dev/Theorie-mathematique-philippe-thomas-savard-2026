@@ -59,6 +59,26 @@ Le fichier `src/SCRIPT_NARRATIF_VP.md` utilise les etiquettes :
   - `@NOTE` jamais lues ni affichees ; "Voir l'illustration" et titres
     "script narratif de l'exemple..." nettoyes du texte TTS
 
+- **Export Video MP4 pour reseaux sociaux** (`scripts/generate_video.py`) :
+  - Format 16:9 1920x1080 30fps H.264 + AAC 192k (YouTube / Facebook / LinkedIn)
+  - Rendu PNG des scenes via Pillow (narration = image centree ; calculation =
+    bloc stylise or/noir avec texte monospace)
+  - Duree audio detectee automatiquement via mutagen
+  - Concatenation audio (TTS ou silences) et video via ffmpeg concat demuxer
+  - **Sous-titres multilingues SRT** : FR source + EN + ES + DE
+    (traduction via Emergent LLM gpt-4o-mini par lots de 20)
+  - **Variante MP4 avec sous-titres FR incrustes** (burned-in) pour partage
+    standalone
+  - Workflow GitHub Actions dedie (`generate-video.yml`) avec choix des
+    langues, mode test, limitation scenes
+  - Options env : `VIDEO_TEST_MODE`, `MAX_SCENES`, `FFMPEG_PRESET`,
+    `SUBTITLE_LANGS`, `ENABLE_TRANSLATION`
+
+- **Tests pytest** (`tests/test_animation_parser.py`) :
+  - 7 tests passent : parser d'etiquettes, exclusion des @NOTE, association
+    mini-script <-> calcul precedent, format SRT, decoupage chunks SRT,
+    robustesse fichier vide, marqueurs de fin
+
 ### Sessions precedentes
 - Replacement Unicode -> ASCII pour `Philippot_Method.thy` (Isabelle compliant)
 - `academic_evaluation.py` : evaluation multi-critere (note 92.5/100, A+)
@@ -69,26 +89,42 @@ Le fichier `src/SCRIPT_NARRATIF_VP.md` utilise les etiquettes :
 - `src/mini_script.md` : extraction initiale des 17 mini-scripts (legacy)
 
 ## Tests realises
-- Generation locale `ENABLE_TTS=false ENABLE_PDF=true REPO_ROOT=. python3 scripts/generate_animation.py`
+- Generation animation locale `ENABLE_TTS=false ENABLE_PDF=true REPO_ROOT=. python3 scripts/generate_animation.py`
   -> produit `animation.html` (2.6 MB) et `animation.pdf` (1.8 MB) avec 27 scenes
-- Smoke test screenshot : scene 1 (narration image) et scene 4 (calcul 2.0 plein ecran) OK
-- Lint Python : passes
+- Generation video locale `VIDEO_TEST_MODE=true MAX_SCENES=2 python3 scripts/generate_video.py`
+  -> produit `animation_16x9_youtube.mp4` (3.1 MB, 2 min) + variante avec
+  sous-titres FR incrustes (4.1 MB) en environ 2 min sur preset ultrafast
+- Traduction LLM (EN/ES) validee sur 3 phrases -- traductions precises y
+  compris des termes mathematiques ("Digamma", "nombre premier")
+- Smoke test screenshot : scene 1 (narration image) et scene 4 (calcul 2.0
+  plein ecran) OK ; MP4 frame : illustration + badge NARRATION + titre
+  + sous-titres FR lisibles
+- Lint Python : passes (animation.py + video.py)
+- Tests pytest : **7/7 passent** (`tests/test_animation_parser.py`)
 
 ## Backlog (P1/P2)
-- **P1** : Tester le pipeline complet en production via GitHub Actions
-  (`workflow_dispatch` -> `generate-animation.yml`) avec `ENABLE_TTS=true`
-  et le secret `_CLE` configure
-- **P1** : Verifier la synchronisation audio/visuel sur navigateur cible
+- **P1** : Tester les workflows GitHub Actions en production :
+  - `generate-animation.yml` (workflow_dispatch) avec `ENABLE_TTS=true`
+  - `generate-video.yml` (workflow_dispatch) avec `enable_translation=true`,
+    langues FR/EN/ES/DE par defaut, secret `_CLE` configure
+  - Valider la synchronisation audio/visuel et la qualite des traductions
+- **P1** : Verifier que la video generee est bien lisible sur YouTube/
+  Facebook/LinkedIn et que les SRT s'activent bien en CC multilingue
+- **P2** : Ajouter les formats portrait 9:16 (TikTok/Reels/Shorts) et
+  carre 1:1 (Instagram feed) via le meme pipeline
 - **P2** : Affiner les seuils de detection `looks_like_calc()` si certains
   blocs sont mal classes
-- **P2** : Permettre l'ajout d'etiquettes `@ILLUSTRATION: ID` explicites pour
-  controler precisement quelle image affiche pour quelle narration
-- **P2** : Refactoring : decouper `generate_animation.py` (722 lignes) en modules
+- **P2** : Support optionnel `@ILLUSTRATION: ID` explicite
+- **P2** : Refactoring : decouper `generate_animation.py` en modules
   (`parser.py`, `renderer_html.py`, `renderer_pdf.py`, `tts.py`)
 
 ## Integrations 3rd party
+- OpenAI GPT-4o-mini (traductions sous-titres) -- via Emergent LLM Key
 - OpenAI GPT (textes Q&A) -- via Emergent LLM Key
 - OpenAI TTS `tts-1-hd` voix `shimmer` -- via Emergent LLM Key
+- ffmpeg 5.1.x (video encoding H.264 + AAC, burn-in subtitles)
+- Pillow (rendu PNG des scenes)
+- mutagen (lecture duree MP3)
 - WeasyPrint (PDF)
 - MathJax 3 (rendu LaTeX dans HTML)
 
