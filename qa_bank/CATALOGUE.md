@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-29 18:31 UTC
-**Total Q&R:** 103
+**Derniere mise a jour:** 2026-04-30 12:43 UTC
+**Total Q&R:** 104
 
 ---
 
@@ -176,7 +176,23 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ### Source: `mecanique_discret.thy`
 
-**1. [avance] Comment la définition 'M2_structure' dans 'mecanique_discret.thy' est-elle utilisée pour démontrer l'égalité des sommes C1', C2', C3' à R1', et comment les relations avec R2' et R3' sont-elles structurellement démontrées ?**
+**1. [expert] Dans le contexte de la 'Matrice de transition' dans le fichier 'mecanique_discret.thy', calculons R1' lorsque C1' = 2, C2' = 3, C3' = 4 et diam_eq' = 5. Montrez chaque étape de votre calcul.**
+
+*Categorie: mathematique/calcul | Score: 0.8*
+
+> Pour calculer R1', nous utilisons la formule donnée pour R1' dans le fichier 'mecanique_discret.thy':
+
+R1' = 2 * C1' * diam_eq'.
+
+Substituons les valeurs fournies: C1' = 2 et diam_eq' = 5. Nous avons:
+
+R1' = 2 * 2 * 5 = 2 * 10 = 20.
+
+Ainsi, la valeur de R1' est 20. Cette vérification est conforme à la définition de R1' dans la section de la 'Matrice de transition', démontrant que R1' dépend linéairement de C1' et du 'diam_eq'.
+
+---
+
+**2. [avance] Comment la définition 'M2_structure' dans 'mecanique_discret.thy' est-elle utilisée pour démontrer l'égalité des sommes C1', C2', C3' à R1', et comment les relations avec R2' et R3' sont-elles structurellement démontrées ?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
@@ -184,7 +200,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**2. [avance] Comment la démonstration de l'axiome 'alt_factor_axiom' dans le fichier 'mecanique_discret.thy' relie-t-elle la ratio trigonométrique alternative avec l'invariant géométrique dans un contexte philosophique, notamment au niveau de la teleosemantique et de l'isossophie?**
+**3. [avance] Comment la démonstration de l'axiome 'alt_factor_axiom' dans le fichier 'mecanique_discret.thy' relie-t-elle la ratio trigonométrique alternative avec l'invariant géométrique dans un contexte philosophique, notamment au niveau de la teleosemantique et de l'isossophie?**
 
 *Categorie: philosophique/philosophique | Score: 0.8*
 
@@ -192,7 +208,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**3. [expert] Dans le cadre du système cardan sans blocage, la somme des longueurs des segments R1, R2 et R3 est donnée par les définitions Isabelle/HOL. Calculez la somme totale des longueurs pour un enregistrement cardan_lengths donné, en utilisant les longueurs définies pour chaque segment.**
+**4. [expert] Dans le cadre du système cardan sans blocage, la somme des longueurs des segments R1, R2 et R3 est donnée par les définitions Isabelle/HOL. Calculez la somme totale des longueurs pour un enregistrement cardan_lengths donné, en utilisant les longueurs définies pour chaque segment.**
 
 *Categorie: mathematique/calcul | Score: 0.8*
 
@@ -228,7 +244,7 @@ Les calculs nécessitent une simple évaluation numérique pour obtenir la somme
 
 ---
 
-**4. [avance] Comment est démontré le rapport géométrique fondamental (b(n,p) / 2) / h(n,p) = sqrt(p) dans le contexte de la mécanique harmonique du chaos discret, spécifiquement pour les triangles inscrits dans les carrés emboîtés tel que décrit dans 'mecanique_discret.thy'?**
+**5. [avance] Comment est démontré le rapport géométrique fondamental (b(n,p) / 2) / h(n,p) = sqrt(p) dans le contexte de la mécanique harmonique du chaos discret, spécifiquement pour les triangles inscrits dans les carrés emboîtés tel que décrit dans 'mecanique_discret.thy'?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
@@ -236,7 +252,7 @@ Les calculs nécessitent une simple évaluation numérique pour obtenir la somme
 
 ---
 
-**5. [avance] Comment le lemme 'geometric_unit_eq_unit' dans 'mecanique_discret.thy' démontre-t-il que l'unité géométrique pour un 'p' admissible est équivalente à 'sqrt(p) + 1' et quelles sont les étapes essentielles de cette preuve?**
+**6. [avance] Comment le lemme 'geometric_unit_eq_unit' dans 'mecanique_discret.thy' démontre-t-il que l'unité géométrique pour un 'p' admissible est équivalente à 'sqrt(p) + 1' et quelles sont les étapes essentielles de cette preuve?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
