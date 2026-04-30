@@ -154,3 +154,10 @@ Message: Animation v3 : lecteur video, images plein ecran, narration enrichie
 
 ---
 
+
+## 2026-04-30 -- Commit c362b93
+
+Message:  Titre: mise a jour SCRIPT_NARRATIF.md .
+
+---
+
