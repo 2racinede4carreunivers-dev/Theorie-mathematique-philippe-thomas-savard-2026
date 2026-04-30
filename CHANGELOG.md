@@ -133,3 +133,10 @@ Message: Systeme d'animation narrative : script Python + workflow
 
 ---
 
+
+## 2026-04-29 -- Commit 4a633da
+
+Message: Animation v2 : narration enrichie des calculs, formules et tableaux
+
+---
+
