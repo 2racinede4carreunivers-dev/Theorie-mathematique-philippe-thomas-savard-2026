@@ -666,16 +666,164 @@ showSlide(1);
 # PDF GENERATION
 # ================================================================
 
-def generate_pdf(html_path, pdf_path):
-    """Generate PDF from HTML using weasyprint."""
+def generate_pdf(scenes, pdf_path):
+    """Generate PDF with all slides visible, one per page."""
     try:
         from weasyprint import HTML
         print("  Generation PDF...")
-        HTML(filename=html_path).write_pdf(pdf_path)
+
+        slides_html = ""
+        total = len(scenes)
+        for scene in scenes:
+            num = scene["num"]
+            title = scene["title"]
+            text = scene["text"]
+
+            text_html = ""
+            for line in text.split("\n"):
+                s = line.strip()
+                if not s:
+                    continue
+                s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+                s = re.sub(r'\*(.+?)\*', r'<em>\1</em>', s)
+                s = re.sub(r'`(.+?)`', r'<code>\1</code>', s)
+                if s.startswith(">"):
+                    s = s.lstrip("> ")
+                    text_html += f'<blockquote>{s}</blockquote>\n'
+                elif s.startswith("- ") or s.startswith("* "):
+                    item = re.sub(r'^[-*]\s*', '', s)
+                    text_html += f"<li>{item}</li>\n"
+                else:
+                    text_html += f"<p>{s}</p>\n"
+
+            tables_html = ""
+            for table in scene.get("tables", []):
+                rows = table.strip().split("\n")
+                tables_html += '<table>\n'
+                for i, row in enumerate(rows):
+                    cells = [c.strip() for c in row.split("|") if c.strip()]
+                    if not cells or all(re.match(r'^[-:]+$', c) for c in cells):
+                        continue
+                    tag = "th" if i == 0 else "td"
+                    tables_html += "  <tr>"
+                    for cell in cells:
+                        tables_html += f"<{tag}>{cell}</{tag}>"
+                    tables_html += "</tr>\n"
+                tables_html += "</table>\n"
+
+            images_html = ""
+            for img in scene.get("images", []):
+                b64 = embed_image_base64(img)
+                if b64:
+                    images_html += f'<div class="img-container"><img src="{b64}"></div>\n'
+
+            slides_html += f'''
+<div class="page">
+  <div class="page-header">
+    <span class="page-num">Page {num} / {total}</span>
+    <h2>{title}</h2>
+  </div>
+  <div class="page-body">
+    {text_html}
+    {tables_html}
+    {images_html}
+  </div>
+</div>
+'''
+
+        pdf_html = f'''<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {{
+  size: A4;
+  margin: 2cm;
+}}
+body {{
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #1a1a1a;
+}}
+.page {{
+  page-break-after: always;
+  padding-bottom: 20px;
+}}
+.page:last-child {{
+  page-break-after: avoid;
+}}
+.page-header {{
+  border-bottom: 2px solid #8b7332;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}}
+.page-header h2 {{
+  font-size: 16pt;
+  color: #333;
+  margin: 5px 0 0 0;
+}}
+.page-num {{
+  font-size: 9pt;
+  color: #8b7332;
+  letter-spacing: 1px;
+}}
+.page-body p {{
+  margin-bottom: 8px;
+  text-align: justify;
+}}
+blockquote {{
+  border-left: 3px solid #8b7332;
+  padding: 8px 15px;
+  margin: 10px 0;
+  font-style: italic;
+  color: #555;
+}}
+strong {{ color: #000; }}
+code {{
+  background: #f0f0f0;
+  padding: 1px 4px;
+  font-size: 10pt;
+}}
+table {{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 9pt;
+}}
+th, td {{
+  border: 1px solid #999;
+  padding: 5px 8px;
+  text-align: left;
+}}
+th {{
+  background: #f5f0e0;
+  color: #333;
+}}
+.img-container {{
+  text-align: center;
+  margin: 15px 0;
+}}
+.img-container img {{
+  max-width: 80%;
+  max-height: 300px;
+}}
+li {{ margin-bottom: 4px; }}
+ul {{ margin: 8px 0 8px 20px; }}
+</style>
+</head>
+<body>
+{slides_html}
+</body>
+</html>'''
+
+        HTML(string=pdf_html).write_pdf(pdf_path)
         print(f"  PDF genere : {pdf_path}")
         return True
     except Exception as e:
         print(f"  Erreur PDF : {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 
@@ -795,7 +943,7 @@ async def async_main():
     if ENABLE_PDF:
         print("\n--- Generation PDF ---")
         pdf_path = os.path.join(OUTPUT_DIR, "animation.pdf")
-        generate_pdf(html_path, pdf_path)
+        generate_pdf(scenes, pdf_path)
 
     # Scene index
     index = []
