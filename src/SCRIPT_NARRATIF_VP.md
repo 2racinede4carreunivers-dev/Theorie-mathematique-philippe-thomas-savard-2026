@@ -1,9 +1,64 @@
+############################################################
+#                     PAGE DE PRÉSENTATION                 #
+############################################################
+
+> **Auteur :** Philippe Thomas Savard  
+> **Date :** Trente avril deux‑mille vingt‑six  
+> **Lieu :** Lévis, Chaudière‑Appalaches, Canada  
+> **Licence :** Apache 2.0  
+
+---
+
+# 🌌 **L’Univers est au Carré**
+
+<div align="center">
+  <img src="./assets/images/animation_G-1.png" alt="Illustration de présentation" style="max-width: 70%; border-radius: 12px;">
+</div>
+
+<p align="center">
+  <a href="https://author-identity-fix.emergent.host/">
+    👉 Voir l’animation / application web
+  </a>
+</p>
+
+---
+
+## 🔗 Ressources associées
+
+- 📘 **Dépôt GitHub officiel**  
+  https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026.git
+
+- 🌐 **Application Web – Présentation interactive**  
+  https://author-identity-fix.emergent.host/
+
+---
+
+## ✨ Note d’intention
+
+*Une exploration mathématique et philosophique où la structure, la géométrie et la pensée se rencontrent pour révéler une vision nouvelle de l’univers.*
+
+############################################################
+@NARRATION: 1.0
+
+<p align="center">
+  <a href="./assets/animation/animation_A-3.png">
+    👉 Voir l’illustration : animation_A-3
+  </a>
+</p>
+
 Questionnement de la théorie de l'univers est au carré:
 
 Comment la théorie 'L'Univers est au Carré', avec ses concepts de transformation géométrique et de validation formelle, remet-elle en question notre vision conventionnelle de l'univers comme un espace de dimensions interagissant linéairement, et quelles implications cela a-t-il sur la nature même du savoir scientifique et notre compréhension philosophique de la réalité ?
 
 La théorie 'L'Univers est au Carré' propose une interprétation de l'univers où les transformations géométriques, telles que la quadrature, servent de moyen pour révéler les propriétés cachées des structures fondamentales. Ce concept suggère que l'univers pourrait être compris en termes de transformations non linéaires qui échappent à la perception conventionnelle. En introduisant la formalisation rigoureuse via des outils comme Isabelle/HOL, la théorie insiste sur une épistémologie où la vérité scientifique dépend autant de l'élégance des transformations géométriques que de leur démonstration formelle. Ce changement de paradigme pourrait conduire à une vision où le savoir n'est plus une simple accumulation de faits linéaires mais une compréhension profonde des interactions complexes entre les concepts mathématiques, redéfinissant ainsi notre compréhension philosophique des lois régissant la réalité et notre place dans l'univers.
 ============================================================
+<p align="center">
+  <a href="./assets/animation/animation_A-2.png">
+    👉 Voir l’illustration : animation_A-2
+  </a>
+</p>
+
+@NARRATION: 1.1
 
 ------------------------------------------------------------
 INTRODUCTION
@@ -19,13 +74,22 @@ Le quatrième chapitre, "Espace de Philippot", permet à l'auteur de baptiser un
 
 Alors que nous nous apprêtons à explorer ces chapitres, il est essentiel de noter que chaque composant mathématique est entrelacé d'une fibre philosophique. Cette approche intégrative, que Savard a méthodiquement déployée, met en lumière comment le domaine mathématique n'est pas seulement une quête de vérité numérique, mais aussi un voyage dans la pensée humaine. Préparez-vous à parcourir les méandres de cette théorie captivante, où les mathématiques rencontrent la philosophie dans une danse intellectuelle qui porte la signature indélébile de Philippe Thomas Savard.
 
-
-------------------------------------------------------------
+@NARRATION: 2.0
+-----------------------------------------------------------
 CHAPITRE 1 - LA GEOMETRIE DU SPECTRE DES NOMBRES PREMIERS
 ------------------------------------------------------------
 
-La géométrie du spectre des nombres premiers est une exploration qui trouve son origine dans une observation simple, mais profondément significative : lorsqu'on examine les relations entre des nombres entiers successifs, un rapport constant émerge. Ce rapport se révèle être un fondement crucial pour l'élaboration des méthodes ultérieures, ouvrant ainsi une perspective unique sur la compréhension de la nature des nombres premiers.
+<p align="center">
+  <a href="./assets/animation/animation_A-5.png">
+    👉 Voir l’illustration : animation_A-5
+  </a>
+</p>
 
+La géométrie du spectre des nombres premiers est une exploration qui trouve son origine dans une observation simple, mais profondément significative : lorsqu'on examine les relations entre des nombres entiers successifs, un rapport constant émerge. Ce rapport se révèle être un fondement crucial pour l'élaboration des méthodes ultérieures, ouvrant ainsi une perspective unique sur la compréhension de la nature des nombres premiers.
+---
+@EXEMPLE_CALCUL: 2.0
+@NOTE: Placer l'exemple de calcul sur une page fixe de l'animation. L'image ou le bloc de calcul doit rester affiché pendant toute la durée de la narration du mini-script associé. Ne pas inclure cette note dans la narration audio.
+entre --- et ---
 Voici un exemple des deux suite A et B qui sert a déterminer les nombres premiers a l'aide de celles-ci: 
 
 Pour (29) 10 termes, 10ième nombre premier suite A et B:
@@ -50,6 +114,35 @@ Suite B:
 
  (somme B-Digamma calculé)/(6ième position (zêta))=Nombre premier    (3262-1406)/64=29 10ième nombre premier 
  2, 3, 5, 7, 11, 13, 17, 19, 23, 29  29 es bien le 10ième.
+---
+
+
+---
+@MINI_SCRIPT: 2.0
+**script narratif de l'exemple de calcule précédent**
+Dans cet exemple, nous observons comment les suites A et B servent de structure
+géométrique pour identifier la position d’un nombre premier. La suite A suit une
+progression régulière où chaque terme double presque toujours le précédent, ce qui
+permet d’obtenir une somme cumulative révélatrice. La suite B, quant à elle, suit une
+progression similaire mais avec une légère variation qui encode une information
+supplémentaire.
+
+Le digamma joue ici un rôle central : il représente la valeur pivot qui permet de
+corriger la somme de la suite A afin d’isoler la contribution réelle du nombre premier.
+En soustrayant cette valeur, on obtient un « digamma calculé » qui sert ensuite à
+comparer les deux suites.
+
+Lorsque l’on combine la somme de la suite B avec le digamma calculé, puis que l’on
+divise le résultat par la sixième position de la suite A — la position zêta — on obtient
+directement le nombre premier recherché. Dans ce cas-ci, le calcul reconduit
+exactement la valeur 29, confirmant qu’il s’agit bien du 10ᵉ nombre premier.
+
+Ce procédé montre que la structure interne des suites encode déjà l’ordre des nombres
+premiers, et que la méthode spectrale permet de révéler cette organisation cachée sans
+avoir à parcourir les entiers un par un.
+---
+
+@NARRATION: 3.0
 
  Les rapports spectraux peuvent impliquer une comparaison de nombres premiers disposés de manière symétrique, c’est‑à‑dire selon une structure du type (1 × 1) pouvant s’étendre jusqu’à n × n, où la quantité de nombres premiers comparés dans chaque ensemble demeure strictement équivalente.
 
@@ -61,10 +154,12 @@ Pour qu’une comparaison soit qualifiée d’asymétrique ordonnée, deux condi
 La première est le déséquilibre structurel entre les deux blocs comparés : le bloc B doit impérativement contenir un terme de plus que le bloc A, et ce terme supplémentaire doit être un nombre premier.  
 La seconde condition exige que les deux blocs soient organisés selon un ordre strictement croissant et chronologique.
 
-Un exemple de comparaison asymétrique ordonnée est :  
+##Un exemple de comparaison asymétrique ordonnée est :  
 - (2 - (3 - 5)),  
 ou encore :  
 - (2 - 3 - 5 - 7 - 11) - (13 - 17 - 19 - 23 - 29 - 31).  
+
+
 
 Dans ces deux cas, on observe clairement que B = A + 1, ce qui crée le déséquilibre requis. Une comparaison respectant ces critères produit alors une valeur spectrale différente du rapport attendu.
 
@@ -85,7 +180,7 @@ Les définitions de 'asymetrique_ordonnée' et 'asymetrique_chaotique' dans le f
 
 La comparaison asymétrique chaotique, fondée sur la nature chaotique de la répartition des nombres premiers dans l’ensemble des entiers, confirme que ce qui relève d’une entité définie reste en rapport direct avec celle‑ci. L’organisation mentale que nous produisons n’altère pas ce rapport : elle ne fait que refléter l’état structuré de notre intelligence.
 
-Exemple de comparaison chaotique (2,3) et (5,7,11)
+##Exemple de comparaison ordonnée (2,3) et (5,7,11)
 
 ((((3.25/2×2^1 )-2)-((3.25/2×2^2 )-2))-(((3.25/2×2^3 )-2)-((3.25/2×2^4 )-2)-((3.25/2×2^5 )-2))) /
 ((((6.5/2×2^1 )-66)-((6.5/2×2^2 )-66))-(((6.5/2×2^3 )-66)-((6.5/2×2^4 )-66)-((6.5/2×2^5 )-66))) =
@@ -127,16 +222,59 @@ Somme suite B = 6590
 (3.25/2 × n^2) - 2 = Somme suite A  
 Quand n est un nombre entier strictement positif.
 
+---
+@MINI_SCRIPT: 3.0
+
+Dans ces exemples, nous illustrons deux manières très différentes de comparer des
+groupes de nombres premiers : l’asymétrie ordonnée et l’asymétrie chaotique. Ces deux
+formes de comparaison révèlent comment la structure interne des suites A et B
+influence directement le rapport spectral obtenu.
+
+Dans la comparaison asymétrique ordonnée, les deux blocs de nombres premiers sont
+organisés de manière strictement croissante, et le bloc B contient toujours un élément
+de plus que le bloc A. Ce léger déséquilibre structurel suffit à modifier le rapport
+spectral attendu. L’exemple présenté montre que lorsque l’on compare deux ensembles
+ordonnés de cette façon, la valeur obtenue diffère du rapport classique de un‑demi.
+Cette différence provient du fait que l’on attribue deux fois une position objective aux
+mêmes éléments : une première fois par leur construction dans les suites, et une
+seconde fois par leur réorganisation chronologique.
+
+À l’inverse, la comparaison asymétrique chaotique repose sur l’absence d’ordre
+chronologique. Les blocs ne sont pas alignés selon une progression régulière, et leurs
+tailles peuvent varier. Cette absence d’ordre reflète la nature chaotique de la
+répartition des nombres premiers dans l’ensemble des entiers. Pourtant, même dans ce
+contexte, les suites A et B conservent une cohérence interne : elles traduisent la
+structure définie de l’entité mathématique qu’elles représentent. Le rapport spectral
+obtenu dans l’exemple chaotique montre que, malgré le désordre apparent, la relation
+entre les blocs demeure stable et reflète la géométrie profonde du spectre.
+
+Ces deux exemples démontrent que l’ordre et le chaos ne sont pas opposés, mais deux
+façons complémentaires de révéler la même réalité mathématique. L’asymétrie ordonnée
+met en lumière l’effet de la structure imposée, tandis que l’asymétrie chaotique
+révèle la constance des rapports même lorsque l’ordre disparaît. Ensemble, ils
+illustrent comment la méthode spectrale capture la dualité fondamentale entre
+organisation et dispersion dans la distribution des nombres premiers.
+---
+
+@NARRATION: 4.0
 Évidence de la géométrie du spectre des nombres premiers, ce que conclut Savard sur les différentes comparaisons générants les rapports spectraux et la cohérence entre les faits observés auxquels nous attribuons une valeurs objective rapporté et l'incohérence de cette attribution lorsque celle-ci est replacé parmis le même environement. L'incohérence est de prétendre que de remettre en ordre objective dans le même environement les valeurs préalablement déterminé dans un ordre objectif et de prétendre que l'ordre objectif déterminé une fois remis dans l'environement crée l'environement selon la valeur objective et non la valeur objective qui est de rapport a l'environement. Un infini est d'égale grandeur a un autre infini même qu'a un ensemble constitué d'infinis. Lorsque cette comparaison est mis relation par rapport a un ordre de grandeur chronologique du premier a l'infini le rapport change d'ordre de grandeur ce qui est une observation de notre esprit mais qui est toujours de rapport entre lui même (les infinis) a la réalité pas notre esprit qui crée la réalité la réalité est toujours de rapport avec ce quelle est? De rapport réalité.
+
+@NARRATION: 5.0
+
+@NOTE: Placer cette axiomatisation sur une page fixe durant la narration de celle-ci. Ne pas inclure cette note dans la narration audio.
 
 Axiomatisation de la géométrie du spectre des nombres premies:
 
 «Quand n>=1 et que n <=-1 tous les n ramènent a un nombre premier P. Tous les valeur de n sont la conséquence de la quantité de termes dans les suites A et B. Tous les P entre eux respecte le rapport spectral 1/k. Ce rapport spectral est numériquement valide algébriquement incohérent» -:«Philippe Thomas Savard le dix avril deux milles vingt-six».
 
+@NARRATION: 6.0
 Conclusion de l'auteur par l'évidence précédente sur la carte mental téléosémantique de notre esprit a sur la réalité cette représentation est toujours de même rapport que le monde matériel avec lui-même? C'est a dire l'univers matériel peu importe les rapport que notre esprit peu déterminé de toute ordre chronologique objectif sur celui-ci prédéterminé par cette représentation de la carte mental objectivement attribué a l'esprit d'un être vivant.
 
 Dans la géométrie du spectre des nombres premiers il y a également un section traitant du sujet de l'écart entre les premiers. Cette section mets de l'avant une méthode qui inclut la somme des suites A et B pour déteminer cette écart? Trois cas sont ainsi démontré et dans le document de la géométrie du spectre des nombres premiers la démonstrationest également valider par le script HOL d'isabelle. Ces trois cas rapportés dans le document officiel permet d'enlever le voile sur trois cas particuliés: Le premier le cas ou les nombres premier et leurs écart est considérés entre deux premiers positif. Le deuxième cas est pour un écarts entre nombres premiers qui sont tous deux négatifs. Le troisième cas le plus particulié des trois et le plus révélateur pour l'auteur et sa conclusion portant sur l'énigme de Riemann. Cette écart inclut l'écart mixte soit entre deux nombres premiers qui sont un négatif et un positif. 
 Dans cette écart paritculié qu'est l'écart mixte il est intéressant d'observer une particularité certaine? L'inclusion du zéros dans la valeur rapporté par la méthode. Ce zéro additionne 1 a la réoponse final. 
+@NOTE: Placer l'exemple de calcul sur une page à lui seul et laisser cette page fixe durant toute la narration du 
+---
+mini-script. Ne pas inclure cette note dans la narration audio.
 
 Observation de l'auteur sur l'écart mixte qu'il y a entre -31 et 17:
 
@@ -152,7 +290,43 @@ ex -31 et 17:
 -31-16=-47 nombres 
 
 -30, -29 ....-1 = -30 nombres et 1,2,3,4...16=16 nombres 16<>17 nombres 
+---
+@MINI_SCRIPT: 7.0
 
+Dans cette section, nous explorons l’une des observations les plus révélatrices de la
+géométrie du spectre : l’écart mixte entre deux nombres premiers, lorsque l’un est
+négatif et l’autre positif. Contrairement aux écarts purement positifs ou purement
+négatifs, l’écart mixte possède une propriété unique : il inclut naturellement le zéro.
+Cette inclusion ajoute systématiquement une unité au résultat final, ce qui distingue
+nettement ce type d’écart des deux autres.
+
+L’exemple entre –31 et 17 illustre parfaitement cette particularité. Lorsque l’on
+compte les entiers situés entre ces deux valeurs, on obtient un total qui inclut le
+zéro, ce qui explique pourquoi la méthode spectrale conduit à un écart de quarante‑sept
+nombres. Cette addition d’une unité n’est pas un artefact du calcul, mais une
+conséquence directe de la structure même de l’écart mixte.
+
+Cette observation prend une importance particulière lorsqu’on la met en relation avec
+la fonction zêta de Riemann. Tout comme la fonction zêta permet de localiser les zéros
+sur la droite critique, l’écart mixte permet de considérer un intervalle contenant à la
+fois des premiers négatifs et positifs, et d’y intégrer systématiquement une unité
+supplémentaire. Cette addition répétée produit une valeur relative plus grande que
+celle obtenue dans les écarts purement positifs ou négatifs.
+
+L’auteur propose alors une analogie géométrique : si l’on représente les zéros de la
+droite critique dans un rectangle tronqué, l’écart mixte produit une courbure
+apparentée de cette droite. La valeur maximale relative augmente, et comme l’intervalle
+contient davantage de nombres premiers, la droite critique semble se déformer. Si
+l’aire comprise entre cette droite courbée et la droite critique habituelle est égale à
+l’aire restante du rectangle tronqué, alors cette égalité pourrait constituer une
+démonstration valide de la conjecture de Riemann.
+
+Ainsi, l’écart mixte n’est pas seulement un cas particulier : il devient un outil
+conceptuel permettant d’explorer la structure profonde des zéros de la fonction zêta,
+et d’envisager une nouvelle approche pour comprendre la nature de la droite critique.
+---
+
+@NARRATION: 7.0
 L’écart et la méthode utilisée conduisent à un total de –47 nombres, ce qui inclut le zéro. La méthode appliquée aux écarts positifs et négatifs demeure identique à celle utilisée pour l’écart mixte, à la différence qu’il n’est pas nécessaire de soustraire 1 au résultat. L’auteur en conclut intuitivement que le zéro est effectivement inclus dans l’écart mixte.
 
 Selon l’encyclopédie libre Wikipédia : « Des travaux plus récents se sont focalisés sur le calcul explicite d’endroits où se trouvent beaucoup de zéros (dans l’espoir de trouver un contre-exemple) et de placer des bornes supérieures sur la proportion de zéros se trouvant ailleurs que sur la droite critique (dans l’espoir de la réduire à zéro). » — Article sur l’hypothèse de Riemann, Wikipédia.
@@ -162,9 +336,10 @@ L’auteur apprécie cette affirmation, qui laisse entrevoir la possibilité d�
 Puisque la fonction zêta permet de déterminer la position de tous les nombres premiers — ce qui est également le cas de la méthode *inlut*, validée par Isabelle dans *methode_spectral.thy* — l’écart mixte permet, comme la fonction zêta, de considérer l’ensemble des zéros de la droite critique dans un rectangle. Ce rectangle possède une aire totale. L’auteur propose de considérer un intervalle donné, allant de 0 à un nombre premier d’une valeur déterminée. Le rectangle peut alors être tronqué d’une partie représentant l’ensemble des zéros de la droite critique.
 
 L’auteur, dans un premier temps par intuition, propose d’utiliser l’écart mixte pour le même intervalle considéré. Puisque l’écart mixte ajoute 1 à chaque écart entre deux nombres premiers dans l’intervalle, cette addition répétée produit une valeur relative plus grande que la valeur maximale initiale du rectangle tronqué représentant les zéros de la droite critique considéré. Ainsi, la droite critique apparaît courbée : la valeur maximale relative augmente, et comme l’intervalle contient davantage de nombres premiers, la droite critique se déforme. L’auteur affirme que si l’aire comprise entre la droite critique courbée et la droite critique habituelle est égale à l’aire restante du rectangle tronqué représentant la droite critique, alors cette égalité constituerait une démonstration valide permettant de conclure à la véracité de la conjecture de la fonction zêta.
-
+---
 <img src="./assets/images/quadrature_parabole_zero_critique.png" alt="Quadrature parabole zéro critique" style="max-width: 100%; height: auto;">
 
+@NARRATION: 8.0
 Cette figure est particulièrement démonstrative. Selon les calculs issus du schéma de la pesée d’Archimède, reproduit selon les dimensions de la règle de Philippot, il est possible de vérifier que l’aire de la parabole correspond à celle de la section restante multipliée par 4/3. L’aire obtenue est donc identique à celle de la parabole. Cependant, le produit issu du théorème de Thalès, selon lequel :  
 c = Aire du triangle × longueur OH = Aire parabole × OE ,  
 donne une valeur quatre fois plus petite que celle obtenue pour l’aire du triangle × longueur OH dans le cas précédent. Lécart mixte permet d'inclure plus de combinaison permettant de déterminer l'écart entre deux P. Lorsque deux rapport spectraux 1/k sont comparré pour deux fois la même position du P premier par exemple pour un rapport spectral 1/2 et 1/3 prenons le P=227 pour les deux le rapport 1/2 est toujours présent et reste inchangé même pour deux rapport spectral différent. Cependant si les rapport spectral 1/k sont différent que 1/2 et un autre raport 1/k par exemple 1/33 et 1/144 pour deux fois la même position de nombre premier le rapport est autre que 1/2. Pour deux rapport spectraux 1/k différents mais dont la position des nombres comparés n'est pas la même le rapport est toujours autre que 1/2. Le théorème de Thalèse qui réflète que :Aire du triangle × longueur OH= Aire parabole × OE est 4 fois plus grand malgré qu'a la pesé l'aire de la parabole = l'aire de la section tronqué démontre bien que l'écart mixte ajoute les rapport comparé mentionné précédemment.
@@ -179,7 +354,9 @@ C’est pourquoi, à la question de l’hypothèse de Riemann formulée par Phil
 la réponse qu’il propose est : **non**.
 
 Schizophrénie universitaire type.
+---
 
+@NARRATION: 9.0
 ## Analyse de la quantité de nombres entre deux nombres premiers  
 ### Étude de trois cas distincts : (+,+), (-,-) et (-,+)
 
@@ -195,6 +372,7 @@ Chaque exemple applique la même méthode :
 - combinaison algébrique des résultats pour obtenir la **quantité exacte de nombres entre les deux bornes**.
 
 ---
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
 
 ## 1. Cas (+,+) : Quantité de nombres entre 23 et 7
 
@@ -442,6 +620,13 @@ La 'pulsion de vie' est décrite comme une force impliquée qui pousse à compre
 
 Au cœur de cette exploration se trouve la méthode du produit alternatif. Cette méthode novatrice conjugue les propriétés géométriques de figures distinctes. Lorsqu'un observateur applique cette méthode, il découvre que le produit entre le périmètre d'une figure et le diamètre d'une autre figure est invariablement égal au produit inverse. Une telle symétrie ne se borne pas à révéler une simple correspondance ; elle démontre comment les surfaces planes sont capables de contenir des volumes. Cette propriété laisse entrevoir un univers où les dimensions euclidiennes se rencontrent de manière élégante et inattendue, aiguisant notre compréhension des formes et des structures numériques.
 
+<p align="center">
+  <a href="./assets/animation/animation_C-5.png">
+    👉 Voir l’illustration : animation_C-5
+  </a>
+</p>
+
+
 Périmètre du carré A * diamètre du carré B= Diamètre du carré A * périmètre carré B
 
 Le produit alternatif asymétrique pour sa part est :
@@ -450,11 +635,72 @@ Aire A * Aire C= Aire B * Aire D
 =Volume de la pièce
 
 Pour l'auteur il s'agit du volume du tesseract qui se replie perpétuellent. 
+---
+@MINI_SCRIPT: 10.0
+Dans cette section, nous examinons trois configurations fondamentales permettant de
+déterminer la quantité de nombres compris entre deux nombres premiers. Ces trois cas
+reposent tous sur la même méthode : l’utilisation des suites A et B, du Digamma
+calculé, et d’une combinaison algébrique finale qui révèle l’écart exact entre les
+bornes.
 
+Le premier cas concerne deux nombres premiers positifs. Ici, la structure de l’écart
+est simple : les deux bornes appartiennent au même côté de la droite numérique, et la
+méthode spectrale reproduit exactement la quantité attendue de nombres situés entre
+eux. L’écart obtenu correspond directement à la différence entre les deux bornes,
+confirmant la cohérence de la méthode dans un contexte entièrement positif.
+
+Le second cas traite de deux nombres premiers négatifs. Bien que les valeurs soient
+situées du côté négatif de la droite numérique, la méthode fonctionne de manière
+identique. Les suites A et B, ainsi que le Digamma calculé, s’adaptent naturellement à
+la polarité négative. Le résultat final correspond à la quantité réelle de nombres
+compris entre les deux bornes négatives, démontrant que la méthode spectrale conserve
+sa validité même lorsque l’on travaille dans un espace entièrement négatif.
+
+Le troisième cas est le plus particulier : l’écart mixte entre un nombre premier
+négatif et un nombre premier positif. Ici, une singularité apparaît. Contrairement aux
+deux premiers cas, l’écart mixte traverse le zéro, et cette traversée modifie la
+structure interne du calcul. Le zéro agit comme une unité supplémentaire, ce qui
+ajoute systématiquement un au résultat final. Cette particularité n’est pas un
+artefact, mais une propriété intrinsèque de l’écart mixte : le zéro fait partie de
+l’intervalle, et la méthode spectrale en tient naturellement compte.
+
+Cette observation est d’autant plus intéressante qu’elle entre en résonance avec la
+fonction zêta de Riemann. Tout comme la fonction zêta considère les zéros situés sur
+la droite critique, l’écart mixte inclut un zéro structurel qui modifie la valeur
+relative de l’intervalle. L’auteur propose une analogie géométrique : si l’on
+représente les zéros de la droite critique dans un rectangle tronqué, l’écart mixte
+produit une courbure apparente de cette droite. La valeur maximale relative augmente,
+et l’intervalle contient davantage de nombres premiers. Si l’aire comprise entre cette
+droite courbée et la droite critique habituelle est égale à l’aire restante du
+rectangle tronqué, cette égalité pourrait constituer une démonstration valide de la
+conjecture de Riemann.
+
+Ainsi, les trois cas d’écarts — positif, négatif et mixte — révèlent chacun une facette
+de la géométrie du spectre. Le cas mixte, en particulier, met en lumière une
+propriété profonde : la présence du zéro comme point de transition modifie la
+structure de l’écart et ouvre une perspective nouvelle sur la relation entre les
+nombres premiers et les zéros de la fonction zêta.
+
+<p align="center">
+  <a href="./assets/animation/animation_C-6.png">
+    👉 Voir l’illustration : animation_C-6
+  </a>
+</p>
+
+---
+
+@NARRATION: 10.0
 ## Analyse numérique métrique:
 Suivant cette réalisation, l'analyse se poursuit avec l'application de l'analyse numérique métrique. En s'inspirant de la granulométrie, cette approche adopte une technique de tamisage rigoureuse. Les nombres sont ainsi passés au crible à travers deux séquences distinctes, permettant à l'analyse d'effectuer des comparaisons entre figures géométriques dont les aires conservent toujours le même rapport. Ce rapport, non modifié par la complexité croissante des nombres, met en lumière une structure sous-jacente ordonnée parmi ce qui semble, à première vue, être un ensemble chaotique et désordonné.
 
 ## Résumé – Mouvement du Tesseract, Produit Alternatif et Analyse Numérique Métrique
+
+<p align="center">
+  <a href="./assets/animation/animation_B-2.png">
+    👉 Voir l’illustration : animation_B-2
+  </a>
+</p>
+
 
 Les sections 2.2 à 3.2 du document présentent la base géométrique qui soutient toute la méthode spectrale. L’auteur y décrit comment le mouvement d’un hypercube (tesseract) en rotation génère deux types de produits alternatifs : un produit symétrique (issu de deux carrés parfaits) et un produit asymétrique (issu d’une déformation rectangulaire). Dans les deux cas, les aires diagonales opposées se répondent selon une relation périmètre–diamètre qui reste invariante. Cette invariance est interprétée comme la signature géométrique du repli interne du tesseract.
 
@@ -466,6 +712,16 @@ La section 3.2 introduit la géométrie des trapèzes ABCD, CDEF et EFGH. Ces tr
 <img src="./assets/animation/animation_B-11.png"
      alt="Illustration animation B-11"
      style="max-width: 100%; height: auto;">
+---
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
+  
+<p align="center">
+  <a href="./assets/animation/animation_B-11.png">
+    👉 Voir l’illustration : animation_B-11
+  </a>
+</p>
+
+
 ## Exemple complet – Aires des trapèzes ABCD, CDEF et EFGH
 
 Les trois trapèzes successifs sont définis par les points A, B, C, D, E, F, G et H. Leurs aires sont calculées à partir des longueurs issues des petites diagonales des parallélogrammes.
@@ -537,6 +793,11 @@ Aire :
 
 ## Mise en relation des aires
 
+<p align="center">
+  <a href="./assets/animation/animation_B-3.png">
+    👉 Voir l’illustration : animation_B-3
+  </a>
+</p>
 
 
 \[
@@ -572,7 +833,35 @@ Cette répétition infinie du rapport 1/2 est interprétée comme une structure 
 - et la partie réelle 1/2 des zéros non triviaux de la fonction zêta.
 
 Dans cette perspective, la géométrie des trapèzes constitue une « prise de vue » locale de la même structure que celle suggérée par la conjecture de Riemann.
+---
+@MINI_SCRIPT: 11.0
+Dans cet exemple, nous observons trois trapèzes successifs inscrits dans une structure
+géométrique qui se déploie par niveaux. Chaque trapèze possède deux bases et une
+hauteur, et leur aire respective peut être calculée à partir de ces éléments. Ce qui
+retient particulièrement notre attention n’est pas la valeur individuelle de ces aires,
+mais le rapport constant qui les relie.
 
+Lorsque l’on compare l’aire du premier trapèze à celle du second, on obtient un rapport
+de un‑demi. Le même rapport apparaît entre le second et le troisième trapèze. Cette
+relation ne se limite pas à ces trois exemples : elle se répète à chaque niveau de la
+construction, créant une progression infinie où chaque trapèze possède une aire égale
+à la moitié de celle du suivant.
+
+Cette répétition du rapport un‑demi n’est pas un simple hasard numérique. Elle révèle
+une structure profonde, une sorte de signature géométrique qui traverse l’ensemble de
+la construction. Cette signature se retrouve dans plusieurs aspects de la méthode
+spectrale : dans les suites A et B, dans l’analyse numérique métrique, et même dans la
+géométrie du tesseract en repli. Elle fait également écho à la partie réelle un‑demi
+des zéros non triviaux de la fonction zêta de Riemann.
+
+Ainsi, les trapèzes ne sont pas seulement des figures géométriques isolées. Ils
+constituent une fenêtre sur une structure plus vaste, où chaque niveau reflète le
+précédent selon un rapport constant. Cette progression infinie suggère que la géométrie
+locale des trapèzes et la structure globale du spectre des nombres premiers partagent
+une même logique interne. Dans cette perspective, la géométrie des trapèzes devient une
+illustration tangible de la même organisation profonde que celle évoquée par la
+conjecture de Riemann.
+---
 <img src="./assets/animation/animation_B-4.png"
      alt="Illustration animation B-4"
      style="max-width: 100%; height: auto;">
@@ -601,6 +890,11 @@ Dans cette perspective, la géométrie des trapèzes constitue une « prise de v
      alt="Illustration animation B-10"
      style="max-width: 100%; height: auto;">
 
+---
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
+---  
+
+@NARRATION: 11.0
 La méthode de Philippot introduit ensuite une dimension itérative à cette étude. En utilisant des suites fractionnaires soigneusement élaborées, chaque terme de la suite constitue une fraction précise de son prédécesseur. Cette méthode, rigoureusement formalisée dans le cadre de l'environnement Isabelle/HOL, met en œuvre des substitutions à des positions déterminées de la suite. Cette précision garantit que la progression est profondément modulée par le nombre de termes employés, renforçant les bases de la structure spectrale qui est observée.
 
 À travers ces progressions méthodologiques successives, émerge la notion de structure spectrale. Quelle que soit la longueur finie de la séquence examinée, on observe toujours un rapport constant entre deux termes consécutifs. Il ne s'agit pas simplement d'un phénomène limité aux frontières imposées par la finitude ; ce rapport prétend, à une validité infinie, un invariant mathématique et conceptuel dans l'étude des nombres premiers.
@@ -817,8 +1111,51 @@ Cette structure est **universelle** pour toutes les suites de longueur n ≥ 8.
 
 
 Ce motif se répète pour toutes les longueurs n ≥ 8.
-
 ---
+@MINI_SCRIPT: 12.0
+La méthode de Philippôt introduit une dynamique itérative dans l’étude des suites
+fractionnaires. Chaque suite est construite de manière à ce que chaque terme représente
+une fraction précise du précédent. Cette progression n’est pas arbitraire : elle est
+définie par une règle de substitution unique, appliquée à une position déterminée de la
+suite. Cette règle, formalisée dans l’environnement Isabelle/HOL, garantit que la
+structure interne de la suite évolue de façon contrôlée à chaque étape.
+
+À mesure que les substitutions se succèdent, une structure remarquable apparaît : le
+rapport entre deux termes substitués consécutifs demeure constant. Ce rapport spectral,
+égal à un sur k, ne dépend ni de la longueur de la suite, ni du nombre d’étapes déjà
+effectuées. Il constitue la signature fondamentale de la méthode, un invariant qui
+persiste même lorsque la suite s’allonge ou que les substitutions se multiplient.
+
+Les premières étapes montrent comment la somme de la suite décroît progressivement.
+L’étape initiale fixe une valeur de référence, puis chaque substitution retire un terme
+selon une position précise, modifiant la somme de manière prévisible. Cette décroissance
+n’est pas aléatoire : elle suit une structure géométrique où chaque terme retiré est
+lié au précédent par le même rapport spectral.
+
+Les tableaux présentés illustrent cette progression pour différentes longueurs de
+suites. Ils montrent comment les suites évoluent à chaque étape, comment les termes se
+réorganisent, et comment la position de substitution influence la structure globale.
+Pour les suites de longueur supérieure ou égale à huit, la méthode adopte une forme
+entièrement régulière : la position de substitution est toujours la même, ce qui crée
+une architecture stable et universelle.
+
+Cette régularité permet de définir une forme abstraite pour la somme de chaque étape.
+La somme peut toujours être exprimée comme un numérateur divisé par un dénominateur
+commun, dont la structure dépend du rapport spectral et du nombre d’étapes. Le
+numérateur suit un motif précis : il s’agit toujours de la valeur de référence diminuée
+d’une somme de termes successifs, chacun lié au précédent par le rapport un sur k.
+
+Ainsi, la méthode de Philippôt n’est pas seulement une construction fractionnaire. Elle
+constitue un système rigoureux, cohérent et reproductible, où chaque étape révèle une
+partie de la structure spectrale profonde. Cette structure, formalisée dans Isabelle/HOL,
+montre que le rapport spectral un sur k est un invariant conceptuel, présent à toutes
+les échelles et dans toutes les longueurs de suites. Elle offre une perspective
+géométrique et numérique unifiée sur la manière dont les suites évoluent, et sur la
+façon dont cette évolution reflète la géométrie du spectre des nombres premiers.
+---
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
+---  
+@NARRATION: 12.0
 En parvenant à l'axiomatisation finale, une série d'affirmations cruciales est proposée. Pour une plage de n définie, un nombre premier se déduit invariablement. Les valeurs que ces n adoptent, en fonction de la quantité de termes dans les suites, témoignent d'un rapport spectral constant. Si, sur le plan purement numérique, ce rapport est valide, il révèle pourtant une incohérence algebrique. Cette apparente contradiction souligne une asymétrie intentionnellement ordonnée : bien que les nombres premiers, dans leur positionnement au sein de l'univers des entiers, puissent apparaître de façon désordonnée, cet ordre apparent est le fruit d'une logique sous-jacente que l'observateur choisit d'imposer.
 
 <img src="./assets/images/quadrature_parabole_zero_critique.png" alt="Quadrature parabole zéro critique" style="max-width: 100%; height: auto;">
@@ -848,6 +1185,8 @@ L’axiome `concordance_spectrale` assure la compatibilité entre ces trois pers
 C'est ici qu'intervient l'auteur en tant que libre penseur, un analogiste qui perçoit les mathématiques comme grammaire. Ancré dans une pensée synthétique, où chaque cause connait préalablement son effet, il explore et démontre des connexions où l'effet est inévitablement imbriqué avec sa cause, révélant un univers où la beauté des nombres premiers se marie à une syntaxe géométrique complexe et méticuleuse. Cette vision élargit notre compréhension des nombres, transformant ainsi notre conception classique d'une suite de constantes mathématiques en une danse harmonieuse de relations géométriques et numériques.
 
 L'illustration de la pesé d'Archimède est le visuelle et résultante directe de la série d'axiomatisation que l'auteur a produit a partir de la méthode proposé par Archimède pour déterminé la quadrature de la parabole l'aire de cette dernière a l'aide d'une pesé théorique et a priori. La figur illustre la droite critique des zéros de Zêta par la règle de Philippôt, cette règle qui détermine tous les mesures utilisé dans cette théorie de l'univers est au carré. Cette règle est un triangle rectangle divisé en 8 sections distinctes équère droite qui est extensionné d'un tier pour ce qui est de sa hauteur formant avec la mesure de la base de l'équère droit une section triangulaire a 45 degré de la pleine mesure de l'angle oposé de l'équère droit a l'extrémité opposé et dont une extension est ajouté de (4-8^1/2). Une droite partant de l'angle droit de la règle de Philippôt allant jusqu'a l'hypoténuse a 45 degré formé par l'extension de la règle. Ce plan trifocal ainsi formé forme un triangle d'angles de 60 degrés 75 degrés et de 45 degré fermant ainsi a 180 degré le plan trifocal. Un carré le plus grand inscrivable dans le plan trifocal est positionné? La hauteur du plan trifocal du sommet a 45 degré perpendiculairement a la base formé par les angles de 60 et 75 degré et de mesure de (3^1/2+1) / (2^1+1)=1.131652498 hauteur du plan trifocal. Le plus grand carré inscrivable dans le plan trifocal l'un de ses sommet est tangent a la mesure de la droite formé a l'aide de la mesure de la base de la règle de Philippôt. A ce point partant du sommet de l'angle de 60 degré passant par le sommet tangent du carré a la base de la règle de Philippôt et ce terminant au sommet a 45 degré du plan trifocal formant la parabole de la droite critique des zéros critique de Zêta courbé par l'écart mixte et sa mise en relation combinant plus de nombres premiers que la droit réelle et habituelle des zéros critiques de la fonction Zêta. Ces nombres premiers en plus grande quantité pour un même intervale considéré est du aux  compinaisons mixte telle (-2,2), (-3,3),(-5,5)... (-P-ième,P-ième) qui sont une comparaison non inclut dans la comparaison de même polarité (+,+) et (-,-) qui ne peut comparer les nombre premier de même valeur. La comparaisont de l'écart mixte entre les premiers implique également que +1 est ajouté a tous les écart considéré puisque 0 est considéré dans cette écart mixte. Donnant a l'interval considéré une valeur plus grande mais realtive. Cette valeur relative augmenté dû a l'écart mixte permet selon l'auteur Savard de courber la droite critique permettant l'observation de la parabole. L'intervale sur lequel est considéré les zéros critiques permet si l'on cosidère l'ensemble de la droite critique comme une surface d'un rectangle l'intervale considèré de cette droit critique ainsi représenté l'aire de l'intervale considéré laisserait une section partielle pour les premiers non considéré par l'interval. L'auteur Philippe Thomas Savard mentionne que si l'aire de la parabole formé est égale a l'aire de la section restante de l'intervale considèré cette égalité démontre que tous les zéros critique =1/2 de la section restante serait incluent sur la droite critique et révèlerait par cette méthode de pesé de la quadrature de la parabole une solution certaine a la conjecture de la fonction Zêta. Effectivement comme premet d'observé le schéma conçu par Savard l'aire de la parabole est = a la valeur de la pesé représentant l'aire total de la droite critique les deux aire sont égale . L'aire de la parabole=Aire des zéro critique qui ne sont pas considèré: Aire triangle ABC=√1.6-√0.8=Aire zéros critique restant (√0.1×(4-√8)). Cette démonstration semble indiqueé que l'intuition de l'auteur semble ce concrétisé. Cependant lorsque nous vérifion par le théorème de Thalèse l'affimation suivante:eulement 25% des zéros critiques extérieur a l'intervale considéré sont sous la droite critique.
+---
+
 Aire pararbole * OE= Aire du triangle * OH. Mais la réalité
 
  Aire parabole= 4/3(√1.6-√8) 
@@ -869,17 +1208,84 @@ Réponse de Savard: Il faut pour comprendre la réponse qui est en lien directe 
 Réponse final : non tous les zéros non triviaux de la la fonction zêta de Bernhard Riemann n'ont pas tous 1/2 pour partie réelle.
 
 Schizophrénie universitaire type.
+---
+@MINI_SCRIPT: 13.0
+Dans cette section, nous entrons au cœur de l’axiomatisation qui soutient la méthode
+spectrale. L’objectif n’est plus seulement de présenter des exemples numériques ou
+géométriques, mais de montrer que ces exemples reposent sur une architecture logique
+cohérente. Cette architecture est formalisée dans Isabelle/HOL, où chaque intuition
+devient un axiome, chaque observation une structure, et chaque relation un principe
+déductif.
 
+La première composante de cette axiomatisation est analytique. Elle introduit un type
+abstrait représentant les zéros non triviaux de la fonction zêta, ainsi que des
+fonctions donnant leur partie réelle et imaginaire. Un axiome fondamental affirme que
+chaque nombre premier est déterminé, d’une manière ou d’une autre, par l’un de ces
+zéros. Cette idée, issue des formules explicites de Riemann et von Mangoldt, devient
+ici un principe logique qui relie directement les zéros de ζ à la distribution des
+nombres premiers.
+
+La seconde composante est spectrale. Elle formalise la méthode de Philippôt en
+introduisant des suites A et B, un indice spectral, un premier spectral associé, et un
+rapport spectral constant de la forme un sur k. Ce rapport, invariant à travers toutes
+les étapes, encode la structure interne de la méthode. Il reflète l’asymétrie ordonnée
+et la dynamique chaotique mais structurée de la distribution des nombres premiers dans
+le spectre.
+
+La troisième composante est géométrique. Elle modélise la droite critique comme une
+aire totale, tronquée selon un intervalle donné. Cette troncature est mise en relation
+avec les écarts mixtes, dont la particularité est d’inclure le zéro et d’ajouter une
+unité à chaque intervalle. Cette addition répétée modifie la valeur relative de
+l’intervalle et courbe la droite critique, créant une parabole dont l’aire peut être
+comparée à l’aire restante du rectangle initial.
+
+Ces trois composantes — analytique, spectrale et géométrique — forment un plan
+trifocal. Chacune apporte une perspective différente sur la même question : comment
+les nombres premiers se distribuent‑ils, et que nous disent les zéros de la fonction
+zêta à leur sujet? L’axiome de concordance relie ces trois perspectives en affirmant
+qu’à chaque indice spectral correspond un zéro de ζ intervenant dans la même
+détermination première. Ce lien crée une cohérence profonde entre les trois mondes.
+
+L’auteur propose alors une interprétation géométrique inspirée de la pesée
+d’Archimède. La courbure de la droite critique, induite par l’écart mixte, forme une
+parabole dont l’aire peut être comparée à la section restante du rectangle. Si ces
+aires sont égales, la structure géométrique suggère que tous les zéros considérés dans
+l’intervalle possèdent une partie réelle égale à un demi. Cette idée ne constitue pas
+une preuve, mais une intuition géométrique forte, issue de la mise en relation des
+trois perspectives du plan trifocal.
+
+Ainsi, cette axiomatisation ne démontre pas la conjecture de Riemann, mais elle
+organise les intuitions de l’auteur dans un cadre logique où les structures
+analytiques, spectrales et géométriques convergent. Elle montre que les phénomènes
+observés dans la méthode spectrale ne sont pas isolés, mais les manifestations d’une
+même architecture conceptuelle, où chaque élément renforce les autres.
+---
+@NARRATION: 13.0
 ------------------------------------------------------------
 CHAPITRE 2 - LA MECANIQUE HARMONIQUE DU CHAOS DISCRET
 ------------------------------------------------------------
+---
+
+<p align="center">
+  <a href="./assets/animation/animation_C-7.png">
+    👉 Voir l’illustration : animation_C-7
+  </a>
+</p>
+
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
+---  
 :«Quelle est la signification ontologique de la théorie 'L'Univers est au Carré' sur notre compréhension de l'univers et comment cela impacte-t-il notre vision du monde?**
 
 *Categorie: philosophique/implications ontologiques 
 
 > La théorie 'L'Univers est au Carré' suggère que tous les phénomènes de l'univers peuvent être interprétés à travers le prisme du 'de cette théorie géométrique et de ces évidences', une idée qui transcende le simple concept géométrique pour devenir une métaphore de l'ordre cosmique et de la cohérence intérieure. Ontologiquement, cela implique que l'univers, souvent perçu comme un ensemble chaotique de lois naturelles, peut être simplifié à travers des principes géométrique qui unifient différents états de la réalité géométrique et physique comparable dans ces explication de la réduction des figures a un carré parallèlement avec la relativité restrainte, l'effet Doppler règle des inverses des carrés déterminant que la position de l'observateur influence la mesure. Savard l'auteur de la théorie de:« l'univers est au carré »dans le chapitre de: «la mécanique harmonique du chaos discret». Propose par ailleurs une nouvelle possibilité a l'invariance géométrique qui habituellement est réservé a la translation, l'homothétie et la réflexion? Dans ce chapitre portant sur la mécanique harmonique du chaos discret.L'auteur avance sur l'opinion d'un nouvelle invariance ou le choix de l'unité par l'observateur influence la postion de la mesure. Cette approche remarquable est détaillée dans un schéma, où une succession de figures géométriques desquels est déterminées un système d'équation qui détermine un diamètre équivalent a ces figures intriqués et où les positions conséquentes suivent la progression de nombres premiers qui déterminent la position physique des mesures dans la figure à des endroit différents selon l'unité choisi. Cette perception influence notre vision du monde en proposant que complexité et simplicité ne sont pas opposées, mais plutôt interconnectées par des lois mathématiques profondes qui sous-tendent notre réalité. Ainsi, l'impact épistémologique est de redéfinir comment nous acquérons et appréhendons le savoir en postulant que les lois mathématiques sont centrales à l'univers, façonnant notre compréhension fondamentale et nos interactions ».
+<p align="center">
+  <a href="./assets/animation/animation_C-8.png">
+    👉 Voir l’illustration : animation_C-8
+  </a>
+</p>
 
-Chapitre 2 : La mécanique harmonique du chaos discret.
+##Chapitre 2 : La mécanique harmonique du chaos discret.
 
 Dans l'univers fascinant de la géométrie fractale, l'auteur se penche sur une construction particulière qui va servir de toile de fond à l'exploration de la mécanique harmonique du chaos discret. Cette exploration débute par la mise en place d'une figure fondamentale : deux carrés ingénieusement emboîtés, riches de symétrie et de régularité, sont inscrits dans un quadrillage fractal. Les triangles inhérents à cette configuration deviennent les pièces maîtresses révélant la mécanique sous-jacente. Cette structure complexe permet d'examiner les lois mathématiques qui gouvernent le chaos apparent, transformant le désordre perçu en harmonie cachée. Une matrice est conçu, matrice a dérive première suportant cette harmonie dans chaos ainsi la complexité de la structure du chaos est ainsi mieux définit et mieux compris.
 
@@ -890,6 +1296,11 @@ Le concept clé de cette démarche est l'invariance géométrique, une idée cen
 Progressant vers une compréhension plus abstraite, la démarche s'illustre à travers l'utilisation de trois matrices successives. Dans la première, les dimensions géométriques réelles sont scrupuleusement capturées, formant le socle concret de l'analyse. De cette première matrice il en vient a se poser la question si cette structure matriciel pourrait être valide pour des mesure non définit par le schéma et toujours impliquer les mêmes relation de proportionnalité. Enfin, la troisième matrice intervient pour normaliser le système avec des coefficients premiers qui démontrent que la question qui s'est posé pour la métrice intermédiaire et de manière intuitive peut être simplifié a la valeur de la suposition intermédiaire ; libérant ainsi la structure des particularités individuelles, elle dévoile la charpente arithmétique profonde en jeu. C'est à travers cette séquence méthodique que l'auteur parvient à décoder le langage structurel du chaos organisé par la matrice a dérive première composé uniquement de nombres premiers et a un inconnu unique pour l'ensemble de l'égalité des trois équation qui composent la matrice a dérive première. Un coéfficient a la valeur du numérateur toujours égale pour tous les élément présent de la matrice a dérive première.
 
 Matrice de la mécanique du Chaos discret de laquelle ce définit la matrice intermédière dans un deuxième temps par la question des valeurs par défauts qui sont pour la matrice a dérive première du troisième effort résolut.
+<p align="center">
+  <a href="./assets/animation/animation_C-9.png">
+    👉 Voir l’illustration : animation_C-9
+  </a>
+</p>
 
 ## L'invariance géométrique fruit du produit alternatif permetant l'observation d'un diamètre équivalent qui est le résultat constant de l'invariance géométrique. 
 
@@ -949,6 +1360,13 @@ Unité  arcsin⁡〖AL/2=19.13299528〗
 √4.5×0.5/(sin19.13299528°)=√5+1
 
 
+<p align="center">
+  <a href="./assets/animation/animation_C-15.png">
+    👉 Voir l’illustration : animation_C-15
+  </a>
+</p>
+
+
 ##Matrice a la hauteur de 1.5:
 | 1er terme | 2ième terme | 3ième terme | égalité |
 |-----------|-------------|-------------|---------|
@@ -1000,10 +1418,68 @@ Pour conclure cette démarche, le lecteur est guidé vers une formalisation rigo
 
 En filigrane de cette exploration conceptuelle se dessine une pensée philosophique plus profonde. La constance des lois géométriques au sein du chaos discret devient ainsi l'incarnation mathématique de ce lien, exprimant une rigueur et une régularité universelles au sein des fluctuations apparentes du monde. L'invariance géométrique, telle qu'examinée dans cette étude, cristallise une vérité intemporelle, résonnant parfaitement avec le désir humain de comprendre et d'ordonner sont organisation vers l'inexploré.
 
+---
+@MINI_SCRIPT: 14.0
+Dans cette section, nous explorons la mécanique harmonique du chaos discret, un domaine
+où la géométrie, les nombres premiers et l’invariance se rencontrent pour révéler une
+structure cachée derrière ce qui semble être du désordre. L’auteur commence par une
+figure composée de carrés emboîtés et de triangles, inscrits dans un quadrillage
+fractal. Cette figure n’est pas seulement décorative : elle sert de base à une série de
+relations géométriques qui dévoilent une harmonie profonde au sein du chaos apparent.
 
+Le concept central est celui de l’invariance géométrique. Cette invariance affirme que
+l’unité choisie par l’observateur influence la position de la mesure dans la figure,
+mais sans jamais modifier la relation fondamentale entre les longueurs. Autrement dit,
+les valeurs numériques changent, mais la structure reste la même. Cette constance
+géométrique devient une loi universelle, indépendante de l’unité choisie, et reflète
+une stabilité étonnante au cœur de la complexité.
+
+Pour illustrer cette invariance, l’auteur utilise le produit alternatif, une relation
+entre quatre termes qui permet de dégager un diamètre équivalent. Ce diamètre, toujours
+constant malgré les variations d’unité, devient la signature géométrique de
+l’invariance. Chaque exemple montre que, même lorsque les positions changent dans la
+figure, la relation fondamentale demeure intacte. Cette constance révèle une loi
+intrinsèque qui traverse toutes les configurations.
+
+La démonstration se poursuit à travers une série de matrices. La première capture les
+dimensions géométriques réelles de la figure. La seconde, intermédiaire, pose la
+question de savoir si ces relations demeurent valides pour des valeurs qui ne proviennent
+pas directement du schéma. La troisième matrice apporte la réponse : en normalisant les
+relations avec des coefficients premiers, elle montre que la structure profonde est
+indépendante des valeurs particulières. Les trois matrices convergent vers une même
+égalité, révélant une charpente arithmétique stable et universelle.
+
+Cette progression mène à la matrice à dérive première, une structure entièrement
+déterminée par des nombres premiers et un seul inconnu. Elle montre que, derrière la
+complexité apparente, se cache une mécanique harmonique où chaque terme joue un rôle
+précis. La constance de l’égalité dans toutes les matrices confirme que la structure
+géométrique et la structure arithmétique sont parfaitement alignées.
+
+Enfin, l’invariance géométrique est formulée sous forme d’équation générale. Elle
+montre que le diamètre équivalent, issu du produit alternatif, dépend uniquement du
+nombre premier choisi et de l’unité géométrique associée. Cette équation relie la
+géométrie tangible à une abstraction mathématique profonde, où chaque unité choisie
+s’aligne naturellement avec l’unité théorique.
+
+À travers cette démarche, l’auteur révèle que le chaos discret n’est pas un désordre,
+mais une structure harmonique où les lois géométriques demeurent constantes malgré les
+fluctuations apparentes. Cette invariance devient une expression mathématique d’une
+vérité plus large : même dans la complexité, l’univers obéit à des lois profondes,
+stables et intemporelles.
+---
+
+@NARRATION: 14.0
+---
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
+---  
 ------------------------------------------------------------
 CHAPITRE 3 - LE POSTULAT DE L'UNIVERS EST AU CARRE
 ------------------------------------------------------------
+<p align="center">
+  <a href="./assets/animation/animation_E-1.png">
+    👉 Voir l’illustration : animation_E-1
+  </a>
+</p>
 
 Dans ce chapitre, nous explorerons un concept audacieux, souvent débattu dans les cercles mathématiques modernes : le postulat de l'univers est au carré (Neuromorphisme). À la croisée des idées anciennes et des approches contemporaines, cette théorie aborde la structuration géométrique de notre réalité en prenant racine dans un paradigme carré. Cette approche pour l'auteur est sa version de la relativité d'Albert Einstein puisque pour la relativité qui mentionne que la position de l'observateur influence la mesure. Que cette étirement au effet physique sur le temps se calcul bien souvent par la règle des inverses des carrés. Le postulat de l'univers est au carré qui interpelle le lecteur avec la proposition que toute figure élevé au carré est un carré malgré l'apparence des déffinitions intrinsèque de ses figures. L'univers qui serait observable en entier la figure ou forme que cette observation la manière dont nous aurions de l'apprecevoir pourrait se résoudre a être de manière certaine par les même opération un carré. Le reamrquable parallèle que l'auteur Philippe Thomas Savard trace entre les deux théorie pour simplifié a sa vision celle d'une théorie bien implenté validé par les communautés de la connaissances de ce monde sont élaboré dans ce chapitre avec un audace certain et ne craint pas le ridicule.
 
@@ -1206,8 +1682,49 @@ Le postulat montre qu’un rectangle élevé au carré engendre :
 - et une structure diagonale équivalente à un octogone régulier élevé au carré.
 
 Cette triple équation constitue la base géométrique du **Postulat de l’Univers est au Carré**, reliant périmètres, aires, diagonales et unités spectrales dans une même architecture mathématique.
+---
+@MINI_SCRIPT: 15.0
+Le cœur de la théorie de l’Univers est au Carré repose sur un geste géométrique
+simple, mais extraordinairement fécond : élever un périmètre au carré. Ce geste,
+appelé le squaring, transforme un rectangle initial en une nouvelle figure dont les
+proportions, les diagonales et les aires révèlent une structure plus profonde que
+celle de la figure d’origine.
 
+À partir d’un rectangle de dimensions précises, l’élévation au carré de son périmètre
+génère un second rectangle. Ce nouveau rectangle n’est pas une simple version
+agrandie du premier : il possède une organisation interne qui se décompose en deux
+figures complémentaires, un carré maximal inscrit et un rectangle résiduel. Ces deux
+figures, mises ensemble, reconstituent exactement la surface du rectangle élevé au
+carré.
 
+La clé de cette construction réside dans les diagonales. Chacune des trois figures —
+le carré inscrit, le rectangle complémentaire et le rectangle complet — possède une
+diagonale propre. Ces trois diagonales ne sont pas indépendantes : elles s’alignent
+selon une relation commune qui fait émerger une nouvelle figure géométrique, l’octogone
+carré. Cette figure apparaît comme la seconde élévation au carré, une forme régulière
+dont le périmètre est directement lié à la diagonale du rectangle complet.
+
+Les trois équations fondamentales du postulat expriment cette relation. Elles montrent
+que les diagonales des trois figures, combinées à l’unité géométrique issue du carré
+inscrit, convergent toutes vers la même structure : un octogone régulier élevé au
+carré. Cette convergence n’est pas un accident numérique, mais la manifestation d’une
+loi géométrique profonde qui relie périmètres, aires et diagonales dans une même
+architecture.
+
+La progression des coefficients confirme cette structure. En modifiant la position du
+coefficient associé au nombre premier, la même relation se répète, révélant une
+progression ordonnée qui s’étend à d’autres polygones réguliers, comme l’hexagone
+carré. Chaque exemple montre que la même logique interne se reproduit, indépendamment
+de la figure considérée.
+
+Ainsi, le squaring n’est pas seulement une opération géométrique : c’est un principe
+générateur. Il transforme une figure simple en une structure plus riche, où chaque
+élément — carré, rectangle, diagonale, octogone — participe à une même cohérence
+mathématique. Le postulat de l’Univers est au Carré repose sur cette idée : qu’en
+élevant une figure au carré, on révèle une géométrie cachée, ordonnée et profondément
+structurée.
+---
+@NARRATION: 15.0
 La deuxième équation de la séries de trois permet l'observation que la valeur obtenu est bien un octogone carré.
 
 Dans cette nouvelle figure, un carré maximal est inscrit. Le choix même de cet emplacement, la sélection de ce carré particulier, est stratégique. Le rapport calculé entre l'aire de ce carré et celle du rectangle qui l'entoure devient une unité fondamentale. Cette unité symbolique incarne un équilibre, une manière de quantifier l'interaction et la transformation entre les deux figures.
@@ -1219,8 +1736,8 @@ Au cœur de la théorie, on adopte une échelle de mesure particulière, choisis
   Le squaring, se veut une méthode non seulement de compréhension, mais d’ajustement continuel pour assurer la permanence de l'équité et de la clarté dans le discours géométrique.
 
 Ainsi, le postulat de l'univers est au carré n'est pas une simple hypothèse numérique, mais une proposition philosophique et géométrique remarquable, cherchant à capturer la symétrie et la complexité de l'univers dans lequel nous évoluons. Par la méthodologie développée, il trace un chemin vers cette compréhension plus profonde de l’interconnexion des formes et des chiffres.
-
-
+---
+@NARRATION: 16.0
 ------------------------------------------------------------
 CHAPITRE 4 - L'ESPACE DE PHILIPPOT
 ------------------------------------------------------------
@@ -1244,7 +1761,8 @@ L'étape suivante de cette construction théorique est l'incorporation des nombr
 Parallèlement, une correspondance subtile émerge entre la pyramide et un ellipsoïde : le volume de la pyramide, mesuré à une certaine hauteur, représente une fraction précise et rationnelle du volume d'un ellipsoïde construit à partir des mêmes paramètres. Cette révélation ouvre une perspective nouvelle : la pyramide peut être interprétée comme une tangente plane à un ellipsoïde de même essence. L'ancrage géométrique s'accomplit dans cette transmutation, une reconnaissance de l'équivalence entre deux mondes géométriques.
 
 Ainsi, l'espace de Philippot incarne une unification remarquable. En intégrant la spirale de Théodore de Cyrène, les disques associés, les nombres hypercomplexes, et les correspondances volumétriques, il établit une structure incroyablement cohérente et interconnectée. Cette unification n’est pas simplement structurale, elle représente, au sens le plus profond, un pont conceptuel entre diverses abstractions mathématiques.
-
+---
+@NARRATION: 17.0
 ------------------------------------------------------------
 CHAPITRE 5 - LA TELEOSEMANTIQUE ET LA PHILOSOPHIE
 ------------------------------------------------------------
@@ -1351,7 +1869,7 @@ mecanique du chaos, le postulat de la quadrature et l'espace pyramidal de Philip
 chaque etape revele une facette nouvelle d'un univers mathematique ou l'ordre et le
 chaos dansent ensemble au rythme des nombres premiers.
 
-
+---
 ============================================================
 FIN DU SCRIPT
 ============================================================
@@ -1360,3 +1878,44 @@ FIN DU SCRIPT
 *"L'Univers est au Carre"*
 *Genere et restructure a partir de la V.P. et enrichi par la banque de Q&R (101 questions)*
 
+---
+
+# NOTE POUR L’AGENT emergent.sh (E1)
+
+Consigne pour employer le fichier `SCRIPT_NARRATIF.md` afin d’encoder le nécessaire au build du workflow dans GitHub Actions pour générer l’animation où la narration est composée du script de ce `.md` :
+
+1. **Étiquettes de narration**  
+   - Les étiquettes `@NARRATION: x.y` indiquent que le texte compris entre les séparateurs `---` et `---` (ou le bloc associé) doit être soumis à la narration principale.  
+   - La narration principale suit l’ordre des étiquettes `@NARRATION` dans le fichier.
+
+2. **Étiquettes de mini-script**  
+   - Les étiquettes `@MINI_SCRIPT: x.y` indiquent que le texte compris entre les `---` et `---` (ou le bloc associé) est un mini-script de narration lié à un exemple de calcul.  
+   - Chaque `@MINI_SCRIPT` commente **l’exemple de calcul qui précède immédiatement** cette étiquette dans le fichier.  
+   - Ces mini-scripts doivent être lus après l’affichage de la page contenant l’exemple de calcul correspondant.
+
+3. **Exemples de calcul**  
+   - Tous les exemples de calcul présents dans le fichier `.md` doivent être affichés **sur une page dédiée**, avec une illustration fixe (image ou schéma).  
+   - Cette page doit rester **fixe** pendant toute la durée de la narration explicative associée (mini-script).
+
+4. **Reprise de la narration principale**  
+   - Une fois la narration du mini-script terminée, la narration principale (`@NARRATION`) reprend.  
+   - À ce moment, la page peut changer pour afficher la prochaine illustration ou la prochaine section, selon la progression du script.
+
+5. **Illustrations et étiquettes @ILLUSTRATION**  
+   - Les blocs `@ILLUSTRATION: ID` suivis d’une image Markdown (`![...](...)`) indiquent les visuels à afficher à l’écran.  
+   - Chaque illustration est liée à une section de narration principale et, le cas échéant, à un mini-script.  
+   - L’illustration doit rester affichée **tant que la narration de la section correspondante (narration principale + mini-script)** n’est pas terminée.
+
+6. **Étiquettes @NOTE**  
+   - Les blocs `@NOTE:` contiennent des instructions **destinées uniquement à l’agent E1**.  
+   - Ces notes **ne doivent jamais être lues dans la narration audio**.  
+   - E1 doit les utiliser pour :
+     - savoir combien de temps une illustration doit rester affichée,
+     - savoir si la page doit rester fixe pendant un mini-script,
+     - comprendre les liens entre une illustration, un exemple de calcul, une étiquette `@NARRATION` et une étiquette `@MINI_SCRIPT`.
+
+En résumé :  
+- `@NARRATION` → narration principale, défilement des scènes.  
+- `@MINI_SCRIPT` → narration locale d’exemples de calcul, page fixe.  
+- `@ILLUSTRATION` → image à afficher pour la section.  
+- `@NOTE` → consignes techniques pour E1, **non narrées**.
