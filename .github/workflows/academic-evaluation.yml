@@ -67,7 +67,7 @@ jobs:
           CORPUS_DB: "qa_bank/corpus.db"
           HOL_DB: "archive/Univers_Au_Carre.db"
           USE_LLM: ${{ inputs.use_llm }}
-          EMERGENT_LLM_KEY: ${{ secrets.EMERGENT_LLM_KEY }}
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
         run: |
           python scripts/evaluation/academic_evaluation.py
 
