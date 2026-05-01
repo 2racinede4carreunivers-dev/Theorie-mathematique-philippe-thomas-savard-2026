@@ -585,18 +585,28 @@ def render_calc_block(raw_text):
 # ================================================================
 
 async def generate_tts(scenes):
+    # Toujours creer le dossier audio (meme vide) pour eviter les warnings
+    # de upload-artifact sur GitHub Actions
+    os.makedirs(AUDIO_DIR, exist_ok=True)
+
     if not LLM_KEY:
-        print("  Pas de cle LLM (EMERGENT_LLM_KEY).")
+        print("  [ATTENTION] Cle LLM (EMERGENT_LLM_KEY) manquante ou vide.")
+        print("  [ATTENTION] Sur GitHub Actions, verifiez que le secret '_CLE'")
+        print("  [ATTENTION] est configure dans Settings > Secrets > Actions.")
         return {}
+    print(f"  Cle LLM detectee (longueur: {len(LLM_KEY)} chars)")
+
     try:
         from emergentintegrations.llm.openai import OpenAITextToSpeech
     except ImportError:
-        print("  emergentintegrations non installe.")
+        print("  [ERREUR] emergentintegrations non installe.")
+        print("  [INFO]   Installer avec : pip install emergentintegrations \\")
+        print("                            --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/")
         return {}
 
     tts = OpenAITextToSpeech(api_key=LLM_KEY)
     audio_map = {}
-    os.makedirs(AUDIO_DIR, exist_ok=True)
+    errors = 0
 
     for scene in scenes:
         num = scene["num"]
@@ -608,28 +618,38 @@ async def generate_tts(scenes):
         mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
 
         if os.path.exists(mp3_path):
-            print(f"  Scene {num}: cache")
+            print(f"  Scene {num}/{len(scenes)}: cache")
             with open(mp3_path, "rb") as f:
                 audio_map[num] = base64.b64encode(f.read()).decode()
             continue
 
-        try:
-            print(f"  Scene {num}/{len(scenes)} ({scene['type']}): TTS...")
-            audio_bytes = await tts.generate_speech(
-                text=text,
-                model="tts-1-hd",
-                voice="shimmer",
-                speed=0.95,
-                response_format="mp3"
-            )
-            with open(mp3_path, "wb") as f:
-                f.write(audio_bytes)
-            audio_map[num] = base64.b64encode(audio_bytes).decode()
-        except Exception as e:
-            print(f"  Scene {num}: erreur - {str(e)[:80]}")
-            import time
-            time.sleep(3)
+        # Retry avec backoff exponentiel sur erreurs reseau / rate limit
+        success = False
+        for attempt in range(3):
+            try:
+                print(f"  Scene {num}/{len(scenes)} ({scene['type']}): TTS..."
+                      f"{' (retry ' + str(attempt) + ')' if attempt else ''}")
+                audio_bytes = await tts.generate_speech(
+                    text=text,
+                    model="tts-1-hd",
+                    voice="shimmer",
+                    speed=0.95,
+                    response_format="mp3"
+                )
+                with open(mp3_path, "wb") as f:
+                    f.write(audio_bytes)
+                audio_map[num] = base64.b64encode(audio_bytes).decode()
+                success = True
+                break
+            except Exception as e:
+                err_msg = str(e)[:200]
+                print(f"  Scene {num}: erreur tentative {attempt + 1}/3 - {err_msg}")
+                import asyncio as _aio
+                await _aio.sleep(3 * (attempt + 1))
+        if not success:
+            errors += 1
 
+    print(f"  TTS termine : {len(audio_map)} audios generes, {errors} echecs sur {len(scenes)} scenes")
     return audio_map
 
 

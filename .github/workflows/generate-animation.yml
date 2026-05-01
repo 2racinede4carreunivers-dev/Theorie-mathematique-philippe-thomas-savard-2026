@@ -37,9 +37,22 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --quiet pip --upgrade
-          pip install weasyprint
+          pip install --quiet weasyprint
           if [ "${{ inputs.enable_tts }}" = "true" ]; then
-            pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+            pip install --quiet emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          fi
+
+      - name: Verify secret _CLE
+        if: ${{ inputs.enable_tts == 'true' }}
+        env:
+          LLM_KEY_LEN: ${{ secrets._CLE != '' && 'SET' || 'MISSING' }}
+        run: |
+          echo "Etat du secret _CLE : $LLM_KEY_LEN"
+          if [ "$LLM_KEY_LEN" = "MISSING" ]; then
+            echo "::error::Le secret '_CLE' est vide ou absent."
+            echo "::error::Configurez-le dans Settings > Secrets and variables > Actions"
+            echo "::error::(valeur = votre cle Emergent LLM commencant par 'sk-emergent-')"
+            exit 1
           fi
 
       - name: Generate animation
@@ -50,6 +63,19 @@ jobs:
           EMERGENT_LLM_KEY: ${{ secrets._CLE }}
         run: |
           python scripts/generate_animation.py
+
+      - name: Check audio output
+        if: ${{ inputs.enable_tts == 'true' }}
+        id: audio_check
+        run: |
+          mkdir -p animation_output/audio
+          MP3_COUNT=$(find animation_output/audio -name "*.mp3" -type f | wc -l)
+          echo "mp3_count=$MP3_COUNT" >> $GITHUB_OUTPUT
+          echo "Nombre de fichiers MP3 generes : $MP3_COUNT"
+          if [ "$MP3_COUNT" = "0" ]; then
+            echo "::warning::Aucun fichier MP3 n'a ete genere malgre enable_tts=true."
+            echo "::warning::Verifiez les logs du step 'Generate animation' pour identifier la cause."
+          fi
 
       - name: Upload HTML animation
         uses: actions/upload-artifact@v4
@@ -66,15 +92,41 @@ jobs:
         continue-on-error: true
 
       - name: Upload audio files
-        if: ${{ inputs.enable_tts == 'true' }}
+        if: ${{ inputs.enable_tts == 'true' && steps.audio_check.outputs.mp3_count != '0' }}
         uses: actions/upload-artifact@v4
         with:
           name: animation-audio
           path: animation_output/audio/
-        continue-on-error: true
+          if-no-files-found: ignore
 
       - name: Upload scene index
         uses: actions/upload-artifact@v4
         with:
           name: animation-scenes-index
           path: animation_output/scenes_index.json
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Animation generation summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- enable_tts : ${{ inputs.enable_tts }}" >> $GITHUB_STEP_SUMMARY
+          echo "- enable_pdf : ${{ inputs.enable_pdf }}" >> $GITHUB_STEP_SUMMARY
+          if [ -f animation_output/scenes_index.json ]; then
+            SCENE_COUNT=$(python3 -c "import json; print(len(json.load(open('animation_output/scenes_index.json'))))")
+            echo "- Scenes generees : $SCENE_COUNT" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -d animation_output/audio ]; then
+            MP3_COUNT=$(find animation_output/audio -name "*.mp3" -type f | wc -l)
+            echo "- Fichiers audio MP3 : $MP3_COUNT" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Artifacts disponibles" >> $GITHUB_STEP_SUMMARY
+          echo "- \`animation-html\` : le lecteur video HTML autonome" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.enable_pdf }}" = "true" ]; then
+            echo "- \`animation-pdf\` : version PDF paginee" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ "${{ inputs.enable_tts }}" = "true" ]; then
+            echo "- \`animation-audio\` : fichiers MP3 de narration (si generes)" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- \`animation-scenes-index\` : index JSON des scenes" >> $GITHUB_STEP_SUMMARY
