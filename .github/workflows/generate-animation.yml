@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       enable_tts:
-        description: "Generer la narration audio TTS (voix feminine francaise)"
+        description: "Activer la narration audio TTS (utilise le cache assets/audio_cache/ si pas de cle)"
         required: false
-        default: "false"
+        default: "true"
         type: choice
         options:
           - "true"
@@ -39,20 +39,20 @@ jobs:
           pip install --quiet pip --upgrade
           pip install --quiet weasyprint
           if [ "${{ inputs.enable_tts }}" = "true" ]; then
-            pip install --quiet emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+            pip install --quiet emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/ || true
           fi
 
-      - name: Verify secret _CLE
+      - name: Check audio cache
         if: ${{ inputs.enable_tts == 'true' }}
-        env:
-          LLM_KEY_LEN: ${{ secrets._CLE != '' && 'SET' || 'MISSING' }}
         run: |
-          echo "Etat du secret _CLE : $LLM_KEY_LEN"
-          if [ "$LLM_KEY_LEN" = "MISSING" ]; then
-            echo "::error::Le secret '_CLE' est vide ou absent."
-            echo "::error::Configurez-le dans Settings > Secrets and variables > Actions"
-            echo "::error::(valeur = votre cle Emergent LLM commencant par 'sk-emergent-')"
-            exit 1
+          if [ -d assets/audio_cache ]; then
+            CACHE_COUNT=$(find assets/audio_cache -name "*.mp3" -type f | wc -l)
+            echo "Fichiers MP3 en cache (assets/audio_cache) : $CACHE_COUNT"
+            if [ "$CACHE_COUNT" = "0" ]; then
+              echo "::warning::assets/audio_cache/ existe mais est vide."
+            fi
+          else
+            echo "::warning::assets/audio_cache/ est absent. Le workflow essaiera d'appeler l'API TTS (peut echouer sur compte Emergent Free Tier)."
           fi
 
       - name: Generate animation
