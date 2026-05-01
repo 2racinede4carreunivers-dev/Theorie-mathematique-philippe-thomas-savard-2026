@@ -154,14 +154,7 @@ Pour qu’une comparaison soit qualifiée d’asymétrique ordonnée, deux condi
 La première est le déséquilibre structurel entre les deux blocs comparés : le bloc B doit impérativement contenir un terme de plus que le bloc A, et ce terme supplémentaire doit être un nombre premier.  
 La seconde condition exige que les deux blocs soient organisés selon un ordre strictement croissant et chronologique.
 
-##Un exemple de comparaison asymétrique ordonnée est :  
-- (2 - (3 - 5)),  
-ou encore :  
-- (2 - 3 - 5 - 7 - 11) - (13 - 17 - 19 - 23 - 29 - 31).  
-
-
-
-Dans ces deux cas, on observe clairement que B = A + 1, ce qui crée le déséquilibre requis. Une comparaison respectant ces critères produit alors une valeur spectrale différente du rapport attendu.
+Dans les cas de comparaison asymétrique ordonnée, on observe clairement que B = A + 1, ce qui crée le déséquilibre requis. Une comparaison respectant ces critères produit alors une valeur spectrale différente du rapport attendu.
 
 La raison en est liée à la nature même des ordinaux infinis. Lorsque l’on compare des ensembles infinis en leur attribuant une position objective, l’ensemble des entiers plus un élément n’est pas équivalent à un élément ajouté à l’ensemble des entiers. Cette dissymétrie fondamentale se reflète dans le résultat spectral.
 
@@ -180,7 +173,19 @@ Les définitions de 'asymetrique_ordonnée' et 'asymetrique_chaotique' dans le f
 
 La comparaison asymétrique chaotique, fondée sur la nature chaotique de la répartition des nombres premiers dans l’ensemble des entiers, confirme que ce qui relève d’une entité définie reste en rapport direct avec celle‑ci. L’organisation mentale que nous produisons n’altère pas ce rapport : elle ne fait que refléter l’état structuré de notre intelligence.
 
-##Exemple de comparaison ordonnée (2,3) et (5,7,11)
+(3.25/2 × n^2) - 2 = Somme suite A  
+Quand n est un nombre entier strictement positif.
+
+---
+@EXEMPLE_CALCUL: 3.0
+
+## 1. Un exemple de comparaison asymétrique ordonnée est :
+
+- (2 - (3 - 5)),  
+ou encore :  
+- (2 - 3 - 5 - 7 - 11) - (13 - 17 - 19 - 23 - 29 - 31).
+
+## 2. Exemple de comparaison ordonnée (2,3) et (5,7,11)
 
 ((((3.25/2×2^1 )-2)-((3.25/2×2^2 )-2))-(((3.25/2×2^3 )-2)-((3.25/2×2^4 )-2)-((3.25/2×2^5 )-2))) /
 ((((6.5/2×2^1 )-66)-((6.5/2×2^2 )-66))-(((6.5/2×2^3 )-66)-((6.5/2×2^4 )-66)-((6.5/2×2^5 )-66))) =
@@ -189,10 +194,13 @@ La comparaison asymétrique chaotique, fondée sur la nature chaotique de la ré
 ((-119/2 - -53) - (-40 - -14 - 38)) =
 
 59.75 / 57.5 = 1.039130435
- 
-La comparaison chaotique :
 
-## Comparaison asymétrique chaotique (3 , 23) (41 , 29 , 31)
+Rapport spectral 1/k = 1/2  ---> 1.039130435 n'est pas la valeur du rapport spectral recherchée.  
+Raison : L'ordinal infini.  
+Les nombres premiers dans la théorie de l'univers est au carré sont tous des infinis.  
+L'ensemble des nombres entiers + 1 n'est pas égal à 1 + l'ensemble des nombres entiers.
+
+## 3. La comparaison asymétrique chaotique (3 , 23) (41 , 29 , 31)
 
 3 :  
 Somme suite A = 9/2  
@@ -217,10 +225,8 @@ Somme suite B = 6590
 ((9/2 - 830) - (13310 - 1662 - 3326)) /  
 ((-53 - 1598) - (26558 - 3262 - 6590))  
 
-= 0.4983112709
-
-(3.25/2 × n^2) - 2 = Somme suite A  
-Quand n est un nombre entier strictement positif.
+= 0.4983112709  
+Rapport spectral 1/k recherché = 1/2
 
 ---
 @MINI_SCRIPT: 3.0

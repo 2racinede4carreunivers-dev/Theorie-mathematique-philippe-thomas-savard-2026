@@ -439,7 +439,10 @@ def build_scenes_from_blocks(blocks):
             continue
 
         if tag == "EXEMPLE_CALCUL":
-            content = s["calc_raw"] if s["calc_raw"].strip() else s["raw"]
+            # Pour un tag EXPLICITE @EXEMPLE_CALCUL, on prend TOUT le raw
+            # (pas de filtre looks_like_calc : l'utilisateur a explicitement
+            # declare que ce bloc est un calcul a afficher en entier).
+            content = s["raw"]
             if content.strip():
                 pending_calc_raw = content
             continue
@@ -588,12 +591,31 @@ async def generate_tts(scenes):
     # Toujours creer le dossier audio (meme vide) pour eviter les warnings
     # de upload-artifact sur GitHub Actions
     os.makedirs(AUDIO_DIR, exist_ok=True)
+    audio_map = {}
+
+    # Charger d'abord les MP3 deja en cache (utile meme sans cle, pour relancer
+    # une generation partielle ou utiliser des audios pre-generes manuellement)
+    for scene in scenes:
+        num = scene["num"]
+        text = scene["text"][:4000]
+        if not text.strip():
+            continue
+        text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
+        mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
+        if os.path.exists(mp3_path):
+            with open(mp3_path, "rb") as f:
+                audio_map[num] = base64.b64encode(f.read()).decode()
+    if audio_map:
+        print(f"  {len(audio_map)} audios trouves en cache (reutilises)")
 
     if not LLM_KEY:
-        print("  [ATTENTION] Cle LLM (EMERGENT_LLM_KEY) manquante ou vide.")
-        print("  [ATTENTION] Sur GitHub Actions, verifiez que le secret '_CLE'")
-        print("  [ATTENTION] est configure dans Settings > Secrets > Actions.")
-        return {}
+        if audio_map:
+            print("  Cle LLM absente : utilisation du cache uniquement.")
+        else:
+            print("  [ATTENTION] Cle LLM (EMERGENT_LLM_KEY) manquante ou vide.")
+            print("  [ATTENTION] Sur GitHub Actions, verifiez que le secret '_CLE'")
+            print("  [ATTENTION] est configure dans Settings > Secrets > Actions.")
+        return audio_map
     print(f"  Cle LLM detectee (longueur: {len(LLM_KEY)} chars)")
 
     try:
@@ -602,10 +624,9 @@ async def generate_tts(scenes):
         print("  [ERREUR] emergentintegrations non installe.")
         print("  [INFO]   Installer avec : pip install emergentintegrations \\")
         print("                            --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/")
-        return {}
+        return audio_map
 
     tts = OpenAITextToSpeech(api_key=LLM_KEY)
-    audio_map = {}
     errors = 0
 
     for scene in scenes:
@@ -613,15 +634,12 @@ async def generate_tts(scenes):
         text = scene["text"][:4000]
         if not text.strip():
             continue
+        # Deja en cache (charge ci-dessus), on saute
+        if num in audio_map:
+            continue
 
         text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
         mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
-
-        if os.path.exists(mp3_path):
-            print(f"  Scene {num}/{len(scenes)}: cache")
-            with open(mp3_path, "rb") as f:
-                audio_map[num] = base64.b64encode(f.read()).decode()
-            continue
 
         # Retry avec backoff exponentiel sur erreurs reseau / rate limit
         success = False
@@ -644,12 +662,16 @@ async def generate_tts(scenes):
             except Exception as e:
                 err_msg = str(e)[:200]
                 print(f"  Scene {num}: erreur tentative {attempt + 1}/3 - {err_msg}")
+                # Si budget depasse, pas la peine de retry
+                if "budget" in err_msg.lower() or "quota" in err_msg.lower():
+                    print("  [ARRET] Budget LLM depasse - arret des appels TTS")
+                    return audio_map
                 import asyncio as _aio
                 await _aio.sleep(3 * (attempt + 1))
         if not success:
             errors += 1
 
-    print(f"  TTS termine : {len(audio_map)} audios generes, {errors} echecs sur {len(scenes)} scenes")
+    print(f"  TTS termine : {len(audio_map)} audios generes/charges, {errors} echecs sur {len(scenes)} scenes")
     return audio_map
 
 
