@@ -1,0 +1,74 @@
+# Workflow automatique quotidien - Generation Q&R
+# Theorie Mathematique Philippe Thomas Savard 2026
+#
+# Frequence: 3 fois par jour (6h, 12h, 18h UTC)
+# Tache: Genere 1 question/reponse a chaque execution
+
+name: Auto QR Quotidien
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+    - cron: '0 12 * * *'
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate_single_qa:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configuration Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installation des dependances
+        run: |
+          python -m pip install --upgrade pip
+          pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+
+      - name: Verification de la banque existante
+        run: |
+          mkdir -p qa_bank
+          if [ -f qa_bank/qa_bank.db ]; then
+            echo "Banque existante trouvee"
+          else
+            echo "Nouvelle banque sera creee"
+          fi
+
+      - name: Generation automatique de 1 QR
+        env:
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          python3 scripts/auto_generate_qa.py
+
+      - name: Commit et push de la banque mise a jour
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase || git pull || true
+          if [ -f qa_bank/qa_bank.db ]; then
+            git add qa_bank/qa_bank.db
+            if [ -f qa_bank/CATALOGUE.md ]; then
+              git add qa_bank/CATALOGUE.md
+            fi
+            HOUR=$(date -u +%H)
+            git diff --staged --quiet || git commit -m "Auto: +1 QR $(date +%Y-%m-%d) ${HOUR}h UTC"
+            git push || (git pull --rebase && git push) || true
+          fi
+
+      - name: Resume
+        run: |
+          echo "## Generation QR Automatique" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "1 question/reponse generee et ajoutee a la banque" >> $GITHUB_STEP_SUMMARY
