@@ -97,6 +97,117 @@ def find_font(prefer_mono=False):
     return None
 
 
+def render_intro_frame(scene, out_path):
+    """Cree un PNG 1920x1080 pour la page de presentation (intro).
+
+    Layout : photo de l'auteur a gauche, titre + meta a droite, sur fond
+    noir avec touches dorees.
+    """
+    import base64
+    from io import BytesIO
+
+    canvas = Image.new("RGB", (TARGET_W, TARGET_H), color=(10, 8, 12))
+    draw = ImageDraw.Draw(canvas)
+
+    # Gradient radial douce simule par plusieurs cercles degrades
+    # (simple : un halo dore centre)
+    for r, alpha in [(900, 20), (700, 35), (500, 45), (300, 55)]:
+        overlay = Image.new("RGBA", (r * 2, r * 2), (0, 0, 0, 0))
+        od = ImageDraw.Draw(overlay)
+        od.ellipse([0, 0, r * 2, r * 2], fill=(201, 168, 76, alpha))
+        canvas.paste(
+            Image.alpha_composite(
+                Image.new("RGBA", overlay.size, (0, 0, 0, 0)), overlay
+            ).convert("RGB"),
+            (TARGET_W // 2 - r, TARGET_H // 2 - r),
+            overlay.split()[3],
+        )
+
+    # Recadre l'image auteur (portrait) a gauche
+    photo_data_url = scene.get("author_photo")
+    photo_x_center = 520  # centre de la photo
+    photo_y_center = TARGET_H // 2
+    photo_w, photo_h = 380, 520
+
+    if photo_data_url:
+        m = re.match(r'data:image/[^;]+;base64,(.+)', photo_data_url)
+        if m:
+            try:
+                img_bytes = base64.b64decode(m.group(1))
+                img = Image.open(BytesIO(img_bytes)).convert("RGB")
+                # Redimensionner pour remplir photo_w x photo_h (crop centre)
+                ratio = max(photo_w / img.width, photo_h / img.height)
+                new_w = int(img.width * ratio)
+                new_h = int(img.height * ratio)
+                img = img.resize((new_w, new_h), Image.LANCZOS)
+                left = (new_w - photo_w) // 2
+                top = (new_h - photo_h) // 2
+                img = img.crop((left, top, left + photo_w, top + photo_h))
+
+                # Cadre dore
+                px = photo_x_center - photo_w // 2
+                py = photo_y_center - photo_h // 2
+                draw.rectangle(
+                    [px - 6, py - 6, px + photo_w + 6, py + photo_h + 6],
+                    outline=(201, 168, 76), width=4,
+                )
+                canvas.paste(img, (px, py))
+            except Exception as e:
+                print(f"  Erreur chargement photo intro : {e}")
+
+    # Texte a droite
+    text_x = 900
+    font_path = find_font()
+
+    # Titre
+    if font_path:
+        try:
+            f_title = ImageFont.truetype(font_path, 78)
+        except Exception:
+            f_title = ImageFont.load_default()
+        try:
+            f_sub = ImageFont.truetype(font_path, 30)
+            f_meta = ImageFont.truetype(font_path, 24)
+            f_meta_bold_path = "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf"
+            f_meta_bold = (
+                ImageFont.truetype(f_meta_bold_path, 24)
+                if os.path.exists(f_meta_bold_path) else f_meta
+            )
+        except Exception:
+            f_sub = f_meta = f_meta_bold = f_title
+
+        title = scene.get("title", "L'Univers est au Carre")
+        subtitle = scene.get("subtitle", "")
+        meta = scene.get("meta", {})
+
+        # Titre en dore
+        draw.text((text_x, 220), title, fill=(255, 216, 102), font=f_title)
+        # Subtitle en or patine
+        draw.text((text_x, 320), subtitle, fill=(201, 168, 76), font=f_sub)
+
+        # Ligne de separation
+        draw.line([(text_x, 395), (text_x + 600, 395)],
+                  fill=(201, 168, 76), width=2)
+
+        # Meta
+        meta_y = 440
+        line_h = 52
+        rows = [
+            ("Auteur :", meta.get("author", "")),
+            ("Date :", meta.get("date", "")),
+            ("Lieu :", meta.get("place", "")),
+            ("Licence :", meta.get("license", "")),
+        ]
+        for label, val in rows:
+            draw.text((text_x, meta_y), label, fill=(201, 168, 76),
+                      font=f_meta_bold)
+            draw.text((text_x + 140, meta_y), val, fill=(232, 224, 192),
+                      font=f_meta)
+            meta_y += line_h
+
+    canvas.save(out_path, "PNG", optimize=True)
+
+
 def render_narration_frame(image_data_url, title, out_path):
     """Cree un PNG 1920x1080 avec l'illustration centree sur fond noir.
 
@@ -549,7 +660,20 @@ async def async_main():
     for sc in scenes:
         num = sc["num"]
         frame_path = os.path.join(FRAMES_DIR, f"scene_{num:03d}.png")
-        if sc["type"] == "calculation":
+        if sc["type"] == "intro":
+            # Scene de presentation : passer la scene brute pour acceder
+            # aux meta, subtitle, author_photo, etc.
+            intro_data = {
+                "title": sc.get("title", ""),
+                "subtitle": sc.get("subtitle", ""),
+                "meta": sc.get("meta", {}),
+                "author_photo": (
+                    sc["author_photo"]["data"]
+                    if sc.get("author_photo") else None
+                ),
+            }
+            render_intro_frame(intro_data, frame_path)
+        elif sc["type"] == "calculation":
             render_calc_frame(sc.get("calc_raw", ""), sc["title"], frame_path)
         else:
             img_url = sc["image"]["data"] if sc.get("image") else None

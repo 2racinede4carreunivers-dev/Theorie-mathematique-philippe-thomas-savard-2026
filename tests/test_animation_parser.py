@@ -98,8 +98,10 @@ def test_split_text_into_srt_chunks_respects_timing():
 def test_empty_script_does_not_crash():
     blocks = parse_tagged_script("")
     assert blocks == []
+    # Scenes contient TOUJOURS la scene d'intro (page de presentation)
     scenes = build_scenes_from_blocks(blocks)
-    assert scenes == []
+    assert len(scenes) == 1
+    assert scenes[0]["type"] == "intro"
 
 
 def test_stop_markers_truncate_parsing():
@@ -191,3 +193,22 @@ Deuxieme narration sans image propre.
     # Note: l'image peut etre None si fichier inexistant -- on teste la logique
     # de propagation du `last_image` plus bas.
     assert len(narr_scenes) == 2
+
+
+def test_intro_scene_is_first():
+    """La scene d'intro (page de presentation) est toujours premiere."""
+    md = """
+@NARRATION: 1.0
+Premier texte.
+
+@MINI_SCRIPT: 1.0
+Un mini-script.
+"""
+    blocks = parse_tagged_script(md)
+    scenes = build_scenes_from_blocks(blocks)
+    assert scenes[0]["type"] == "intro"
+    assert scenes[0]["num"] == 1
+    assert "Philippe Thomas Savard" in scenes[0]["meta"]["author"]
+    assert scenes[0]["title"] == "L'Univers est au Carre"
+    # La scene d'intro doit avoir une narration introductive non vide
+    assert len(scenes[0]["text"]) > 50

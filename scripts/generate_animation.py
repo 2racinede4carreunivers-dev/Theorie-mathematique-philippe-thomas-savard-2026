@@ -469,9 +469,66 @@ def build_scenes_from_blocks(blocks):
         # PROSE residuel : ignore
         continue
 
+    # Prepend la scene d'introduction (page de presentation)
+    intro = build_intro_scene()
+    if intro:
+        scenes.insert(0, intro)
+
     for i, sc in enumerate(scenes):
         sc["num"] = i + 1
     return scenes
+
+
+def build_intro_scene():
+    """Construit la scene d'introduction basee sur les meta-donnees du projet.
+
+    Retourne une scene de type 'intro' avec titre, photo de l'auteur,
+    date et lieu. Lue par le TTS au demarrage de l'animation.
+    """
+    # Chercher la photo de l'auteur dans les dossiers d'assets
+    author_photo = None
+    for candidate in ("philippe_thomas_savard.jpg", "philippe_thomas_savard.png",
+                      "auteur.jpg", "author.jpg"):
+        data, name = embed_image_path(candidate)
+        if data:
+            author_photo = {"data": data, "name": name, "src": candidate}
+            break
+
+    # Illustration principale de presentation (animation_G-1 souvent)
+    title_illustration = None
+    for candidate in ("animation_G-1.png", "animation_G1.png"):
+        data, name = embed_image_path(candidate)
+        if data:
+            title_illustration = {"data": data, "name": name, "src": candidate}
+            break
+
+    narration_text = (
+        "Bienvenue dans L'Univers est au Carre, une theorie mathematique "
+        "originale de Philippe Thomas Savard. Auteur autodidacte etabli a "
+        "Levis, au Canada, il propose ici une exploration audacieuse de la "
+        "geometrie des nombres premiers, du postulat du squaring et de ses "
+        "implications philosophiques. Une invitation a penser les "
+        "mathematiques autrement : rigoureuses, visuelles, et profondement "
+        "humaines."
+    )
+
+    return {
+        "type": "intro",
+        "id": "0.0",
+        "title": "L'Univers est au Carre",
+        "subtitle": "Theorie mathematique de Philippe Thomas Savard",
+        "author_photo": author_photo,
+        "title_illustration": title_illustration,
+        "meta": {
+            "author": "Philippe Thomas Savard",
+            "date": "30 avril 2026",
+            "place": "Levis, Chaudiere-Appalaches, Canada",
+            "license": "Apache 2.0",
+        },
+        "text": narration_text,
+        "image": author_photo,  # utilise pour fallback rendu
+        "calc_html": None,
+    }
 
 
 def render_calc_block(raw_text):
@@ -584,14 +641,26 @@ def generate_html(scenes, audio_map):
     total = len(scenes)
     scenes_data = []
     for s in scenes:
-        scenes_data.append({
+        entry = {
             "num": s["num"],
             "title": s["title"],
             "type": s["type"],
             "image": s["image"]["data"] if s.get("image") else None,
             "calc_html": s.get("calc_html"),
             "audio": audio_map.get(s["num"]),
-        })
+        }
+        # Donnees specifiques a la scene d'intro
+        if s["type"] == "intro":
+            entry["subtitle"] = s.get("subtitle", "")
+            entry["meta"] = s.get("meta", {})
+            entry["author_photo"] = (
+                s["author_photo"]["data"] if s.get("author_photo") else None
+            )
+            entry["title_illustration"] = (
+                s["title_illustration"]["data"]
+                if s.get("title_illustration") else None
+            )
+        scenes_data.append(entry)
 
     scenes_json = json.dumps(scenes_data, ensure_ascii=False)
 
@@ -759,6 +828,78 @@ body {
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
+/* ===== Scene d'intro / page de presentation ===== */
+.intro-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #141218 0%, #050507 70%);
+  position: relative;
+  overflow: hidden;
+}
+.intro-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(201, 168, 76, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(180, 120, 60, 0.12), transparent 40%);
+  pointer-events: none;
+}
+.intro-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 64px;
+  align-items: center;
+  max-width: 92%;
+  padding: 40px;
+}
+.intro-photo {
+  width: 280px;
+  height: 380px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 3px solid rgba(201, 168, 76, 0.85);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(201, 168, 76, 0.2);
+  flex-shrink: 0;
+}
+.intro-text {
+  color: #f0e8d0;
+  font-family: 'Georgia', 'Cambria', serif;
+}
+.intro-title {
+  font-size: 3.4rem;
+  color: #ffd866;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 20px rgba(201, 168, 76, 0.3);
+}
+.intro-subtitle {
+  font-size: 1.3rem;
+  color: #c9a84c;
+  margin-bottom: 38px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+.intro-meta {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: #d8c890;
+  border-left: 2px solid rgba(201, 168, 76, 0.5);
+  padding-left: 22px;
+}
+.intro-meta strong {
+  color: #c9a84c;
+  display: inline-block;
+  min-width: 90px;
+  letter-spacing: 0.5px;
+}
 </style>
 </head>
 <body>
@@ -767,6 +908,16 @@ body {
   <div class="type-badge" id="type-badge" data-testid="type-badge"></div>
   <img id="scene-image" src="" alt="" data-testid="scene-image" style="display:none;">
   <div class="calc-page" id="calc-page" data-testid="calc-page" style="display:none;"></div>
+  <div class="intro-page" id="intro-page" data-testid="intro-page" style="display:none;">
+    <div class="intro-content">
+      <img class="intro-photo" id="intro-photo" alt="Philippe Thomas Savard">
+      <div class="intro-text">
+        <div class="intro-title" id="intro-title"></div>
+        <div class="intro-subtitle" id="intro-subtitle"></div>
+        <div class="intro-meta" id="intro-meta"></div>
+      </div>
+    </div>
+  </div>
   <div class="no-image" id="no-image" style="display:none;">Chargement...</div>
 </div>
 <div class="controls">
@@ -788,6 +939,11 @@ let audio = null;
 const img = document.getElementById('scene-image');
 const calcPage = document.getElementById('calc-page');
 const noImg = document.getElementById('no-image');
+const introPage = document.getElementById('intro-page');
+const introPhoto = document.getElementById('intro-photo');
+const introTitle = document.getElementById('intro-title');
+const introSubtitle = document.getElementById('intro-subtitle');
+const introMeta = document.getElementById('intro-meta');
 const titleOv = document.getElementById('title-overlay');
 const typeBadge = document.getElementById('type-badge');
 const btnPlay = document.getElementById('btn-play');
@@ -805,9 +961,23 @@ function showScene(idx) {
   // Reset displays
   img.style.display = 'none';
   calcPage.style.display = 'none';
+  introPage.style.display = 'none';
   noImg.style.display = 'none';
 
-  if (scene.type === 'calculation' && scene.calc_html) {
+  if (scene.type === 'intro') {
+    if (scene.author_photo) introPhoto.src = scene.author_photo;
+    introTitle.textContent = scene.title;
+    introSubtitle.textContent = scene.subtitle || '';
+    const meta = scene.meta || {};
+    introMeta.innerHTML =
+      '<strong>Auteur :</strong> ' + (meta.author || '') + '<br>' +
+      '<strong>Date :</strong> ' + (meta.date || '') + '<br>' +
+      '<strong>Lieu :</strong> ' + (meta.place || '') + '<br>' +
+      '<strong>Licence :</strong> ' + (meta.license || '');
+    introPage.style.display = 'flex';
+    typeBadge.textContent = 'Presentation';
+    typeBadge.style.display = 'block';
+  } else if (scene.type === 'calculation' && scene.calc_html) {
     calcPage.innerHTML = scene.calc_html;
     calcPage.style.display = 'block';
     if (window.MathJax && window.MathJax.typesetPromise) {
@@ -926,9 +1096,32 @@ def generate_pdf(scenes, pdf_path):
         total = len(scenes)
         for s in scenes:
             num = s["num"]
-            type_label = "Exemple de calcul" if s["type"] == "calculation" else "Narration"
+            if s["type"] == "intro":
+                type_label = "Presentation"
+            elif s["type"] == "calculation":
+                type_label = "Exemple de calcul"
+            else:
+                type_label = "Narration"
+
             content_html = ""
-            if s["type"] == "calculation" and s.get("calc_html"):
+            if s["type"] == "intro":
+                meta = s.get("meta", {})
+                photo_src = s["author_photo"]["data"] if s.get("author_photo") else ""
+                content_html = f'''
+<div class="intro-pdf">
+  <img class="intro-pdf-photo" src="{photo_src}" alt="Auteur">
+  <div class="intro-pdf-text">
+    <h1 class="intro-pdf-title">{s["title"]}</h1>
+    <p class="intro-pdf-sub">{s.get("subtitle", "")}</p>
+    <ul class="intro-pdf-meta">
+      <li><strong>Auteur :</strong> {meta.get("author", "")}</li>
+      <li><strong>Date :</strong> {meta.get("date", "")}</li>
+      <li><strong>Lieu :</strong> {meta.get("place", "")}</li>
+      <li><strong>Licence :</strong> {meta.get("license", "")}</li>
+    </ul>
+  </div>
+</div>'''
+            elif s["type"] == "calculation" and s.get("calc_html"):
                 content_html = f'<div class="calc-box">{s["calc_html"]}</div>'
             elif s.get("image"):
                 content_html = f'<div class="img-box"><img src="{s["image"]["data"]}"></div>'
@@ -973,6 +1166,14 @@ body {{ font-family: Georgia, serif; font-size: 10pt; line-height: 1.5; color: #
 .calc-box h4 {{ font-family: Georgia, serif; color: #8b7332; font-size: 10pt; margin: 8px 0 4px; }}
 .calc-box .calc-formula {{ text-align: center; margin: 8px 0; font-style: italic; }}
 .txt p {{ margin-bottom: 6px; text-align: justify; }}
+.intro-pdf {{ display: flex; gap: 20px; align-items: center; padding: 20px 0; }}
+.intro-pdf-photo {{ width: 140px; height: 190px; object-fit: cover;
+                    border: 2px solid #8b7332; border-radius: 6px; flex-shrink: 0; }}
+.intro-pdf-title {{ font-size: 22pt; color: #8b7332; margin: 0 0 6px; }}
+.intro-pdf-sub {{ font-size: 11pt; color: #5a4a22; font-style: italic; margin: 0 0 14px; }}
+.intro-pdf-meta {{ list-style: none; padding: 0; margin: 0; font-size: 9.5pt; }}
+.intro-pdf-meta li {{ padding: 3px 0; border-bottom: 1px dotted #d4c08a; }}
+.intro-pdf-meta strong {{ color: #8b7332; display: inline-block; min-width: 70px; }}
 </style></head><body>{pages_html}</body></html>'''
 
         HTML(string=pdf_html).write_pdf(pdf_path)
