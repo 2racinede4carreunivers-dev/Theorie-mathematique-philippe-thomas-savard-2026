@@ -233,3 +233,4 @@ credentials.json
 *.pem
 *.key
 .credentials
+repo_savard/animation_output/animation.html

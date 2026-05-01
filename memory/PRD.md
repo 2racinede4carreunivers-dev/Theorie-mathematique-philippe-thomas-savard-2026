@@ -103,11 +103,12 @@ Le fichier `src/SCRIPT_NARRATIF_VP.md` utilise les etiquettes :
 - Tests pytest : **7/7 passent** (`tests/test_animation_parser.py`)
 
 ## Backlog (P1/P2)
-- **P1** : Tester les workflows GitHub Actions en production :
-  - `generate-animation.yml` (workflow_dispatch) avec `ENABLE_TTS=true`
-  - `generate-video.yml` (workflow_dispatch) avec `enable_translation=true`,
-    langues FR/EN/ES/DE par defaut, secret `_CLE` configure
-  - Valider la synchronisation audio/visuel et la qualite des traductions
+- **P1 (NOUVEAU)** : Verifier sur GitHub Actions que le workflow
+  `generate-animation.yml` consomme bien `assets/audio_cache/*.mp3`
+  sans avoir besoin de la cle LLM (compte Free Tier bloque)
+- **P1** : Tester `generate-video.yml` (workflow_dispatch) avec
+  `enable_translation=true`, langues FR/EN/ES/DE par defaut
+  -> la traduction peut encore consommer du budget LLM, a surveiller
 - **P1** : Verifier que la video generee est bien lisible sur YouTube/
   Facebook/LinkedIn et que les SRT s'activent bien en CC multilingue
 - **P2** : Ajouter les formats portrait 9:16 (TikTok/Reels/Shorts) et
@@ -117,6 +118,23 @@ Le fichier `src/SCRIPT_NARRATIF_VP.md` utilise les etiquettes :
 - **P2** : Support optionnel `@ILLUSTRATION: ID` explicite
 - **P2** : Refactoring : decouper `generate_animation.py` en modules
   (`parser.py`, `renderer_html.py`, `renderer_pdf.py`, `tts.py`)
+- **P2** : Envisager Git LFS pour `assets/audio_cache/` si le repo devient
+  trop lourd (actuellement +94 MB, repo total ~176 MB)
+
+## Session 2026-05-01 (finalisation audio cache)
+- Genere les **29/29 MP3** (voix shimmer FR) en local depuis l'Emergent Pod
+  (user a recharge le Universal Key : budget +10 credits)
+- Commit dans `assets/audio_cache/` (94 MB, 29 fichiers + README)
+- `scripts/generate_animation.py` : prioritise le cache du repo avant tout
+  appel API (robuste au 403 Free Tier sur GitHub Actions)
+- `scripts/generate_video.py` : `find_audio_for_scene()` cherche aussi dans
+  le cache du repo
+- Workflow `generate-animation.yml` : retire le fail-hard sur `_CLE`
+  manquant, active TTS par defaut, step diagnostique 'Check audio cache'
+- Tests pytest : **11/11 passent**
+- Test en conditions GitHub Actions simulees (cle LLM vide) :
+  -> 29 audios charges depuis cache, HTML genere, 0 appel API
+- Commit final : `55aaf3d` (a pusher via 'Save to Github')
 
 ## Integrations 3rd party
 - OpenAI GPT-4o-mini (traductions sous-titres) -- via Emergent LLM Key
