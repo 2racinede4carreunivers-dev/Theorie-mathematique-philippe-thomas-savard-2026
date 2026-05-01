@@ -154,3 +154,24 @@ Message: Animation v3 : lecteur video, images plein ecran, narration enrichie
 
 ---
 
+
+## 2026-04-30 -- Commit c362b93
+
+Message:  Titre: mise a jour SCRIPT_NARRATIF.md .
+
+---
+
+
+## 2026-04-30 -- Commit 1658f87
+
+Message: Merge branch 'main' of https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026
+
+---
+
+
+## 2026-04-30 -- Commit a920df5
+
+Message: CHANGELOG: mise a jour automatique
+
+---
+

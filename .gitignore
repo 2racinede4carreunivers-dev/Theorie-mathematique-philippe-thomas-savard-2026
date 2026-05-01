@@ -143,3 +143,4 @@ credentials.json
 *.pem
 *.key
 .credentials
+animation_output/
