@@ -40,51 +40,57 @@ ENABLE_TTS = os.environ.get("ENABLE_TTS", "false").lower() == "true"
 ENABLE_PDF = os.environ.get("ENABLE_PDF", "true").lower() == "true"
 
 # ================================================================
-# IMAGE FALLBACK (utilise si aucune <img> dans la section MD)
+# (FALLBACK SUPPRIME : seules les illustrations presentes dans le .md
+# sont utilisees dans l'animation, conformement aux instructions)
 # ================================================================
-
-FALLBACK_IMAGES = [
-    "animation_A-2.png", "animation_A-3.png", "animation-A-4.png",
-    "Animation_A-5.png", "animation_A-6.png",
-    "animation_T-1.png", "animation_T-2.png", "animation_T-3.png",
-    "animation-T-4.png", "aniamtion-T-5.png", "animation_T-6.png",
-    "animation_B-1.png", "animation_B-2.png", "animation_B-3.png",
-    "animation_C-1.png", "animation_C-3.png", "animation_C-5.png",
-    "animation_D-1.png", "animation_D-2.png",
-    "animation_E-1.png", "animation_E-2.png", "animation_E-3.png", "animation_E-4.png",
-    "animation_F-1.png", "animation_G-1.png",
-    "animation_H-1.png", "animation_H-2.png", "animation_H-3.png",
-]
 
 
 def embed_image_path(rel_or_abs_path):
-    """Embed une image au format data: en cherchant dans plusieurs dossiers."""
-    # Essai chemin direct (si absolu ou existant)
+    """Embed une image au format data: en cherchant dans plusieurs dossiers.
+
+    Recherche insensible a la casse car les noms dans le .md ne correspondent
+    pas toujours exactement aux fichiers reels (ex: animation_A-5.png vs
+    Animation_A-5.png).
+    """
+    target_basename = os.path.basename(rel_or_abs_path)
+    # Candidats directs (rapides, sensibles a la casse)
     candidates = [
         rel_or_abs_path,
         os.path.join(REPO_ROOT, rel_or_abs_path.lstrip("./")),
-        os.path.join(ASSETS_DIR, os.path.basename(rel_or_abs_path)),
-        os.path.join(ASSETS_IMG_DIR, os.path.basename(rel_or_abs_path)),
+        os.path.join(ASSETS_DIR, target_basename),
+        os.path.join(ASSETS_IMG_DIR, target_basename),
     ]
     for path in candidates:
         if os.path.exists(path):
-            ext = os.path.splitext(path)[1].lstrip(".").lower() or "png"
-            if ext == "jpg":
-                ext = "jpeg"
-            with open(path, "rb") as f:
-                data = base64.b64encode(f.read()).decode()
-            return f"data:image/{ext};base64,{data}", os.path.basename(path)
-    return None, os.path.basename(rel_or_abs_path)
+            return _read_image_as_data_url(path)
+
+    # Recherche insensible a la casse dans les dossiers d'assets
+    target_lower = target_basename.lower()
+    for assets_dir in (ASSETS_DIR, ASSETS_IMG_DIR,
+                       os.path.join(REPO_ROOT, "assets", "animation"),
+                       os.path.join(REPO_ROOT, "assets", "images"),
+                       os.path.join(REPO_ROOT, "assets")):
+        if not os.path.isdir(assets_dir):
+            continue
+        try:
+            for fname in os.listdir(assets_dir):
+                if fname.lower() == target_lower:
+                    return _read_image_as_data_url(
+                        os.path.join(assets_dir, fname)
+                    )
+        except OSError:
+            continue
+    return None, target_basename
 
 
-def get_fallback_images():
-    """Retourne une liste d'images fallback en data:url."""
-    out = []
-    for fname in FALLBACK_IMAGES:
-        data, name = embed_image_path(fname)
-        if data:
-            out.append({"data": data, "name": name})
-    return out
+def _read_image_as_data_url(path):
+    """Lit une image et retourne (data_url, basename)."""
+    ext = os.path.splitext(path)[1].lstrip(".").lower() or "png"
+    if ext == "jpg":
+        ext = "jpeg"
+    with open(path, "rb") as f:
+        data = base64.b64encode(f.read()).decode()
+    return f"data:image/{ext};base64,{data}", os.path.basename(path)
 
 
 # ================================================================
@@ -93,16 +99,46 @@ def get_fallback_images():
 
 # Regex pour les etiquettes au debut de ligne (apres espaces eventuels)
 TAG_RE = re.compile(r'^\s*@(NARRATION|MINI_SCRIPT|EXEMPLE_CALCUL|NOTE|ILLUSTRATION)\s*:\s*(.*)$')
+
+# Reconnaitre les illustrations dans le markdown :
+# 1. <img src="..."> direct
+# 2. <a href="...png|jpg|jpeg|webp">...</a> (hyperlien vers une image asset)
+# 3. ![alt](path) markdown
 IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\'][^>]*>', re.IGNORECASE)
-MD_IMG_RE = re.compile(r'!\[[^\]]*\]\(([^)]+)\)')
+A_HREF_IMG_RE = re.compile(
+    r'<a[^>]+href=["\']([^"\']+\.(?:png|jpg|jpeg|webp|gif))["\'][^>]*>',
+    re.IGNORECASE,
+)
+MD_IMG_RE = re.compile(r'!\[[^\]]*\]\(([^)]+\.(?:png|jpg|jpeg|webp|gif))\)', re.IGNORECASE)
 SEPARATOR_RE = re.compile(r'^\s*-{3,}\s*$')
 DECOR_RE = re.compile(r'^\s*={3,}\s*$')
 
 
+def extract_all_image_refs(raw):
+    """Extrait toutes les references aux illustrations dans l'ordre d'apparition.
+
+    Retourne une liste de dicts {pos: int, src: str} ou pos est l'offset
+    en caracteres dans `raw`.
+    """
+    refs = []
+    for regex in (IMG_TAG_RE, A_HREF_IMG_RE, MD_IMG_RE):
+        for m in regex.finditer(raw):
+            refs.append({"pos": m.start(), "src": m.group(1)})
+    refs.sort(key=lambda r: r["pos"])
+    # Deduplication consecutive (meme image referencee 2x sans texte entre)
+    out = []
+    for r in refs:
+        if not out or out[-1]["src"] != r["src"]:
+            out.append(r)
+    return out
+
+
 def clean_md_text(text):
     """Nettoie le markdown pour la narration TTS."""
-    # Retirer les blocs HTML img
+    # Retirer les blocs HTML img + hyperliens vers images
     text = IMG_TAG_RE.sub("", text)
+    text = A_HREF_IMG_RE.sub("", text)
+    text = re.sub(r'</a>', "", text, flags=re.IGNORECASE)
     text = MD_IMG_RE.sub("", text)
     # Retirer balises HTML simples
     text = re.sub(r'</?(p|div|a|span|br|h[1-6])[^>]*>', "", text, flags=re.IGNORECASE)
@@ -121,6 +157,8 @@ def clean_md_text(text):
     text = re.sub(r'\\\[(.+?)\\\]', "", text, flags=re.DOTALL)
     # Filtrer lignes "Voir l'illustration..." (indications visuelles, non narrees)
     text = re.sub(r'^.*Voir l[\u2019\']illustration.*$', "", text, flags=re.MULTILINE)
+    # Filtrer "Voir l'animation / application web" et autres indications similaires
+    text = re.sub(r'^.*Voir l[\u2019\']animation.*$', "", text, flags=re.MULTILINE)
     # Filtrer lignes-titre des mini-scripts ("script narratif de l'exemple...")
     text = re.sub(
         r'^.*script narratif de l[\u2019\']exemple.*$',
@@ -233,7 +271,9 @@ def parse_tagged_script(md_content):
     for s in sections:
         raw = "\n".join(s["lines"])
         s["raw"] = raw
-        s["images"] = IMG_TAG_RE.findall(raw)
+        # Extraire toutes les illustrations dans l'ordre (img + a href + md ![])
+        s["image_refs"] = extract_all_image_refs(raw)
+        s["images"] = [r["src"] for r in s["image_refs"]]
 
         # Separer la partie "calcul" de la partie "narrative" dans les sections NARRATION
         calc_raw, narrative_raw = split_calc_from_narrative(raw)
@@ -293,75 +333,112 @@ def looks_like_calc(text):
     return False
 
 
-def build_scenes_from_blocks(blocks):
-    """Convertit la liste de sections en scenes TTS.
+def split_narration_by_image_positions(narrative_raw, image_refs):
+    """Decoupe une section narration en sous-segments basees sur les positions
+    des images.
 
-    - NARRATION  -> scene 'narration' (image + texte narratif)
-                    Si la section contient aussi un bloc de calcul,
-                    celui-ci est conserve comme calc candidat pour le mini-script
-                    suivant.
-    - EXEMPLE_CALCUL -> stocke le calcul comme candidat
-    - MINI_SCRIPT -> scene 'calculation' (texte du mini-script lu en voix off,
-                    page = calcul candidat affiche en plein ecran)
-    - NOTE -> ignore (ces consignes restent dans s['notes'] pour log mais
-              jamais narrees ni affichees a l'ecran)
+    Chaque sous-segment correspond au texte qui SUIT une illustration (jusqu'a
+    la prochaine, ou jusqu'a la fin). Le texte AVANT la premiere image est
+    rattache a celui de la premiere image.
+
+    Retourne une liste de tuples (image_src_or_None, text_raw).
+    Si aucune image n'est trouvee, retourne [(None, narrative_raw)].
+    """
+    if not image_refs:
+        return [(None, narrative_raw)]
+
+    # On doit retrouver la position des images dans `narrative_raw`.
+    # `image_refs` a ete extrait de `raw` (qui contient peut-etre aussi le
+    # calc), donc on re-extrait sur narrative_raw pour avoir des positions
+    # coherentes.
+    refs = extract_all_image_refs(narrative_raw)
+    if not refs:
+        return [(None, narrative_raw)]
+
+    segments = []
+    n = len(refs)
+    for i, r in enumerate(refs):
+        # Texte du segment : depuis la position de l'image courante jusqu'a la
+        # prochaine image (ou la fin)
+        if i == 0:
+            # Inclut le texte AVANT la premiere image dans le 1er segment
+            start = 0
+        else:
+            start = refs[i]["pos"]
+        end = refs[i + 1]["pos"] if i + 1 < n else len(narrative_raw)
+        seg_text = narrative_raw[start:end]
+        segments.append((r["src"], seg_text))
+    return segments
+
+
+def build_scenes_from_blocks(blocks):
+    """Convertit la liste de sections en scenes.
+
+    Regle stricte : SEULES les illustrations referencees dans le .md sont
+    utilisees (aucun fallback). Si une section narration n'a pas
+    d'illustration, on conserve la derniere illustration affichee.
+
+    - NARRATION : decoupee en sous-scenes selon les positions d'images.
+                  Chaque sous-scene affiche son image pendant son texte.
+    - EXEMPLE_CALCUL : stocke le calcul comme candidat
+    - MINI_SCRIPT : scene 'calculation' avec page de calcul fixe + voix
+                    explicative (le calcul reste affiche pendant tout le
+                    mini-script)
+    - NOTE : ignore (jamais narre ni affiche)
     """
     scenes = []
     pending_calc_raw = None
-    fallback_imgs = get_fallback_images()
-    fallback_idx = 0
-    used_imgs = set()
+    last_image = None  # Image courante a conserver si pas de nouvelle
 
-    def next_fallback():
-        nonlocal fallback_idx
-        for _ in range(len(fallback_imgs)):
-            if fallback_idx < len(fallback_imgs):
-                img = fallback_imgs[fallback_idx]
-                fallback_idx += 1
-                if img["name"] not in used_imgs:
-                    used_imgs.add(img["name"])
-                    return img
-            else:
-                break
-        return None
-
-    def resolve_image(img_srcs):
-        for src in img_srcs:
-            data, name = embed_image_path(src)
-            if data:
-                used_imgs.add(name)
-                return {"data": data, "name": name}
+    def resolve_image(src):
+        data, name = embed_image_path(src)
+        if data:
+            return {"data": data, "name": name, "src": src}
         return None
 
     for s in blocks:
         tag = s["tag"]
 
         if tag == "NARRATION":
-            # Si la section contient un calc_raw, il devient pending pour le prochain mini-script
+            # Si la section contient un calc_raw, il devient pending pour le
+            # prochain mini-script
             if s["calc_raw"].strip():
                 pending_calc_raw = s["calc_raw"]
 
-            text = s["text"]
-            if not text.strip() and not s["images"]:
-                # Narration sans texte ni image : skip
-                continue
+            # Decoupage de la section narration en sous-segments selon les
+            # positions d'images dans la partie narrative (sans le calc)
+            segments = split_narration_by_image_positions(
+                s["narrative_raw"], s["image_refs"]
+            )
 
-            img = resolve_image(s["images"]) if s["images"] else None
-            if img is None:
-                img = next_fallback()
+            for img_src, seg_raw in segments:
+                seg_text = clean_md_text(seg_raw)
 
-            scenes.append({
-                "type": "narration",
-                "id": s["id"],
-                "title": f"Narration {s['id']}" if s["id"] else "Narration",
-                "text": text or s["title"] if False else (text or ""),
-                "image": img,
-                "calc_html": None,
-            })
+                # Resolution image : nouvelle image si presente, sinon on
+                # conserve la derniere. On memorise l'image MEME si le
+                # segment de texte est vide (utile quand une image est
+                # placee entre deux narrations sans texte autour).
+                if img_src:
+                    resolved = resolve_image(img_src)
+                    if resolved:
+                        last_image = resolved
+
+                if not seg_text.strip():
+                    # Segment sans texte : on saute la creation d'une
+                    # scene mais on a deja memorise l'image pour la suite.
+                    continue
+
+                scenes.append({
+                    "type": "narration",
+                    "id": s["id"],
+                    "title": f"Narration {s['id']}" if s["id"] else "Narration",
+                    "text": seg_text,
+                    "image": last_image,
+                    "calc_html": None,
+                })
             continue
 
         if tag == "EXEMPLE_CALCUL":
-            # Le contenu (raw) est le calcul a afficher
             content = s["calc_raw"] if s["calc_raw"].strip() else s["raw"]
             if content.strip():
                 pending_calc_raw = content
@@ -370,13 +447,10 @@ def build_scenes_from_blocks(blocks):
         if tag == "MINI_SCRIPT":
             calc_raw = pending_calc_raw if pending_calc_raw else s["calc_raw"]
             if not calc_raw.strip():
-                # Pas de calcul candidat : on cree quand meme la scene avec
-                # un placeholder textuel
                 calc_raw = "(Exemple de calcul non identifie)"
 
             mini_text = s["text"]
             if not mini_text.strip():
-                # Mini-script sans contenu narratif : on saute
                 pending_calc_raw = None
                 continue
 
