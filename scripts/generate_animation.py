@@ -104,10 +104,10 @@ TAG_RE = re.compile(r'^\s*@(NARRATION|MINI_SCRIPT|EXEMPLE_CALCUL|NOTE|ILLUSTRATI
 # 1. <img src="..."> direct
 # 2. <a href="...png|jpg|jpeg|webp">...</a> (hyperlien vers une image asset)
 # 3. ![alt](path) markdown
-IMG_TAG_RE = re.compile(r'<img[^>]+src=["\']([^"\']+)["\'][^>]*>', re.IGNORECASE)
+IMG_TAG_RE = re.compile(r'<img\b[^>]*?src=["\']([^"\']+)["\'][^>]*?>', re.IGNORECASE | re.DOTALL)
 A_HREF_IMG_RE = re.compile(
-    r'<a[^>]+href=["\']([^"\']+\.(?:png|jpg|jpeg|webp|gif))["\'][^>]*>',
-    re.IGNORECASE,
+    r'<a\b[^>]*?href=["\']([^"\']+\.(?:png|jpg|jpeg|webp|gif))["\'][^>]*?>',
+    re.IGNORECASE | re.DOTALL,
 )
 MD_IMG_RE = re.compile(r'!\[[^\]]*\]\(([^)]+\.(?:png|jpg|jpeg|webp|gif))\)', re.IGNORECASE)
 SEPARATOR_RE = re.compile(r'^\s*-{3,}\s*$')
@@ -540,10 +540,25 @@ def render_calc_block(raw_text):
     - Conserve les retours a la ligne (formule monospace)
     - Detecte les blocs LaTeX \\[ ... \\] et les laisse tels quels (rendu via MathJax)
     - Met les titres ### en valeur
+    - Retire les balises HTML image (<img>, <a href>, 👉 Voir l'illustration)
+      qui ne doivent pas apparaitre dans le slide de calcul.
     """
     # Nettoyer balises HTML img/divers
     text = IMG_TAG_RE.sub("", raw_text)
-    text = re.sub(r'</?(p|div|a|span|br|h[1-6])[^>]*>', "", text, flags=re.IGNORECASE)
+    text = A_HREF_IMG_RE.sub("", text)
+    text = re.sub(r'</a>', "", text, flags=re.IGNORECASE)
+    # Retirer les lignes "👉 Voir l'illustration ..." residuelles
+    text = re.sub(
+        r'^\s*(?:👉\s*)?Voir l[\u2019\']illustration.*$',
+        "",
+        text,
+        flags=re.MULTILINE,
+    )
+    # Retirer aussi les balises paragraphe/div/span et lignes vides multiples
+    text = re.sub(r'</?(p|div|span|br)[^>]*>', "", text, flags=re.IGNORECASE)
+    text = re.sub(r'</?h[1-6][^>]*>', "", text, flags=re.IGNORECASE)
+    # Retirer les retours a la ligne intempestifs (lignes vides multiples)
+    text = re.sub(r'\n{3,}', "\n\n", text)
 
     # Headers markdown -> <h4>
     def h_repl(m):
