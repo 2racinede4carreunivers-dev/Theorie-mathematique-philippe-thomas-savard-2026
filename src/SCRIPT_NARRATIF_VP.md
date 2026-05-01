@@ -282,6 +282,8 @@ Dans cette écart paritculié qu'est l'écart mixte il est intéressant d'observ
 ---
 mini-script. Ne pas inclure cette note dans la narration audio.
 
+---
+@EXEMPLE_CALCUL: 7.0
 Observation de l'auteur sur l'écart mixte qu'il y a entre -31 et 17:
 
 1. Pour déterminer la quatité de termes entre deux premiers il est simple d'effectuer l'opération suivante: 
@@ -386,6 +388,8 @@ Chaque exemple applique la même méthode :
 Le nombre premier suivant 7 est 11 (7 est le 4ᵉ nombre premier, 11 est le 5ᵉ).  
 
 
+---
+@EXEMPLE_CALCUL: 10.0
 \[
 \text{Suite A}(11) = \left(\frac{3.25}{2} \times 2^5\right) - 2 = 50
 \]
@@ -718,15 +722,16 @@ La section 3.2 introduit la géométrie des trapèzes ABCD, CDEF et EFGH. Ces tr
 <img src="./assets/animation/animation_B-11.png"
      alt="Illustration animation B-11"
      style="max-width: 100%; height: auto;">
----
-@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
-  
+
 <p align="center">
   <a href="./assets/animation/animation_B-11.png">
     👉 Voir l’illustration : animation_B-11
   </a>
 </p>
 
+---
+@EXEMPLE_CALCUL: 11.0
+@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
 
 ## Exemple complet – Aires des trapèzes ABCD, CDEF et EFGH
 
@@ -972,6 +977,8 @@ Pour toutes les suites de longueur n ≥ 8, la méthode de Philippôt adopte une
   La somme vaut toujours :  
   
 
+---
+@EXEMPLE_CALCUL: 12.0
 \[
   S_1 = \frac{1}{k-1} = Rs
   \]
@@ -1193,6 +1200,8 @@ C'est ici qu'intervient l'auteur en tant que libre penseur, un analogiste qui pe
 L'illustration de la pesé d'Archimède est le visuelle et résultante directe de la série d'axiomatisation que l'auteur a produit a partir de la méthode proposé par Archimède pour déterminé la quadrature de la parabole l'aire de cette dernière a l'aide d'une pesé théorique et a priori. La figur illustre la droite critique des zéros de Zêta par la règle de Philippôt, cette règle qui détermine tous les mesures utilisé dans cette théorie de l'univers est au carré. Cette règle est un triangle rectangle divisé en 8 sections distinctes équère droite qui est extensionné d'un tier pour ce qui est de sa hauteur formant avec la mesure de la base de l'équère droit une section triangulaire a 45 degré de la pleine mesure de l'angle oposé de l'équère droit a l'extrémité opposé et dont une extension est ajouté de (4-8^1/2). Une droite partant de l'angle droit de la règle de Philippôt allant jusqu'a l'hypoténuse a 45 degré formé par l'extension de la règle. Ce plan trifocal ainsi formé forme un triangle d'angles de 60 degrés 75 degrés et de 45 degré fermant ainsi a 180 degré le plan trifocal. Un carré le plus grand inscrivable dans le plan trifocal est positionné? La hauteur du plan trifocal du sommet a 45 degré perpendiculairement a la base formé par les angles de 60 et 75 degré et de mesure de (3^1/2+1) / (2^1+1)=1.131652498 hauteur du plan trifocal. Le plus grand carré inscrivable dans le plan trifocal l'un de ses sommet est tangent a la mesure de la droite formé a l'aide de la mesure de la base de la règle de Philippôt. A ce point partant du sommet de l'angle de 60 degré passant par le sommet tangent du carré a la base de la règle de Philippôt et ce terminant au sommet a 45 degré du plan trifocal formant la parabole de la droite critique des zéros critique de Zêta courbé par l'écart mixte et sa mise en relation combinant plus de nombres premiers que la droit réelle et habituelle des zéros critiques de la fonction Zêta. Ces nombres premiers en plus grande quantité pour un même intervale considéré est du aux  compinaisons mixte telle (-2,2), (-3,3),(-5,5)... (-P-ième,P-ième) qui sont une comparaison non inclut dans la comparaison de même polarité (+,+) et (-,-) qui ne peut comparer les nombre premier de même valeur. La comparaisont de l'écart mixte entre les premiers implique également que +1 est ajouté a tous les écart considéré puisque 0 est considéré dans cette écart mixte. Donnant a l'interval considéré une valeur plus grande mais realtive. Cette valeur relative augmenté dû a l'écart mixte permet selon l'auteur Savard de courber la droite critique permettant l'observation de la parabole. L'intervale sur lequel est considéré les zéros critiques permet si l'on cosidère l'ensemble de la droite critique comme une surface d'un rectangle l'intervale considèré de cette droit critique ainsi représenté l'aire de l'intervale considéré laisserait une section partielle pour les premiers non considéré par l'interval. L'auteur Philippe Thomas Savard mentionne que si l'aire de la parabole formé est égale a l'aire de la section restante de l'intervale considèré cette égalité démontre que tous les zéros critique =1/2 de la section restante serait incluent sur la droite critique et révèlerait par cette méthode de pesé de la quadrature de la parabole une solution certaine a la conjecture de la fonction Zêta. Effectivement comme premet d'observé le schéma conçu par Savard l'aire de la parabole est = a la valeur de la pesé représentant l'aire total de la droite critique les deux aire sont égale . L'aire de la parabole=Aire des zéro critique qui ne sont pas considèré: Aire triangle ABC=√1.6-√0.8=Aire zéros critique restant (√0.1×(4-√8)). Cette démonstration semble indiqueé que l'intuition de l'auteur semble ce concrétisé. Cependant lorsque nous vérifion par le théorème de Thalèse l'affimation suivante:eulement 25% des zéros critiques extérieur a l'intervale considéré sont sous la droite critique.
 ---
 
+---
+@EXEMPLE_CALCUL: 13.0
 Aire pararbole * OE= Aire du triangle * OH. Mais la réalité
 
  Aire parabole= 4/3(√1.6-√8) 
@@ -1313,6 +1322,8 @@ Matrice de la mécanique du Chaos discret de laquelle ce définit la matrice int
 L'invariance géométrique étant le fait que l'unité choisi dans la mécanique harmonique du chaos discret influence la position d ela mesure. Ce produit alternatif ce divise en une égalité entre 4 terme A*B = C*D
 
 Le terme A= La valeur primitive P
+---
+@EXEMPLE_CALCUL: 14.0
 B = Une position précise dans le schéma qui est égale C^2=B
 C= Une position précise du schéma qui est égale a la racine carré de B^1/2=C.
 D= Mesure qui est ce qui permet l'observation de la mesure qui selon l'unité choisi n'est pas situé au même endroit dans le schéma.
@@ -1514,6 +1525,8 @@ Cette caractéristique unique au carré et ou le carré a tous les caractéristi
      alt="Illustration animation E-1"
      style="max-width: 100%; height: auto;">
 
+---
+@EXEMPLE_CALCUL: 15.0
 
      Système de trois équation du postulat de l'univers est au carré démontrant qu'un octogone carré emerge de la première transition du rectangle élevé au carré:
 
