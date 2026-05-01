@@ -380,16 +380,31 @@ def get_audio_duration(mp3_path):
 
 
 def find_audio_for_scene(scene_num, scene_text):
-    """Trouve le fichier MP3 pour une scene (meme logique que generate_tts)."""
+    """Trouve le fichier MP3 pour une scene (meme logique que generate_tts).
+
+    Cherche dans l'ordre :
+      1. animation_output/audio/ (runtime)
+      2. assets/audio_cache/ (cache commit dans le repo)
+    """
     text_hash = hashlib.md5(scene_text[:4000].encode()).hexdigest()[:8]
-    path = os.path.join(AUDIO_DIR, f"scene_{scene_num:03d}_{text_hash}.mp3")
-    if os.path.exists(path):
-        return path
-    # Fallback : chercher n'importe quel fichier commencant par scene_XXX_
-    if os.path.exists(AUDIO_DIR):
-        for f in os.listdir(AUDIO_DIR):
-            if f.startswith(f"scene_{scene_num:03d}_") and f.endswith(".mp3"):
-                return os.path.join(AUDIO_DIR, f)
+    expected_name = f"scene_{scene_num:03d}_{text_hash}.mp3"
+
+    # Candidats : dossiers dans l'ordre de priorite
+    from generate_animation import REPO_ROOT as _REPO_ROOT
+    cache_dir = os.path.join(_REPO_ROOT, "assets", "audio_cache")
+    candidates_dirs = [AUDIO_DIR, cache_dir]
+
+    # 1. Match exact (scene_NNN_<hash>.mp3)
+    for d in candidates_dirs:
+        path = os.path.join(d, expected_name)
+        if os.path.exists(path):
+            return path
+    # 2. Fallback : n'importe quel fichier scene_NNN_*.mp3
+    for d in candidates_dirs:
+        if os.path.isdir(d):
+            for f in os.listdir(d):
+                if f.startswith(f"scene_{scene_num:03d}_") and f.endswith(".mp3"):
+                    return os.path.join(d, f)
     return None
 
 

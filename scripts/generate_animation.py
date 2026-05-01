@@ -608,6 +608,36 @@ async def generate_tts(scenes):
     os.makedirs(AUDIO_DIR, exist_ok=True)
     audio_map = {}
 
+    # Dossier de cache persistant commit dans le repo (pour GitHub Actions
+    # quand l'appel TTS externe n'est pas possible : 403 free-tier Emergent,
+    # budget epuise, etc.). On le charge EN PREMIER.
+    AUDIO_CACHE_DIR = os.path.join(REPO_ROOT, "assets", "audio_cache")
+    cache_hits = 0
+    if os.path.isdir(AUDIO_CACHE_DIR):
+        for scene in scenes:
+            num = scene["num"]
+            text = scene["text"][:4000]
+            if not text.strip():
+                continue
+            text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
+            cache_path = os.path.join(
+                AUDIO_CACHE_DIR, f"scene_{num:03d}_{text_hash}.mp3"
+            )
+            if os.path.exists(cache_path):
+                with open(cache_path, "rb") as f:
+                    audio_map[num] = base64.b64encode(f.read()).decode()
+                cache_hits += 1
+                # Copie dans le dossier runtime pour que les workflows
+                # ulterieurs (generate_video.py) y aient acces
+                runtime_path = os.path.join(
+                    AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3"
+                )
+                if not os.path.exists(runtime_path):
+                    import shutil as _sh
+                    _sh.copy2(cache_path, runtime_path)
+        if cache_hits:
+            print(f"  {cache_hits} audios charges depuis assets/audio_cache/")
+
     # Charger d'abord les MP3 deja en cache (utile meme sans cle, pour relancer
     # une generation partielle ou utiliser des audios pre-generes manuellement)
     for scene in scenes:
@@ -615,13 +645,15 @@ async def generate_tts(scenes):
         text = scene["text"][:4000]
         if not text.strip():
             continue
+        if num in audio_map:
+            continue
         text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
         mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
         if os.path.exists(mp3_path):
             with open(mp3_path, "rb") as f:
                 audio_map[num] = base64.b64encode(f.read()).decode()
     if audio_map:
-        print(f"  {len(audio_map)} audios trouves en cache (reutilises)")
+        print(f"  {len(audio_map)} audios disponibles (cache + runtime)")
 
     if not LLM_KEY:
         if audio_map:
