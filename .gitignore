@@ -234,3 +234,12 @@ credentials.json
 *.key
 .credentials
 repo_savard/animation_output/animation.html
+-e 
+# Environment and credential files
+.env
+.env.*
+*.env
+credentials.json
+*.pem
+*.key
+.credentials
