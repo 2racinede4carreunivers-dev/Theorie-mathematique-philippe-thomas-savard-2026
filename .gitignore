@@ -143,6 +143,7 @@ credentials.json
 *.pem
 *.key
 .credentials
+<<<<<<< HEAD
 -e 
 # Environment and credential files
 .env
@@ -279,3 +280,6 @@ credentials.json
 *.pem
 *.key
 .credentials
+=======
+animation_output/
+>>>>>>> main
