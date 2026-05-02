@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-04-30 12:43 UTC
-**Total Q&R:** 104
+**Derniere mise a jour:** 2026-05-02 12:17 UTC
+**Total Q&R:** 105
 
 ---
 
@@ -126,7 +126,15 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ### Source: `geometry_prime_spectrum.tex`
 
-**1. [expert] Dans la 'Geometry of the Prime Number Spectrum', il est dit que le produit entre le périmètre d'un carré A et le diamètre d'un carré B est égal au produit du périmètre du carré B et du diamètre du carré A. Supposons que le côté de A est de longueur 4 et le diamètre de B est de longueur 5. Vérifiez cette propriété mathématique.**
+**1. [avance] Dans la démonstration de l'écart entre les nombres premiers -31 et 17, comment la relation <(-22323135/20480 - 39280705/20480)/64 = -47> est-elle établie et que signifie le résultat final de 47?**
+
+*Categorie: mathematique/demonstration | Score: 0.8*
+
+> Pour comprendre comment est établi l'écart entre les nombres premiers -31 et 17, il est essentiel de suivre les calculs et les relations fournies. La démonstration commence par calculer le Digamma pour les valeurs spécifiques de 17 et -31 à l'aide des fonctions de suites définies, puis aboutit à certaines valeurs intermédiaires. Le calcul commence en soustrayant &lt;(-1351615/20480)/64 - (-31)&gt; et mène à un résultat de Digamma de &39280705/20480&gt;. Ensuite, en utilisant cette valeur, les termes sont combinés pour atteindre une expression comme &lt;-22323135/20480 - 39280705/20480&gt;, qui donne -47 une fois divisé par 64. Ceci montre qu'il y a 47 nombres entre -31 et 17, établissant non seulement la méthode, mais aussi un résultat précis et significatif en termes de comptage des nombres premiers contenus entre ces deux limites. Cela démontre comment des résultats numériques complexes peuvent être utilisés pour des preuves formelles dans le contexte de la théorie 'L'Univers est au Carré'.
+
+---
+
+**2. [expert] Dans la 'Geometry of the Prime Number Spectrum', il est dit que le produit entre le périmètre d'un carré A et le diamètre d'un carré B est égal au produit du périmètre du carré B et du diamètre du carré A. Supposons que le côté de A est de longueur 4 et le diamètre de B est de longueur 5. Vérifiez cette propriété mathématique.**
 
 *Categorie: mathematique/calcul | Score: 0.8*
 
@@ -134,7 +142,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**2. [expert] Dans le fichier 'geometry_prime_spectrum.tex', comment l'équation \( \frac{13246 - 10878}{64} = 37 \) démontre-t-elle que 37 est le 12ème nombre premier, et que représentent les termes '13246', '10878' et '64' dans ce contexte ?**
+**3. [expert] Dans le fichier 'geometry_prime_spectrum.tex', comment l'équation \( \frac{13246 - 10878}{64} = 37 \) démontre-t-elle que 37 est le 12ème nombre premier, et que représentent les termes '13246', '10878' et '64' dans ce contexte ?**
 
 *Categorie: mathematique/equation | Score: 0.8*
 
@@ -142,7 +150,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**3. [avance] Dans l'extrait 'Structure spectrale générale pour n termes et infinité d'étapes', comment le lemme 'ratio_spectral_local' valide-t-il la propriété que le rapport entre des termes consécutifs est toujours 1/2, et quelles implications géométriques cela a-t-il sur la compréhension des aires de formes générées par ces suites ?**
+**4. [avance] Dans l'extrait 'Structure spectrale générale pour n termes et infinité d'étapes', comment le lemme 'ratio_spectral_local' valide-t-il la propriété que le rapport entre des termes consécutifs est toujours 1/2, et quelles implications géométriques cela a-t-il sur la compréhension des aires de formes générées par ces suites ?**
 
 *Categorie: mathematique/geometrie | Score: 0.8*
 
@@ -150,7 +158,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**4. [avance] Comment la relation entre le ratio spectral constant RsP_1_3 égal à 1/3, et RsP_1_4 égal à 1/4, est-elle établie à travers les différences entre A_1_3, B_1_3 et A_1_4, B_1_4, et quelles sont les implications pour les séquences négatives définies par SA_neg_eq et SB_neg_eq?**
+**5. [avance] Comment la relation entre le ratio spectral constant RsP_1_3 égal à 1/3, et RsP_1_4 égal à 1/4, est-elle établie à travers les différences entre A_1_3, B_1_3 et A_1_4, B_1_4, et quelles sont les implications pour les séquences négatives définies par SA_neg_eq et SB_neg_eq?**
 
 *Categorie: mathematique/relation | Score: 0.8*
 
@@ -158,7 +166,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**5. [debutant] Quelle est l'hypothèse axiomatique sous-jacente pour garantir la validité de l'équation des nombres premiers dans le cas positif, telle qu'énoncée dans ce fichier?**
+**6. [debutant] Quelle est l'hypothèse axiomatique sous-jacente pour garantir la validité de l'équation des nombres premiers dans le cas positif, telle qu'énoncée dans ce fichier?**
 
 *Categorie: mathematique/fondement | Score: 0.8*
 
@@ -166,7 +174,7 @@ Additionons tous ces termes : 2.236 + 4.472 + 8.944 + 17.888 + 35.777 + 71.554 +
 
 ---
 
-**6. [debutant] Dans l'extrait de la section 'Axiomatization' de 'geometry_prime_spectrum.tex', quelle est la signification de l'axiome selon lequel 'Le rapport spectral \( \frac{1}{k} \) est numériquement valide mais algébriquement incohérent' ?**
+**7. [debutant] Dans l'extrait de la section 'Axiomatization' de 'geometry_prime_spectrum.tex', quelle est la signification de l'axiome selon lequel 'Le rapport spectral \( \frac{1}{k} \) est numériquement valide mais algébriquement incohérent' ?**
 
 *Categorie: mathematique/fondement | Score: 0.8*
 
