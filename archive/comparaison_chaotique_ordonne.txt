@@ -1,0 +1,55 @@
+1.0 Comparaison asymétrique chaotique et ordonnée :
+La comparaison asymétrique se divise en deux possibilités dans la méthode_spectral.thy faisant partie du chapitre géométrie du spectre des nombres premiers. Les deux possibilités sont la comparaison asymétrique chaotique et la comparaison asymétrique ordonnée. Commençons par la comparaison asymétrique ordonnée.
+
+Cette comparaison de nombres premiers est une manière de comparaison des nombres premiers de la méthode spectrale qui permet de vérifier si le rapport spectral 1/k est respecté dans ce cas de comparaison. La comparaison symétrique 1×1 ou n×n a été présentée précédemment. Voici un exemple pour que tout soit clair :
+
+Comparaison symétrique 1×1 et n×n :
+
+2.0 Nous avons vu qu’il faut déterminer les valeurs des suites A et B pour déterminer les nombres premiers dans la méthode spectrale :
+(3.25/2×2^n) - 2 = somme suite A positive.
+(6.5/2×2^n) - 66 = somme suite B positive.
+Quand n est un nombre entier strictement positif.
+
+(3.25×2^n) - 2 = somme suite A négative.
+(6.5×2^n) - 66 = somme suite B négative.
+Quand n est un nombre entier strictement négatif.
+
+3.0 Exemple pour les nombres premiers -5 et 11
+
+Pour -5, troisième nombre premier négatif :
+Somme suite A : (3.25×2^(-3)) - 2 = -1.59375
+Suite A : 13/4 - 13/8 - 13/16 - 13/32 - 2 = -1.59375
+
+Somme suite B : (6.5×2^(-3)) - 66 = -65.1875
+Suite B : 13/2 - 13/4 - 13/8 - 13/16 - 66 = -65.1875
+
+Pour 11, cinquième nombre premier positif :
+Somme suite A : (3.25/2×2^5) - 2 = 50
+Suite A : 2 + 4 + 8 + 12 + 24 = 50
+
+Somme suite B : (6.5/2×2^5) - 66 = 38
+Suite B : -59.5 + 6.5 + 13 + 26 + 52 = 38
+
+4.0 Pour les suites B de 7 termes et moins :
+-59.5 + 6.5 + 13 + 26 + 52 + 104 + 208 = 7 termes
+-59.5 + 6.5 + 13 + 26 + 52 + 104 = 6 termes
+-59.5 + 6.5 + 13 + 26 + 52 = 5 termes
+-59.5 + 6.5 + 13 + 26 = 4 termes
+-59.5 + 6.5 + 13 = 3 termes
+-59.5 + 6.5 = 2 termes
+-59.5 = 1 terme
+
+5.0 Pour les suites B de 8 termes à l’infini :
+2 + 4 + 8 + 16 + 32 + 128 + 192 + 384 = 8 termes
+2 + 4 + 8 + 16 + 32 + 128 + 256 + 384 + 768 = 9 termes
+2 + 4 + 8 + 16 + 32 + 128 + 256 + 512 + 768 + 1536 = 10 termes
+NB : substitution de la 6e position par la 7e position de la suite A (64 substitué par 128)
+
+7.0 Calcul du rapport spectral 1×1 pour -5 et 11 :
+(((3.25×2^(-3)) - 2) - ((3.25/2×2^5) - 2)) / (((6.5×2^(-3)) - 66) - ((6.5/2×2^5) - 66)) = 1/2
+(-1.59375 - 50) / (-65.1875 - 38) = 1/2
+
+8.0 Toutes les comparaisons possibles entre deux nombres premiers différents et entre n×n nombres premiers différents sont symétriques lorsque la quantité de nombres premiers est égale dans les deux ensembles.
+
+La comparaison asymétrique ordonnée compare deux ensembles de nombres premiers débalancés. L’ensemble A et l’ensemble B. Cette comparaison doit respecter :
+- B = A + 1 terme

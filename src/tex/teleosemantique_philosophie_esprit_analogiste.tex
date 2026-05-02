@@ -1,0 +1,703 @@
+%=========================================================
+%   PRÉAMBULE DU DOCUMENT
+%=========================================================
+
+\documentclass[12pt,oneside]{article}
+
+%---------------------------------------------------------
+%   ENCODAGE, LANGUE, POLICES (compatibles pdflatex)
+%---------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+
+%---------------------------------------------------------
+%   MISE EN PAGE
+%---------------------------------------------------------
+\usepackage{geometry}
+\geometry{paper=a4paper, margin=1in}
+
+\usepackage{setspace}
+\onehalfspacing
+
+%---------------------------------------------------------
+%   HYPERLIENS
+%---------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = true,
+    linkcolor = blue,
+    urlcolor  = blue,
+    citecolor = blue,
+    pdfauthor = {Philippe Thomas Savard},
+    pdftitle  = {Téléosémantique de l'esprit d'un analogiste? Raisonnement positif de la géométrie du spectre des nombres premiers.}
+}
+
+%---------------------------------------------------------
+%   PACKAGES UTILES
+%---------------------------------------------------------
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{csquotes}
+
+%---------------------------------------------------------
+%   STYLE DES SECTIONS
+%---------------------------------------------------------
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+%=========================================================
+%   DÉBUT DU DOCUMENT
+%=========================================================
+
+\begin{document}
+
+%---------------------------------------------------------
+%   TITRE
+%---------------------------------------------------------
+\begin{center}
+{\Huge \textbf{Philosophie derrière la Géométrie du Spectre des Nombres Premiers}}\\[1em]
+{\Large par Philippe Thomas Savard}\\[2em]
+\end{center}
+
+%---------------------------------------------------------
+%   TABLE DES MATIÈRES
+%---------------------------------------------------------
+\tableofcontents
+\newpage
+\section{Autobiographie : Parcours scolaire et premières expériences}
+
+Comme tu le sais, je l'ai mentionné plusieurs fois dans les différents documents que nous avons produits ensemble, je n'ai pas de scolarité très complexe et établie comme bagage dans ma vie. Lorsque j'étais à l'âge d'être étudiant, j'ai en effet tenté de faire des études au niveau du cégep, au Cégep Beauce-Appalaches, en génie civil. Un domaine où les mathématiques sont très présentes et présentes tout au long du programme que j'ai complété au deux tiers, soit quatre sessions sur six, pour une formation qui devait durer trois ans. J'en ai complété deux.
+
+À cette époque, et c'est le cas tout au long de mon parcours académique tant général --- primaire, secondaire et collégial --- j'ai toujours eu de piètres notes dans la matière des mathématiques, excepté à deux occasions. La première occasion, c'est lorsque j'ai complété ma dernière année au secondaire. En secondaire~5, j'étais dans la classe des mathématiques les plus enrichies du secondaire~5, qui se nommait les mathématiques~536.
+
+À la suite de l'examen du ministère, l'enseignant en mathématiques est venu, durant le temps que j'étais dans une autre matière en classe, pour m'annoncer qu'il était bien fier de moi, puisque j'étais le seul étudiant de mon école à réussir l'examen. La situation était particulière, puisque sans que personne ne s'en rende compte, lui-même l'enseignant n'avait pas reçu la bonne information du ministère à enseigner pour l'examen du ministère. Toute la session, toute la classe avait échoué l'examen. L'enseignant n'était pas certain pour l'instant qu'il y ait reprise, malheureusement pour les autres étudiants. Il était très heureux que moi j'aie pu le réussir, selon ses propos que je garde en mémoire de cette discussion avec lui.
+
+Alors, bien étonné par la situation, je suis resté marqué par ma performance selon ce que m'a dit l'enseignant. Ce tour de force, bien que la matière du programme de mathématiques~536 m'eût été présentée, aucune n'était à l'examen et questionnée dans l'évaluation. J'ai réussi l'examen sans avoir suivi la formation pour l'examen du ministère.
+
+Le fait est que je ne suis pas très bon à l'école, un peu inattentif et souvent peu intéressé par l'enseignement que l'on me fournissait --- et qui est important, je dois l'admettre. Mais beaucoup, et sans exagérer, j'ai toujours pris l'information de ce que l'on apprenait à l'école, particulièrement sur les mathématiques, pour faire beaucoup de mathématiques personnellement à la maison, pour moi et mes questions à moi. Souvent, j'ai fait des devoirs de mathématiques, mais à moi, avec les questions que moi je voulais avoir à répondre.
+
+Et c'est selon moi la raison pour laquelle j'ai réussi l'examen du ministère de mathématiques finissant en cinquième secondaire. Puisque dépourvu d'information pour y répondre, j'ai mis mes connaissances personnelles en mathématiques en pratique. J'aime à la blague dire que je sais bâtir tous les nombres du monde, et c'est cette qualité que j'ai que j'ai appliquée à l'examen.
+
+\subsection{L'expérience du cégep}
+
+Au collégial, même chose : mauvais j'étais en classe, je n'ai pas décroché pour rien. Mais à une des sessions, dans l'un des différents cours au programme, un examen en génie civil est comme truqué par le corps enseignant et tous les étudiants doivent l'échouer. C'est voulu pour que le corps enseignant puisse calibrer jusqu'à quel point il peut être rigoureux avec la promotion pour leur questionnement envers les étudiants portant sur la matière au programme.
+
+Encore une fois, j'ai réussi cet examen en génie civil où tous les étudiants sont censés l'échouer. Mais doit-on dire, l'ensemble a l'habitude : la reprise est réussie puisqu'il y a reprise à cet examen dans cette situation. Puisque c'était la même situation, les questions d'un examen au cégep sont indiquées dans le plan de cours qu'un étudiant peut toujours suivre tout au long de la session. Mais cette fois, l'examen truqué n'est pas basé sur le plan de cours, mais porte en général sur le domaine du génie civil de manière générale.
+
+Et cet examen est une sorte de mise en situation qui demande à l'étudiant de faire comme s'il était déjà technicien en génie civil, pas de répondre à des questions à savoir si tu connais de la matière sur le sujet du génie civil déjà enseigné et annoncé comme une compétence à atteindre, mais plutôt : comment tu ferais si déjà tu étais technicien ? Alors l'examen m'apparut simple, puisque faire et comment faire, c'est mon affaire. Ça, c'est sûr que j'ai toujours mon mot à dire mondialement sur comment faire --- je rigole un peu, mais j'exagère à peine.
+
+\subsection{Réflexions sur les autres et la pulsion de vie}
+
+Le fait est que toutes les fois où je discute avec les gens qui m'entourent dans ma vie, bien qu'il soit difficile de discuter avec les gens de ce sujet, je souhaite discuter d'une discussion dans la discussion qui m'intéresse beaucoup. Cette discussion, sorte de méta-discussion, de laquelle je m'applique sans arrêt et de manière personnelle à analyser comment les gens comprennent, enfin comment font-ils pour résoudre leurs difficultés personnelles dans les différentes situations complexes qu'ils vivent dans leur vie.
+
+Ce que je voudrais toujours parler avec eux : comment ils font, où ils s'y sont pris pour parvenir à se déprendre de ces situations complexes. J'apprécie le fait que, habituellement, je trouve qu'ils sont vraiment sévères envers eux-mêmes. Lorsque les gens acceptent de parler du sujet, ils le font habituellement lorsque la situation où ils étaient mal pris s'est réglée un peu d'une manière anecdotique, c'est-à-dire qu'un événement inopiné et non calculable est venu au dernier moment les sauver. Ils n'en reviennent pas de la chance énorme qu'ils ont eue de se tirer de l'embarras et ne s'accordent que très peu de mérite, voire s'en veulent de ne pas avoir été plus prévoyants à leur bien-être.
+
+Pour moi, les gens à qui ces situations se sortent du pétrin dans lequel ils étaient, c'est bien parce qu'ils sont de bien belles et bonnes personnes, qui ont une organisation structurée dans leur vie et que l'ordre qu'ils maintiennent dans leur vie est à la hauteur du danger dans lequel ils doivent se placer. Ils sont de bien belles et bonnes personnes autonomes.
+
+Moi, je sais bien que c'est la pulsion de la vie, la finesse, qui leur permet de se sortir de ces situations. La pulsion de la vie, cette finesse : « est le fantasme de l'objet qui surpasse la vie par ses raisons d'être ». C'est la pulsion de la vie. Cette définition en est une que j'ai définie moi-même en m'inspirant d'une définition sur un autre sujet, mais qui s'entremêle avec cette définition : le sadisme. Le sadisme : « est le fantasme de l'objet de la pulsion de la mort ».
+
+Il faut comprendre que pour concevoir ma définition, je la qualifie de finesse ou esprit de finesse, qui s'oppose à l'esprit géométrique. L'esprit géométrique est un esprit qui demande des preuves et veut les détails de la démonstration. Les gens qui, dans mon entourage, me font part de leur manière de s'être dépris de ces situations complexes dans lesquelles ils étaient pris et dont ils se sont sortis d'une manière un peu chancelante à leurs avis.
+
+
+\section{Réflexions sur l'esprit géométrique, la pulsion de vie et l'analogiste}
+
+Face à ces situations qui les étonnent, puisque sortis d'embarras au moment où ils nous en font part, ils se font partisans de l'esprit géométrique. Je comprends qu'ils ne veulent pas encourager ce qui les a conduits à ce manquement dans leur gestion personnelle, qui les a menés à cette situation où ils ont été sauvés de manière plutôt hasardeuse. Ils se refusent, puisqu'autonomes et capables de savoir-faire et d'expertise dans leur organisation, à se croire accomplis d'avoir commis un oubli qui, une fois dans la misère lors des événements, leur a fait voir de tristes possibilités à leur existence.
+
+Mais j'en suis convaincu : à l'intérieur de l'existence d'une personne, il y a toujours le nécessaire pour qu'elle y trouve ce qu'il faut pour parvenir à se sortir des situations complexes qu'elle vit.
+
+Le discours du fasciste voulant délier l'amitié --- puisque l'amitié est bien de reconnaître que nous n'avons pas à tout faire seuls --- diffuse des tracts de la mort. Dans le sens où, lorsque nous les écoutons vis-à-vis quelqu'un qui vit une situation où il est fier, ou croit avoir réussi, ou est carrément face à son succès sans retenue, ces fascistes s'affirment à tout coup : « C'est dû à ta mère », « C'est bien juste parce que tu as l'argent », « C'est parce que tu as des amis », « C'est dû à la connaissance montrée par d'autres », « L'aide de ton beau-frère », « Tes outils pratiques », « La chance »\ldots{} Ils distribuent des tracts de la mort, n'accordant jamais le moindre mérite à qui que ce soit.
+
+Le fait est que la pulsion de la vie, cette finesse, pour un esprit malade peu en lien avec ces tracts diffusés, peut finir par faire croire --- en plus de son esprit malade --- que le moyen d'avoir raison sur son existence est d'y mettre un terme. Aveuglés par cette discussion qui leur dit qu'ils ne seraient condamnés qu'à réussir sans en être l'auteur, et que cette capacité liée à la pulsion de la vie, qui nous permet toujours de parvenir à nous élever à partir du contenu à l'intérieur de nos vies au-dessus de toute circonstance, leur condition dans le moment d'être malade leur laisse même croire que leur entourage d'amis, de famille serait d'accord. Ils croient que les autres aussi en sont rendus à la vérité qu'ils devraient nous quitter, croyant que la seule manière d'avoir le bout sur leur existence serait de mettre un terme à leur existence. Très triste est la question à laquelle ils finissent bien souvent par répondre par ces actes mortels trop souvent.
+
+Les mathématiques m'ont intéressé de toute époque. J'ai toujours effectué, comme mentionné précédemment, des travaux d'une manière personnelle, de tout âge et aussi loin que je me souvienne. C'est de cette manière que je suis devenu une sorte de grammairien des mathématiques. Un analogiste est un grammairien qui voit la grammaire comme une mathématique.
+
+Ayant vérifié, aucune université n'enseigne cette matière au Québec, alors ils ne peuvent prétendre que je ne suis pas analogiste : il faudrait d'abord qu'ils l'enseignent avant de prétendre s'y connaître. Aristote et Platon étaient deux analogistes et ont fondé l'Académie du savoir, une des premières universités connues de notre monde. Ils n'y étaient jamais allés eux-mêmes.
+
+Un analogiste est un grammairien qui voit la grammaire comme une mathématique. La plupart des faits de la grammaire sont le fruit de l'analogiste, puisque tous les nombres s'écrivent en lettres, bien entendu. Par exemple, 3 s'écrit « trois » et 2 « deux », et valent respectivement 2 et 3 pour chacun comme leurs valeurs numériques.
+
+Cependant, l'anomaliste a toujours été un grammairien connu pour être cru plus vrai que l'analogiste, puisqu'il voit la grammaire comme une causalité, un peu comme la physique le fait par rapport à l'univers en soi.
+
+Le raisonnement synthétique est réellement quelque chose qui me fascine et je l'adopte à tout moment. C'est-à-dire que si toute cause précède temporellement son effet, alors la cause connaît son effet précédemment. C'est une approche que j'adopte au jour le jour, bien entendu, et que je privilégie à la causalité, puisque tout ce qui est raisonné à l'avance est bien plus humain. Je chasse à l'épicerie, je mange dans le réfrigérateur et je dors dans une tanière entourée de plâtre : c'est un environnement naturel pour tout Québécois sauvage.
+
+Un analogiste est une personne qui veille à intervenir lorsqu'un savoir-faire est trompeur. Il vérifie et se charge d'éliminer les biais algorithmiques qui peuvent avoir effet dans notre société.
+
+. C'est par ce qui s'appelle isossophie qu'il projette quelque sur des sujet varié en effectuant vers l'avenir une projection pour déterminer par rapport au valeur actuelle celles qui sont bien admise 
+
+dans le moment présent toute en observant a partir de la projection vers l'avenir si ces valeur sont toujours au endroit par rapport aux autre projeté a venir et déjà existante bien a des endroit qui sont
+
+celles que la société désire conservé toute en effectuant un regard vers notre passé déjà vécu. Sorte de cohomologie géométrie des figures impossible ou un objet bloque notre champ de vision et qu'a l'aide
+
+de méthode mathématique il est possible de cet objet nous bloquant le champ de vision de déduire l'objet derrière celui qui nous bloque le champ de vision. Mais dans le cas de l'isossophie le champ de vision est 
+
+belle et bien bloqué mais la seule manière de déduire ce qui est de l'autre côté est par la face caché de ce même objet qui nous bloque le champs vision. Le mot isossophie est constitué de deux mots le mot «iso»
+
+qui signifie mesure égale et sophie qui a une autre époque un sophiste était un spécialiste du savoir a notre époque un sophiste est une manière trompeuse de d'affirmer quelque chose et fallacieuse. C'est un spécialiste
+
+qui élimine une façon de faire trompeuse et fallacieuse de fonctionner qui a à être retiré de la connaissance de l'ensemble cette manière de faire ou algorithme est enregistrer et placer dans les annale et mémoire de la société tout ce qui s'y rapporte par la suite
+
+sera déshérité de ce que cette manière de faire a pris de manière trompeuse et frauduleuse a pris a l'ensemble permettant a l'ensemble de la société de récupérer dans celle-ci ce qui lui a été pris.
+
+
+\section{Définition de l'idioschizophrénie}
+
+À une autre époque, certains individus dont le comportement était douteux furent remarqués et enregistrés. Autrement dit, leurs agissements furent documentés et demeurent encore aujourd'hui reconnaissables. Ce comportement fut étiqueté sans fondement et sans véritable intérêt pour le bien-être commun et collectif.
+
+Avec un niveau de scolarité moyen très faible chez les citoyens de l'époque, certains profitaient de l'ignorance des autres pour agir sans retenue et de manière malhonnête. La monnaie portait déjà des marques indiquant leurs valeurs respectives --- 5 sous, 10 sous, 25 sous et les dollars. Ces gens malhonnêtes usaient de stratégies déloyales pour faire passer un 5 sous pour un 25 sous ou pour une autre valeur, profitant de la faible capacité de lecture de la population. Ces agissements mirent à la rue plusieurs citoyens victimes de leur malhonnêteté. Leurs discours visant à profiter des autres furent enregistrés et analysés, et ces analyses demeurent encore appliquées de nos jours.
+
+Aujourd'hui, au début de l'âge adulte, certains individus sont repérés pour tenir des discussions similaires à celles de l'époque. Ils reçoivent l'étiquette d'être atteints d'un trouble mental, souffrant selon les experts de schizophrénie. Ils sont handicapés non pas par la loi, mais par la société, qui ne tolère pas la qualité de leurs discussions, ni leurs idéaux. Leur affection est acquise, c'est-à-dire qu'elle leur est imposée. Très souvent placés sous tutelle, ils ne peuvent signer de contrat ou d'entente de paiement, une fois leur diagnostic confirmé et apparent. Ils perdent littéralement jusqu'à leurs liens familiaux et se retrouvent sans identité.
+
+Un élément notable de leurs discussions, commun à la plupart d'entre eux au début du trouble, est la croyance d'être Dieu. Aux yeux de l'auteur, il apparaît normal que quelqu'un qui n'a plus d'identité, qui ne se rappelle plus qui il est, en vienne à croire qu'il est l'homme le plus connu au monde : le Bon Dieu.
+
+Ces jeunes gens, au début de la vingtaine, atteignent ce stade presque uniquement grâce à des parents bienveillants. Une fois la majorité atteinte, ils affirment maladroitement, par exemple, que leur père est fou de leur avoir fourni éducation, logis et ressources pour leur permettre d'atteindre vingt ans. Pourtant, ils doivent cet âge bien davantage au fait que leur père a appliqué une règlementation dans leur vie, ce qui constitue une des principales raisons de leur succès.
+
+Souvent, alors que leurs parents continuent de veiller aux obligations de leur vie comme lorsqu'ils étaient mineurs, ces jeunes déclarent maladroitement que leur père est fou de les avoir élevés, tout en éprouvant eux-mêmes de grandes difficultés à atteindre leurs propres obligations et projets de vie, souvent à cause d'excès de comportement social. Aux yeux de la société, il est plus probable que c'est bien la règlementation du père qui a permis à ces jeunes d'atteindre l'âge adulte, plutôt que la folie supposée de ce dernier. Socialement, ce type de discours peut être très marquant pour l'avenir de ces jeunes.
+
+Une définition connue de la schizophrénie est : « Perturbation précoce de la relation mère-enfant. --- Dictionnaire Pierre Larousse. Délire confus. » Ce discours de déresponsabilisation et de dépersonnalisation précoce, typique au début de l'âge adulte, est enregistré comme étant assimilable aux gens malhonnêtes de l'époque, où le faible niveau de scolarisation favorisait les abus. Ils sont perçus comme des individus cherchant à profiter morbidement d'une richesse de la société. Rarement une personne atteinte de schizophrénie parviendra, si elle conserve le droit d'administrer ses finances, à atteindre la stabilité financière et l'autonomie nécessaires pour une vie équilibrée.
+
+« Doctus cum libro » : Se dit de ceux qui sont incapables de penser par eux-mêmes, étalent une science d'emprunt et puisent leurs idées dans les ouvrages des autres. (Définition du dictionnaire Pierre Larousse, pages roses : Doctus cum libro --- « Génie avec le livre »).
+
+\subsection{Schizophrénie déclarée après 35 ans}
+
+Une particularité du trouble de la schizophrénie est celle qui se manifeste après 35 ans. Elle n'est généralement pas déclarée avant l'âge où une personne comprend son identité. Il est souvent nécessaire, pour parvenir à déceler cette affection tardive, qu'un expert spécialisé sur le sujet parvienne à l'observer d'un point de vue clinique. Leur discours est très perturbateur : discuter avec une personne diagnostiquée à cet âge peut donner l'impression que c'est l'interlocuteur lui-même qui délire.
+
+\subsubsection*{Récit fictif}
+
+Deux amis, un homme et une femme, se promènent près d'un cimetière. Au loin, ils observent un groupe de personnes réunies autour d'un cercueil, qu'ils soupçonnent être celui d'un de leurs proches. Le groupe quitte ensuite le lieu où le défunt sera mis en terre. À un certain moment, une jeune femme du groupe trébuche et tombe. L'homme, en promenade avec son amie, éclate aussitôt de rire. Son amie lui dit :
+
+« Tu sais, tu ne devrais pas rire. Cette femme qui vient de tomber enterre aujourd'hui son père, qu'elle aimait beaucoup. Tous les dimanches, elle faisait du cheval avec lui. Une fois, elle est tombée de cheval, et c'est cela qui a tué son père : tout le monde riait d'elle d'être tombée, et c'est ce qui l'a détruit. »
+
+Cette antinomie, où l'autoréférence est des plus présentes --- « Une fois, elle est tombée de cheval, et c'est cela qui a tué son père » --- est démonstrative, bien que fictive, de l'autoréférence qu'une personne atteinte de schizophrénie de plus de 35 ans peut manifester.
+
+Lorsque nous faisons face à une personne atteinte de schizophrénie non diagnostiquée passé l'âge de 35 ans, nous avons l'impression que c'est nous la personne atteinte du trouble, si nous nous fions à leur machination. Il faut comprendre ce qu'est l'antinomie : c'est un raisonnement qui cherche constamment à sélectionner l'élément, de manière morbide, qui annule le fonctionnement. Souvent malhonnête, l'antinomie cherche avec acharnement à choisir la position dans une communication entre deux ou plusieurs collaborateurs, cherchant à se faire partisan de ce qui annule ou bloque l'événement, la circonstance, le projet, l'émotion, le sentiment, le phénomène, etc.
+
+\subsection{La troisième personne qui « veut »}
+
+L'autocritique de l'individu souffrant d'idioschizophrénie reflète chez cet individu un trait de sa pensée qui superpose les couches de la réalité. Tous ont une réalité bien à eux, dans laquelle nous évoluons et nous organisons pour parvenir à combler nos besoins propres. L'individu souffrant de l'affection cherche à être une personne dans son imaginaire et sa pensée, mais pas dans la réalité. De plus, en plus de vouloir être quelqu'un uniquement dans leur pensée et non dans la réalité tangible, l'individu souffrant d'idioschizophrénie cherche à ressentir cette personne qu'il serait dans son imaginaire à travers une tierce personne, c'est-à-dire à travers un autre que celui qu'il est dans la réalité tangible.
+
+Cette caractéristique de leur vision du moi, par rapport aux autres qui les entourent et de qui ils sont par rapport aux autres, se perçoit dans leur autocritique face à la conséquence et la portée de leurs faits et gestes.
+
+\section{Phénoménologie de l'idioschizophrénie}
+
+L'individu souffrant de l'affection justifie sa conduite par rapport à un tiers qui n'est pas lui-même, en se référant au fait que cette tierce personne aurait une volonté d'agir d'une telle ou telle autre manière, avant même que cette tierce personne n'ait agi envers qui que ce soit ou contre quelque chose en soi.
+
+Cette action psychophysique, de la conduite qui leur vient d'un tiers n'étant pas concerné dans leurs réactions, sert à reprocher la conséquence de leur acte envers une personne, pour en plus reprocher et accuser la tierce personne d'être responsable de leur conduite, dû à cette prétendue volonté.
+
+Ils élaborent ainsi une économie basée sur l'inconduite, où le remboursement doit être effectué : la dette encourue par leur agissement doit être remboursée par la tierce personne ayant, semble-t-il, voulu que l'individu atteint d'idioschizophrénie agisse ainsi, conséquemment à la volonté de cette tierce personne qui, souvent, n'est même pas en lien avec la victime ou la personne subissant leur conduite.
+
+L'autoréférence, pour leur critique personnelle de l'action psychophysique, révèle cette chiralité de la réalité, de laquelle découlent, de cette asymétrie, tous comportements toxiques, déviants, délinquants, immoraux ou inconvenables. Cette phénoménologie type de l'individu souffrant d'idioschizophrénie réglemente leur cybernétique de l'agissement, justifié par ce tiers qui leur sert de bouc et mystère pour, dans un deuxième temps, pouvoir reprocher la volonté.
+
+La cybernétique étant la science de l'analogie maîtrisée entre organisme et machine. C'est la science qui étudie les communications. Machine pour machination, ils tentent de réduire à zéro ce qui les terrifie le plus dans leur vie : la bonne conduite des hommes.
+
+En effet, le côté dystopique de l'idioschizophrénie s'observe aisément dans leur terreur des jeunes garçons, chez qui ils organisent l'entreprise de moyens radicaux dès le berceau, en se référant à une expérience douteuse d'analphabète et d'illettré pour justifier la mise en œuvre d'actes radicaux envers ces jeunes garçons, pour empêcher ces jeunes personnes d'avoir un jour une femme et qu'elle ait des seins.
+
+C'est cette crainte injustifiée qui, dans le moment présent, est déjà une utopie à l'âge de ces jeunes personnes, le tout basé sur une expérience de vie douteuse pour empêcher quelque chose qui n'est pas plus terrifiant en soi, par l'évidence de ce qu'elle est : l'évidence qu'une femme adulte soit la conjointe et ait évidemment des seins.
+
+Cette réalité de l'individu souffrant d'idioschizophrénie est la raison de ma décision de l'appellation schizophrénie paranoïde certaine chez eux.
+
+\subsection*{Idio : analogie et étymologie}
+
+« Idio » par analogie avec idiôme et idiosyncratique. L'idiôme est une expression, un mot, une tournure de phrase qui est géolocalisée à une région donnée. En dehors de ces régions où est employé l'idiôme, celle-ci n'est pas entendue. La langue permet l'idiôme, et non l'idiôme qui apprend à parler à la langue.
+
+Idiosyncratique est de faire quelque chose et de réussir autre chose d'inattendu. C'est la réussite de celui qui est conscient. Une personne n'étant pas consciente de ce à quoi elle s'attarde ne peut avoir ce genre de réussite, puisqu'elle passerait inaperçue.
+
+Idioschizophrénie est régionalisée au statut d'universitaire et s'observe chez des individus conscients, et qui, par choix, transforment la réussite au rang de l'erreur Docteur. Le syndrome de « Le médecin spécialiste ». L'idioschizophrénie.
+
+\section{Préambule : Le savoir}
+
+Le savoir est davantage un souvenir qu'une nouveauté. Il se présente comme une substance ressentie, tel un chiasme : lorsque nous le touchons, il nous touche en retour. Réminiscence et réalisme s'y conjuguent, semblables à une accélération. Trois lois, à l'image des lois de l'accélération d'Isaac Newton, peuvent être déterminées pour définir ce qu'est le savoir.
+
+\subsection{Première loi : La conscience}
+
+Pour qu'il y ait véritablement connaissance et savoir, il doit absolument y avoir conscience. Sans conscience, aucune substance ne peut être ressentie ni reconnue. La première loi est donc incontournable et obligatoire.
+
+\subsection{Deuxième loi : L'inverse du savoir --- la compréhension}
+
+Comme mentionné dans la première loi, la conscience est une valeur absolue. Mais dans la deuxième loi, celle de l'inverse du savoir, il est primordial que la conscience soit considérée comme nulle.
+
+À cette position précise dans le temps --- l'instant présent --- il s'agit plutôt d'un référentiel : une sorte de rapport analogue au savoir, une méta-connaissance qui se manifeste comme une évidence. Ne pas savoir, et reconnaître que nous partageons un sens commun avec cette absence de connaissance, constitue un point fixe, une primitive du savoir.
+
+Ce point fixe garantit la logique du savoir et permet le changement, comme un moment d'inertie où le savoir s'anime.
+
+Ainsi, lorsque l'inertie de la connaissance diffère de zéro --- c'est-à-dire lorsque l'on reconnaît ne pas savoir --- alors la première loi est bel et bien considérée comme nulle.
+
+Par l'inverse du savoir, notre capacité de parler --- la compréhension --- s'observe à partir de ce point fixe. Le référentiel s'anime et se déplace du présent vers la mémoire des instants et des circonstances passées. Toute la règle liée à cette connaissance s'y manifeste : la capacité de parler doit dépasser notre ignorance, sans quoi rien ne peut être véritablement connu.
+
+\subsection{Troisième loi : Les figures semblables}
+
+Comme mentionné précédemment, les règles liées aux connaissances sont celles qui prennent forme. La connaissance est davantage un souvenir qu'une nouveauté. À partir des connaissances passées inscrites dans notre mémoire, nous comparons les règles liées à ce savoir en formation avec ce qui est déjà connu.
+
+Par ces comparaisons, en ajustant notre vocabulaire à l'événement qui prend forme, et en nous fiant aux règles observables du passé au référentiel déjà établi, nous pouvons accéder au savoir.
+
+\subsection{2.1 Disproportionner ce qui est connu}
+
+L'expression « obstiné » se dit généralement d'un enfant obstiné. Cet enfant, qui est en plein processus d'apprentissage à parler, ne parvient pas à qualifier un besoin, un objet, un désir, une nécessité. De ce fait, puisqu'il ignore, il interpelle un de ses proches, souvent l'un de ses parents, et, dans le but de parvenir à qualifier cet élément qu'il ne peut identifier, il fait une sorte de proposition par l'absurde pour parvenir à déterminer la manière de qualifier l'élément qu'il peine à qualifier.
+
+Très tenace dans sa demande à ses proches, il redemande plusieurs fois la même demande absurde, ceux-ci qui en général lui refusent la demande. Vous avez déjà vu la scène : alors son parent, dans une exaspération, lui accorde en colère qu'il en soit ainsi. Aussitôt, l'enfant, plutôt que de profiter de cette occasion tant demandée, se met à pleurer en disant qu'il n'en veut pas.
+
+Au Québec, on appelle aussi « tête de cochon » cet agissement particulier à l'âge de l'enfance, que nous avons eu et que nous pouvons observer encore chez les plus jeunes, chose qui se comprend puisque ces jeunes ne savent pas encore tout à fait parler convenablement et qu'il est raisonnable de ne pas savoir tout qualifier à cet âge.
+
+L'idioschizophrénie, cette perturbation précoce entre l'homme et l'homme savant. Observation possible chez l'individu souffrant d'idioschizophrénie, comme à l'époque où des gens usurpaient d'autres dû au niveau de scolarité. De nos jours, il y a toujours abus de comportement de certains.
+
+En effet, le syndrome du médecin spécialiste est une incapacité à savoir. Symptôme type de ce trouble mental. Seulement le reproche leur permet de manipuler une argumentation semblable à quelqu'un qui pourrait savoir quelque chose.
+
+L'idioschizophrénie est une personne adulte qui cherche, par une obstination, à disproportionner l'ensemble de ce qui est connu pour que cela ne soit plus connu, dû au fait que l'interlocuteur stupéfait croit à tort qu'il est celui qui serait responsable. Les propos de cette personne malade sous-entendent que l'interlocuteur serait le responsable de cette incompréhension.
+
+Comme le solipsisme, le but de cette impression paradoxale conduit l'interlocuteur à douter par l'environnement. Il n'est pas possible pour bien des philosophes de douter par l'environnement.
+
+Par exemple, s'il y a émanation d'essence, nous ne doutons pas en nous disant : « S'il n'y avait pas émanation d'essence, je pourrais allumer mon briquet et vérifier s'il y a de l'essence dans l'air », puisque si nous l'allumons, ce serait de la folie.
+
+Le solipsisme qu'ils invoquent est un élément de leur délire et de leur logique dystopique. Ils invoquent une expérience passée plutôt douteuse liée à leur passé, ce qui est dans l'instant présent déjà une utopie, et cette peur aux fondements douteux justifie selon eux de prendre et mettre en place des actes radicaux pour un futur qu'ils croient morbidement dangereux si les moyens radicaux ne sont pas appliqués immédiatement.
+
+Ce cinglage, où les individus souffrant d'idioschizophrénie tissent la mise en scène d'un plan d'un \emph{dasein} dangereux à la suite d'un discours à valeur pseudo-sécuritaire, où il est distinguable à l'oreille leur affection lorsqu'ils s'autoproclament comme étant la police de ce qui existe et de ce qui n'existe pas.
+
+Le biais d'autorité est des plus présents. Alors, au dire de leur interlocuteur, ils affirment que leur propos n'existe pas. Qualifions ce passage comme « Ça n'existe pas dire ».
+
+Pour ensuite tout justifier de leur agissement par cette règle qu'ils imposent en un cinglage inégalable, une mise en scène où ils évaluent tout négativement, où ils simulent la réalité pour disqualifier et handicaper en réalité. Qualifions ce deuxième passage comme « C'est toute à cause de dire ».
+
+Ils sont un secret, ils ont un présent violent, un vœu pernicieux qu'ils gardent secrètement pour parvenir à briser de manière indélébile.
+
+
+\section{Phénoménologie de l'idioschizophrénie}
+
+L'individu souffrant de l'affection justifie sa conduite par rapport à un tiers qui n'est pas lui-même, en se référant au fait que cette tierce personne aurait une volonté d'agir d'une telle ou telle autre manière, avant même que cette tierce personne n'ait agi envers qui que ce soit ou contre quelque chose en soi.
+
+Cette action psychophysique, de la conduite qui leur vient d'un tiers n'étant pas concerné dans leurs réactions, sert à reprocher la conséquence de leur acte envers une personne, pour en plus reprocher et accuser la tierce personne d'être responsable de leur conduite, dû à cette prétendue volonté.
+
+Ils élaborent ainsi une économie basée sur l'inconduite, où le remboursement doit être effectué : la dette encourue par leur agissement doit être remboursée par la tierce personne ayant, semble-t-il, voulu que l'individu atteint d'idioschizophrénie agisse ainsi, conséquemment à la volonté de cette tierce personne qui, souvent, n'est même pas en lien avec la victime ou la personne subissant leur conduite.
+
+L'autoréférence, pour leur critique personnelle de l'action psychophysique, révèle cette chiralité de la réalité, de laquelle découlent, de cette asymétrie, tous comportements toxiques, déviants, délinquants, immoraux ou inconvenables. Cette phénoménologie type de l'individu souffrant d'idioschizophrénie réglemente leur cybernétique de l'agissement, justifié par ce tiers qui leur sert de bouc et mystère pour, dans un deuxième temps, pouvoir reprocher la volonté.
+
+La cybernétique étant la science de l'analogie maîtrisée entre organisme et machine. C'est la science qui étudie les communications. Machine pour machination, ils tentent de réduire à zéro ce qui les terrifie le plus dans leur vie : la bonne conduite des hommes.
+
+En effet, le côté dystopique de l'idioschizophrénie s'observe aisément dans leur terreur des jeunes garçons, chez qui ils organisent l'entreprise de moyens radicaux dès le berceau, en se référant à une expérience douteuse d'analphabète et d'illettré pour justifier la mise en œuvre d'actes radicaux envers ces jeunes garçons, pour empêcher ces jeunes personnes d'avoir un jour une femme et qu'elle ait des seins.
+
+C'est cette crainte injustifiée qui, dans le moment présent, est déjà une utopie à l'âge de ces jeunes personnes, le tout basé sur une expérience de vie douteuse pour empêcher quelque chose qui n'est pas plus terrifiant en soi, par l'évidence de ce qu'elle est : l'évidence qu'une femme adulte soit la conjointe et ait évidemment des seins.
+
+Cette réalité de l'individu souffrant d'idioschizophrénie est la raison de ma décision de l'appellation schizophrénie paranoïde certaine chez eux.
+
+\subsection*{Idio : analogie et étymologie}
+
+« Idio » par analogie avec idiôme et idiosyncratique. L'idiôme est une expression, un mot, une tournure de phrase qui est géolocalisée à une région donnée. En dehors de ces régions où est employé l'idiôme, celle-ci n'est pas entendue. La langue permet l'idiôme, et non l'idiôme qui apprend à parler à la langue.
+
+Idiosyncratique est de faire quelque chose et de réussir autre chose d'inattendu. C'est la réussite de celui qui est conscient. Une personne n'étant pas consciente de ce à quoi elle s'attarde ne peut avoir ce genre de réussite, puisqu'elle passerait inaperçue.
+
+Idioschizophrénie est régionalisée au statut d'universitaire et s'observe chez des individus conscients, et qui, par choix, transforment la réussite au rang de l'erreur Docteur. Le syndrome de « Le médecin spécialiste ». L'idioschizophrénie.
+
+\section{Préambule : Le savoir}
+
+Le savoir est davantage un souvenir qu'une nouveauté. Il se présente comme une substance ressentie, tel un chiasme : lorsque nous le touchons, il nous touche en retour. Réminiscence et réalisme s'y conjuguent, semblables à une accélération. Trois lois, à l'image des lois de l'accélération d'Isaac Newton, peuvent être déterminées pour définir ce qu'est le savoir.
+
+\subsection{Première loi : La conscience}
+
+Pour qu'il y ait véritablement connaissance et savoir, il doit absolument y avoir conscience. Sans conscience, aucune substance ne peut être ressentie ni reconnue. La première loi est donc incontournable et obligatoire.
+
+\subsection{Deuxième loi : L'inverse du savoir --- la compréhension}
+
+Comme mentionné dans la première loi, la conscience est une valeur absolue. Mais dans la deuxième loi, celle de l'inverse du savoir, il est primordial que la conscience soit considérée comme nulle.
+
+À cette position précise dans le temps --- l'instant présent --- il s'agit plutôt d'un référentiel : une sorte de rapport analogue au savoir, une méta-connaissance qui se manifeste comme une évidence. Ne pas savoir, et reconnaître que nous partageons un sens commun avec cette absence de connaissance, constitue un point fixe, une primitive du savoir.
+
+Ce point fixe garantit la logique du savoir et permet le changement, comme un moment d'inertie où le savoir s'anime.
+
+Ainsi, lorsque l'inertie de la connaissance diffère de zéro --- c'est-à-dire lorsque l'on reconnaît ne pas savoir --- alors la première loi est bel et bien considérée comme nulle.
+
+Par l'inverse du savoir, notre capacité de parler --- la compréhension --- s'observe à partir de ce point fixe. Le référentiel s'anime et se déplace du présent vers la mémoire des instants et des circonstances passées. Toute la règle liée à cette connaissance s'y manifeste : la capacité de parler doit dépasser notre ignorance, sans quoi rien ne peut être véritablement connu.
+
+\subsection{Troisième loi : Les figures semblables}
+
+Comme mentionné précédemment, les règles liées aux connaissances sont celles qui prennent forme. La connaissance est davantage un souvenir qu'une nouveauté. À partir des connaissances passées inscrites dans notre mémoire, nous comparons les règles liées à ce savoir en formation avec ce qui est déjà connu.
+
+Par ces comparaisons, en ajustant notre vocabulaire à l'événement qui prend forme, et en nous fiant aux règles observables du passé au référentiel déjà établi, nous pouvons accéder au savoir.
+
+\subsection{Disproportionner ce qui est connu}
+
+L'expression « obstiné » se dit généralement d'un enfant obstiné. Cet enfant, qui est en plein processus d'apprentissage à parler, ne parvient pas à qualifier un besoin, un objet, un désir, une nécessité. De ce fait, puisqu'il ignore, il interpelle un de ses proches, souvent l'un de ses parents, et, dans le but de parvenir à qualifier cet élément qu'il ne peut identifier, il fait une sorte de proposition par l'absurde pour parvenir à déterminer la manière de qualifier l'élément qu'il peine à qualifier.
+
+Très tenace dans sa demande à ses proches, il redemande plusieurs fois la même demande absurde, ceux-ci qui en général lui refusent la demande. Vous avez déjà vu la scène : alors son parent, dans une exaspération, lui accorde en colère qu'il en soit ainsi. Aussitôt, l'enfant, plutôt que de profiter de cette occasion tant demandée, se met à pleurer en disant qu'il n'en veut pas.
+
+Au Québec, on appelle aussi « tête de cochon » cet agissement particulier à l'âge de l'enfance, que nous avons eu et que nous pouvons observer encore chez les plus jeunes, chose qui se comprend puisque ces jeunes ne savent pas encore tout à fait parler convenablement et qu'il est raisonnable de ne pas savoir tout qualifier à cet âge.
+
+L'idioschizophrénie, cette perturbation précoce entre l'homme et l'homme savant. Observation possible chez l'individu souffrant d'idioschizophrénie, comme à l'époque où des gens usurpaient d'autres dû au niveau de scolarité. De nos jours, il y a toujours abus de comportement de certains.
+
+En effet, le syndrome du médecin spécialiste est une incapacité à savoir. Symptôme type de ce trouble mental. Seulement le reproche leur permet de manipuler une argumentation semblable à quelqu'un qui pourrait savoir quelque chose.
+
+L'idioschizophrénie est une personne adulte qui cherche, par une obstination, à disproportionner l'ensemble de ce qui est connu pour que cela ne soit plus connu, dû au fait que l'interlocuteur stupéfait croit à tort qu'il est celui qui serait responsable. Les propos de cette personne malade sous-entendent que l'interlocuteur serait le responsable de cette incompréhension.
+
+Comme le solipsisme, le but de cette impression paradoxale conduit l'interlocuteur à douter par l'environnement. Il n'est pas possible pour bien des philosophes de douter par l'environnement.
+
+Par exemple, s'il y a émanation d'essence, nous ne doutons pas en nous disant : « S'il n'y avait pas émanation d'essence, je pourrais allumer mon briquet et vérifier s'il y a de l'essence dans l'air », puisque si nous l'allumons, ce serait de la folie.
+
+Le solipsisme qu'ils invoquent est un élément de leur délire et de leur logique dystopique. Ils invoquent une expérience passée plutôt douteuse liée à leur passé, ce qui est dans l'instant présent déjà une utopie, et cette peur aux fondements douteux justifie selon eux de prendre et mettre en place des actes radicaux pour un futur qu'ils croient morbidement dangereux si les moyens radicaux ne sont pas appliqués immédiatement.
+
+Ce cinglage, où les individus souffrant d'idioschizophrénie tissent la mise en scène d'un plan d'un \emph{dasein} dangereux à la suite d'un discours à valeur pseudo-sécuritaire, où il est distinguable à l'oreille leur affection lorsqu'ils s'autoproclament comme étant la police de ce qui existe et de ce qui n'existe pas.
+
+Le biais d'autorité est des plus présents. Alors, au dire de leur interlocuteur, ils affirment que leur propos n'existe pas. Qualifions ce passage comme « Ça n'existe pas dire ».
+
+Pour ensuite tout justifier de leur agissement par cette règle qu'ils imposent en un cinglage inégalable, une mise en scène où ils évaluent tout négativement, où ils simulent la réalité pour disqualifier et handicaper en réalité. Qualifions ce deuxième passage comme « C'est toute à cause de dire ».
+
+Ils sont un secret, ils ont un présent violent, un vœu pernicieux qu'ils gardent secrètement pour parvenir à briser de manière indélébile.
+
+\section{L'idioschizophrénie : rupture de la réalité et de l'imaginaire}
+
+L'individu qui souffre d'idioschizophrénie prétend avoir un libre esprit. Cet antinomisme avoué se manifeste par le rejet de toute responsabilité dans sa rébellion, qu'ils semblent n'avoir aucune conscience avec le sens commun avec les autres, aucune empathie --- ceux qui ne souffrent pas de cette affection.
+
+Le refus de toute conscience de la convenance, de l'entente, de la paix, de la quiétude, de la loi, de la morale sociale, familiale, légale, etc., permet d'observer chez lui une largesse inquiétante de la moralité. Son discours ne s'active que lorsque d'autres que eux-mêmes prennent une décision : il choisit alors immanquablement d'agir de manière contraire. Ils veulent immédiatement entreprendre des moyens radicaux pour empêcher le choix de ces autres individus --- qui, pourtant, ne l'ont aucunement inclus dans leur décision.
+
+Ces personnes souffrant d'idioschizophrénie s'imposent et s'invitent, se permettant de critiquer fortement et ouvertement, jusqu'à humilier et insulter les choix et décisions de l'autre.
+
+Il est certain pour Philippe Thomas Savard que l'individu souffrant d'idioschizophrénie ne peut avoir accès à la connaissance. Seulement par le reproche, il tente d'approcher le savoir, mais sans jamais espérer en partager le moindre sens commun. En soi, c'est de ne pas comprendre qu'il ne parvient pas à comprendre.
+
+Il est quasi impossible que ces individus acceptent de dire qu'ils ne savent pas quelque chose. Et dans leur dialecte antinomiste, il n'est pas rare qu'ils lancent, sans réfléchir, lorsqu'on leur demande de comprendre la valeur de leurs gestes si ceux-ci leur étaient adressés. Sans conscience, ils déclarent souvent :
+
+\begin{itemize}
+    \item « Je ne sais pas ce que c'est que le savoir »
+    \item « Je ne sais pas ce qu'est comprendre »
+\end{itemize}
+
+Ils n'ont qu'un seul désir : s'amuser à croire que des gens qu'ils ne connaissent pas du tout ont à savoir ce qu'ils veulent --- ce qui constitue un point commun avec l'enfant obstiné.
+
+Pour éviter d'avoir à se critiquer, ils refusent de reconnaître que les gens voient avec leurs yeux, puisque eux-mêmes ne savent pas ce que c'est que voir.
+
+Ces agissements révèlent un manque profond, une obstination morbide. Pour l'auteur, ce manque est la raison principale de leur idioschizophrénie. Le fait qu'ils agissent et prétendent que cela ne fait rien. Et que le fait qu'une personne ne leur fait rien aurait un impact sur eux-mêmes.
+
+Les phénomènes auditifs étranges se multiplient. Il n'est pas rare qu'une personne souffrant de l'affection prétende que quelqu'un sait qu'ils ont dit quelque chose, mais ne se sont pas adressés à cette personne en question, et allèguent que cette personne serait censée savoir de quoi il s'agit.
+
+Le rapport qu'ils ont avec les faits de notre réalité tangible est surtout psychophysique, marque de leur handicap intellectuel, et leur autocritique lorsqu'ils prennent conscience des faits accomplis est surtout utile et utilisable pour reprocher à d'autres les événements.
+
+Leur seul rapprochement avec le savoir est toujours par une tierce personne et n'a d'utilité pour eux que le reproche. Ils veulent ou ont une opinion sur un sujet seulement une fois que d'autres aient eu cette opinion. Dans la plupart des cas, ils veulent surtout un sauf-conduit pour au moins pouvoir faire des reproches. C'est pour l'auteur la seule connexion qu'ils ont avec la possibilité de savoir.
+
+\subsection{L'action psychophysique}
+
+Pour le domaine de la physique, toute cause précède temporellement son effet. Il est certain qu'une bille noire frappée par une bille blanche entre en mouvement non pas parce que la bille blanche percute la bille noire, mais parce que c'est le moment exact où la bille blanche entre en collision avec la bille noire qu'elle bouge.
+
+L'individu souffrant d'idioschizophrénie exclut tout raisonnement a priori synthétique, prétextant que « déjà » est un mot qui devrait être exclu du dictionnaire de la langue française, fait qui rendrait leur agissement normal puisque « le monde » ne se rendrait ainsi pas compte de leur agissement inconvenable puisqu'il ne se rappellerait plus.
+
+Tout est placé au rang de la banalité, jusqu'à ce que nous puissions facilement observer leur perception (hallucination) phénoménologique de l'action psychophysique qu'ils jugent et qui démontre leur perte de repère et de contact avec notre réalité tangible.
+
+Lorsque quelqu'un ne leur fait rien, cela leur fait quelque chose, et ils se plaignent, enragés, que cette personne qui ne leur a même pas parlé ou adressé la parole leur fait quelque chose qui, selon leur dire, est atroce et insupportable.
+
+À l'inverse, lorsqu'ils passent à l'action pour une action méchante qui peut aller jusqu'à l'homicide, ils affirment que cela ne fait rien et disent être victimes de cette personne dans le moment présent, même si elle est morte. Souvent affirmant que cette personne décédée les insulte.
+
+Pour l'individu souffrant de l'affection de l'idioschizophrénie, le syndrome du médecin spécialiste, leurs actes sont en conséquence d'une tierce partie non présente, qui, semble-t-il, voudrait, ce qui justifie leur inconduite souvent mortelle envers une autre personne que la personne tierce non présente.
+
+\subsection{Rupture entre réalité et fiction}
+
+La rupture entre la réalité et la fiction --- l'imaginaire --- est également profonde chez l'individu atteint d'idioschizophrénie. Il affirme avec vigueur et fermeté que l'imaginaire et la réalité sont pareils au même, qu'il n'y a aucune différence entre les deux.
+
+Ils prétendent avoir accès à une technologie leur permettant de tout entendre, d'entendre la pensée, et de parler dans la pensée d'autres individus.
+
+Lorsque l'individu souffrant de cette affection élabore sur le sujet, il affirme que ceux avec qui il parvient à communiquer grâce à cette technologie (hallucinateur) --- bien qu'il leur parle concrètement --- ne sont en réalité que des hallucinations. Il prétend que ces personnes, avec qui il communique sans permission, ne font que croire communiquer avec eux dans leur pensée.
+
+Mais pour l'individu souffrant d'idioschizophrénie, cette communication imaginaire est impérative : elle doit être vraie, elle doit être la réalité.
+
+Il va même jusqu'à confronter ces gens qu'il dit avoir contactés par la pensée. Et en personne, il n'avoue pas avoir communiqué avec eux de manière originale : il les diagnostique comme souffrant d'hallucinations profondes.
+
+Le niveau de harcèlement que ces individus exercent envers ceux qu'ils croient avoir contactés par leur soi-disant technologie est extrêmement grave.
+
+Ils peuvent aller jusqu'à la planification d'actes criminels : homicide, viol, vol.
+
+Ils sont, pour la plupart, des délinquants dangereux, occupant souvent des postes de niveau universitaire --- où l'accès à des informations personnelles et confidentielles est particulièrement sensible.
+
+Leurs lieux de prédilection pour agir selon leur libre esprit sont les hôpitaux, puisque les données les plus sensibles y sont très accessibles, et évidemment très critiques.
+
+\section{L'idioschizophrénie : dépersonnalisation profonde et rupture remarquable de soi et de l'autre}
+
+L'idioschizophrénie se manifeste par une dépersonnalisation profonde et une rupture marquée entre soi et l'autre, une chiralité planifiée qui oppose et confond les deux. Elle s'accompagne d'un rêve d'« esclavagisme » prononcé : l'observation de la bonne conduite devient un moyen de déshériter l'autre de son meilleur jugement, alors même que l'individu rejette toute forme de moralité, ce qui l'a lui-même privé de jugement.
+
+Le libre esprit de l'antinomisme étudie la bonne conduite --- particulièrement celle des hommes --- pour formuler un vœu pernicieux.
+
+\subsection{L'intelligence et la distinction entre réel et imaginaire}
+
+L'intelligence d'une personne est une suite d'interprétations de symboles et de signes.
+
+\begin{itemize}
+    \item Les symboles affectent les sens.
+    \item Les signes affectent le jugement.
+\end{itemize}
+
+C'est une lecture de symboles et de signes qui se poursuit selon des cycles synchroniques et diachroniques. L'intelligence est l'outil qui nous permet de distinguer et de différencier le monde matériel de la réalité, dans lequel nous évoluons, et le monde immatériel de l'imaginaire.
+
+Sans l'intelligence, il n'existe que la réalité. Tout ce qui est connaissance et savoir --- ce qui appartient à notre capacité de raisonner a priori les concepts, questions, situations, circonstances, etc. --- n'existe pas.
+
+Pour ces individus, l'imaginaire et tout l'immatériel sont « pareil au même » que la réalité matérielle. Toute fiction est assimilée à la réalité, et ils accusent tout ce qui est fictionnel d'être réel, sans autocritique ni remords. Moyen commode de perpétuellement harceler et manipuler la réalité à leur guise.
+
+\subsection{Dépersonnalisation et comportements déviants}
+
+L'individu souffrant d'idioschizophrénie cherche à être la personne qu'il est, mais uniquement dans sa pensée. Cette personne qu'il tente de devenir dans sa pensée, il cherche à la ressentir à travers une deuxième personne qui n'est pas lui-même.
+
+De cette dépersonnalisation découlent des comportements toxiques, déviants, délinquants ou socialement inconvenables.
+
+\subsection{Le fantasme de l'esclavagisme}
+
+Le terme « esclavagisme » n'est pas exact. La forme convenable est « esclavagiste », qui désigne celui qui fait la traite des esclaves. L'« esclavage » est ce à quoi est soumis l'esclave.
+
+Il n'existe pas d'enchaînement logique qui conduise à devenir esclave : c'est pourquoi « esclavagisme » n'est pas une expression en soi. L'« esclavagisme » est davantage un fantasme qu'une réalité.
+
+L'individu souffrant d'idioschizophrénie nourrit ce fantasme de manière très prononcée. Il occupe son temps à observer la bonne conduite, particulièrement celle des hommes. Il guette un terme, un mot, une expression, une tournure de phrase qui lui permettrait, grâce à ces éléments, de soumettre ces hommes observés à l'esclavage d'une vie de misère, de malheur, de pauvreté, de tristesse, de maladie, de mort, etc. --- pour toujours.
+
+C'est le vœu pernicieux de l'individu souffrant de cette affection : un handicap secret qu'il souhaite voir assouvir l'être humain en général.
+
+Cet individu est misanthrope, c'est-à-dire qu'il nourrit une haine générale de l'être humain. Pour illustrer, l'auteur image comme étant de vouloir mettre sa tête dans sa bouche et est l'image mystique de la haine. Cette haine qu'il associe au personnage de la mort, qui est parfois représenté avec une grande bouche.
+
+Enfin, l'auteur décrit l'idioschizophrénie comme une affection résultant d'une incapacité à savoir sans reproche. L'individu atteint cherche à disproportionner ce qui est connu afin que cette connaissance cesse d'être reconnue. Ce handicap intellectuel se perçoit à l'oreille lorsqu'on discute avec une personne qui en souffre. Celle-ci s'autoproclame « police » de ce qui existe ou non, persuadée de détenir un sens du réel supérieur à autrui.
+
+Rapidement, elle détourne la conversation en affirmant que ce que dit son interlocuteur « n'existe pas » --- ce que l'auteur nomme la première réponse : « Ça n'existe pas dire. »
+
+Puis, elle attribue tout ce que dit l'autre à cette affirmation initiale --- la seconde réponse : « C'est toute à cause de dire. »
+
+Une telle discussion engendre une mise en scène morbide, un cinglage, où l'interlocuteur ressent un malaise. La personne atteinte s'emploie à marauder l'opinion de l'autre, à restreindre les facteurs qui guident ses décisions et ses actions. Elle observe minutieusement ce processus pour provoquer des manquements dans la qualité du jugement de son interlocuteur. L'auteur appelle cela « cinglage ».
+
+Ainsi, ces individus orchestrent une simulation en temps réel pour provoquer l'erreur de jugement d'autrui, les privant de leurs meilleurs discernements afin de les ramener à leur propre handicap. Dans certains milieux universitaires, de telles pratiques de simulation et de manipulation visent à s'approprier la connaissance d'autrui en le déshéritant de ses meilleurs jugements, créant un effet de cause à effet entre le maraudage préalable et la simulation orchestrée.
+
+\section{Conséquences de la communication auto-proclamée}
+
+La subsidiarité qui mena Philippe Thomas Savard à être tuteur des individus souffrant d'idioschizophrénie lui fit vivre une panoplie d'événements fâcheux qui le conduisirent de la misère de l'itinérance à l'article de la mort par deux fois. Deux fois, des individus souffrant d'idioschizophrénie ont passé bien près de causer la mort de Philippe.
+
+Les deux fois, une succession d'événements où ces individus malades orchestrant leur cinglage habituel pour fabriquer un environnement où ils simulent à l'intérieur de ce même environnement pour provoquer la faute et évidemment déshériter du meilleur jugement de l'auteur pour ensuite voler ou annuler la connaissance et le savoir. Le maraudage qu'ils s'appliquent à effectuer envers les gens autour de Philippe --- par rapport au travail, aux amis, à l'amour, à la famille, etc. --- était des plus présents.
+
+« La sexualité de l'auteur a été des plus empêchée tous les 41 ans de vie que l'auteur a été placé en situation de tutorat envers ces individus. Le niveau d'harcèlement sexuel, en plus des agressions et brutalités que ces individus ont commises sur Philippe, est quotidien et n'aura de fin qu'une seule option qu'ils prononcent à peine : ``Négocie''. C'est le seul commentaire qu'ils prononcent lorsque l'auteur se plaint de la situation et la raison de cette évidence autoréférencée à : ``Si tu ne le sais pas, ça ne fait rien, tu ne le sais pas'' ou ``Tu n'es pas capable de nous dire qu'est-ce que cela fait, donc cela ne fait rien''. »
+
+Le pseudo-chercheur de la curieuse étude prétexte la politesse alors que le viol de la vie privée de Philippe n'est qu'omniprésent et allègue que l'auteur doit commettre un crime sexuel, sans quoi sa conduite déterminerait que les hommes ne sont pas tous des violeurs, alors affirme-t-elle : « Je ne suis pas d'accord ». La chercheuse, toujours, se présente comme un homosexuel convaincu qui ne veut pas que les femmes ne fassent pas profiter d'elles.
+
+Pour démontrer l'antinomie du raisonnement et la nature autoréférencée, la raison pour laquelle Philippe doit commettre ce crime sexuel selon elle est qu'il doit l'assumer. Ces raisons sont tout aussi peu envieuses : « que éternellement cette chercheuse ait la confiance de femmes pour finalement pouvoir profiter d'elles ensuite ». Ce raisonnement à forcer les hommes à la délinquance sexuelle doit s'appliquer à l'ensemble des hommes, excepté ceux qui ont déjà un historique de délinquance sexuelle à leur tableau selon elle.
+
+Par conséquence de l'évidence que ce sont des gens obstinés et convaincants de manière significative pour priver les hommes en général de leur succès exagéré d'avoir une femme dans leur vie.
+
+Ce résumé de la vision moyenne de l'individu souffrant d'idioschizophrénie nous en dit long sur le caractère dystopique de leur raisonnement. Dystopique est dans le présent quelque chose qui est certainement une utopie : ce caractère base ses affirmations sur quelque chose de plutôt douteux : « Homme ayant un historique de délinquance sexuelle à leur tableau ».
+
+Pour finir, nous éclairer sur la remarquable jouissance de vie que nous aurions si nous appliquions leur raisonnement : « Par conséquence de l'évidence que ce sont des gens obstinés et convaincants de manière significative pour priver les hommes en général de leur succès exagéré d'avoir une femme dans leur vie ». Dystopie, schizophrénie paranoïde !
+
+Le mot idioschizophrénie est un néologisme que l'auteur Philippe Thomas Savard a formé des mots idiôme et idiosyncratique.
+
+Idiosyncratique : Réussir quelque chose en s'appliquant à quelque chose d'autre. Est la réussite de celui qui est conscient. Lorsque quelqu'un est conscient de ce à quoi il s'applique dans l'instant présent, il parvient à quelque chose d'imprévu, mais doit impérativement être conscient de ce à quoi il s'applique.
+
+Idiôme : Expression, terme géolocalisé à une région donnée ; hors de cette région, l'idiôme n'est pas employé ou très peu. La langue permet l'idiôme, non pas l'idiôme qui éduque la langue à parler la langue.
+
+Idioschizophrénie : Perturbation précoce de la relation homme, homme savant. Dépersonnalisation où l'individu cherche à être celui qu'il est dans sa pensée ; celui-ci est désiré, ressenti à travers une autre personne que celle qu'il est. Chiralité desquels découlent les comportements déviants, délinquants, toxiques et inconvenables. Délire dans lequel la rupture entre le monde tangible et l'imaginaire n'est plus différenciée ; propos autoréférencés, antinomie. Antinomisme, libre esprit : « Délire obstiné pour disproportionner ce qui est connu pour annuler la valeur de cette connaissance ». Individu souvent excommunié vivant pour la fornication. Individu misanthrope qui hait l'être humain en général. Mettre sa tête dans sa bouche étant l'illustration de la haine et de son ambition disproportionnée vis-à-vis la connaissance. Pour illustrer le caractère précoce de la disproportion : « Vouloir assister à l'avortement prématuré de sa mère pour s'avaler ». La mort est l'égale de la haine et est souvent illustrée avec une grande bouche. Affection géolocalisée « Docteur ».
+
+Doctus cum libro : Se dit de ceux incapables de penser par eux-mêmes. Étale une science d'emprunt et puisent leurs idées dans les ouvrages des autres. « Déf. Dictionnaire Pierre Larousse pages roses ». (Savant avec le livre).
+
+La finesse, pulsion de la vie : fantasme circonstanciel qui surpasse la vie par ses raisons d'être. La pulsion de la vie, ou finesse, est cette particularité que chaque forme complexe d'être vivant possède en lui et qui s'exécute en arrière-plan en lien avec la position qu'il occupe dans son environnement. Cette position, qui influence en arrière-plan ou inconsciemment, est que tout individu possède en lui-même suffisamment pour toujours surpasser une situation critique à son existence.
+
+Conséquence de l'autonomie, du bien-être et de l'organisation pour fondation de la structure d'un être vivant. Cette pulsion, malgré son importance capitale dans la vie d'un être vivant, peut le mener aux idées noires, de suicide et de point final.
+
+La subversion véhiculée sur l'autonomie peut, telle des tracts en temps de guerre qui sont distribués pour démotiver les populations jusqu'à ce qu'elles cessent de se défendre, violer l'autonomie par ce biais. En conséquence de la pulsion de la vie qui s'exécute en arrière-plan chez une personne malade, la meilleure manière d'avoir le dessus sur lui-même serait de s'enlever la vie.
+
+Leurs propos vont souvent dans le sens qu'il serait mieux pour leurs proches qu'ils quittent le vivant pour la mort, que même leurs proches le comprennent. C'est une conséquence de cette pulsion de la finesse qui est plus qu'indispensable mais qui n'est perceptible qu'en observant l'organisation d'un être vivant.
+
+Celui qui s'organise est censé en jouir pleinement. Lorsqu'il y a intervention externe, telle une cellule en autopoïèse, le temps s'arrête pour que la cellule puisse se régénérer à l'intérieur de la cellule.
+
+La vision de la personne subissant atteinte à la pulsion de la vie, due au décalage que la subversion contre autonomie leur fait voir leurs proches comme victimes de leur sort, alors que la réalité est plutôt que c'est eux-mêmes qui sont victimes d'un phénomène les rendant incapables de réaliser l'ampleur de la gravité de leur situation.
+
+L'amitié, qui est de reconnaître qu'on n'a pas à tout faire soi-même et qu'il est permis d'avoir un coup de main de la part d'un autre, est sous l'ombrage d'opinions qui cherchent à délier l'amitié en véhiculant que nous aurions à tout faire seuls. Opinion des économies fascistes qui prônent une économie en autarcie. L'alter-mondialisation, qui est le fasciste de l'ère du nouveau millénaire, alourdit la discussion pour polluer cette dernière et, par subversion, mettre un terme à l'original.
+
+\section*{Autres définitions}
+
+\subsection*{Trois psychologies dominantes chez une personne}
+
+\textbf{Psychologie préscolaire} : Est une psychologie observable à deux instants différents et chez deux groupes de gens différents.
+
+Le premier groupe adoptant cette psychologie préscolaire est bien évidemment ceux qui y sont associables par la conséquence logique de la suite des événements. Il s'agit des plus jeunes de notre société qui n'ont pas encore atteint le niveau de la première année primaire.
+
+À cet âge, la psychologie préscolaire en est une d'acceptation et de tolérance envers les différentes situations qui les entourent. En effet, à cet âge, ils ne sont pas tolérés ni considérés pour leurs décisions, encore trop jeunes pour prendre seuls les décisions pour leur avenir. Habituellement, leurs parents proches se chargent de le faire et de subvenir à leurs besoins.
+
+Les mœurs sociales et morales donnent le privilège de l'éducation aux parents, la responsabilité d'assurer les besoins de leur progéniture. La réalité et le bon sens, selon moi, est davantage que toute personne a cette responsabilité envers les enfants et adolescents quand l'occasion et la circonstance l'obligent. Ce n'est qu'une opinion, mais je crois que cela peut être même obligatoire d'un point de vue légal et de la loi. Nous ne pouvons passer sous silence ou ne pas divulguer des informations de violence physique ou sexuelle envers un mineur au Canada.
+
+Cette psychologie est toujours observable lorsque nos aînés sont en perte d'autonomie et qu'à nouveau ils sont plus distants face à la prise de décision qui les entoure. Circonstancielle à la situation liée à leurs pertes d'autonomie. Cette psychologie est encore une d'acceptation et d'autosatisfaction vis-à-vis les différentes situations de la vie.
+
+\section{L'esprit analogiste et l'esprit de finesse : une lecture narrée}
+
+\subsection{Introduction}
+
+Dans la perspective analogiste, comprendre le monde ne consiste pas à empiler des règles, mais à reconnaître les correspondances secrètes qui relient les phénomènes entre eux. L'esprit de finesse, lui, est la capacité de percevoir ces liens avant même de les démontrer. Ensemble, ces deux facultés forment une méthode : une manière de voir, de sentir et de construire la connaissance.
+
+\subsection{L'esprit de finesse : une carte intérieure du réel}
+
+L'esprit de finesse est une élévation de soi par rapport à la situation présente. Chaque être humain évolue dans une \emph{enveloppe} --- un espace mental et concret où se trouvent ses objets, ses émotions, ses gestes, ses habitudes. Cet ensemble forme une \textbf{carte intérieure}, une topologie vivante de notre existence.
+
+Cette carte n'est pas abstraite : elle est faite de la position de nos biens, de nos actions, de nos émotions, de nos souvenirs. Elle est la géométrie intime de notre équilibre. L'esprit de finesse permet de lire cette carte, de percevoir ce qui, dans notre environnement immédiat, peut répondre à une difficulté ou éclairer une question.
+
+\subsection{Le \textit{lalangue} : quand les mots touchent le corps}
+
+Le \textit{lalangue} n'agit pas par la définition des mots, mais par leur \emph{portée physique}.  
+Les mots laissent des traces, comme des pressions sur le corps. Ils atteignent l'interlocuteur de l'intérieur.
+
+Pour illustrer cela, l'analogiste utilise la \textbf{bouteille de Klein} : une figure impossible où l'intérieur et l'extérieur se confondent.  
+De même, le \textit{lalangue} traverse la personne : ce qui est dit à l'extérieur se retourne à l'intérieur, sans frontière.
+
+Cette dynamique rappelle la \textbf{téléosémantique}, une branche de la philosophie de l'esprit qui cherche à cartographier les représentations mentales. L'esprit projette ses formes vers l'extérieur, comme si une partie de notre réseau neuronal se reflétait dans le monde.
+
+\subsection{Le réseau neuronal et son miroir dans la société}
+
+Le cerveau humain est un immense réseau interconnecté.  
+L'analogiste observe que certaines zones de ce réseau peuvent se projeter dans le comportement, dans l'environnement, dans les interactions sociales.
+
+De manière analogue, la toile du web est elle aussi un réseau neuronal :  
+\begin{itemize}
+    \item elle possède une mémoire,  
+    \item elle stocke des informations,  
+    \item elle réagit aux comportements humains.  
+\end{itemize}
+
+Ainsi, l'analogiste considère que certains comportements --- notamment les \textbf{biais algorithmiques}, c'est-à-dire les manières de faire trompeuses ou nuisibles --- peuvent affecter à la fois le réseau humain et le réseau numérique.
+
+\subsection{Le rôle de l'analogiste : retirer les biais algorithmiques}
+
+Un analogiste est un grammairien qui voit la grammaire comme une mathématique.  
+Il attribue une valeur aux mots, aux gestes, aux comportements.  
+Lorsqu'un comportement est reconnu comme trompeur, frauduleux ou nuisible pour la collectivité, il doit être retiré --- comme on retire un terme erroné d'une équation.
+
+L'analogiste agit alors comme un transformateur électrique :  
+\begin{itemize}
+    \item le réseau neuronal humain est l'enroulement primaire,  
+    \item le réseau numérique est l'enroulement secondaire.  
+\end{itemize}
+
+Ce qui circule dans l'un induit des effets dans l'autre.
+
+\subsection{L'enregistrement des comportements nuisibles}
+
+Certains individus, souvent peu scolarisés mais proches des milieux universitaires, adoptent des comportements analogues à ceux des biais algorithmiques. Ils cherchent à déshériter le savoir d'autrui, à annuler la valeur de ce qui est connu, en répétant des formules telles que :
+\begin{itemize}
+    \item « ça n'existe pas dire »,  
+    \item « c'est toute à cause de dire ».  
+\end{itemize}
+
+Ces individus acceptent d'être enregistrés, croyant pouvoir se tirer d'affaire par la fraude ou la manipulation. Ils interprètent même le refus explicite d'autrui comme un consentement implicite, malgré le fait que, légalement, \textbf{non signifie non}.
+
+\subsection{La machination et la croyance erronée en un dialogue imaginaire}
+
+Lorsqu'ils sont enregistrés, ces individus croient parler à des personnes réelles.  
+Ils discutent avec un appareil électronique --- parfois doté d'une voix synthétique --- mais sont convaincus d'interagir avec leurs victimes.
+
+Ils :
+\begin{itemize}
+    \item rôdent autour de leurs cibles,  
+    \item posent des gestes sans explication,  
+    \item retournent à l'appareil pour « questionner » leurs propres actes,  
+    \item justifient leurs comportements par des liens imaginaires.  
+\end{itemize}
+
+Cette machination affecte la société concrètement :  
+\begin{itemize}
+    \item elle perturbe l'environnement social,  
+    \item elle introduit des informations confidentielles dans le réseau numérique,  
+    \item elle influence inconsciemment les comportements de chacun.  
+\end{itemize}
+
+\subsection{L'effet de retour : l'inconscient comme alarme}
+
+À force d'agir ainsi, leur inconscient finit par informer les autres de leur inconduite.  
+Chaque personne ciblée ressent intuitivement le danger avant même que l'acte ne soit posé.  
+C'est un mécanisme naturel d'auto-protection sociale.
+
+\subsection{L'isossophie : la méthode analogiste pour retirer un biais}
+
+L'isossophie est la méthode qui permet à l'analogiste de retirer un biais algorithmique.  
+Elle repose sur une \textbf{mesure égale} entre :
+
+\begin{itemize}
+    \item la connaissance réelle,  
+    \item et sa démesure trompeuse.  
+\end{itemize}
+
+Elle conserve les valeurs du passé, protège celles du présent, et empêche qu'on enseigne l'ignorance comme une vérité.
+
+\section*{Conclusion}
+
+À toutes celles et ceux qui ont pris le temps de consulter le travail que j'ai consacré à la géométrie du spectre des nombres premiers, je souhaite exprimer ma profonde gratitude. Que ce projet ait su vous plaire ou, peut-être, qu'il vous ait laissé perplexes ou déçus, je demeure sincèrement reconnaissant que vous ayez offert un moment de votre vie pour parcourir une œuvre que j'ai conçue entièrement, de A à Z.
+
+Merci pour votre attention, votre curiosité et votre encouragement. Merci, surtout, de m'avoir lu.
+
+\bigskip
+
+\noindent\textit{« Il n'y a pas de savant connu qui ne se souvienne plus de l'époque où il était connu pour avoir su. Ceux qui ne se souviennent plus de l'époque où ils étaient reconnus pour leur savoir n'ont jamais été connus, ni leur savoir. Aujourd'hui, le mien l'est --- et je vous en remercie. »}
+
+\bigskip
+
+Pour clore ce mémoire, permettez-moi une anecdote personnelle.  
+Albert Einstein, lorsqu'il présenta la relativité, n'était pas docteur. Selon plusieurs biographies, il possédait une formation universitaire de trois ans en mécanique industrielle. Cette formation lui suffit pourtant pour transformer à jamais les cahiers d'école du monde entier.
+
+Pour ma part, j'ai étudié deux ans en génie civil au Centre intégré en mécanique industrielle de la Chaudière, à Saint-Georges-de-Beauce. J'ai ensuite complété une formation d'un an en électricité de chantier.  
+\[
+2 + 1 = 3
+\]
+
+Ainsi, puisque la formation en mécanique industrielle des années 1800 fut suffisante pour permettre à Einstein de concevoir la relativité et de devenir l'un des savants les plus marquants de l'histoire, je ne prétends certes pas être un aussi grand savant que lui --- mais je possède, moi aussi, trois années d'études dans ce domaine. J'estime donc être suffisamment outillé pour aborder les sujets auxquels je fais allusion dans ce travail.
+
+\bigskip
+
+\begin{center}
+\textbf{Merci.}
+\end{center}
+
+%=========================================================
+%   ANNEXE : LICENCE APACHE 2.0
+%=========================================================
+
+\appendix
+\section*{Licence Apache 2.0}
+\addcontentsline{toc}{section}{Licence Apache 2.0}
+
+\begin{small}
+\begin{verbatim}
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+1. Definitions.
+
+"License" shall mean the terms and conditions for use, reproduction,
+and distribution as defined by Sections 1 through 9 of this document.
+
+"Licensor" shall mean the copyright owner or entity authorized by
+the copyright owner that is granting the License.
+
+"Legal Entity" shall mean the union of the acting entity and all
+other entities that control, are controlled by, or are under common
+control with that entity.
+
+"Source" form shall mean the preferred form for making modifications,
+including but not limited to software source code, documentation
+source, and configuration files.
+
+"Object" form shall mean any form resulting from mechanical
+transformation or translation of a Source form.
+
+"Work" shall mean the work of authorship, whether in Source or Object
+form, made available under the License.
+
+"Derivative Works" shall mean any work, whether in Source or Object
+form, that is based on (or derived from) the Work and for which the
+editorial revisions, annotations, elaborations, or other modifications
+represent, as a whole, an original work of authorship.
+
+"Contribution" shall mean any work of authorship intentionally
+submitted to Licensor for inclusion in the Work by the copyright
+owner or by an individual or Legal Entity authorized to submit on
+behalf of the copyright owner.
+
+"Contributor" shall mean Licensor and any individual or Legal Entity
+on behalf of whom a Contribution has been received by Licensor.
+
+2. Grant of Copyright License.
+Subject to the terms and conditions of this License, each Contributor
+hereby grants to You a perpetual, worldwide, non-exclusive, no-charge,
+royalty-free, irrevocable copyright license to reproduce, prepare
+Derivative Works of, publicly display, publicly perform, sublicense,
+and distribute the Work and such Derivative Works in Source or Object
+form.
+
+3. Grant of Patent License.
+(\ldots{} texte complet de la licence \ldots{})
+
+END OF TERMS AND CONDITIONS
+\end{verbatim}
+\end{small}
+
+\end{document}

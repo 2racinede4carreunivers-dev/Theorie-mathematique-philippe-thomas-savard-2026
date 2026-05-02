@@ -1,0 +1,240 @@
+{
+  "eval_time": "2026-04-20 01:15 UTC",
+  "total_score": 74.3,
+  "category": "Revisions majeures requises",
+  "files": [
+    {
+      "name": "espace_philippot.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 3,
+        "rigueur": 3,
+        "notation": 3,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "7 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 22.0. Axiomes bien justifies. Penalite : 4 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure de locales propre, documentation textuelle abondante.",
+        "originalite": "Originalite significative. 3 concepts."
+      },
+      "total": 16,
+      "metrics": {
+        "lines": 198,
+        "definitions": 15,
+        "lemmas": 7,
+        "proved": 7,
+        "axiomatizations": 1,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "geometrie_spectre_premier.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 3
+      },
+      "justifications": {
+        "correction": "1 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Structure presente mais des elements de connexion manquent.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite moderee."
+      },
+      "total": 13,
+      "metrics": {
+        "lines": 152,
+        "definitions": 13,
+        "lemmas": 1,
+        "proved": 1,
+        "axiomatizations": 0,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "infini_parti.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 1,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "1 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Lacunes majeures dans la completude logique.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 4 concepts."
+      },
+      "total": 13,
+      "metrics": {
+        "lines": 511,
+        "definitions": 23,
+        "lemmas": 1,
+        "proved": 1,
+        "axiomatizations": 0,
+        "locales": 12,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "mecanique_discret.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 3,
+        "rigueur": 3,
+        "notation": 2,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "7 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 25.0. Axiomes bien justifies. Penalite : 3 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 3 concepts."
+      },
+      "total": 15,
+      "metrics": {
+        "lines": 651,
+        "definitions": 68,
+        "lemmas": 7,
+        "proved": 7,
+        "axiomatizations": 3,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "methode_de_philippot.thy",
+      "scores": {
+        "correction": 2,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 4
+      },
+      "justifications": {
+        "correction": "3 lemme(s) prouve(s). Debut de verification mais lacunes.",
+        "completude": "Structure presente mais des elements de connexion manquent.",
+        "rigueur": "Aucune axiomatisation. Approche purement definitoire.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite significative. 3 concepts."
+      },
+      "total": 14,
+      "metrics": {
+        "lines": 242,
+        "definitions": 33,
+        "lemmas": 3,
+        "proved": 3,
+        "axiomatizations": 0,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "methode_spectral.thy",
+      "scores": {
+        "correction": 4,
+        "completude": 3,
+        "rigueur": 4,
+        "notation": 3,
+        "originalite": 5
+      },
+      "justifications": {
+        "correction": "50 lemmes prouves par le noyau Isabelle. Correction exemplaire.",
+        "completude": "Structure complete : sections, preuves, documentation. Aucune locale vide.",
+        "rigueur": "Ratio preuves/axiomes = 9.7. Axiomes bien justifies.",
+        "notation": "Structure de locales propre, documentation textuelle abondante.",
+        "originalite": "Hautement original. 5 concepts uniques identifies."
+      },
+      "total": 19,
+      "metrics": {
+        "lines": 1597,
+        "definitions": 96,
+        "lemmas": 50,
+        "proved": 50,
+        "axiomatizations": 15,
+        "locales": 0,
+        "sorries": 0
+      }
+    },
+    {
+      "name": "postulat_carre.thy",
+      "scores": {
+        "correction": 3,
+        "completude": 2,
+        "rigueur": 4,
+        "notation": 2,
+        "originalite": 3
+      },
+      "justifications": {
+        "correction": "5 lemmes prouves. Correction acceptable avec potentiel d'expansion.",
+        "completude": "Structure presente mais des elements de connexion manquent. Locales vides detectees : octogone_carre_equations, hexagone_carre_equations.",
+        "rigueur": "Aucune axiomatisation. Toutes les propositions sont prouvees ou definitoires. Penalite : 16 constante(s) flottante(s) encodee(s) comme axiomes.",
+        "notation": "Structure ou documentation presente mais pas les deux.",
+        "originalite": "Originalite moderee."
+      },
+      "total": 14,
+      "metrics": {
+        "lines": 451,
+        "definitions": 19,
+        "lemmas": 8,
+        "proved": 5,
+        "axiomatizations": 0,
+        "locales": 6,
+        "sorries": 0
+      }
+    }
+  ],
+  "global": {
+    "infrastructure": {
+      "score": 10,
+      "details": {
+        "workflows": 5,
+        "scripts": 9,
+        "metadata": true,
+        "databases": 2
+      }
+    },
+    "coverage": {
+      "score": 5.5,
+      "details": {
+        "cross_refs": 0,
+        "qa_count": 0,
+        "arbo": 4,
+        "hol_lines": 3795,
+        "pdf_count": 10
+      }
+    },
+    "philosophy": {
+      "score": 9.0,
+      "details": {
+        "files": [
+          "teleosemantics_mind_analogist_philosophy.tex",
+          "teleosemantique_philosophie_esprit_analogiste.tex"
+        ],
+        "concepts_found": 10,
+        "math_refs": 25,
+        "concepts_detail": {
+          "phenomenolog": 3,
+          "conscience": 14,
+          "savoir": 53,
+          "analogiste": 19,
+          "lalangue": 6,
+          "neuronal": 4,
+          "isossophie": 5,
+          "pulsion": 14,
+          "finesse": 24,
+          "connaissance": 28
+        }
+      }
+    }
+  }
+}

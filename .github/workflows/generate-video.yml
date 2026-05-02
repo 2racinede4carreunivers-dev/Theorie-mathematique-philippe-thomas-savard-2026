@@ -1,0 +1,123 @@
+name: Generate Video MP4
+on:
+  workflow_dispatch:
+    inputs:
+      subtitle_langs:
+        description: "Langues de sous-titres (separees par virgule, ex: en,es,de)"
+        required: false
+        default: "en,es,de"
+        type: string
+      enable_translation:
+        description: "Activer la traduction des sous-titres via LLM"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+      max_scenes:
+        description: "Limiter le nombre de scenes (0 = toutes)"
+        required: false
+        default: "0"
+        type: string
+      test_mode:
+        description: "Mode test (preset ultrafast, qualite reduite)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies (ffmpeg)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu
+
+      - name: Install Python dependencies
+        run: |
+          pip install --quiet pip --upgrade
+          pip install --quiet weasyprint Pillow mutagen
+          pip install --quiet emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+
+      - name: Verify ffmpeg
+        run: ffmpeg -version | head -1
+
+      - name: Generate animation (HTML + audio TTS)
+        env:
+          REPO_ROOT: "."
+          ENABLE_TTS: "true"
+          ENABLE_PDF: "false"
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
+        run: |
+          python scripts/generate_animation.py
+
+      - name: Generate MP4 video (16:9 1920x1080) + subtitles
+        env:
+          REPO_ROOT: "."
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
+          SUBTITLE_LANGS: ${{ inputs.subtitle_langs }}
+          ENABLE_TRANSLATION: ${{ inputs.enable_translation }}
+          MAX_SCENES: ${{ inputs.max_scenes }}
+          VIDEO_TEST_MODE: ${{ inputs.test_mode }}
+        run: |
+          python scripts/generate_video.py
+
+      - name: Upload MP4 (clean)
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-mp4-clean
+          path: animation_output/video/animation_16x9_youtube.mp4
+          if-no-files-found: error
+
+      - name: Upload MP4 (FR subtitles burned-in)
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-mp4-fr-subtitles
+          path: animation_output/video/animation_16x9_youtube_FR_subtitles.mp4
+        continue-on-error: true
+
+      - name: Upload subtitles SRT (multilingue)
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-subtitles-multilang
+          path: animation_output/video/subtitles/
+
+      - name: Upload video manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-manifest
+          path: animation_output/video/video_manifest.json
+        continue-on-error: true
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Video generation summary" >> $GITHUB_STEP_SUMMARY
+          if [ -f animation_output/video/video_manifest.json ]; then
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            cat animation_output/video/video_manifest.json >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Files produced" >> $GITHUB_STEP_SUMMARY
+          ls -lh animation_output/video/*.mp4 2>/dev/null | awk '{print "- " $9 " (" $5 ")"}' >> $GITHUB_STEP_SUMMARY || true
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Subtitles" >> $GITHUB_STEP_SUMMARY
+          ls animation_output/video/subtitles/ 2>/dev/null | awk '{print "- " $1}' >> $GITHUB_STEP_SUMMARY || true

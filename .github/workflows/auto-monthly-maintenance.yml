@@ -1,0 +1,61 @@
+# Workflow automatique mensuel - Maintenance du depot
+# Theorie Mathematique Philippe Thomas Savard 2026
+#
+# Frequence: Le 1er de chaque mois a 9h00 UTC
+# Taches: Maintenance, relecture, corrections simples, rapport de coherence
+
+name: Auto Maintenance Mensuelle
+
+on:
+  schedule:
+    - cron: '0 9 1 * *'
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  monthly_maintenance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configuration Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installation des dependances
+        run: |
+          python -m pip install --upgrade pip
+          pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+
+      - name: Maintenance et analyse du depot
+        env:
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
+        run: |
+          python3 scripts/auto_monthly_maintenance.py
+
+      - name: Commit et push du rapport
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [ -d maintenance_reports ]; then
+            git add maintenance_reports/
+            git diff --staged --quiet || git commit -m "Auto: Rapport maintenance $(date +%Y-%m)"
+            git push || echo "Rien a pousser"
+          fi
+
+      - name: Resume
+        run: |
+          echo "## Maintenance Mensuelle" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Rapport de maintenance genere dans maintenance_reports/" >> $GITHUB_STEP_SUMMARY

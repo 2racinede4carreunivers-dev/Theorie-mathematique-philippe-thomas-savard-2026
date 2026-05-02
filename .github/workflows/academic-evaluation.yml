@@ -1,0 +1,96 @@
+name: Academic Evaluation
+on:
+  workflow_dispatch:
+    inputs:
+      use_llm:
+        description: "Activer l'evaluation qualitative LLM (GPT-4o)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+permissions:
+  contents: write
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --quiet pip --upgrade
+          if [ "${{ inputs.use_llm }}" = "true" ]; then
+            pip install emergentintegrations --extra-index-url https://d33sy5i8bnduwe.cloudfront.net/simple/
+          fi
+
+      - name: Download corpus.db artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build.yml
+          name_is_regexp: true
+          name: "^corpus-db-"
+          path: qa_bank/
+        continue-on-error: true
+
+      - name: Download HOL session log
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build.yml
+          name: hol-session-log
+          path: archive/
+        continue-on-error: true
+
+      - name: Locate downloaded artifacts
+        run: |
+          echo "=== Contenu qa_bank/ ==="
+          find qa_bank/ -type f 2>/dev/null || echo "vide"
+          echo "=== Contenu archive/ ==="
+          find archive/ -type f 2>/dev/null || echo "vide"
+          echo "=== Fallback: corpus.db deja dans le depot ==="
+          ls -la qa_bank/corpus.db 2>/dev/null || echo "pas de corpus.db local"
+
+      - name: Run Academic Evaluation
+        env:
+          REPO_ROOT: "."
+          CORPUS_DB: "qa_bank/corpus.db"
+          HOL_DB: "archive/Univers_Au_Carre.db"
+          USE_LLM: ${{ inputs.use_llm }}
+          EMERGENT_LLM_KEY: ${{ secrets._CLE }}
+        run: |
+          python scripts/evaluation/academic_evaluation.py
+
+      - name: Display report
+        run: cat evaluation/RAPPORT_EVALUATION.md
+
+      - name: Upload evaluation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report
+          path: evaluation/RAPPORT_EVALUATION.md
+
+      - name: Upload evaluation data
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-data
+          path: evaluation/grille_evaluation.json
+
+      - name: Commit evaluation report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add evaluation/
+          git diff --cached --quiet || git commit -m "Evaluation academique $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase origin main
+          git push
