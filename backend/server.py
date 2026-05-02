@@ -1,4 +1,5 @@
 from fastapi import FastAPI, APIRouter
+from fastapi.responses import FileResponse, HTMLResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -65,6 +66,27 @@ async def get_status_checks():
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
     
     return status_checks
+
+
+# ----------------------------------------------------------------------
+# Preview de l'animation generee (servit en static depuis /app/repo_savard)
+# ----------------------------------------------------------------------
+ANIM_HTML = "/app/repo_savard/animation_output/animation.html"
+
+
+@api_router.get("/anim", response_class=HTMLResponse)
+async def serve_animation():
+    if not os.path.exists(ANIM_HTML):
+        return HTMLResponse(
+            "<h1>Animation non generee</h1>"
+            "<p>Lancez : <code>python3 scripts/generate_animation.py</code></p>",
+            status_code=404,
+        )
+    return FileResponse(
+        ANIM_HTML,
+        media_type="text/html; charset=utf-8",
+        headers={"Cache-Control": "no-store"},
+    )
 
 # Include the router in the main app
 app.include_router(api_router)
