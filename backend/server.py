@@ -1,5 +1,5 @@
 from fastapi import FastAPI, APIRouter
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -71,10 +71,19 @@ async def get_status_checks():
 # ----------------------------------------------------------------------
 # Preview de l'animation generee (servit en static depuis /app/repo_savard)
 # ----------------------------------------------------------------------
-ANIM_HTML = "/app/repo_savard/animation_output/animation.html"
+ANIM_DIR = "/app/repo_savard/animation_output"
+ANIM_HTML = os.path.join(ANIM_DIR, "animation.html")
+ANIM_AUDIO_DIR = os.path.join(ANIM_DIR, "audio")
 
 
-@api_router.get("/anim", response_class=HTMLResponse)
+@api_router.get("/anim")
+async def serve_animation_redirect():
+    # Redirection vers /api/anim/ (avec slash final) pour que les URLs
+    # relatives `audio/X.mp3` dans le HTML resolvent vers /api/anim/audio/X.mp3
+    return RedirectResponse(url="/api/anim/", status_code=307)
+
+
+@api_router.get("/anim/", response_class=HTMLResponse)
 async def serve_animation():
     if not os.path.exists(ANIM_HTML):
         return HTMLResponse(
@@ -86,6 +95,22 @@ async def serve_animation():
         ANIM_HTML,
         media_type="text/html; charset=utf-8",
         headers={"Cache-Control": "no-store"},
+    )
+
+
+@api_router.get("/anim/audio/{filename}")
+async def serve_animation_audio(filename: str):
+    """Sert les MP3 de narration referencees par l'animation HTML."""
+    # Securite : empeche path traversal (../)
+    if "/" in filename or "\\" in filename or ".." in filename:
+        return HTMLResponse("Invalid filename", status_code=400)
+    path = os.path.join(ANIM_AUDIO_DIR, filename)
+    if not os.path.exists(path) or not filename.endswith(".mp3"):
+        return HTMLResponse("Audio not found", status_code=404)
+    return FileResponse(
+        path,
+        media_type="audio/mpeg",
+        headers={"Cache-Control": "public, max-age=3600"},
     )
 
 # Include the router in the main app
