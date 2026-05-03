@@ -77,11 +77,31 @@ jobs:
             echo "::warning::Verifiez les logs du step 'Generate animation' pour identifier la cause."
           fi
 
+      - name: Generate YouTube chapters + social media kit
+        if: ${{ inputs.enable_tts == 'true' }}
+        env:
+          REPO_ROOT: "."
+        run: |
+          pip install --quiet mutagen
+          python scripts/generate_youtube_chapters.py || true
+
       - name: Upload HTML animation
         uses: actions/upload-artifact@v4
         with:
           name: animation-html
           path: animation_output/animation.html
+
+      - name: Upload YouTube + social media kit
+        if: ${{ inputs.enable_tts == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-social-kit
+          path: |
+            animation_output/youtube_description.txt
+            animation_output/youtube_chapters_only.txt
+            animation_output/social_media_kit.txt
+            animation_output/chapters.json
+          if-no-files-found: ignore
 
       - name: Upload PDF animation
         if: ${{ inputs.enable_pdf == 'true' }}
