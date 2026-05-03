@@ -1026,7 +1026,34 @@ const scenes = __SCENES_JSON__;
 const total = scenes.length;
 let current = 0;
 let playing = false;
-let audio = null;
+
+// UN SEUL element Audio reutilise (evite saturation memoire navigateur
+// apres ~18 elements crees, qui causait le bug "scenes 19-29 defilent
+// sans son" : audio.play() etait rejete par manque de ressources).
+const audio = new Audio();
+audio.preload = 'auto';
+let scenePlayingIdx = -1;  // pour eviter races sur changements rapides
+
+audio.addEventListener('ended', () => {
+  if (playing && current < total - 1) {
+    current++;
+    showScene(current);
+    playAudio();
+  } else {
+    playing = false;
+    btnPlay.innerHTML = '&#9654;';
+    btnPlay.classList.remove('active');
+  }
+});
+
+audio.addEventListener('error', (e) => {
+  console.error('Audio error scene ' + (current + 1), e, audio.error);
+  if (playing && current < total - 1) {
+    setTimeout(() => {
+      if (playing) { current++; showScene(current); playAudio(); }
+    }, 1500);
+  }
+});
 
 const img = document.getElementById('scene-image');
 const calcPage = document.getElementById('calc-page');
@@ -1097,62 +1124,33 @@ function showScene(idx) {
 }
 
 function playAudio() {
-  if (audio) { audio.pause(); audio = null; }
   const scene = scenes[current];
+  scenePlayingIdx = current;
+  // Pause l'audio en cours et reset, sans recreer l'element
+  audio.pause();
+  try { audio.currentTime = 0; } catch (e) { /* ignore */ }
+
   if (scene.audio) {
-    // URL relative : charge a la demande, evite les crashes memoire
-    // sur fichiers volumineux (sinon 29 MP3 en base64 = 130 MB en RAM)
-    audio = new Audio('audio/' + scene.audio);
-    audio.preload = 'auto';
+    // Charge le nouvel MP3 via URL relative
+    audio.src = 'audio/' + scene.audio;
+    audio.load();
+    const startedFor = current;
     audio.play().catch(err => {
-      console.error('Audio err scene ' + (current+1) + ':', err);
-      // Si autoplay bloque ou erreur, on avance quand meme apres 8s
+      console.error('audio.play() rejected scene ' + (startedFor + 1) + ':', err);
+      // Fallback : avance apres un delai court (pas 8s sinon "saute" trop vite)
       setTimeout(() => {
-        if (playing && current < total - 1) {
+        if (playing && current === startedFor && current < total - 1) {
           current++; showScene(current); playAudio();
-        } else { playing = false; btnPlay.innerHTML = '&#9654;'; btnPlay.classList.remove('active'); }
-      }, 8000);
-    });
-    audio.onended = function() {
-      if (playing && current < total - 1) {
-        current++;
-        showScene(current);
-        setTimeout(playAudio, 600);
-      } else {
-        playing = false;
-        btnPlay.innerHTML = '&#9654;';
-        btnPlay.classList.remove('active');
-      }
-    };
-    // Filet de securite : si l'audio n'emet ni 'ended' ni 'error' dans les
-    // (duration+30s), on avance de force (protection deadlock)
-    audio.onloadedmetadata = function() {
-      const watchdog = (audio.duration || 60) * 1000 + 30000;
-      const expectedScene = current;
-      setTimeout(() => {
-        if (playing && current === expectedScene && audio && !audio.ended) {
-          console.warn('Watchdog: scene ' + (current+1) + ' stuck, advancing');
-          if (current < total - 1) {
-            current++; showScene(current); playAudio();
-          }
         }
-      }, watchdog);
-    };
-    audio.onerror = function(e) {
-      console.error('Audio onerror scene ' + (current+1), e);
-      if (playing && current < total - 1) {
-        setTimeout(() => {
-          current++; showScene(current); playAudio();
-        }, 2000);
-      }
-    };
+      }, 3000);
+    });
   } else {
+    // Pas d'audio pour cette scene : avance apres un delai par defaut
     if (playing && current < total - 1) {
+      const startedFor = current;
       setTimeout(() => {
-        if (playing) {
-          current++;
-          showScene(current);
-          playAudio();
+        if (playing && current === startedFor) {
+          current++; showScene(current); playAudio();
         }
       }, 6000);
     }
@@ -1169,17 +1167,17 @@ function togglePlay() {
   } else {
     btnPlay.innerHTML = '&#9654;';
     btnPlay.classList.remove('active');
-    if (audio) audio.pause();
+    audio.pause();
   }
 }
 
 btnPlay.addEventListener('click', togglePlay);
 btnPrev.addEventListener('click', () => {
-  if (audio) { audio.pause(); audio = null; }
+  audio.pause();
   if (current > 0) { current--; showScene(current); if (playing) playAudio(); }
 });
 btnNext.addEventListener('click', () => {
-  if (audio) { audio.pause(); audio = null; }
+  audio.pause();
   if (current < total - 1) { current++; showScene(current); if (playing) playAudio(); }
 });
 
@@ -1187,8 +1185,9 @@ progressBar.addEventListener('click', (e) => {
   const rect = progressBar.getBoundingClientRect();
   const pct = (e.clientX - rect.left) / rect.width;
   const idx = Math.floor(pct * total);
-  if (audio) { audio.pause(); audio = null; }
+  audio.pause();
   showScene(idx);
+  current = idx;
   if (playing) playAudio();
 });
 
