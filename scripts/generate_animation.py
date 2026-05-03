@@ -603,10 +603,17 @@ def render_calc_block(raw_text):
 # ================================================================
 
 async def generate_tts(scenes):
+    """Charge / genere les MP3 TTS et retourne un mapping num -> filename MP3.
+
+    Les MP3 sont stockes dans AUDIO_DIR (animation_output/audio/) et le
+    HTML les reference par URL relative `audio/<filename>.mp3` au lieu
+    de les embarquer en base64 (sinon fichier HTML de 130 MB et crashes
+    navigateur sur Chrome/Firefox apres la 8eme scene).
+    """
     # Toujours creer le dossier audio (meme vide) pour eviter les warnings
     # de upload-artifact sur GitHub Actions
     os.makedirs(AUDIO_DIR, exist_ok=True)
-    audio_map = {}
+    audio_map = {}  # num -> filename (ex: "scene_001_32933d60.mp3")
 
     # Dossier de cache persistant commit dans le repo (pour GitHub Actions
     # quand l'appel TTS externe n'est pas possible : 403 free-tier Emergent,
@@ -620,26 +627,21 @@ async def generate_tts(scenes):
             if not text.strip():
                 continue
             text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
-            cache_path = os.path.join(
-                AUDIO_CACHE_DIR, f"scene_{num:03d}_{text_hash}.mp3"
-            )
+            filename = f"scene_{num:03d}_{text_hash}.mp3"
+            cache_path = os.path.join(AUDIO_CACHE_DIR, filename)
             if os.path.exists(cache_path):
-                with open(cache_path, "rb") as f:
-                    audio_map[num] = base64.b64encode(f.read()).decode()
+                audio_map[num] = filename
                 cache_hits += 1
-                # Copie dans le dossier runtime pour que les workflows
-                # ulterieurs (generate_video.py) y aient acces
-                runtime_path = os.path.join(
-                    AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3"
-                )
+                # Copie dans le dossier runtime pour que le HTML
+                # puisse pointer dessus via URL relative
+                runtime_path = os.path.join(AUDIO_DIR, filename)
                 if not os.path.exists(runtime_path):
                     import shutil as _sh
                     _sh.copy2(cache_path, runtime_path)
         if cache_hits:
             print(f"  {cache_hits} audios charges depuis assets/audio_cache/")
 
-    # Charger d'abord les MP3 deja en cache (utile meme sans cle, pour relancer
-    # une generation partielle ou utiliser des audios pre-generes manuellement)
+    # Charger aussi les MP3 deja dans AUDIO_DIR (runtime)
     for scene in scenes:
         num = scene["num"]
         text = scene["text"][:4000]
@@ -648,10 +650,10 @@ async def generate_tts(scenes):
         if num in audio_map:
             continue
         text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
-        mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
+        filename = f"scene_{num:03d}_{text_hash}.mp3"
+        mp3_path = os.path.join(AUDIO_DIR, filename)
         if os.path.exists(mp3_path):
-            with open(mp3_path, "rb") as f:
-                audio_map[num] = base64.b64encode(f.read()).decode()
+            audio_map[num] = filename
     if audio_map:
         print(f"  {len(audio_map)} audios disponibles (cache + runtime)")
 
@@ -686,7 +688,8 @@ async def generate_tts(scenes):
             continue
 
         text_hash = hashlib.md5(text.encode()).hexdigest()[:8]
-        mp3_path = os.path.join(AUDIO_DIR, f"scene_{num:03d}_{text_hash}.mp3")
+        filename = f"scene_{num:03d}_{text_hash}.mp3"
+        mp3_path = os.path.join(AUDIO_DIR, filename)
 
         # Retry avec backoff exponentiel sur erreurs reseau / rate limit
         success = False
@@ -703,7 +706,7 @@ async def generate_tts(scenes):
                 )
                 with open(mp3_path, "wb") as f:
                     f.write(audio_bytes)
-                audio_map[num] = base64.b64encode(audio_bytes).decode()
+                audio_map[num] = filename
                 success = True
                 break
             except Exception as e:
@@ -1097,8 +1100,19 @@ function playAudio() {
   if (audio) { audio.pause(); audio = null; }
   const scene = scenes[current];
   if (scene.audio) {
-    audio = new Audio('data:audio/mp3;base64,' + scene.audio);
-    audio.play().catch(err => console.error('Audio err', err));
+    // URL relative : charge a la demande, evite les crashes memoire
+    // sur fichiers volumineux (sinon 29 MP3 en base64 = 130 MB en RAM)
+    audio = new Audio('audio/' + scene.audio);
+    audio.preload = 'auto';
+    audio.play().catch(err => {
+      console.error('Audio err scene ' + (current+1) + ':', err);
+      // Si autoplay bloque ou erreur, on avance quand meme apres 8s
+      setTimeout(() => {
+        if (playing && current < total - 1) {
+          current++; showScene(current); playAudio();
+        } else { playing = false; btnPlay.innerHTML = '&#9654;'; btnPlay.classList.remove('active'); }
+      }, 8000);
+    });
     audio.onended = function() {
       if (playing && current < total - 1) {
         current++;
@@ -1108,6 +1122,28 @@ function playAudio() {
         playing = false;
         btnPlay.innerHTML = '&#9654;';
         btnPlay.classList.remove('active');
+      }
+    };
+    // Filet de securite : si l'audio n'emet ni 'ended' ni 'error' dans les
+    // (duration+30s), on avance de force (protection deadlock)
+    audio.onloadedmetadata = function() {
+      const watchdog = (audio.duration || 60) * 1000 + 30000;
+      const expectedScene = current;
+      setTimeout(() => {
+        if (playing && current === expectedScene && audio && !audio.ended) {
+          console.warn('Watchdog: scene ' + (current+1) + ' stuck, advancing');
+          if (current < total - 1) {
+            current++; showScene(current); playAudio();
+          }
+        }
+      }, watchdog);
+    };
+    audio.onerror = function(e) {
+      console.error('Audio onerror scene ' + (current+1), e);
+      if (playing && current < total - 1) {
+        setTimeout(() => {
+          current++; showScene(current); playAudio();
+        }, 2000);
       }
     };
   } else {
