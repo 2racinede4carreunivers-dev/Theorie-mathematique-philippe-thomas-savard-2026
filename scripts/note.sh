@@ -1,40 +1,45 @@
 #!/usr/bin/env bash
 set -e
 
+# Aller à la racine du dépôt, peu importe d'où le script est lancé
 REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
 NOTE_FILE="$REPO_ROOT/.pending_note"
 
-echo "=== Note pour le CHANGELOG ==="
+echo "=== Création d'une note pour le CHANGELOG ==="
 echo ""
 
-# --- Detection automatique ---
+# --- Détection automatique ---
 BUILD_HASH="$(git rev-parse --short HEAD 2>/dev/null || echo 'local')"
-TODAY="$(date '+%Y-%m-%d')"
+TODAY_HUMAN="$(date '+%d %B %Y %H:%M')"
 
-# --- Questions posees a l'utilisateur ---
-read -p "1. Titre de la mise a jour : " TITLE
-read -p "2. Resume des modifications : " SUMMARY
-read -p "3. Date (YYYY-MM-DD) [$TODAY] : " DATE
+# --- Questions posées à l'utilisateur ---
+read -p "1. Titre de la mise à jour : " TITLE
+read -p "2. Résumé des modifications : " SUMMARY
+read -p "3. Date (texte libre) [$TODAY_HUMAN] : " DATE
 
-# Valeurs par defaut si vide
-TITLE="${TITLE:-Mise a jour $BUILD_HASH}"
-SUMMARY="${SUMMARY:-Modifications au depot.}"
-DATE="${DATE:-$TODAY}"
+# Valeurs par défaut si vide
+TITLE="${TITLE:-Mise à jour $BUILD_HASH}"
+SUMMARY="${SUMMARY:-Modifications au dépôt.}"
+DATE="${DATE:-$TODAY_HUMAN}"
 
-# --- Enregistrement dans .pending_note (fichier versionne) ---
+# --- Écriture du fichier .pending_note ---
 cat > "$NOTE_FILE" <<EOF
-TITLE=${TITLE}
-SUMMARY=${SUMMARY}
-DATE=${DATE}
-HASH=${BUILD_HASH}
+TITLE=$TITLE
+SUMMARY=$SUMMARY
+DATE=$DATE
 EOF
 
 echo ""
-echo "Note enregistree dans : .pending_note"
+echo "Note enregistrée dans : .pending_note"
 echo "  Titre   : $TITLE"
-echo "  Resume  : $SUMMARY"
+echo "  Résumé  : $SUMMARY"
 echo "  Date    : $DATE"
 echo ""
-echo "La note sera integree au CHANGELOG lors du prochain push."
-echo "N'oubliez pas de commiter .pending_note avec vos modifications :"
-echo "  git add .pending_note && git commit -m \"$TITLE\" && git push"
+echo "La note sera intégrée automatiquement au CHANGELOG lors du prochain push."
+echo ""
+echo "Exécute maintenant :"
+echo "  git add .pending_note"
+echo "  git commit -m \"$TITLE\""
+echo "  git push"
