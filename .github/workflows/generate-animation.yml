@@ -85,6 +85,57 @@ jobs:
           pip install --quiet mutagen
           python scripts/generate_youtube_chapters.py || true
 
+      - name: Prepare ALL-IN-ONE bundle
+        if: ${{ inputs.enable_tts == 'true' }}
+        run: |
+          # Cree un dossier animation_bundle/ qui contient TOUT ce qu'il
+          # faut pour que l'animation fonctionne avec le son quand
+          # l'utilisateur ouvre animation.html depuis son disque.
+          BUNDLE=animation_output/animation_bundle
+          mkdir -p "$BUNDLE/audio"
+          cp animation_output/animation.html "$BUNDLE/"
+          cp animation_output/audio/*.mp3 "$BUNDLE/audio/" 2>/dev/null || true
+          cp animation_output/youtube_description.txt "$BUNDLE/" 2>/dev/null || true
+          cp animation_output/youtube_chapters_only.txt "$BUNDLE/" 2>/dev/null || true
+          cp animation_output/social_media_kit.txt "$BUNDLE/" 2>/dev/null || true
+          cp animation_output/chapters.json "$BUNDLE/" 2>/dev/null || true
+          cp animation_output/animation.pdf "$BUNDLE/" 2>/dev/null || true
+          # README explicatif pour l'utilisateur
+          cat > "$BUNDLE/README.txt" << 'EOF'
+          Animation "L'Univers est au Carre" - Bundle complet
+          ====================================================
+
+          CONTENU :
+            - animation.html        : lecteur video interactif (a ouvrir
+                                      avec votre navigateur)
+            - audio/                : 29 fichiers MP3 de narration
+            - animation.pdf         : version PDF paginee (optionnelle)
+            - youtube_*.txt         : chapitrage YouTube pret a copier
+            - social_media_kit.txt  : posts pre-rediges Twitter/LinkedIn/etc
+            - chapters.json         : structure des chapitres
+
+          MODE D'EMPLOI :
+            1. Dezippez ce fichier dans un dossier
+            2. Double-cliquez sur animation.html
+            3. Cliquez sur le bouton Play
+            IMPORTANT : gardez le dossier audio/ A COTE de animation.html,
+                        sinon le son ne sera pas joue.
+
+          Auteur : Philippe Thomas Savard
+          Licence : Apache 2.0
+          Depot : https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026
+          EOF
+          echo "Bundle prepare : $(du -sh $BUNDLE | cut -f1)"
+          ls -la "$BUNDLE/"
+
+      - name: Upload ALL-IN-ONE bundle (RECOMMANDE)
+        if: ${{ inputs.enable_tts == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-bundle-COMPLET
+          path: animation_output/animation_bundle/
+          if-no-files-found: warn
+
       - name: Upload HTML animation
         uses: actions/upload-artifact@v4
         with:
