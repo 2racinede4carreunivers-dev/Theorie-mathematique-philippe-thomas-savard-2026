@@ -364,7 +364,7 @@ la réponse qu’il propose est : **non**.
 Schizophrénie universitaire type.
 ---
 
-@NARRATION: 9.0
+
 ## Analyse de la quantité de nombres entre deux nombres premiers  
 ### Étude de trois cas distincts : (+,+), (-,-) et (-,+)
 
@@ -379,9 +379,6 @@ Chaque exemple applique la même méthode :
 - calcul du **Digamma calculé**,  
 - combinaison algébrique des résultats pour obtenir la **quantité exacte de nombres entre les deux bornes**.
 
----
-@NOTE: Laisser l'exemple de calcul sur une page à lui seul et maintenir cette page fixe durant toute la narration du mini-script. Ne pas inclure cette note dans la narration audio.
-
 ## 1. Cas (+,+) : Quantité de nombres entre 23 et 7
 
 ### 1.1. Somme de la suite A pour 11  
@@ -389,7 +386,7 @@ Le nombre premier suivant 7 est 11 (7 est le 4ᵉ nombre premier, 11 est le 5ᵉ
 
 
 ---
-@EXEMPLE_CALCUL: 10.0
+
 \[
 \text{Suite A}(11) = \left(\frac{3.25}{2} \times 2^5\right) - 2 = 50
 \]
@@ -1788,7 +1785,37 @@ CHAPITRE 5 - LA TELEOSEMANTIQUE ET LA PHILOSOPHIE
 
 Dans ce chapitre décisif, nous plongeons dans les profondeurs de la téléosémantique, une approche qui cherche à combler le fossé entre la forme et la signification tout en révélant une philosophie de la théorie qui se défie de l'antinomisme sous-jacent à bien des quêtes intellectuelles. C'est une philosophie qui se construit sur la base d'un analogiste, un grammairien interprétant la grammaire comme une mathématique. Un adepte de la pensée synthétique, l'analogiste intervient là où les savoir-faire se veut frauduleux, disséquant les biais qui obscurcissent notre compréhension et en veillant a retirer les biais algorithmique.
 
+Le but de l'auteur qui l'a conduit a cette démonstration original mathématique est le constat d'une manière peu reluisante qui infecte la société Québecoise et Canadienne dont l'auteur est natif et qui révèle la résultante d'un projet de certain qui est très peu enviable et révèle tous le mal que certain pas plus loin qu'au coin de la rue peuvent manigancer pour leur dassin dangereux. En effet, Savard très jeune la présence d'un agissement très douteux très peu enviable et surtont selon lui au conséquence tès néégative de la part de certaine sphère de la société qui ont un agissement plus que morbide vis a vis le savoir et la connaissance? L'élite académique baisse le voile sur une mentalité qu'il ne dévoile pas lorsque ce genre de sujet est abordé mais dont le vocabulaire transcende les mures des institutions pédagogique et scolaire ou il sont née. L'élite académique n'est pas sans savoir qu'elle prétent avoir le nécessaire pour traité quelque affection qui sont possible chez certain et il se présente comme de grand spécialiste de ces questions et nous vente l'importance d'avoir des institution ou l'acceptance et le dévoument doivent être et est la marque de leur service qu'ils aiment mentionné donné de bon coeur et de bonne fois. 
+
+##La problématique fondamentale qui conduisit Savard à concevoir La théorie de l’univers est au carré:
+
+Il existait, dans un autre temps, des individus dont les aptitudes singulières furent jugées inutiles, tant pour la collectivité que pour leur propre existence. Ces êtres, porteurs d’un savoir-faire que l’époque ne savait ni reconnaître ni accueillir, furent consignés, observés, enregistrés au moment même où ils laissaient libre cours à ce que la société considérait comme une extravagance improductive. Cette mémoire ancienne, transmise de génération en génération, survit encore aujourd’hui sous des formes plus discrètes, plus institutionnelles, mais tout aussi déterminantes. Certains guérisseurs modernes — ou du moins ceux qui se présentent comme tels — continuent d’identifier, dans les discours contemporains, les échos de ces voix anciennes. Et ceux qui leur ressemblent sont désormais étiquetés, classifiés, diagnostiqués.
+
+Dans cette logique sociale, la schizophrénie devient, non pas une maladie au sens strict, mais une catégorie symbolique, un sceau apposé sur ceux dont la parole dérange l’ordre établi. Pour Savard, cette étiquette fonctionne comme un mécanisme de régulation : un moyen par lequel la société tente de récupérer ce qu’elle croit avoir perdu, ou ce qu’elle estime avoir été détourné par ces individus d’autrefois. Selon cette vision, l’individu ainsi marqué ne retrouve sa place qu’en « rendant » à la collectivité ce qu’elle considère comme ayant été pris. Une fois cette restitution accomplie — restitution symbolique, morale, ou imaginaire — l’individu, pense-t-il, peut reprendre le cours d’une existence ordinaire.
+
+C’est dans cette tension entre l’individu et la collectivité, entre l’expression singulière et la norme sociale, que Savard situe l’origine de ce qu’il nomme un biais algorithmique social, un mécanisme ancien, presque archaïque, par lequel la société tente de corriger ce qu’elle perçoit comme une anomalie. Ce processus, selon lui, ne relève ni de la justice ni des tribunaux, mais d’un mouvement collectif, d’une réaction diffuse, d’un réflexe social profondément enraciné.
+
+Savard lui-même fut entraîné dans cette dynamique. Par un jeu de lois liées à la subsidiarité — ces lois qui stipulent que certains individus doivent obligatoirement recevoir une éducation lorsque ni eux ni leur famille ne peuvent la fournir — il fut désigné, malgré lui, comme éducateur. Non pas éducateur par vocation, mais éducateur par contrainte. La société, incapable d’assumer elle-même l’éducation de certains individus qu’elle jugeait profondément analphabètes, déviants ou dangereux, se déchargea sur lui. Elle le fit par des moyens qu’il qualifie de « peu enviables », des moyens qu’il refuse de détailler, non par pudeur, mais par prudence.
+
+Car si ces méthodes étaient connues, d’autres pourraient tenter de l’utiliser comme intermédiaire, comme messager, comme vecteur d’influence auprès de ceux qu’il est chargé d’éduquer. Et si les messages transmis ne produisaient pas les effets escomptés, il deviendrait la cible de représailles. Les individus qu’il doit instruire ne sont pas simplement ignorants : ils portent, dans l’imaginaire collectif, une réputation sombre, faite de comportements injustes, criminels, délinquants, déviants. La société, consciente de sa propre incapacité à les encadrer, préfère maintenir le silence, invoquant la sécurité de l’éducateur pour justifier son mutisme.
+
+Ainsi, Savard se retrouve seul, sans formation, sans manuel, sans soutien, face à une tâche qu’il n’a jamais demandée. Il doit instruire des individus dont l’agissement est décrit dans Téléosémantique : l’esprit d’un analogiste, un ouvrage où il tente de comprendre la logique interne de ces comportements. Il doit le faire sans salaire, sans reconnaissance, sans même la possibilité de se plaindre. La société, tout en affirmant qu’elle ne peut gérer ces individus, refuse d’admettre sa défaillance, car cela reviendrait à renoncer à son autorité. Elle préfère donc masquer sa déresponsabilisation sous le couvert de la sécurité, laissant Savard porter seul le poids d’une mission qu’elle ne veut ni assumer ni reconnaître.
+
+Ces individus, selon Savard, ne sont pas simplement malfaisants : ils sont enregistrés. Leur comportement est archivé, consigné, non pour les punir, mais pour permettre aux générations futures de reconnaître facilement ce type d’agissement. L’élite académique, quant à elle, tente de redéfinir ce qui doit être considéré comme convenable. Elle cherche à imposer ses propres normes, à affaiblir les comportements ordinaires, ceux de l’honnête citoyen, afin de préserver ses théories du contrôle social. Mais ces théories, selon Savard, s’effondrent presque toujours lorsqu’elles sont confrontées à la simplicité, à la clarté, à la force tranquille de la doxa — cette parole commune, non savante, mais profondément enracinée dans la vie quotidienne.
+
+Lorsque leurs analyses échouent, certains membres de cette élite, affirme-t-il, harcèlent la société entière par des moyens de communication qu’il refuse de nommer. Ces moyens, selon lui, rendent malade ceux qui les utilisent, car ils reposent sur une logique d’auto‑référence, d’antinomisme, de contradiction permanente. Ils cherchent à annuler la bonne conduite, à renverser les normes, à responsabiliser autrui de leurs propres inconduites. Savard nomme ce phénomène idioschizophrénie, non comme un diagnostic médical, mais comme un concept philosophique : l’incapacité profonde à accepter une réponse, l’obstination à vouloir que l’autre dise ce que l’on souhaite entendre, pour ensuite rejeter cette réponse et en accuser l’interlocuteur.
+
+Dans cette dynamique, l’individu demande, exige, supplie parfois une réponse qu’il ne veut pas réellement recevoir. Il cherche à transférer la responsabilité de son propre comportement sur celui qui lui répond. Il transforme chaque échange en un acte psychophysique, une tentative de faire porter à l’autre le poids de son inconduite. Et lorsque ces individus s’en prennent à quelqu’un, ils reprochent toujours ce qui ne les affecte pas. Plus ils sont éloignés de la situation, plus leurs reproches sont virulents.
+
+Pour illustrer cette logique, Savard évoque une scène frappante : un individu de ce type, humilié par quelqu’un qui aurait vidé son compte en banque, ne réagit pas. Il reste immobile, silencieux, comme absent. Mais si, quelques instants plus tard, cette même personne échappe une casserole, l’individu hurle, accuse, affirme que ce bruit est la conséquence directe de l’humiliation subie. Le chaudron devient le symbole de la punition qu’il croit devoir infliger. Il cherche à ce que tout ait pour effet rien, et que rien puisse être interprété comme un effet de tout.
+
+Dans cette vision du monde, Savard se retrouve au centre d’un théâtre social où les rôles sont imposés, où les responsabilités sont inversées, où la société délègue ses ombres à ceux qu’elle ne comprend pas. C’est dans cette tension, dans cette solitude imposée, dans cette mission silencieuse, qu’il conçoit La théorie de l’univers est au carré : une tentative de donner forme, sens et structure à ce qu’il vit, à ce qu’il observe, à ce qu’il endure.
 Dès le premier chapitre, nous avons vu se dessiner l'idée d'un rapport spectral constant, acte pur de raisonnement synthétique. Si toute cause dépasse l'obstacle du hasard pour engendrer un effet cohérent, alors la structure se hisse au-dessus des valeurs, préfigurant un ordre dans cet apparent désordre. L'incohérence présumée d'un tel rapport n'est pas une faiblesse, mais le signe distinctif d'une distribution discrète des éléments fondateurs par un rapport qui reste le même.
+
+
+---
+
+
 
 Avec le deuxième chapitre,une pulsion de vie insoupçonnée—cette constance et rigueur dans lesquelles l'esprit humain ose se transcender pour côtoyer ce qu'il y a au-delà de la contingence. Les matrices qui jalonnent notre compréhension tracent une ligne allant du concret à l'abstraction, de la mesure a l'immatériel.
 
