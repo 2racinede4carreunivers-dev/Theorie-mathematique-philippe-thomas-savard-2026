@@ -1,45 +1,43 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
 
-# Aller à la racine du dépôt, peu importe d'où le script est lancé
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-cd "$REPO_ROOT"
+# ================================
+# Script note.sh — Version corrigée
+# Compatible avec le workflow GitHub
+# ================================
 
-NOTE_FILE="$REPO_ROOT/.pending_note"
-
-echo "=== Création d'une note pour le CHANGELOG ==="
+echo "----------------------------------------"
+echo " Génération d'une note pour CHANGELOG.md"
+echo "----------------------------------------"
 echo ""
 
-# --- Détection automatique ---
-BUILD_HASH="$(git rev-parse --short HEAD 2>/dev/null || echo 'local')"
-TODAY_HUMAN="$(date '+%d %B %Y %H:%M')"
+# Question 1 — Titre
+read -p "Titre de la mise à jour : " TITLE
 
-# --- Questions posées à l'utilisateur ---
-read -p "1. Titre de la mise à jour : " TITLE
-read -p "2. Résumé des modifications : " SUMMARY
-read -p "3. Date (texte libre) [$TODAY_HUMAN] : " DATE
+# Question 2 — Résumé
+read -p "Résumé court : " SUMMARY
 
-# Valeurs par défaut si vide
-TITLE="${TITLE:-Mise à jour $BUILD_HASH}"
-SUMMARY="${SUMMARY:-Modifications au dépôt.}"
-DATE="${DATE:-$TODAY_HUMAN}"
+# Question 3 — Date (auto ou manuelle)
+read -p "Date (laisser vide pour aujourd'hui) : " DATE
+if [ -z "$DATE" ]; then
+    DATE=$(date +%Y-%m-%d)
+fi
 
-# --- Écriture du fichier .pending_note ---
-cat > "$NOTE_FILE" <<EOF
-TITLE=$TITLE
-SUMMARY=$SUMMARY
-DATE=$DATE
-EOF
+# Écriture dans le fichier attendu par GitHub Actions
+{
+    echo "TITLE=$TITLE"
+    echo "SUMMARY=$SUMMARY"
+    echo "DATE=$DATE"
+} > .pending_note
 
 echo ""
-echo "Note enregistrée dans : .pending_note"
-echo "  Titre   : $TITLE"
-echo "  Résumé  : $SUMMARY"
-echo "  Date    : $DATE"
+echo "----------------------------------------"
+echo " Note enregistrée dans .pending_note"
+echo "----------------------------------------"
+echo "Contenu écrit :"
+cat .pending_note
 echo ""
-echo "La note sera intégrée automatiquement au CHANGELOG lors du prochain push."
-echo ""
-echo "Exécute maintenant :"
-echo "  git add .pending_note"
-echo "  git commit -m \"$TITLE\""
+echo "Vous pouvez maintenant faire :"
+echo "  git add ."
+echo "  git commit -m \"Mise à jour note\""
 echo "  git push"
+echo ""
