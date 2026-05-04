@@ -235,3 +235,10 @@ Message: Remove references to 'pilosophy_geometry_of_prime_number.tex'
 
 ---
 
+
+## 2026-05-04 -- Commit 2ffa7b6
+
+Message:  Titre: Mise a jour note.sh .
+
+---
+
