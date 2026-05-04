@@ -219,3 +219,12 @@ Resume:
 
 ---
 
+
+## Le quatre mai deux-milles vingt-six 14:50 -- SCRIPT_NARRATIF_VP.md mise a jour:
+
+Commit: bddb7f6
+
+Resume: 
+
+---
+
