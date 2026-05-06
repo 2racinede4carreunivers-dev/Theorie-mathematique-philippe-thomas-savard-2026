@@ -7,6 +7,7 @@ text "Formalisation de base de la methode spectrale (rapport 1/2)."
 (* Constante Zeta : 6ieme terme de la suite A pour le rapport 1/2 *)
 definition Z :: real where
   "Z = 64"
+  
 
 (* Somme de la suite A en fonction de n *)
 definition SA :: "nat => real" where
