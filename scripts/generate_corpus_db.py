@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """
-Générateur du corpus SQLite complet
-Extraction textuelle PDF, TEX, THY + arborescences HOL, LaTeX, PDF, globale
-Version complète et fonctionnelle
+Générateur du corpus SQLite complet (corpus_actions)
+Extraction avancée :
+- TEX, THY, PDF, MD, TXT
+- Arborescences HOL / LaTeX / PDF
+- Structure Markdown
+- Concepts
+- Exemples de calculs (détection avancée, option B)
 """
 
 import os
-import sys
 import re
+import sys
+import json
 import sqlite3
 import hashlib
-import json
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -19,62 +23,79 @@ from datetime import datetime, timezone
 # UTILITAIRES
 # ------------------------------------------------------------
 
-def sha256_file(filepath):
+def iso_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def sha256_file(filepath: str) -> str:
     h = hashlib.sha256()
-    with open(filepath, 'rb') as f:
-        for chunk in iter(lambda: f.read(8192), b''):
+    with open(filepath, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
             h.update(chunk)
     return h.hexdigest()
 
 
-def iso_now():
-    return datetime.now(timezone.utc).isoformat()
+def read_text_file(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8", errors="ignore")
+    except Exception as e:
+        return f"[Erreur lecture fichier texte: {e}]"
 
 
 # ------------------------------------------------------------
 # EXTRACTION TEX
 # ------------------------------------------------------------
 
-def extract_text_tex(filepath):
+def extract_text_tex(filepath: Path) -> str:
     """Extrait le texte brut d'un fichier .tex en retirant les commandes LaTeX."""
     try:
-        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
+        content = filepath.read_text(encoding="utf-8", errors="ignore")
 
         # Retirer les commentaires
-        content = re.sub(r'%.*$', '', content, flags=re.MULTILINE)
+        content = re.sub(r"%.*$", "", content, flags=re.MULTILINE)
 
-        # Retirer les environnements begin/end
-        content = re.sub(r'\\(begin|end)\{[^}]*\}', '', content)
+        # Retirer environnements begin/end
+        content = re.sub(r"\\(begin|end)\{[^}]*\}", "", content)
 
-        # Retirer les commandes LaTeX du type \commande{...}
-        content = re.sub(r'\\[a-zA-Z]+\*?\{([^}]*)\}', r'\1', content)
+        # Commandes \commande{...}
+        content = re.sub(r"\\[a-zA-Z]+\*?\{([^}]*)\}", r"\1", content)
 
-        # Retirer les commandes du type \commande[options]
-        content = re.sub(r'\\[a-zA-Z]+\*?(?:\[[^\]]*\])?', '', content)
+        # Commandes \commande[options]
+        content = re.sub(r"\\[a-zA-Z]+\*?(?:\[[^\]]*\])?", "", content)
 
-        # Nettoyage final pour enlever les accolades, les signes $, etc.
-        content = re.sub(r'[{}$^]', '', content)
+        # Nettoyage symboles
+        content = re.sub(r"[{}$^]", "", content)
+
+        # Espaces
+        content = re.sub(r"\n{3,}", "\n\n", content)
+        content = re.sub(r" {2,}", " ", content)
 
         return content.strip()
-
     except Exception as e:
         return f"[Erreur extraction TEX: {e}]"
 
 
-def extract_tex_sections(filepath):
-    """
-    Extraction très simple des sections LaTeX.
-    On repère les commandes \section, \subsection, \subsubsection.
-    """
+def extract_tex_sections(filepath: Path):
+    """Extraction simple des sections LaTeX."""
     sections = []
     try:
-        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
-        pattern = r'\\(section|subsection|subsubsection)\*?\{([^}]*)\}'
-        for kind, title in re.findall(pattern, content):
-            sections.append({
-                'level': kind,
-                'title': title.strip()
-            })
+        content = filepath.read_text(encoding="utf-8", errors="ignore")
+        patterns = [
+            (r"\\chapter\*?\{([^}]*)\}", "chapter"),
+            (r"\\section\*?\{([^}]*)\}", "section"),
+            (r"\\subsection\*?\{([^}]*)\}", "subsection"),
+            (r"\\subsubsection\*?\{([^}]*)\}", "subsubsection"),
+        ]
+        for pattern, level in patterns:
+            for m in re.finditer(pattern, content):
+                sections.append(
+                    {
+                        "level": level,
+                        "title": m.group(1).strip(),
+                        "position": m.start(),
+                    }
+                )
+        sections.sort(key=lambda x: x["position"])
     except Exception:
         pass
     return sections
@@ -84,60 +105,47 @@ def extract_tex_sections(filepath):
 # EXTRACTION HOL
 # ------------------------------------------------------------
 
-def extract_text_thy(filepath):
-    """Extrait le texte brut d'un fichier .thy Isabelle/HOL."""
+def extract_text_thy(filepath: Path) -> str:
     try:
-        return Path(filepath).read_text(encoding='utf-8', errors='ignore').strip()
+        return filepath.read_text(encoding="utf-8", errors="ignore").strip()
     except Exception as e:
         return f"[Erreur extraction THY: {e}]"
 
 
-def extract_thy_structure(filepath):
-    """Extrait la structure logique d'un fichier .thy."""
+def extract_thy_structure(filepath: Path):
     structure = {
-        'theory_name': '',
-        'imports': [],
-        'theorems': [],
-        'lemmas': [],
-        'definitions': [],
-        'datatypes': [],
-        'functions': [],
-        'locales': [],
+        "theory_name": "",
+        "imports": [],
+        "theorems": [],
+        "lemmas": [],
+        "definitions": [],
+        "datatypes": [],
+        "functions": [],
+        "locales": [],
     }
     try:
-        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
+        content = filepath.read_text(encoding="utf-8", errors="ignore")
 
-        # Nom de la théorie
-        m = re.search(r'theory\s+(\w+)', content)
+        m = re.search(r"theory\s+(\w+)", content)
         if m:
-            structure['theory_name'] = m.group(1)
+            structure["theory_name"] = m.group(1)
 
-        # Imports
-        imports_match = re.search(r'imports\s+(.*?)begin', content, re.DOTALL)
+        imports_match = re.search(r"imports\s+(.*?)begin", content, re.DOTALL)
         if imports_match:
             imports_text = imports_match.group(1)
-            structure['imports'] = [
-                x for pair in re.findall(r'(?:"([^"]+)"|(\S+))', imports_text)
-                for x in pair if x and x not in ('', 'begin')
+            structure["imports"] = [
+                x
+                for pair in re.findall(r'(?:"([^"]+)"|(\S+))', imports_text)
+                for x in pair
+                if x and x not in ("", "begin")
             ]
 
-        # Théorèmes
-        structure['theorems'] = re.findall(r'theorem\s+(\w+)', content)
-
-        # Lemmes
-        structure['lemmas'] = re.findall(r'lemma\s+(\w+)', content)
-
-        # Définitions
-        structure['definitions'] = re.findall(r'definition\s+(\w+)', content)
-
-        # Datatypes
-        structure['datatypes'] = re.findall(r'datatype\s+(\w+)', content)
-
-        # Fonctions
-        structure['functions'] = re.findall(r'fun\s+(\w+)', content)
-
-        # Locales
-        structure['locales'] = re.findall(r'locale\s+(\w+)', content)
+        structure["theorems"] = re.findall(r"theorem\s+(\w+)", content)
+        structure["lemmas"] = re.findall(r"lemma\s+(\w+)", content)
+        structure["definitions"] = re.findall(r"definition\s+(\w+)", content)
+        structure["datatypes"] = re.findall(r"datatype\s+(\w+)", content)
+        structure["functions"] = re.findall(r"fun\s+(\w+)", content)
+        structure["locales"] = re.findall(r"locale\s+(\w+)", content)
 
     except Exception:
         pass
@@ -149,19 +157,142 @@ def extract_thy_structure(filepath):
 # EXTRACTION PDF
 # ------------------------------------------------------------
 
-def extract_text_pdf(filepath):
-    """Extrait le texte d'un fichier PDF via pypdf."""
+def extract_text_pdf(filepath: Path) -> str:
     try:
         from pypdf import PdfReader
-        reader = PdfReader(filepath)
-        text_parts = []
+
+        reader = PdfReader(str(filepath))
+        parts = []
         for page in reader.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text_parts.append(page_text)
-        return '\n\n'.join(text_parts).strip()
+            t = page.extract_text()
+            if t:
+                parts.append(t)
+        return "\n\n".join(parts).strip()
     except Exception as e:
         return f"[Erreur extraction PDF: {e}]"
+
+
+def count_pdf_pages(filepath: Path) -> int:
+    try:
+        from pypdf import PdfReader
+
+        reader = PdfReader(str(filepath))
+        return len(reader.pages)
+    except Exception:
+        return 0
+
+
+# ------------------------------------------------------------
+# EXTRACTION MARKDOWN / TXT
+# ------------------------------------------------------------
+
+def extract_md_structure(text: str):
+    """
+    Extraction avancée pour .md / .txt :
+    - titres
+    - listes
+    - blocs de code
+    - résumé simple
+    - nombre de mots
+    """
+    lines = text.splitlines()
+    headings = []
+    lists = []
+    code_blocks = []
+    current_code = []
+    in_code = False
+
+    for i, line in enumerate(lines):
+        # Titres Markdown
+        m = re.match(r"^(#{1,6})\s+(.*)", line)
+        if m:
+            level = len(m.group(1))
+            title = m.group(2).strip()
+            headings.append(
+                {"level": level, "title": title, "line": i + 1}
+            )
+
+        # Listes
+        if re.match(r"^\s*[-*+]\s+.+", line):
+            lists.append({"line": i + 1, "text": line.strip()})
+
+        # Blocs de code ```...```
+        if line.strip().startswith("```"):
+            if not in_code:
+                in_code = True
+                current_code = [line]
+            else:
+                current_code.append(line)
+                code_blocks.append(
+                    {"start_line": i + 1 - len(current_code) + 1, "code": "\n".join(current_code)}
+                )
+                current_code = []
+                in_code = False
+        elif in_code:
+            current_code.append(line)
+
+    # Résumé simple : premières lignes non vides
+    paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
+    summary = " ".join(paragraphs[:3]) if paragraphs else ""
+
+    word_count = len(re.findall(r"\w+", text, flags=re.UNICODE))
+
+    return {
+        "headings": headings,
+        "lists": lists,
+        "code_blocks": code_blocks,
+        "summary": summary,
+        "word_count": word_count,
+    }
+
+
+# ------------------------------------------------------------
+# DETECTION AVANCÉE DES CALCULS (Option B)
+# ------------------------------------------------------------
+
+CALC_PATTERNS = [
+    r"\b\d+\s*/\s*\d+\b",
+    r"√\s*\d+",
+    r"sqrt\(\s*[^)]+\)",
+    r"\\sqrt\{[^}]+\}",
+    r"\b[a-zA-Z0-9]+\s*\^\s*[a-zA-Z0-9]+\b",
+    r"[a-zA-Z0-9]+\s*\^\s*\{[^}]+\}",
+    r"\\sum_{[^}]+}\^{[^}]+}",
+    r"\\prod_{[^}]+}\^{[^}]+}",
+    r"[a-zA-Z]_{n\+1}\s*=\s*[a-zA-Z]_n[^,\n]*",
+    r"\b[a-zA-Z]\s*=\s*[^=\n]+",
+]
+
+
+def detect_calculs(text: str):
+    calculs = []
+    for pattern in CALC_PATTERNS:
+        for m in re.finditer(pattern, text):
+            expr = m.group(0).strip()
+            start = max(0, m.start() - 60)
+            end = min(len(text), m.end() + 60)
+            context = text[start:end].replace("\n", " ")
+            calculs.append({"expression": expr, "context": context})
+    return calculs
+
+
+def classify_calcul(expr: str) -> str:
+    expr = expr.strip()
+    if "sqrt" in expr or "√" in expr or "\\sqrt" in expr:
+        return "racine"
+    if "/" in expr and re.search(r"\d+\s*/\s*\d+", expr):
+        return "fraction"
+    if "^" in expr:
+        return "puissance"
+    if "\\sum" in expr:
+        return "somme"
+    if "\\prod" in expr:
+        return "produit"
+    if re.search(r"_{n\+1}\s*=", expr):
+        return "suite"
+    if "=" in expr:
+        return "equation"
+    return "expression"
 
 
 # ------------------------------------------------------------
@@ -169,157 +300,192 @@ def extract_text_pdf(filepath):
 # ------------------------------------------------------------
 
 def build_arborescence_hol(thy_files):
-    arbo = {'type': 'hol', 'theories': []}
+    arbo = {"type": "hol", "theories": []}
     for f in thy_files:
-        struct = extract_thy_structure(f)
-        arbo['theories'].append({
-            'file': os.path.basename(f),
-            'path': str(f),
-            'theory_name': struct['theory_name'],
-            'imports': struct['imports'],
-            'theorems': struct['theorems'],
-            'lemmas': struct['lemmas'],
-            'definitions': struct['definitions'],
-            'datatypes': struct['datatypes'],
-            'functions': struct['functions'],
-            'locales': struct['locales'],
-            'total_propositions': len(struct['theorems']) + len(struct['lemmas']),
-        })
+        p = Path(f)
+        struct = extract_thy_structure(p)
+        arbo["theories"].append(
+            {
+                "file": p.name,
+                "path": str(p),
+                "theory_name": struct["theory_name"],
+                "imports": struct["imports"],
+                "theorems": struct["theorems"],
+                "lemmas": struct["lemmas"],
+                "definitions": struct["definitions"],
+                "datatypes": struct["datatypes"],
+                "functions": struct["functions"],
+                "locales": struct["locales"],
+                "total_propositions": len(struct["theorems"]) + len(struct["lemmas"]),
+            }
+        )
+
+    theory_names = {t["theory_name"]: t["file"] for t in arbo["theories"] if t["theory_name"]}
+    for t in arbo["theories"]:
+        t["depends_on"] = [imp for imp in t["imports"] if imp in theory_names]
+
     return arbo
 
 
 def build_arborescence_tex(tex_files):
-    arbo = {'type': 'latex', 'documents': []}
+    arbo = {"type": "latex", "documents": []}
     for f in tex_files:
-        sections = extract_tex_sections(f)
-        arbo['documents'].append({
-            'file': os.path.basename(f),
-            'path': str(f),
-            'sections': sections,
-            'total_sections': len(sections),
-        })
+        p = Path(f)
+        sections = extract_tex_sections(p)
+        arbo["documents"].append(
+            {
+                "file": p.name,
+                "path": str(p),
+                "sections": sections,
+                "total_sections": len(sections),
+            }
+        )
     return arbo
 
 
 def build_arborescence_pdf(pdf_files):
-    arbo = {'type': 'pdf', 'documents': []}
+    arbo = {"type": "pdf", "documents": []}
     for f in pdf_files:
-        page_count = 0
-        try:
-            from pypdf import PdfReader
-            page_count = len(PdfReader(f).pages)
-        except Exception:
-            pass
-        arbo['documents'].append({
-            'file': os.path.basename(f),
-            'path': str(f),
-            'pages': page_count,
-        })
+        p = Path(f)
+        pages = count_pdf_pages(p)
+        arbo["documents"].append(
+            {
+                "file": p.name,
+                "path": str(p),
+                "pages": pages,
+            }
+        )
     return arbo
 
 
 def build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf):
-    tex_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_tex['documents']}
-    pdf_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_pdf['documents']}
-    thy_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_hol['theories']}
+    tex_bases = {os.path.splitext(d["file"])[0]: d for d in arbo_tex["documents"]}
+    pdf_bases = {os.path.splitext(d["file"])[0]: d for d in arbo_pdf["documents"]}
+    thy_bases = {os.path.splitext(d["file"])[0]: d for d in arbo_hol["theories"]}
 
     all_bases = set(list(tex_bases.keys()) + list(pdf_bases.keys()) + list(thy_bases.keys()))
     links = []
 
     for base in all_bases:
-        link = {'concept': base, 'files': {}}
+        link = {"concept": base, "files": {}}
         if base in tex_bases:
-            link['files']['tex'] = tex_bases[base]['file']
+            link["files"]["tex"] = tex_bases[base]["file"]
         if base in pdf_bases:
-            link['files']['pdf'] = pdf_bases[base]['file']
+            link["files"]["pdf"] = pdf_bases[base]["file"]
         if base in thy_bases:
-            link['files']['thy'] = thy_bases[base]['file']
+            link["files"]["thy"] = thy_bases[base]["file"]
         links.append(link)
 
     return {
-        'type': 'global',
-        'total_tex': len(arbo_tex['documents']),
-        'total_thy': len(arbo_hol['theories']),
-        'total_pdf': len(arbo_pdf['documents']),
-        'total_theorems': sum(t['total_propositions'] for t in arbo_hol['theories']),
-        'links': links,
-        'hol': arbo_hol,
-        'latex': arbo_tex,
-        'pdf': arbo_pdf,
+        "type": "global",
+        "total_tex": len(arbo_tex["documents"]),
+        "total_thy": len(arbo_hol["theories"]),
+        "total_pdf": len(arbo_pdf["documents"]),
+        "total_theorems": sum(t["total_propositions"] for t in arbo_hol["theories"]),
+        "links": links,
+        "hol": arbo_hol,
+        "latex": arbo_tex,
+        "pdf": arbo_pdf,
     }
 
 
 # ------------------------------------------------------------
-# CREATION DE LA BASE
+# CREATION SCHEMA
 # ------------------------------------------------------------
 
-def create_schema(conn):
+def create_schema(conn: sqlite3.Connection):
     c = conn.cursor()
-    schema_sql = """
-    CREATE TABLE IF NOT EXISTS files (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        filename TEXT NOT NULL,
-        filepath TEXT NOT NULL,
-        filetype TEXT NOT NULL,
-        sha256 TEXT NOT NULL,
-        filesize INTEGER NOT NULL,
-        extracted_text TEXT,
-        created_at TEXT NOT NULL
-    );
+    c.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS files (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename TEXT NOT NULL,
+            filepath TEXT NOT NULL,
+            filetype TEXT NOT NULL,
+            sha256 TEXT NOT NULL,
+            filesize INTEGER NOT NULL,
+            extracted_text TEXT,
+            created_at TEXT NOT NULL
+        );
 
-    CREATE TABLE IF NOT EXISTS arborescences (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        arbo_type TEXT NOT NULL,
-        arbo_data TEXT NOT NULL,
-        created_at TEXT NOT NULL
-    );
+        CREATE TABLE IF NOT EXISTS arborescences (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            arbo_type TEXT NOT NULL,
+            arbo_data TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        );
 
-    CREATE TABLE IF NOT EXISTS hol_structure (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        file_id INTEGER NOT NULL,
-        theory_name TEXT,
-        imports TEXT,
-        theorems TEXT,
-        lemmas TEXT,
-        definitions TEXT,
-        datatypes TEXT,
-        functions TEXT,
-        locales TEXT,
-        total_propositions INTEGER DEFAULT 0,
-        FOREIGN KEY (file_id) REFERENCES files(id)
-    );
+        CREATE TABLE IF NOT EXISTS hol_structure (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_id INTEGER NOT NULL,
+            theory_name TEXT,
+            imports TEXT,
+            theorems TEXT,
+            lemmas TEXT,
+            definitions TEXT,
+            datatypes TEXT,
+            functions TEXT,
+            locales TEXT,
+            total_propositions INTEGER DEFAULT 0,
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        );
 
-    CREATE TABLE IF NOT EXISTS tex_structure (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        file_id INTEGER NOT NULL,
-        sections TEXT,
-        total_sections INTEGER DEFAULT 0,
-        FOREIGN KEY (file_id) REFERENCES files(id)
-    );
+        CREATE TABLE IF NOT EXISTS tex_structure (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_id INTEGER NOT NULL,
+            sections TEXT,
+            total_sections INTEGER DEFAULT 0,
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        );
 
-    CREATE TABLE IF NOT EXISTS pdf_structure (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        file_id INTEGER NOT NULL,
-        page_count INTEGER DEFAULT 0,
-        FOREIGN KEY (file_id) REFERENCES files(id)
-    );
+        CREATE TABLE IF NOT EXISTS pdf_structure (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_id INTEGER NOT NULL,
+            page_count INTEGER DEFAULT 0,
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        );
 
-    CREATE TABLE IF NOT EXISTS concepts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        concept_name TEXT NOT NULL,
-        source_files TEXT,
-        concept_type TEXT,
-        description TEXT
-    );
+        CREATE TABLE IF NOT EXISTS md_structure (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_id INTEGER NOT NULL,
+            headings TEXT,
+            lists TEXT,
+            code_blocks TEXT,
+            summary TEXT,
+            word_count INTEGER DEFAULT 0,
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        );
 
-    CREATE TABLE IF NOT EXISTS metadata (
-        key TEXT PRIMARY KEY,
-        value TEXT NOT NULL
-    );
-    """
-    c.executescript(schema_sql)
+        CREATE TABLE IF NOT EXISTS calculs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            file_id INTEGER NOT NULL,
+            expression TEXT NOT NULL,
+            context TEXT,
+            calc_type TEXT,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS concepts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            concept_name TEXT NOT NULL,
+            source_files TEXT,
+            concept_type TEXT,
+            description TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS metadata (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL
+        );
+        """
+    )
     conn.commit()
 
+
+# ------------------------------------------------------------
+# INSERT HELPERS
+# ------------------------------------------------------------
 
 def insert_file(conn, filename, filepath, filetype, sha256, filesize, extracted_text):
     c = conn.cursor()
@@ -328,10 +494,22 @@ def insert_file(conn, filename, filepath, filetype, sha256, filesize, extracted_
         INSERT INTO files (filename, filepath, filetype, sha256, filesize, extracted_text, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
-        (filename, filepath, filetype, sha256, filesize, extracted_text, iso_now())
+        (filename, filepath, filetype, sha256, filesize, extracted_text, iso_now()),
     )
     conn.commit()
     return c.lastrowid
+
+
+def insert_tex_structure(conn, file_id, sections):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO tex_structure (file_id, sections, total_sections)
+        VALUES (?, ?, ?)
+        """,
+        (file_id, json.dumps(sections, ensure_ascii=False), len(sections)),
+    )
+    conn.commit()
 
 
 def insert_hol_structure(conn, file_id, struct):
@@ -346,28 +524,16 @@ def insert_hol_structure(conn, file_id, struct):
         """,
         (
             file_id,
-            struct.get('theory_name', ''),
-            json.dumps(struct.get('imports', []), ensure_ascii=False),
-            json.dumps(struct.get('theorems', []), ensure_ascii=False),
-            json.dumps(struct.get('lemmas', []), ensure_ascii=False),
-            json.dumps(struct.get('definitions', []), ensure_ascii=False),
-            json.dumps(struct.get('datatypes', []), ensure_ascii=False),
-            json.dumps(struct.get('functions', []), ensure_ascii=False),
-            json.dumps(struct.get('locales', []), ensure_ascii=False),
-            len(struct.get('theorems', [])) + len(struct.get('lemmas', [])),
-        )
-    )
-    conn.commit()
-
-
-def insert_tex_structure(conn, file_id, sections):
-    c = conn.cursor()
-    c.execute(
-        """
-        INSERT INTO tex_structure (file_id, sections, total_sections)
-        VALUES (?, ?, ?)
-        """,
-        (file_id, json.dumps(sections, ensure_ascii=False), len(sections))
+            struct.get("theory_name", ""),
+            json.dumps(struct.get("imports", []), ensure_ascii=False),
+            json.dumps(struct.get("theorems", []), ensure_ascii=False),
+            json.dumps(struct.get("lemmas", []), ensure_ascii=False),
+            json.dumps(struct.get("definitions", []), ensure_ascii=False),
+            json.dumps(struct.get("datatypes", []), ensure_ascii=False),
+            json.dumps(struct.get("functions", []), ensure_ascii=False),
+            json.dumps(struct.get("locales", []), ensure_ascii=False),
+            len(struct.get("theorems", [])) + len(struct.get("lemmas", [])),
+        ),
     )
     conn.commit()
 
@@ -379,154 +545,8 @@ def insert_pdf_structure(conn, file_id, page_count):
         INSERT INTO pdf_structure (file_id, page_count)
         VALUES (?, ?)
         """,
-        (file_id, page_count)
+        (file_id, page_count),
     )
     conn.commit()
 
 
-def insert_arborescence(conn, arbo_type, arbo_data):
-    c = conn.cursor()
-    c.execute(
-        """
-        INSERT INTO arborescences (arbo_type, arbo_data, created_at)
-        VALUES (?, ?, ?)
-        """,
-        (arbo_type, json.dumps(arbo_data, ensure_ascii=False), iso_now())
-    )
-    conn.commit()
-
-
-def insert_metadata(conn, key, value):
-    c = conn.cursor()
-    c.execute(
-        """
-        INSERT INTO metadata (key, value)
-        VALUES (?, ?)
-        ON CONFLICT(key) DO UPDATE SET value=excluded.value
-        """,
-        (key, value)
-    )
-    conn.commit()
-
-
-# ------------------------------------------------------------
-# PIPELINE PRINCIPAL
-# ------------------------------------------------------------
-
-def create_corpus_db(db_path, root_dir):
-    print(f"Création de {db_path}…")
-
-    conn = sqlite3.connect(db_path)
-    create_schema(conn)
-
-    root = Path(root_dir)
-
-    tex_files = list(root.rglob("*.tex"))
-    thy_files = list(root.rglob("*.thy"))
-    pdf_files = list(root.rglob("*.pdf"))
-
-    print(f"Trouvé {len(tex_files)} .tex, {len(thy_files)} .thy, {len(pdf_files)} .pdf")
-
-    # --- Fichiers TEX ---
-    for f in tex_files:
-        f = Path(f)
-        try:
-            text = extract_text_tex(f)
-            sha = sha256_file(f)
-            size = f.stat().st_size
-            file_id = insert_file(
-                conn,
-                f.name,
-                str(f),
-                "tex",
-                sha,
-                size,
-                text
-            )
-            sections = extract_tex_sections(f)
-            insert_tex_structure(conn, file_id, sections)
-        except Exception as e:
-            print(f"[TEX] Erreur sur {f}: {e}")
-
-    # --- Fichiers THY ---
-    for f in thy_files:
-        f = Path(f)
-        try:
-            text = extract_text_thy(f)
-            sha = sha256_file(f)
-            size = f.stat().st_size
-            file_id = insert_file(
-                conn,
-                f.name,
-                str(f),
-                "thy",
-                sha,
-                size,
-                text
-            )
-            struct = extract_thy_structure(f)
-            insert_hol_structure(conn, file_id, struct)
-        except Exception as e:
-            print(f"[THY] Erreur sur {f}: {e}")
-
-    # --- Fichiers PDF ---
-    for f in pdf_files:
-        f = Path(f)
-        try:
-            text = extract_text_pdf(f)
-            sha = sha256_file(f)
-            size = f.stat().st_size
-            file_id = insert_file(
-                conn,
-                f.name,
-                str(f),
-                "pdf",
-                sha,
-                size,
-                text
-            )
-            # Nombre de pages
-            try:
-                from pypdf import PdfReader
-                page_count = len(PdfReader(f).pages)
-            except Exception:
-                page_count = 0
-            insert_pdf_structure(conn, file_id, page_count)
-        except Exception as e:
-            print(f"[PDF] Erreur sur {f}: {e}")
-
-    # --- Arborescences ---
-    arbo_hol = build_arborescence_hol(thy_files)
-    arbo_tex = build_arborescence_tex(tex_files)
-    arbo_pdf = build_arborescence_pdf(pdf_files)
-    arbo_global = build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf)
-
-    insert_arborescence(conn, "hol", arbo_hol)
-    insert_arborescence(conn, "latex", arbo_tex)
-    insert_arborescence(conn, "pdf", arbo_pdf)
-    insert_arborescence(conn, "global", arbo_global)
-
-    # --- Métadonnées ---
-    insert_metadata(conn, "created_at", iso_now())
-    insert_metadata(conn, "root_dir", str(root.resolve()))
-    insert_metadata(conn, "total_tex", str(len(tex_files)))
-    insert_metadata(conn, "total_thy", str(len(thy_files)))
-    insert_metadata(conn, "total_pdf", str(len(pdf_files)))
-
-    conn.close()
-    print("Corpus SQLite généré avec succès.")
-
-
-# ------------------------------------------------------------
-# MAIN
-# ------------------------------------------------------------
-
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage : python3 generate_corpus_db.py <dossier_racine> <fichier_db.sqlite>")
-        sys.exit(1)
-
-    root_dir = sys.argv[1]
-    db_path = sys.argv[2]
-
-    create_corpus_db(db_path, root_dir)
