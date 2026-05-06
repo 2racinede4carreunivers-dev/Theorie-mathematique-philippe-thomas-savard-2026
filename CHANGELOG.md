@@ -177,3 +177,10 @@ Message:  Titre mise a jour .
 
 ---
 
+
+## 2026-05-06 -- Commit 034eb1d
+
+Message:  Titre : scripts/generate_corpus_db.py .
+
+---
+
