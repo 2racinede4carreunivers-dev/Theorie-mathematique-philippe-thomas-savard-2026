@@ -61,16 +61,15 @@ jobs:
 
       - name: Install Isabelle 2024
         run: |
-          echo "Telechargement Isabelle 2024..."
-          curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
-            "https://isabelle.in.tum.de/website-Isabelle2024/dist/Isabelle2024_linux.tar.gz" || \
+          echo "Téléchargement Isabelle 2024..."
           curl -L --retry 5 --retry-delay 10 --max-time 600 -o Isabelle2024_linux.tar.gz \
             "https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz" || \
-          (echo "Echec telechargement" && exit 1)
+             (echo "Échec téléchargement" && exit 1)
 
-          tar -xzf Isabelle2024_linux.tar.gz
-          mv Isabelle2024 isabelle
-          echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+            tar -xzf Isabelle2024_linux.tar.gz
+            mv Isabelle2024 isabelle
+            echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+
 
       - name: Build Isabelle session Univers_Au_Carre
         run: |
