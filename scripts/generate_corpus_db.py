@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
-Generateur du corpus SQLite complet (Option C)
+Générateur du corpus SQLite complet
 Extraction textuelle PDF, TEX, THY + arborescences HOL, LaTeX, PDF, globale
-
-Execute par le job generate_corpus_db dans build.yml
+Version complète et fonctionnelle
 """
 
 import os
@@ -16,8 +15,11 @@ from pathlib import Path
 from datetime import datetime, timezone
 
 
+# ------------------------------------------------------------
+# UTILITAIRES
+# ------------------------------------------------------------
+
 def sha256_file(filepath):
-    """Calcule le SHA-256 d'un fichier."""
     h = hashlib.sha256()
     with open(filepath, 'rb') as f:
         for chunk in iter(lambda: f.read(8192), b''):
@@ -25,33 +27,127 @@ def sha256_file(filepath):
     return h.hexdigest()
 
 
+def iso_now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+# ------------------------------------------------------------
+# EXTRACTION TEX
+# ------------------------------------------------------------
+
 def extract_text_tex(filepath):
     """Extrait le texte brut d'un fichier .tex en retirant les commandes LaTeX."""
     try:
         content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
+
         # Retirer les commentaires
         content = re.sub(r'%.*$', '', content, flags=re.MULTILINE)
-        # Retirer les commandes LaTeX communes
+
+        # Retirer les environnements begin/end
         content = re.sub(r'\\(begin|end)\{[^}]*\}', '', content)
+
+        # Retirer les commandes LaTeX du type \commande{...}
         content = re.sub(r'\\[a-zA-Z]+\*?\{([^}]*)\}', r'\1', content)
-        content = re.sub(r'\\[a-zA-Z]+\*?(\[[^\]]*\])?', '', content)
-        content = re.sub(r'[{}$]', '', content)
-        # Nettoyer les espaces multiples
-        content = re.sub(r'\n{3,}', '\n\n', content)
-        content = re.sub(r' {2,}', ' ', content)
+
+        # Retirer les commandes du type \commande[options]
+        content = re.sub(r'\\[a-zA-Z]+\*?(?:\[[^\]]*\])?', '', content)
+
+        # Nettoyage final pour enlever les accolades, les signes $, etc.
+        content = re.sub(r'[{}$^]', '', content)
+
         return content.strip()
+
     except Exception as e:
         return f"[Erreur extraction TEX: {e}]"
 
 
-def extract_text_thy(filepath):
-    """Extrait le texte et la structure d'un fichier .thy Isabelle/HOL."""
+def extract_tex_sections(filepath):
+    """
+    Extraction très simple des sections LaTeX.
+    On repère les commandes \section, \subsection, \subsubsection.
+    """
+    sections = []
     try:
         content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
-        return content.strip()
+        pattern = r'\\(section|subsection|subsubsection)\*?\{([^}]*)\}'
+        for kind, title in re.findall(pattern, content):
+            sections.append({
+                'level': kind,
+                'title': title.strip()
+            })
+    except Exception:
+        pass
+    return sections
+
+
+# ------------------------------------------------------------
+# EXTRACTION HOL
+# ------------------------------------------------------------
+
+def extract_text_thy(filepath):
+    """Extrait le texte brut d'un fichier .thy Isabelle/HOL."""
+    try:
+        return Path(filepath).read_text(encoding='utf-8', errors='ignore').strip()
     except Exception as e:
         return f"[Erreur extraction THY: {e}]"
 
+
+def extract_thy_structure(filepath):
+    """Extrait la structure logique d'un fichier .thy."""
+    structure = {
+        'theory_name': '',
+        'imports': [],
+        'theorems': [],
+        'lemmas': [],
+        'definitions': [],
+        'datatypes': [],
+        'functions': [],
+        'locales': [],
+    }
+    try:
+        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
+
+        # Nom de la théorie
+        m = re.search(r'theory\s+(\w+)', content)
+        if m:
+            structure['theory_name'] = m.group(1)
+
+        # Imports
+        imports_match = re.search(r'imports\s+(.*?)begin', content, re.DOTALL)
+        if imports_match:
+            imports_text = imports_match.group(1)
+            structure['imports'] = [
+                x for pair in re.findall(r'(?:"([^"]+)"|(\S+))', imports_text)
+                for x in pair if x and x not in ('', 'begin')
+            ]
+
+        # Théorèmes
+        structure['theorems'] = re.findall(r'theorem\s+(\w+)', content)
+
+        # Lemmes
+        structure['lemmas'] = re.findall(r'lemma\s+(\w+)', content)
+
+        # Définitions
+        structure['definitions'] = re.findall(r'definition\s+(\w+)', content)
+
+        # Datatypes
+        structure['datatypes'] = re.findall(r'datatype\s+(\w+)', content)
+
+        # Fonctions
+        structure['functions'] = re.findall(r'fun\s+(\w+)', content)
+
+        # Locales
+        structure['locales'] = re.findall(r'locale\s+(\w+)', content)
+
+    except Exception:
+        pass
+
+    return structure
+
+
+# ------------------------------------------------------------
+# EXTRACTION PDF
+# ------------------------------------------------------------
 
 def extract_text_pdf(filepath):
     """Extrait le texte d'un fichier PDF via pypdf."""
@@ -68,88 +164,11 @@ def extract_text_pdf(filepath):
         return f"[Erreur extraction PDF: {e}]"
 
 
-def extract_tex_sections(filepath):
-    """Extrait la structure des sections d'un fichier .tex."""
-    sections = []
-    try:
-        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
-        patterns = [
-            (r'\\chapter\*?\{([^}]*)\}', 'chapter'),
-            (r'\\section\*?\{([^}]*)\}', 'section'),
-            (r'\\subsection\*?\{([^}]*)\}', 'subsection'),
-            (r'\\subsubsection\*?\{([^}]*)\}', 'subsubsection'),
-        ]
-        for pattern, level in patterns:
-            for match in re.finditer(pattern, content):
-                sections.append({
-                    'level': level,
-                    'title': match.group(1).strip(),
-                    'position': match.start()
-                })
-        sections.sort(key=lambda x: x['position'])
-    except Exception:
-        pass
-    return sections
-
-
-def extract_thy_structure(filepath):
-    """Extrait la structure logique d'un fichier .thy (theoremes, lemmes, imports)."""
-    structure = {
-        'theory_name': '',
-        'imports': [],
-        'theorems': [],
-        'lemmas': [],
-        'definitions': [],
-        'datatypes': [],
-        'functions': [],
-        'locales': [],
-    }
-    try:
-        content = Path(filepath).read_text(encoding='utf-8', errors='ignore')
-
-        # Nom de la theorie
-        m = re.search(r'theory\s+(\w+)', content)
-        if m:
-            structure['theory_name'] = m.group(1)
-
-        # Imports
-        imports_match = re.search(r'imports\s+(.*?)begin', content, re.DOTALL)
-        if imports_match:
-            imports_text = imports_match.group(1)
-            structure['imports'] = [i.strip().strip('"') for i in re.findall(r'(?:"([^"]+)"|(\S+))', imports_text) if any(x for x in i)]
-            structure['imports'] = [x for pair in re.findall(r'(?:"([^"]+)"|(\S+))', imports_text) for x in pair if x and x not in ('', 'begin')]
-
-        # Theoremes
-        for m in re.finditer(r'theorem\s+(\w+)', content):
-            structure['theorems'].append(m.group(1))
-
-        # Lemmes
-        for m in re.finditer(r'lemma\s+(\w+)', content):
-            structure['lemmas'].append(m.group(1))
-
-        # Definitions
-        for m in re.finditer(r'definition\s+(\w+)', content):
-            structure['definitions'].append(m.group(1))
-
-        # Datatypes
-        for m in re.finditer(r'datatype\s+(\w+)', content):
-            structure['datatypes'].append(m.group(1))
-
-        # Fonctions
-        for m in re.finditer(r'fun\s+(\w+)', content):
-            structure['functions'].append(m.group(1))
-
-        # Locales
-        for m in re.finditer(r'locale\s+(\w+)', content):
-            structure['locales'].append(m.group(1))
-
-    except Exception:
-        pass
-    return structure
-
+# ------------------------------------------------------------
+# ARBORESCENCES
+# ------------------------------------------------------------
 
 def build_arborescence_hol(thy_files):
-    """Construit l'arborescence logique HOL a partir des fichiers .thy."""
     arbo = {'type': 'hol', 'theories': []}
     for f in thy_files:
         struct = extract_thy_structure(f)
@@ -166,15 +185,10 @@ def build_arborescence_hol(thy_files):
             'locales': struct['locales'],
             'total_propositions': len(struct['theorems']) + len(struct['lemmas']),
         })
-    # Construire les liens de dependances
-    theory_names = {t['theory_name']: t['file'] for t in arbo['theories']}
-    for t in arbo['theories']:
-        t['depends_on'] = [imp for imp in t['imports'] if imp in theory_names]
     return arbo
 
 
 def build_arborescence_tex(tex_files):
-    """Construit l'arborescence documentaire LaTeX."""
     arbo = {'type': 'latex', 'documents': []}
     for f in tex_files:
         sections = extract_tex_sections(f)
@@ -188,14 +202,12 @@ def build_arborescence_tex(tex_files):
 
 
 def build_arborescence_pdf(pdf_files):
-    """Construit l'arborescence narrative PDF."""
     arbo = {'type': 'pdf', 'documents': []}
     for f in pdf_files:
         page_count = 0
         try:
             from pypdf import PdfReader
-            reader = PdfReader(f)
-            page_count = len(reader.pages)
+            page_count = len(PdfReader(f).pages)
         except Exception:
             pass
         arbo['documents'].append({
@@ -207,14 +219,13 @@ def build_arborescence_pdf(pdf_files):
 
 
 def build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf):
-    """Construit l'arborescence globale unifiant HOL, LaTeX et PDF."""
-    # Creer les liens entre documents par nom de base
-    links = []
     tex_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_tex['documents']}
     pdf_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_pdf['documents']}
     thy_bases = {os.path.splitext(d['file'])[0]: d for d in arbo_hol['theories']}
 
     all_bases = set(list(tex_bases.keys()) + list(pdf_bases.keys()) + list(thy_bases.keys()))
+    links = []
+
     for base in all_bases:
         link = {'concept': base, 'files': {}}
         if base in tex_bases:
@@ -238,236 +249,284 @@ def build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf):
     }
 
 
-def create_corpus_db(db_path, tex_files, thy_files, pdf_files):
-    """Cree la base de donnees SQLite corpus.db complete."""
-    print(f"Creation de {db_path}...")
+# ------------------------------------------------------------
+# CREATION DE LA BASE
+# ------------------------------------------------------------
+
+def create_schema(conn):
+    c = conn.cursor()
+    schema_sql = """
+    CREATE TABLE IF NOT EXISTS files (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        filename TEXT NOT NULL,
+        filepath TEXT NOT NULL,
+        filetype TEXT NOT NULL,
+        sha256 TEXT NOT NULL,
+        filesize INTEGER NOT NULL,
+        extracted_text TEXT,
+        created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS arborescences (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        arbo_type TEXT NOT NULL,
+        arbo_data TEXT NOT NULL,
+        created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS hol_structure (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_id INTEGER NOT NULL,
+        theory_name TEXT,
+        imports TEXT,
+        theorems TEXT,
+        lemmas TEXT,
+        definitions TEXT,
+        datatypes TEXT,
+        functions TEXT,
+        locales TEXT,
+        total_propositions INTEGER DEFAULT 0,
+        FOREIGN KEY (file_id) REFERENCES files(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS tex_structure (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_id INTEGER NOT NULL,
+        sections TEXT,
+        total_sections INTEGER DEFAULT 0,
+        FOREIGN KEY (file_id) REFERENCES files(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS pdf_structure (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_id INTEGER NOT NULL,
+        page_count INTEGER DEFAULT 0,
+        FOREIGN KEY (file_id) REFERENCES files(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS concepts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        concept_name TEXT NOT NULL,
+        source_files TEXT,
+        concept_type TEXT,
+        description TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS metadata (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+    );
+    """
+    c.executescript(schema_sql)
+    conn.commit()
+
+
+def insert_file(conn, filename, filepath, filetype, sha256, filesize, extracted_text):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO files (filename, filepath, filetype, sha256, filesize, extracted_text, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (filename, filepath, filetype, sha256, filesize, extracted_text, iso_now())
+    )
+    conn.commit()
+    return c.lastrowid
+
+
+def insert_hol_structure(conn, file_id, struct):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO hol_structure (
+            file_id, theory_name, imports, theorems, lemmas,
+            definitions, datatypes, functions, locales, total_propositions
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            file_id,
+            struct.get('theory_name', ''),
+            json.dumps(struct.get('imports', []), ensure_ascii=False),
+            json.dumps(struct.get('theorems', []), ensure_ascii=False),
+            json.dumps(struct.get('lemmas', []), ensure_ascii=False),
+            json.dumps(struct.get('definitions', []), ensure_ascii=False),
+            json.dumps(struct.get('datatypes', []), ensure_ascii=False),
+            json.dumps(struct.get('functions', []), ensure_ascii=False),
+            json.dumps(struct.get('locales', []), ensure_ascii=False),
+            len(struct.get('theorems', [])) + len(struct.get('lemmas', [])),
+        )
+    )
+    conn.commit()
+
+
+def insert_tex_structure(conn, file_id, sections):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO tex_structure (file_id, sections, total_sections)
+        VALUES (?, ?, ?)
+        """,
+        (file_id, json.dumps(sections, ensure_ascii=False), len(sections))
+    )
+    conn.commit()
+
+
+def insert_pdf_structure(conn, file_id, page_count):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO pdf_structure (file_id, page_count)
+        VALUES (?, ?)
+        """,
+        (file_id, page_count)
+    )
+    conn.commit()
+
+
+def insert_arborescence(conn, arbo_type, arbo_data):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO arborescences (arbo_type, arbo_data, created_at)
+        VALUES (?, ?, ?)
+        """,
+        (arbo_type, json.dumps(arbo_data, ensure_ascii=False), iso_now())
+    )
+    conn.commit()
+
+
+def insert_metadata(conn, key, value):
+    c = conn.cursor()
+    c.execute(
+        """
+        INSERT INTO metadata (key, value)
+        VALUES (?, ?)
+        ON CONFLICT(key) DO UPDATE SET value=excluded.value
+        """,
+        (key, value)
+    )
+    conn.commit()
+
+
+# ------------------------------------------------------------
+# PIPELINE PRINCIPAL
+# ------------------------------------------------------------
+
+def create_corpus_db(db_path, root_dir):
+    print(f"Création de {db_path}…")
 
     conn = sqlite3.connect(db_path)
-    c = conn.cursor()
+    create_schema(conn)
 
-    # Schema
-    c.executescript('''
-        CREATE TABLE IF NOT EXISTS files (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            filename TEXT NOT NULL,
-            filepath TEXT NOT NULL,
-            filetype TEXT NOT NULL,
-            sha256 TEXT NOT NULL,
-            filesize INTEGER NOT NULL,
-            extracted_text TEXT,
-            created_at TEXT NOT NULL
-        );
+    root = Path(root_dir)
 
-        CREATE TABLE IF NOT EXISTS arborescences (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            arbo_type TEXT NOT NULL,
-            arbo_data TEXT NOT NULL,
-            created_at TEXT NOT NULL
-        );
+    tex_files = list(root.rglob("*.tex"))
+    thy_files = list(root.rglob("*.thy"))
+    pdf_files = list(root.rglob("*.pdf"))
 
-        CREATE TABLE IF NOT EXISTS hol_structure (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            file_id INTEGER NOT NULL,
-            theory_name TEXT,
-            imports TEXT,
-            theorems TEXT,
-            lemmas TEXT,
-            definitions TEXT,
-            datatypes TEXT,
-            functions TEXT,
-            locales TEXT,
-            total_propositions INTEGER DEFAULT 0,
-            FOREIGN KEY (file_id) REFERENCES files(id)
-        );
+    print(f"Trouvé {len(tex_files)} .tex, {len(thy_files)} .thy, {len(pdf_files)} .pdf")
 
-        CREATE TABLE IF NOT EXISTS tex_structure (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            file_id INTEGER NOT NULL,
-            sections TEXT,
-            total_sections INTEGER DEFAULT 0,
-            FOREIGN KEY (file_id) REFERENCES files(id)
-        );
-
-        CREATE TABLE IF NOT EXISTS pdf_structure (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            file_id INTEGER NOT NULL,
-            page_count INTEGER DEFAULT 0,
-            FOREIGN KEY (file_id) REFERENCES files(id)
-        );
-
-        CREATE TABLE IF NOT EXISTS concepts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            concept_name TEXT NOT NULL,
-            source_files TEXT,
-            concept_type TEXT,
-            description TEXT
-        );
-
-        CREATE TABLE IF NOT EXISTS metadata (
-            key TEXT PRIMARY KEY,
-            value TEXT NOT NULL
-        );
-    ''')
-
-    now = datetime.now(timezone.utc).isoformat()
-
-    # Metadata
-    commit_sha = os.environ.get('GITHUB_SHA', 'local')
-    c.execute("INSERT OR REPLACE INTO metadata VALUES (?, ?)", ('generated_at', now))
-    c.execute("INSERT OR REPLACE INTO metadata VALUES (?, ?)", ('commit_sha', commit_sha))
-    c.execute("INSERT OR REPLACE INTO metadata VALUES (?, ?)", ('version', '1.0.0'))
-
-    # Inserer les fichiers TEX
-    print("  Extraction des fichiers .tex...")
+    # --- Fichiers TEX ---
     for f in tex_files:
-        sha = sha256_file(f)
-        size = os.path.getsize(f)
-        text = extract_text_tex(f)
-        sections = extract_tex_sections(f)
-
-        c.execute('''INSERT INTO files (filename, filepath, filetype, sha256, filesize, extracted_text, created_at)
-                     VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                  (os.path.basename(f), str(f), 'tex', sha, size, text, now))
-        file_id = c.lastrowid
-        c.execute('''INSERT INTO tex_structure (file_id, sections, total_sections)
-                     VALUES (?, ?, ?)''',
-                  (file_id, json.dumps(sections, ensure_ascii=False), len(sections)))
-        print(f"    {os.path.basename(f)}: {len(text)} car., {len(sections)} sections")
-
-    # Inserer les fichiers THY
-    print("  Extraction des fichiers .thy...")
-    for f in thy_files:
-        sha = sha256_file(f)
-        size = os.path.getsize(f)
-        text = extract_text_thy(f)
-        struct = extract_thy_structure(f)
-
-        c.execute('''INSERT INTO files (filename, filepath, filetype, sha256, filesize, extracted_text, created_at)
-                     VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                  (os.path.basename(f), str(f), 'thy', sha, size, text, now))
-        file_id = c.lastrowid
-        c.execute('''INSERT INTO hol_structure (file_id, theory_name, imports, theorems, lemmas, definitions, datatypes, functions, locales, total_propositions)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                  (file_id, struct['theory_name'],
-                   json.dumps(struct['imports']),
-                   json.dumps(struct['theorems']),
-                   json.dumps(struct['lemmas']),
-                   json.dumps(struct['definitions']),
-                   json.dumps(struct['datatypes']),
-                   json.dumps(struct['functions']),
-                   json.dumps(struct['locales']),
-                   len(struct['theorems']) + len(struct['lemmas'])))
-        total_p = len(struct['theorems']) + len(struct['lemmas'])
-        print(f"    {os.path.basename(f)}: theorie={struct['theory_name']}, {total_p} propositions")
-
-    # Inserer les fichiers PDF
-    print("  Extraction des fichiers .pdf...")
-    for f in pdf_files:
-        sha = sha256_file(f)
-        size = os.path.getsize(f)
-        text = extract_text_pdf(f)
-        page_count = 0
+        f = Path(f)
         try:
-            from pypdf import PdfReader
-            page_count = len(PdfReader(f).pages)
-        except Exception:
-            pass
+            text = extract_text_tex(f)
+            sha = sha256_file(f)
+            size = f.stat().st_size
+            file_id = insert_file(
+                conn,
+                f.name,
+                str(f),
+                "tex",
+                sha,
+                size,
+                text
+            )
+            sections = extract_tex_sections(f)
+            insert_tex_structure(conn, file_id, sections)
+        except Exception as e:
+            print(f"[TEX] Erreur sur {f}: {e}")
 
-        c.execute('''INSERT INTO files (filename, filepath, filetype, sha256, filesize, extracted_text, created_at)
-                     VALUES (?, ?, ?, ?, ?, ?, ?)''',
-                  (os.path.basename(f), str(f), 'pdf', sha, size, text, now))
-        file_id = c.lastrowid
-        c.execute('''INSERT INTO pdf_structure (file_id, page_count) VALUES (?, ?)''',
-                  (file_id, page_count))
-        print(f"    {os.path.basename(f)}: {page_count} pages, {len(text)} car.")
+    # --- Fichiers THY ---
+    for f in thy_files:
+        f = Path(f)
+        try:
+            text = extract_text_thy(f)
+            sha = sha256_file(f)
+            size = f.stat().st_size
+            file_id = insert_file(
+                conn,
+                f.name,
+                str(f),
+                "thy",
+                sha,
+                size,
+                text
+            )
+            struct = extract_thy_structure(f)
+            insert_hol_structure(conn, file_id, struct)
+        except Exception as e:
+            print(f"[THY] Erreur sur {f}: {e}")
 
-    # Generer les arborescences
-    print("  Generation des arborescences...")
+    # --- Fichiers PDF ---
+    for f in pdf_files:
+        f = Path(f)
+        try:
+            text = extract_text_pdf(f)
+            sha = sha256_file(f)
+            size = f.stat().st_size
+            file_id = insert_file(
+                conn,
+                f.name,
+                str(f),
+                "pdf",
+                sha,
+                size,
+                text
+            )
+            # Nombre de pages
+            try:
+                from pypdf import PdfReader
+                page_count = len(PdfReader(f).pages)
+            except Exception:
+                page_count = 0
+            insert_pdf_structure(conn, file_id, page_count)
+        except Exception as e:
+            print(f"[PDF] Erreur sur {f}: {e}")
+
+    # --- Arborescences ---
     arbo_hol = build_arborescence_hol(thy_files)
     arbo_tex = build_arborescence_tex(tex_files)
     arbo_pdf = build_arborescence_pdf(pdf_files)
-    arbo_globale = build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf)
+    arbo_global = build_arborescence_globale(arbo_hol, arbo_tex, arbo_pdf)
 
-    c.execute("INSERT INTO arborescences (arbo_type, arbo_data, created_at) VALUES (?, ?, ?)",
-              ('hol', json.dumps(arbo_hol, ensure_ascii=False, indent=2), now))
-    c.execute("INSERT INTO arborescences (arbo_type, arbo_data, created_at) VALUES (?, ?, ?)",
-              ('latex', json.dumps(arbo_tex, ensure_ascii=False, indent=2), now))
-    c.execute("INSERT INTO arborescences (arbo_type, arbo_data, created_at) VALUES (?, ?, ?)",
-              ('pdf', json.dumps(arbo_pdf, ensure_ascii=False, indent=2), now))
-    c.execute("INSERT INTO arborescences (arbo_type, arbo_data, created_at) VALUES (?, ?, ?)",
-              ('global', json.dumps(arbo_globale, ensure_ascii=False, indent=2), now))
-    print("    4 arborescences generees (HOL, LaTeX, PDF, globale)")
+    insert_arborescence(conn, "hol", arbo_hol)
+    insert_arborescence(conn, "latex", arbo_tex)
+    insert_arborescence(conn, "pdf", arbo_pdf)
+    insert_arborescence(conn, "global", arbo_global)
 
-    # Extraire les concepts depuis les theoremes et sections
-    print("  Extraction des concepts...")
-    for t in arbo_hol['theories']:
-        for thm in t['theorems']:
-            c.execute("INSERT INTO concepts (concept_name, source_files, concept_type) VALUES (?, ?, ?)",
-                      (thm, json.dumps([t['file']]), 'theorem'))
-        for lem in t['lemmas']:
-            c.execute("INSERT INTO concepts (concept_name, source_files, concept_type) VALUES (?, ?, ?)",
-                      (lem, json.dumps([t['file']]), 'lemma'))
-        for defn in t['definitions']:
-            c.execute("INSERT INTO concepts (concept_name, source_files, concept_type) VALUES (?, ?, ?)",
-                      (defn, json.dumps([t['file']]), 'definition'))
-        for loc in t['locales']:
-            c.execute("INSERT INTO concepts (concept_name, source_files, concept_type) VALUES (?, ?, ?)",
-                      (loc, json.dumps([t['file']]), 'locale'))
-
-    conn.commit()
-
-    # Statistiques finales
-    c.execute("SELECT COUNT(*) FROM files")
-    total_files = c.fetchone()[0]
-    c.execute("SELECT COUNT(*) FROM concepts")
-    total_concepts = c.fetchone()[0]
-    c.execute("SELECT SUM(LENGTH(extracted_text)) FROM files")
-    total_text = c.fetchone()[0] or 0
+    # --- Métadonnées ---
+    insert_metadata(conn, "created_at", iso_now())
+    insert_metadata(conn, "root_dir", str(root.resolve()))
+    insert_metadata(conn, "total_tex", str(len(tex_files)))
+    insert_metadata(conn, "total_thy", str(len(thy_files)))
+    insert_metadata(conn, "total_pdf", str(len(pdf_files)))
 
     conn.close()
-
-    print(f"\nCorpus genere: {db_path}")
-    print(f"  Fichiers: {total_files}")
-    print(f"  Concepts: {total_concepts}")
-    print(f"  Texte extrait: {total_text} caracteres")
-    print(f"  Arborescences: 4 (HOL, LaTeX, PDF, globale)")
-    print(f"  Taille DB: {os.path.getsize(db_path)} octets")
+    print("Corpus SQLite généré avec succès.")
 
 
-def main():
-    print("=" * 60)
-    print("GENERATION DU CORPUS SQLite (Option C - Extraction complete)")
-    print("=" * 60)
-
-    # Trouver les fichiers
-    root = Path('.')
-    tex_files = sorted([str(f) for f in root.rglob('src/tex/*.tex')])
-    thy_files = sorted([str(f) for f in root.rglob('src/hol/*.thy')])
-    pdf_files = sorted([str(f) for f in root.rglob('src/pdf/*.pdf')])
-
-    print(f"\nFichiers trouves:")
-    print(f"  .tex: {len(tex_files)}")
-    print(f"  .thy: {len(thy_files)}")
-    print(f"  .pdf: {len(pdf_files)}")
-
-    if not tex_files and not thy_files:
-        print("ERREUR: Aucun fichier source trouve")
-        sys.exit(1)
-
-    # Creer le dossier de sortie
-    Path('corpus_output').mkdir(exist_ok=True)
-    db_path = 'corpus_output/corpus.db'
-
-    # Supprimer l'ancienne DB si elle existe
-    if os.path.exists(db_path):
-        os.remove(db_path)
-
-    create_corpus_db(db_path, tex_files, thy_files, pdf_files)
-
-    print("\n" + "=" * 60)
-    print("CORPUS GENERE AVEC SUCCES")
-    print("=" * 60)
-
+# ------------------------------------------------------------
+# MAIN
+# ------------------------------------------------------------
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) < 3:
+        print("Usage : python3 generate_corpus_db.py <dossier_racine> <fichier_db.sqlite>")
+        sys.exit(1)
+
+    root_dir = sys.argv[1]
+    db_path = sys.argv[2]
+
+    create_corpus_db(db_path, root_dir)

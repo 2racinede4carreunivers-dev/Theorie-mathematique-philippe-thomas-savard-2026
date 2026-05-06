@@ -1,35 +1,3 @@
-<<<<<<< HEAD
-# CHANGELOG
-
-## Carnet de mises a jour -- L'Univers est au Carre
-
-Depot : Theorie mathematique de Philippe Thomas Savard 2026
-Licence : Apache 2.0
-
----
-
-## 2026-04-20 -- Reinitialisation du CHANGELOG
-
-Reinitialisation du CHANGELOG, restructuration complete du fonctionnement.
-Les mises a jour commencent maintenant. Malgre le decalage, l'information
-est a jour a partir de cette derniere mise a jour.
-
-Bienvenu sur le depot de Philippe Thomas Savard aux contributeurs et
-visiteurs. Vos modifications sont les bienvenues selon les regles de
-la LICENCE Apache 2.0. Bienvenu a tous!
-
-### Etat du depot a cette date :
-- 7 theories Isabelle/HOL dans `src/hol/` (0 sorry, compilation reussie)
-- 10 documents LaTeX dans `src/tex/` (FR + EN)
-- 14 PDF compiles dans `src/pdf/`
-- Banque Q&R evolutive (83+ questions generees par GPT-4o)
-- Infrastructure CI/CD : 5 workflows GitHub Actions
-- Systeme d'evaluation academique automatise (74.3/100)
-- 4 arborescences Mermaid.js dans `src/arborescences_corpus/`
-- Release v1.0.0 publiee
-
----
-=======
 # CHANGELOG
 
 ## Carnet de mises a jour -- L'Univers est au Carre
@@ -67,7 +35,6 @@ Message: Fix CHANGELOG job: git add .pending_note ne crash plus si absent
 
 ---
 
->>>>>>> 53932f4d57405ffde6a83b1c9122c88a23540d7c
 
 ## Vingt avril deux milles vingt six 17:06 -- Mise a jour du CHANGELOG
 
@@ -186,59 +153,6 @@ Message: Résolution complète des conflits entre main et conflict_010526_0136 (
 ## 2026-05-01 -- Commit 2e17ca2
 
 Message: Merge branch 'main' of https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026
-
----
-
-
-## 2026-05-01 -- Commit ffd69b2
-
-Message: Enrichissement des 9 scenes de calcul avec exemples complets
-
----
-
-
-## 2026-05-02 -- Commit 511b822
-
-Message: Merge pull request #5 from 2racinede4carreunivers-dev/conflict_010526_0136
-
----
-
-
-## 2026-05-03 -- Commit 3bebf69
-
-Message: Merge branch 'main' of https://github.com/2racinede4carreunivers-dev/Theorie-mathematique-philippe-thomas-savard-2026
-
----
-
-
-## Le quatre mai deux-milles vingt-six 6:44 -- Animation/html/mp4
-
-Commit: baacac8
-
-Resume: 
-
----
-
-
-## Le quatre mai deux-milles vingt-six 14:50 -- SCRIPT_NARRATIF_VP.md mise a jour:
-
-Commit: bddb7f6
-
-Resume: 
-
----
-
-
-## 2026-05-04 -- Commit b6009b2
-
-Message: Remove references to 'pilosophy_geometry_of_prime_number.tex'
-
----
-
-
-## 2026-05-04 -- Commit 2ffa7b6
-
-Message:  Titre: Mise a jour note.sh .
 
 ---
 

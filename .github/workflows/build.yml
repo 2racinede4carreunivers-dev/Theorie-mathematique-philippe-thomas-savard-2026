@@ -400,10 +400,9 @@ jobs:
             qa_bank/qa_bank.db
           retention-days: 30
           if-no-files-found: warn
-
-  ###########################################################################
-  # 🟫 JOB CORPUS DB — Base SQLite + Arborescences + Extraction textuelle
-  ###########################################################################
+###########################################################################
+# 🟫 JOB CORPUS DB — Génération du corpus SQLite attesté
+###########################################################################
 
   generate_corpus_db:
     runs-on: ubuntu-latest
@@ -421,26 +420,24 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installation des dependances corpus
+      - name: Installation des dépendances corpus
         run: |
           python -m pip install --upgrade pip
           pip install pypdf beautifulsoup4 lxml markdownify
 
-      - name: Telecharger les PDF compiles
+      - name: Télécharger les PDF compilés
         uses: actions/download-artifact@v4
         with:
           name: pdf-documents
           path: src/pdf/
 
-      - name: Telecharger les theories HOL
+      - name: Télécharger les théories HOL
         uses: actions/download-artifact@v4
         with:
           name: hol-theories
           path: src/hol/
 
-      - name: Generation du corpus SQLite complet
-        env:
-          GITHUB_SHA: ${{ github.sha }}
+      - name: Génération du corpus SQLite complet
         run: |
           python3 scripts/generate_corpus_db.py
 
@@ -452,34 +449,16 @@ jobs:
           retention-days: 90
 
       - name: Attestation SLSA pour corpus.db
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: corpus_output/corpus.db
 
-      - name: Resume corpus
-        run: |
-          echo "## Corpus SQLite" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          DB_SIZE=$(stat -c%s corpus_output/corpus.db 2>/dev/null || echo "0")
-          echo "**Taille:** ${DB_SIZE} octets" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Contenu:**" >> $GITHUB_STEP_SUMMARY
-          echo "- Extraction textuelle complete (PDF, TEX, THY)" >> $GITHUB_STEP_SUMMARY
-          echo "- 4 arborescences (HOL, LaTeX, PDF, globale)" >> $GITHUB_STEP_SUMMARY
-          echo "- Concepts extraits (theoremes, lemmes, definitions)" >> $GITHUB_STEP_SUMMARY
-          echo "- SHA-256 pour chaque fichier" >> $GITHUB_STEP_SUMMARY
-          echo "- Attestation SLSA generee" >> $GITHUB_STEP_SUMMARY
-
-      - name: Commit corpus.db dans le depot
+      - name: Commit corpus.db dans le dépôt
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          cp corpus_output/corpus.db qa_bank/corpus.db
           git add qa_bank/corpus.db
-          git diff --staged --quiet || git commit -m "Auto: corpus.db mis a jour $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "Auto: corpus.db mis à jour $(date +%Y-%m-%d)"
           git push || (git pull --rebase && git push) || true
 
   ###########################################################################
