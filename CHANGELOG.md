@@ -184,3 +184,10 @@ Message:  Titre : scripts/generate_corpus_db.py .
 
 ---
 
+
+## 2026-05-06 -- Commit ba93718
+
+Message:  Titre : Ajout Corpus pour LLM a venir! .
+
+---
+
