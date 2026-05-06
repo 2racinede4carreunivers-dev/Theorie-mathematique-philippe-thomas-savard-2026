@@ -550,3 +550,29 @@ def insert_pdf_structure(conn, file_id, page_count):
     conn.commit()
 
 
+def insert_markdown_examples(conn, corpus_root):
+    """
+    Lecture et insertion du fichier exemple_calculs.md dans la base corpus.db
+    """
+    md_path = corpus_root / "exemple_calculs.md"
+    if not md_path.exists():
+        print("[INFO] Aucun fichier exemple_calculs.md trouvé, étape ignorée.")
+        return
+
+    text = md_path.read_text(encoding="utf-8", errors="ignore")
+    sha = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    filesize = len(text.encode("utf-8"))
+
+    file_id = insert_file(
+        conn,
+        filename=md_path.name,
+        filepath=str(md_path),
+        filetype="markdown",
+        sha256=sha,
+        filesize=filesize,
+        extracted_text=text,
+    )
+
+    md_struct = extract_md_structure(text)
+    insert_md_structure(conn, file_id, md_struct)
+    print(f"[OK] Fichier Markdown {md_path.name} ajouté au corpus.")

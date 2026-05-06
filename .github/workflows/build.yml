@@ -456,6 +456,9 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: corpus_output/corpus.db
+      - name: Ajouter exemple_calculs.md au corpus
+        run: |
+            python3 generate_corpus_db.py --include-markdown
 
       - name: Resume corpus
         run: |
