@@ -3065,9 +3065,24 @@ text "
 % ============================================================================
 
 \begin{tcolorbox}[colback=white,colframe=black,title={Quadrature de la parabole et zéros critiques}]
-La figure intitulée \emph{Quadrature de la parabole -- Pesé d'Archimède} illustre la relation
-géométrique entre l’aire d’une parabole et l’aire d’un triangle associé, appliquée ici à
-l’interprétation géométrique des zéros critiques de la fonction zêta.
+\section*{Quadrature de la parabole d'Archimède et aire de la droite critique}
+
+La fonction zêta — non pas la fonction zêta de Riemann, mais une fonction zêta définie différemment — permet-elle de déterminer la position de tous les nombres premiers? Dans les exemples précédents, il a été démontré, en plus de la validation HOL d'Isabelle, que la méthode spectrale permet également de déterminer la position de tous les nombres premiers. Ces exemples ont aussi introduit l'étude de l'écart entre deux nombres premiers à l’aide des suites A et B. Trois cas ont été présentés : $(-,-)$, $(+,+)$ et $(-,+)$, correspondant respectivement à l'écart négatif, à l'écart positif et à l'écart mixte.
+
+La droite critique de la fonction zêta peut être représentée par l'aire d'un rectangle. Si l'on considère un intervalle donné pour les premiers $P$, l'aire de la droite critique se trouve alors divisée en deux sections : la partie correspondant à l'intervalle étudié, et la partie restante, extérieure à cet intervalle. L'auteur, Philippe Thomas Savard, propose une approche utilisant l'écart mixte et la pesée d'Archimède, employée pour démontrer la quadrature de la parabole. L'écart mixte permet au moins autant de combinaisons d'écarts entre nombres premiers que les écarts positifs et négatifs, mais inclut en plus les combinaisons symétriques telles que $(-2,2)$, $(-3,3)$, $(-5,5)$, ..., $(-p\text{-ième}, p\text{-ième})$. Ainsi, pour un même intervalle, il y a davantage de nombres premiers considérés que dans les deux autres types d’écarts.
+
+De plus, comme montré dans les exemples précédents, l'écart mixte — contrairement aux deux autres — inclut la valeur $0$, ce qui ajoute $+1$ à chaque combinaison d'écart entre deux premiers $P$. L'intervalle considéré devient donc relativement plus grand, puisque la valeur maximale de l'intervalle augmente de $+1$. Cet effet a pour conséquence de courber la droite critique. Savard affirme que si l'aire de la parabole ainsi formée est égale à l’aire de la section du rectangle représentant la droite critique, alors cette égalité démontrerait que tous les zéros de la droite critique ont pour partie réelle $1/2$.
+
+Le schéma proposé repose sur la pesée d'Archimède, qui démontre que l'
+aire de la parabole est égale aux $4/3$ de l'aire du triangle inscrit. Dans l'exemple illustré, l'aire de la parabole et, à droite, la pesée représentant l'aire restante, sont égales. Cependant, selon le théorème de Thalès, pour la même question, on obtient :
+
+
+\[
+\text{Aire de la parabole} \times OE \neq \text{Aire du triangle} \times OH.
+\]
+
+
+
 
 Dans la quadrature classique d’Archimède, l’aire de la région parabolique est donnée par :
 \[
