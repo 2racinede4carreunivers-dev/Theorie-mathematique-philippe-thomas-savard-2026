@@ -163,3 +163,10 @@ Message:  Titre : Mise a jour du corpus .
 
 ---
 
+
+## 2026-05-06 -- Commit 5569a8b
+
+Message:  Titre: Mise a jour Buil.yml .
+
+---
+
