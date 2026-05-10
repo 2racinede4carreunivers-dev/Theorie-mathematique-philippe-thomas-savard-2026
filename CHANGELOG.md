@@ -198,3 +198,10 @@ Message: Merge branch 'main' of https://github.com/2racinede4carreunivers-dev/Th
 
 ---
 
+
+## 2026-05-10 -- Commit 1f95777
+
+Message: Restaure scripts/auto_generate_qa.py (workflow Auto QR Quotidien casse)
+
+---
+
