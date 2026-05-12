@@ -216,3 +216,12 @@ Date : Le onze avril deux-milles vingt-six. 18h22
 
 ---
 
+
+## Le onze mai deux-milles vingt-six 14:22 -- Ajout du fichier fonction_zeta_philippot.thy
+
+Commit: 8ece030
+
+Resume: Le fichier ajouté est un fichier de validation HOL qui revient en quelque sorte sur la question de la méthode spectral de manière nouvelle et conçu pour le corpus HOL et sera joint a l'agent ?
+
+---
+
