@@ -1,4 +1,3 @@
-
 name: Build Isabelle + LaTeX + Release intelligente
 
 on:
@@ -77,10 +76,8 @@ jobs:
           echo "Compilation de la session Isabelle Univers_Au_Carre via ROOT dans src/hol"
           isabelle build -v -d src/hol Univers_Au_Carre
 
-
-
       ###########################################################################
-      # 🟦 SECTION LATEX — SUPPORT PNG
+      #  SECTION LATEX — SUPPORT PNG
       ###########################################################################
 
       - name: Préparer l'accès aux images PNG
@@ -170,7 +167,6 @@ jobs:
           echo "PDF dans src/pdf/:"
           ls -la src/pdf/*.pdf 2>/dev/null || echo "  Aucun PDF"
 
-
       ###########################################################################
 
       - name: Generate attestation report (SHA-256 des PDF)
@@ -249,40 +245,9 @@ jobs:
             src/pdf/spirale_inverse_temps.pdf
 
   ###########################################################################
-  # 🟩 JOB HOL — SECTION CORRIGÉE
+  #  JOB HOL — Vérification HOL
   ###########################################################################
-      - name: Force HTTP/1.1
-        run: git config --global http.version HTTP/1.1
 
-      - name: Remove Git proxies
-        run: |
-          git config --global --unset http.proxy || true
-          git config --global --unset https.proxy || true
-
-      - name: Prepare download directory
-        run: mkdir -p isabelle
-
-      - name: Download Isabelle
-        run: |
-          curl -L --retry 5 --retry-delay 5 --http1.1 \
-            -o isabelle/Isabelle2024_linux.tar.gz \
-            https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz
-
-      - name: Check Isabelle archive size
-        run: |
-          FILESIZE=$(stat -c%s "isabelle/Isabelle2024_linux.tar.gz")
-          if [ "$FILESIZE" -lt 1000000 ]; then
-            echo "Downloaded file is too small ($FILESIZE bytes). Likely a server error."
-            exit 1
-          fi
-  
-      - name: Extract Isabelle
-        run: |
-          tar -xzf isabelle/Isabelle2024_linux.tar.gz
-          mv Isabelle2024 isabelle
-          echo "$PWD/isabelle/bin" >> $GITHUB_PATH
-
-  
   hol_verification:
     runs-on: ubuntu-latest
     needs: build
@@ -328,7 +293,7 @@ jobs:
           path: ~/.isabelle/Isabelle2024/heaps/
 
   ###########################################################################
-  # 🟪 JOB Q&R — Génération des Questions/Réponses uniquement
+  #  JOB Q&R — Génération des Questions/Réponses uniquement
   ###########################################################################
 
   generate_qa:
@@ -359,10 +324,10 @@ jobs:
       - name: Vérification de la clé API
         run: |
           if [ -z "${{ secrets._CLE }}" ]; then
-            echo "⚠️  EMERGENT_LLM_KEY non configuré - Génération Q&R désactivée"
+            echo "  EMERGENT_LLM_KEY non configuré - Génération Q&R désactivée"
             echo "qa_enabled=false" >> $GITHUB_OUTPUT
           else
-            echo "✅ Clé API Emergent configurée"
+            echo " Clé API Emergent configurée"
             echo "qa_enabled=true" >> $GITHUB_OUTPUT
           fi
         id: check_key
@@ -392,7 +357,7 @@ jobs:
           GITHUB_SHA: ${{ github.sha }}
           GENERATION_LANGUAGE: ${{ github.event.inputs.qa_language || 'fr' }}
         run: |
-          echo "🧠 Démarrage de la génération Q&R..."
+          echo " Démarrage de la génération Q&R..."
           echo "   Commit: $GITHUB_SHA"
           echo "   Langue: $GENERATION_LANGUAGE"
           echo "   Répertoire: $(pwd)"
@@ -403,7 +368,7 @@ jobs:
 
       - name: Résumé de la génération Q&R
         run: |
-          echo "## 📚 Génération Q&R - Théorie Savard" >> $GITHUB_STEP_SUMMARY
+          echo "##  Génération Q&R - Théorie Savard" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -416,7 +381,7 @@ jobs:
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📋 Prochaines étapes" >> $GITHUB_STEP_SUMMARY
+          echo "###  Prochaines étapes" >> $GITHUB_STEP_SUMMARY
           echo "1. Téléchargez l'artifact \`qa-generated\`" >> $GITHUB_STEP_SUMMARY
           echo "2. Examinez les Q&R dans le fichier Markdown" >> $GITHUB_STEP_SUMMARY
           echo "3. Utilisez \`python qa_validator.py --interactive\` pour valider" >> $GITHUB_STEP_SUMMARY
@@ -433,7 +398,7 @@ jobs:
           if-no-files-found: warn
 
   ###########################################################################
-  # 🟫 JOB CORPUS DB — Base SQLite + Arborescences + Extraction textuelle
+  #  JOB CORPUS DB — Base SQLite + Arborescences + Extraction textuelle
   ###########################################################################
 
   generate_corpus_db:
@@ -487,9 +452,10 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-path: corpus_output/corpus.db
+
       - name: Ajouter exemple_calculs.md au corpus
         run: |
-            python3 generate_corpus_db.py --include-markdown
+          python3 generate_corpus_db.py --include-markdown
 
       - name: Resume corpus
         run: |
@@ -517,7 +483,7 @@ jobs:
           git push || (git pull --rebase && git push) || true
 
   ###########################################################################
-  # 🟦 JOB RELEASE
+  #  JOB RELEASE
   ###########################################################################
 
   release:
