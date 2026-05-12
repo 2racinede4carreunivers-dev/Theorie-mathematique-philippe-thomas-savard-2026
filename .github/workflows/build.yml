@@ -251,7 +251,38 @@ jobs:
   ###########################################################################
   # 🟩 JOB HOL — SECTION CORRIGÉE
   ###########################################################################
+      - name: Force HTTP/1.1
+        run: git config --global http.version HTTP/1.1
 
+      - name: Remove Git proxies
+        run: |
+          git config --global --unset http.proxy || true
+          git config --global --unset https.proxy || true
+
+      - name: Prepare download directory
+        run: mkdir -p isabelle
+
+      - name: Download Isabelle
+        run: |
+          curl -L --retry 5 --retry-delay 5 --http1.1 \
+            -o isabelle/Isabelle2024_linux.tar.gz \
+            https://isabelle.in.tum.de/dist/Isabelle2024_linux.tar.gz
+
+      - name: Check Isabelle archive size
+        run: |
+          FILESIZE=$(stat -c%s "isabelle/Isabelle2024_linux.tar.gz")
+          if [ "$FILESIZE" -lt 1000000 ]; then
+            echo "Downloaded file is too small ($FILESIZE bytes). Likely a server error."
+            exit 1
+          fi
+  
+      - name: Extract Isabelle
+        run: |
+          tar -xzf isabelle/Isabelle2024_linux.tar.gz
+          mv Isabelle2024 isabelle
+          echo "$PWD/isabelle/bin" >> $GITHUB_PATH
+
+  
   hol_verification:
     runs-on: ubuntu-latest
     needs: build
