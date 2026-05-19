@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-05-19 09:59 UTC
-**Total Q&R:** 128
+**Derniere mise a jour:** 2026-05-19 14:46 UTC
+**Total Q&R:** 129
 
 ---
 
@@ -560,7 +560,15 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ### Source: `postulat_carre.thy`
 
-**1. [avance] Dans le contexte de 'postulat_carre.thy', comment le théorème exprimant l'équivalence entre un rectangle et un carré est-il formulé, et quelles sont ses implications géométriques?**
+**1. [expert] Dans le fichier 'postulat_carre.thy', comment le lemme 'diagonale_tronquee_carree' démontre-t-il que la somme des carrés des côtés tronqués s3 et t3 est égale à 6 dans l'exemple numérique pour p = 3?**
+
+*Categorie: mathematique/equation | Score: 0.8*
+
+> Le lemme 'diagonale_tronquee_carree' montre comment la somme des carrés des côtés tronqués s3 et t3 atteint une valeur de 6, en utilisant la relation sqrt(s3 * s3 + t3 * t3) = sqrt 6 indiquée par l'axiome 'diag_trunc_3'. La preuve débute par l'égalité des diagonales tronquées: (sqrt(s3 * s3 + t3 * t3))^2 = (sqrt 6)^2. Après simplification, cela revient à démontrer que s3^2 + t3^2 = 6. Chacune de ces étapes exploite la simplification algébrique de la mise au carré, reliant ainsi les longueurs des côtés aux propriétés métriques du rectangle concerné. Cela vérifie que la configuration géométrique respectant ces conditions spécifiques (pour p = 3) contraint les dimensions tronquées à cette relation précise.
+
+---
+
+**2. [avance] Dans le contexte de 'postulat_carre.thy', comment le théorème exprimant l'équivalence entre un rectangle et un carré est-il formulé, et quelles sont ses implications géométriques?**
 
 *Categorie: mathematique/theoreme | Score: 0.8*
 
@@ -568,7 +576,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**2. [avance] Comment le concept de 'l'univers est au carré', dans le contexte du fichier 'postulat_carre.thy', implique-t-il une vision téléosémantique de l'univers, où la transformation conceptuelle d'un rectangle en carré (via le carré du périmètre) peut être interprétée comme une réflexion sur l'harmonie et l'unité fondamentales de l'univers? Considérez spécifiquement les définitions des aires 'S_S' et 'S_F' et des diagonales 'd_S' et 'd_F' comme des métaphores possibles de l’intégrité unifiée de toute structure géométrique.**
+**3. [avance] Comment le concept de 'l'univers est au carré', dans le contexte du fichier 'postulat_carre.thy', implique-t-il une vision téléosémantique de l'univers, où la transformation conceptuelle d'un rectangle en carré (via le carré du périmètre) peut être interprétée comme une réflexion sur l'harmonie et l'unité fondamentales de l'univers? Considérez spécifiquement les définitions des aires 'S_S' et 'S_F' et des diagonales 'd_S' et 'd_F' comme des métaphores possibles de l’intégrité unifiée de toute structure géométrique.**
 
 *Categorie: philosophique/philosophique | Score: 0.8*
 
@@ -576,7 +584,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**3. [intermediaire] Comment la méthode de squaring est-elle utilisée dans l'exemple numérique pour p = 3 pour démontrer la relation entre la hauteur, le tronquage et la diagonale dans le fichier 'postulat_carre.thy'?**
+**4. [intermediaire] Comment la méthode de squaring est-elle utilisée dans l'exemple numérique pour p = 3 pour démontrer la relation entre la hauteur, le tronquage et la diagonale dans le fichier 'postulat_carre.thy'?**
 
 *Categorie: mathematique/methode | Score: 0.8*
 
@@ -584,7 +592,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**4. [avance] Comment est démontré formellement que l'aire du carré inscrit dans le 'locale' octogone_carre_equations est définie par l'équation 'area_carre = (4 - sqrt 8) ^ 2' et quelles propriétés géométriques sont utilisées dans cette preuve?**
+**5. [avance] Comment est démontré formellement que l'aire du carré inscrit dans le 'locale' octogone_carre_equations est définie par l'équation 'area_carre = (4 - sqrt 8) ^ 2' et quelles propriétés géométriques sont utilisées dans cette preuve?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
@@ -592,7 +600,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**5. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
+**6. [intermediaire] Comment le concept de 'eq_ratio_height' se distingue-t-il du 'eq_ratio_trunc' dans le fichier 'postulat_carre.thy', notamment en termes de leur relation avec le nombre premier p?**
 
 *Categorie: mathematique/comparaison | Score: 0.8*
 
