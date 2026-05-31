@@ -1481,80 +1481,80 @@ theory methode_spectral
 begin
 
 (****************************************************************)
-(* TABLE DES MATIERES – SCRIPT HOL : GEOMETRIE DU SPECTRE       *)
+(* TABLE DES MATIERES - SCRIPT HOL : GEOMETRIE DU SPECTRE       *)
 (*                                                              *)
-(* I.   RAPPORT SPECTRAL 1/2 – FONDATIONS                       *)
-(*      1. Forme générale des suites SA et SB ............... 55–62 *)
-(*      2. Validité des formes générales pour n > 0 ......... 68–76 *)
-(*      3. Rapport spectral 1/2 (définition + preuve) ....... 83–115 *)
-(*      4. Généralisation n×n du rapport spectral ........... 122–147 *)
-(*      5. Digamma calculé et équation du premier ........... 153–201 *)
-(*      6. Postulat spectral 1/2 (axiomatisation) ........... 207–216 *)
-(*      7. Exemples : 29, 31, 37, 41 ........................ 221–289 *)
+(* I.   RAPPORT SPECTRAL 1/2 - FONDATIONS                       *)
+(*      1. Forme generale des suites SA et SB ............... 55-62 *)
+(*      2. Validite des formes generales pour n > 0 ......... 68-76 *)
+(*      3. Rapport spectral 1/2 (definition + preuve) ....... 83-115 *)
+(*      4. Generalisation n x n du rapport spectral ......... 122-147 *)
+(*      5. Digamma calcule et equation du premier ........... 153-201 *)
+(*      6. Postulat spectral 1/2 (axiomatisation) ........... 207-216 *)
+(*      7. Exemples : 29, 31, 37, 41 ........................ 221-289 *)
 (*                                                              *)
 (* II.  MODELE SPECTRAL 1/4                                     *)
-(*      1. Définitions générales A_1_4 et B_1_4 ............. 296–312 *)
-(*      2. Équation générale du premier (1/4) ............... 318–323 *)
-(*      3. Postulat spectral 1/4 (axiomatisation) ........... 330–335 *)
-(*      4. Exemple complet : premier 947 ..................... 351–377 *)
+(*      1. Definitions generales A_1_4 et B_1_4 ............. 296-312 *)
+(*      2. Equation generale du premier (1/4) ............... 318-323 *)
+(*      3. Postulat spectral 1/4 (axiomatisation) ........... 330-335 *)
+(*      4. Exemple complet : premier 947 ..................... 351-377 *)
 (*                                                              *)
 (* III. MODELE SPECTRAL 1/3                                     *)
-(*      1. Définitions générales A_1_3 et B_1_3 ............. 384–398 *)
-(*      2. Équation générale du premier (1/3) ............... 404–409 *)
-(*      3. Postulat spectral 1/3 (axiomatisation) ........... 416–420 *)
-(*      4. Exemple complet : premier 227 ..................... 437–456 *)
-(*      5. Preuve générale du rapport constant 1/3 .......... 461–502 *)
+(*      1. Definitions generales A_1_3 et B_1_3 ............. 384-398 *)
+(*      2. Equation generale du premier (1/3) ............... 404-409 *)
+(*      3. Postulat spectral 1/3 (axiomatisation) ........... 416-420 *)
+(*      4. Exemple complet : premier 227 ..................... 437-456 *)
+(*      5. Preuve generale du rapport constant 1/3 .......... 461-502 *)
 (*                                                              *)
-(* IV.  RAPPORT SPECTRAL 1/4 – PREUVE GENERALE                 *)
-(*      1. Définition RsP_1_4 ............................... 509–513 *)
-(*      2. Preuve du rapport constant 1/4 .................... 514–542 *)
+(* IV.  RAPPORT SPECTRAL 1/4 - PREUVE GENERALE                 *)
+(*      1. Definition RsP_1_4 ............................... 509-513 *)
+(*      2. Preuve du rapport constant 1/4 .................... 514-542 *)
 (*                                                              *)
 (* V.   SUITES MIXTES A ET B (-,+)                              *)
-(*      1. Définitions SA_mix et SB_mix ...................... 548–555 *)
-(*      2. Formes fermées et récurrence ...................... 556–580 *)
-(*      3. Reconstruction générale du premier (mixte) ........ 583–595 *)
-(*      4. Exemple : six termes négatifs ..................... 597–616 *)
+(*      1. Definitions SA_mix et SB_mix ...................... 548-555 *)
+(*      2. Formes fermees et recurrence ...................... 556-580 *)
+(*      3. Reconstruction generale du premier (mixte) ........ 583-595 *)
+(*      4. Exemple : six termes negatifs ..................... 597-616 *)
 (*                                                              *)
-(* VI.  SUITES NÉGATIVES – ÉQUATIONS SPECTRALES                 *)
-(*      1. Définitions SA_neg_eq et SB_neg_eq ................ 622–629 *)
-(*      2. Digamma négatif ................................... 630–636 *)
-(*      3. Rapport spectral négatif 1/2 (axiomatisation) ..... 643–657 *)
+(* VI.  SUITES NEGATIVES - EQUATIONS SPECTRALES                 *)
+(*      1. Definitions SA_neg_eq et SB_neg_eq ................ 622-629 *)
+(*      2. Digamma negatif ................................... 630-636 *)
+(*      3. Rapport spectral negatif 1/2 (axiomatisation) ..... 643-657 *)
 (*                                                              *)
-(* VII. GÉOMÉTRIE SPECTRALE – ASYMÉTRIE ORDONNÉE / CHAOTIQUE    *)
-(*      1. Indices valides et croissance stricte (int) ....... 664–672 *)
-(*      2. Asymétrie ordonnée et chaotique ................... 673–689 *)
-(*      3. Propriétés générales ............................... 691–708 *)
+(* VII. GEOMETRIE SPECTRALE - ASYMETRIE ORDONNEE / CHAOTIQUE    *)
+(*      1. Indices valides et croissance stricte (int) ....... 664-672 *)
+(*      2. Asymetrie ordonnee et chaotique ................... 673-689 *)
+(*      3. Proprietes generales ............................... 691-708 *)
 (*                                                              *)
-(* VIII. MÉTHODE DE COMPARAISON ASYMÉTRIQUE                     *)
-(*      1. Version nat des asymétries ........................ 741–744+ *)
-(*      2. Comparaison asymétrique modèle 1/2 ................ (suite) *)
-(*      3. Comparaison asymétrique modèle 1/4 ................ (suite) *)
+(* VIII. METHODE DE COMPARAISON ASYMETRIQUE                     *)
+(*      1. Version nat des asymetries ........................ 741-744+ *)
+(*      2. Comparaison asymetrique modele 1/2 ................ (suite) *)
+(*      3. Comparaison asymetrique modele 1/4 ................ (suite) *)
 (*                                                              *)
-(* IX.  AXIOMATISATIONS SPECTRALES — SECTIONS OFFICIELLES       *)
+(* IX.  AXIOMATISATIONS SPECTRALES - SECTIONS OFFICIELLES       *)
 (*                                                              *)
-(*      1. Axiomatisation positive (modèle 1/2) .............. 207–216 *)
-(*         → section "Axiomatisation positive"                  *)
-(*         → axiome : spectral_postulate_pos                    *)
+(*      1. Axiomatisation positive (modele 1/2) .............. 207-216 *)
+(*         -> section "Axiomatisation positive"                 *)
+(*         -> axiome : spectral_postulate_pos                   *)
 (*                                                              *)
-(*      2. Axiomatisation spectral 1/4 ........................ 330–335 *)
-(*         → section "Axiomatisation spectral 1/4"              *)
-(*         → axiome : spectral_postulate_1_4                    *)
+(*      2. Axiomatisation spectral 1/4 ........................ 330-335 *)
+(*         -> section "Axiomatisation spectral 1/4"             *)
+(*         -> axiome : spectral_postulate_1_4                   *)
 (*                                                              *)
-(*      3. Axiomatisation rapport 1/3 ......................... 416–420 *)
-(*         → section "Axiomatisation rapport 1/3."              *)
-(*         → axiome : spectral_postulate_1_3                    *)
+(*      3. Axiomatisation rapport 1/3 ......................... 416-420 *)
+(*         -> section "Axiomatisation rapport 1/3."             *)
+(*         -> axiome : spectral_postulate_1_3                   *)
 (*                                                              *)
-(*      4. Axiomatisation négative (rapport spectral 1/2) .... 643–652 *)
-(*         → section "Rapport spectral 1/2 négatif"             *)
-(*         → axiome : spectral_ratio_neg_un_demi                *)
+(*      4. Axiomatisation negative (rapport spectral 1/2) ..... 643-652 *)
+(*         -> section "Rapport spectral 1/2 negatif"            *)
+(*         -> axiome : spectral_ratio_neg_un_demi               *)
 (*                                                              *)
-(*      X.   VALIDATION EPIPOLAIRE DU PLAN TRIFOCAL                  *)
+(* X.   VALIDATION EPIPOLAIRE DU PLAN TRIFOCAL                  *)
 (*      1. Objets abstraits du plan trifocal ................. (nouveau) *)
-(*      2. Aires et géométrie de la droite critique .......... (nouveau) *)
-(*      3. Combinatoire des écarts (simple/mixte) ............ (nouveau) *)
-(*      4. Axiomes trifocaux : Zêta / Spectral / RH .......... (nouveau) *)
+(*      2. Aires et geometrie de la droite critique .......... (nouveau) *)
+(*      3. Combinatoire des ecarts (simple/mixte) ............ (nouveau) *)
+(*      4. Axiomes trifocaux : Zeta / Spectral / RH .......... (nouveau) *)
 (*      5. Courbure, aire parabolique et validation .......... (nouveau) *)
-(*      6. Théorème final : solution épipolaire .............. (nouveau) *)
+(*      6. Theoreme final : solution epipolaire .............. (nouveau) *)
 (****************************************************************)
 
 
@@ -3168,26 +3168,26 @@ axiomatization where
     "complementary_areas ⟹ (∀ρ::zero_zeta. Re_zero ρ = 1/2)"
 
 (**************************************************************)
-(* SECTION : Validation épipolaire du plan trifocal           *)
+(* SECTION : Validation epipolaire du plan trifocal           *)
 (**************************************************************)
 
-section "Validation épipolaire du plan trifocal"
+section "Validation epipolaire du plan trifocal"
 
-text ‹
-  Cette section formalise, de manière abstraite, le plan trifocal :
+text "*
+  Cette section formalise, de maniere abstraite, le plan trifocal :
 
-    1. FZg  : Fonction Zêta (vue globalement),
-    2. HyRi : Hypothèse de Riemann,
-    3. MsP  : Méthode spectrale et position des nombres premiers.
+    1. FZg  : Fonction Zeta (vue globalement),
+    2. HyRi : Hypothese de Riemann,
+    3. MsP  : Methode spectrale et position des nombres premiers.
 
   On y ajoute :
     - la combinatoire des comparaisons de premiers (simples vs mixtes),
-    - la représentation des zéros critiques par un rectangle T_area,
-    - la partie tronquée T_tr_area et la partie restante T_restant_area,
-    - une courbure de la droite critique modélisée par une aire parabolique,
-    - une variable logique HypR_demi_solFinal qui représente la
-      « validation géométrique » de Re(s) = 1/2 dans cette perspective.
-›
+    - la representation des zeros critiques par un rectangle T_area,
+    - la partie tronquee T_tr_area et la partie restante T_restant_area,
+    - une courbure de la droite critique modelisee par une aire parabolique,
+    - une variable logique HypR_demi_solFinal qui represente la
+      validation geometrique de Re(s) = 1/2 dans cette perspective.
+*"
 
 (**************************************************************)
 (* 1. Objets abstraits du plan trifocal                       *)
@@ -3195,92 +3195,82 @@ text ‹
 
 typedecl position          (* position abstraite d'un nombre premier *)
 
-
 consts
-  FZg_posP   :: "prime_index ⇒ position"   (* Position via fonction Zêta *)
-  Ms_posP    :: "prime_index ⇒ position"   (* Position via méthode spectrale *)
-  HypR_demi  :: real                       (* Partie réelle 1/2 (RH) *)
-  Ms_demi    :: real                       (* Rapport spectral 1/2 (méthode spectrale) *)
+  FZg_posP   :: "prime_index => position"   (* Position via fonction Zeta *)
+  Ms_posP    :: "prime_index => position"   (* Position via methode spectrale *)
+  HypR_demi  :: real                         (* Partie reelle 1/2 (RH) *)
+  Ms_demi    :: real                         (* Rapport spectral 1/2 (methode spectrale) *)
 
 (**************************************************************)
-(* 2. Aires et géométrie de la droite critique                *)
+(* 2. Aires et geometrie de la droite critique                *)
 (**************************************************************)
 
 consts
-  T_area         :: real  (* Aire totale du rectangle des zéros critiques *)
-  T_tr_area      :: real  (* Aire tronquée correspondant à un intervalle de premiers *)
-  T_restant_area :: real  (* Aire restante hors de l'intervalle considéré *)
+  T_area         :: real  (* Aire totale du rectangle des zeros critiques *)
+  T_tr_area      :: real  (* Aire tronquee correspondant a un intervalle de premiers *)
+  T_restant_area :: real  (* Aire restante hors de l'intervalle considere *)
 
-  Courb_droitcri_init_aire_parabol :: real  (* Aire sous la courbe « courbée » *)
-  Aire_parab                        :: real  (* Aire de la parabole (modèle de courbure) *)
+  Courb_droitcri_init_aire_parabol :: real  (* Aire sous la courbe courbee *)
+  Aire_parab                        :: real  (* Aire de la parabole *)
 
 (**************************************************************)
 (* 3. Combinatoire des comparaisons de premiers               *)
 (**************************************************************)
 
 consts
-  P_reel        :: real  (* Valeur réelle associée à l'intervalle 0..P-ième premier *)
-  Com_Pinit_Re  :: real  (* Nombre relatif de comparaisons simples dans l'intervalle *)
+  P_reel        :: real  (* Valeur reelle associee a l'intervalle 0..P-ieme premier *)
+  Com_Pinit_Re  :: real  (* Nombre relatif de comparaisons simples *)
   Com_mixt_Sup  :: real  (* Nombre relatif de comparaisons mixtes (-,+) *)
-  Com_ident     :: real  (* Contribution des comparaisons entre premiers identiques (-p, p) *)
+  Com_ident     :: real  (* Comparaisons identiques (-p, p) *)
 
 (**************************************************************)
-(* 4. Variable logique de « solution » de l'hypothèse         *)
+(* 4. Variable logique de solution de l'hypothese             *)
 (**************************************************************)
 
 consts
   HypR_demi_solFinal :: bool
 
-text ‹
+text "*
   Les axiomes suivants codent les relations conceptuelles :
 
-    - FZg_posP et Ms_posP donnent la même position des premiers,
-    - HypR_demi et Ms_demi représentent la même valeur 1/2,
-    - l'aire totale T_area est la somme de T_tr_area (tronqué) et T_restant_area,
+    - FZg_posP et Ms_posP donnent la meme position des premiers,
+    - HypR_demi et Ms_demi representent la meme valeur 1/2,
+    - l'aire totale T_area est la somme de T_tr_area et T_restant_area,
     - la combinatoire mixte est strictement plus riche que la combinatoire initiale,
-    - cette sur‑combinatoire se traduit par une courbure de la droite critique,
-    - si l'aire de la parabole égale l'aire restante T_restant_area,
+    - cette sur-combinatoire se traduit par une courbure de la droite critique,
+    - si l'aire de la parabole egale l'aire restante T_restant_area,
       alors la variable HypR_demi_solFinal est vraie.
-›
+*"
 
 axiomatization
-  postulate_positions :: "bool"
-  and postulate_demi :: "bool"
-  and postulate_aire_rectangle :: "bool"
-  and postulate_combinatoire_1 :: "bool"
-  and postulate_combinatoire_2 :: "bool"
-  and postulate_courbure :: "bool"
-  and postulate_solution :: "bool"
-axiomatization where
-  (* 1. Correspondance des positions des premiers : FZg_posP = Ms_posP *)
+  postulate_positions :: bool
+  and postulate_demi :: bool
+  and postulate_aire_rectangle :: bool
+  and postulate_combinatoire_1 :: bool
+  and postulate_combinatoire_2 :: bool
+  and postulate_courbure :: bool
+  and postulate_solution :: bool
+where
   postulate_positions:
-    "∀p. FZg_posP p = Ms_posP p" and
+    "ALL p. FZg_posP p = Ms_posP p" and
 
-  (* 2. Correspondance des valeurs 1/2 : HypR_demi = Ms_demi *)
   postulate_demi:
     "HypR_demi = Ms_demi" and
 
-  (* 3. Décomposition de l'aire totale du rectangle des zéros critiques *)
   postulate_aire_rectangle:
     "T_area = T_tr_area + T_restant_area" and
 
-  (* 4. Combinatoire : l'écart mixte fournit plus de comparaisons
-        que le schéma initial, notamment via les comparaisons identiques (-p, p). *)
   postulate_combinatoire_1:
     "Com_Pinit_Re < Com_ident" and
+
   postulate_combinatoire_2:
     "Com_mixt_Sup > Com_Pinit_Re" and
 
-  (* 5. La sur‑combinatoire (Com_Pinit_Re < Com_ident) se traduit
-        par une courbure de la droite critique modélisée par Aire_parab. *)
   postulate_courbure:
-    "Com_Pinit_Re < Com_ident ⟹
-     Courb_droitcri_init_aire_parabol = Aire_parab" and
+    "Com_Pinit_Re < Com_ident ==> Courb_droitcri_init_aire_parabol = Aire_parab" and
 
-  (* 6. Si l'aire de la parabole égale l'aire restante T_restant_area,
-        alors la perspective géométrique est compatible avec Re(s) = 1/2. *)
   postulate_solution:
-    "Aire_parab = T_restant_area ⟹ HypR_demi_solFinal"
+    "Aire_parab = T_restant_area ==> HypR_demi_solFinal"
 
 (**************************************************************)
 (* 5. LEMMES DE VALIDATION LOGIQUE                            *)
@@ -3302,7 +3292,7 @@ lemma aire_rectangle_decompose:
   by simp
 
 lemma combinatoire_mixte_stricte:
-  "Com_Pinit_Re < Com_ident ∧ Com_mixt_Sup > Com_Pinit_Re"
+  "Com_Pinit_Re < Com_ident & Com_mixt_Sup > Com_Pinit_Re"
   using postulate_combinatoire_1 postulate_combinatoire_2
   by simp
 
