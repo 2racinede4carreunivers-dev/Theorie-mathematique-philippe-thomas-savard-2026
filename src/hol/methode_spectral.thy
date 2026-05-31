@@ -1841,4 +1841,5 @@ lemma solution_epipolaire_Riemann:
   using assms postulate_courbure postulate_solution
   by simp
 
+
 end
