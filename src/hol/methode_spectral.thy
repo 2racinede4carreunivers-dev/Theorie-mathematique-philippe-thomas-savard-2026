@@ -5,96 +5,120 @@ begin
 (****************************************************************)
 (* TABLE DES MATIERES – SCRIPT HOL : GEOMETRIE DU SPECTRE       *)
 (*                                                              *)
-(* I.  RAPPORT SPECTRAL 1/2 – FONDATIONS                        *)
-(*     1. Definitions des suites SA et SB (type nat)            *)
-(*     2. Validite des formes generales pour n > 0              *)
-(*     3. Definition du Rapport Spectral RsP                    *)
-(*     4. Preuve formelle du ratio constant 1/2                 *)
-(*     5. Points de resonance (29, 31, 37, 41)                  *)
-(*     6. Validation numrique sur les indices z1 à z25         *)
+(* I.   RAPPORT SPECTRAL 1/2 – FONDATIONS                       *)
+(*      1. Forme générale des suites SA et SB ............... 55–62 *)
+(*      2. Validité des formes générales pour n > 0 ......... 68–76 *)
+(*      3. Rapport spectral 1/2 (définition + preuve) ....... 83–115 *)
+(*      4. Généralisation n×n du rapport spectral ........... 122–147 *)
+(*      5. Digamma calculé et équation du premier ........... 153–201 *)
+(*      6. Postulat spectral 1/2 (axiomatisation) ........... 207–216 *)
+(*      7. Exemples : 29, 31, 37, 41 ........................ 221–289 *)
 (*                                                              *)
-(* II. EXTENSIONS AUX RAPPORTS 1/3 ET 1/4                       *)
-(*     1. Modele spectral 1/3 – Premier 227                     *)
-(*     2. Modele spectral 1/4 – Premier 947                     *)
-(*     3. Preuve du Rapport Spectral constant 1/3               *)
-(*     4. Preuve du Rapport Spectral constant 1/4               *)
+(* II.  MODELE SPECTRAL 1/4                                     *)
+(*      1. Définitions générales A_1_4 et B_1_4 ............. 296–312 *)
+(*      2. Équation générale du premier (1/4) ............... 318–323 *)
+(*      3. Postulat spectral 1/4 (axiomatisation) ........... 330–335 *)
+(*      4. Exemple complet : premier 947 ..................... 351–377 *)
 (*                                                              *)
-(* III. MeTHODE SAVARD – UNIFICATION GeNeRALE                   *)
-(*     1. Les quatre equations spectrales (SA & SB reels)       *)
-(*        - Equations positives                                 *)
-(*        -Equations negatives                                  *)
-(*     2. Demonstration des suites negatives (n < 0)            *)
-(*        - Structure geometrique                               *)
-(*        - Exemples explicites SA_neg                          *)
-(*        - Correspondance rang \<leftrightarrow> premier negatif               *)
-(*     3. Definition generale du Digamma calcule                *)
-(*        - Version positive                                    *)
-(*        - Version négative                                    *)
-(*     4. Définition generale du Gap spectral (Methode Savard)  *)
+(* III. MODELE SPECTRAL 1/3                                     *)
+(*      1. Définitions générales A_1_3 et B_1_3 ............. 384–398 *)
+(*      2. Équation générale du premier (1/3) ............... 404–409 *)
+(*      3. Postulat spectral 1/3 (axiomatisation) ........... 416–420 *)
+(*      4. Exemple complet : premier 227 ..................... 437–456 *)
+(*      5. Preuve générale du rapport constant 1/3 .......... 461–502 *)
 (*                                                              *)
-(* IV. ÉCART ENTRE DEUX NOMBRES PREMIERS                        *)
-(*     1. Exemple 1 : Écart entre 23 et 7                       *)
-(*        - SA(11)                                              *)
-(*        - SB(23)                                              *)
-(*        - Digamma(23)                                         *)
-(*        - Digamma(7)                                          *)
-(*        - Résultat -15                                      *)
+(* IV.  RAPPORT SPECTRAL 1/4 – PREUVE GENERALE                 *)
+(*      1. Définition RsP_1_4 ............................... 509–513 *)
+(*      2. Preuve du rapport constant 1/4 .................... 514–542 *)
 (*                                                              *)
-(*     2. Exemple 2 : Écart entre -19 et -5                     *)
-(*        - SA(-7)                                              *)
-(*        - SB(-3)                                              *)
-(*        - Digamma(-5)                                         *)
-(*        - SB(-19)                                             *)
-(*        - Digamma(-19)                                        *)
-(*        - Résultat final : -13                                *)
+(* V.   SUITES MIXTES A ET B (-,+)                              *)
+(*      1. Définitions SA_mix et SB_mix ...................... 548–555 *)
+(*      2. Formes fermées et récurrence ...................... 556–580 *)
+(*      3. Reconstruction générale du premier (mixte) ........ 583–595 *)
+(*      4. Exemple : six termes négatifs ..................... 597–616 *)
 (*                                                              *)
-(*     3. Exemple 3 : Écart entre -31 et 17                     *)
-(*        - SA(-29)                                             *)
-(*        - SB(17)                                              *)
-(*        - Digamma(17)                                         *)
-(*        - SB(-31)                                             *)
-(*        - Digamma(-31)                                        *)
-(*        - Résultat final : -47                                *)
+(* VI.  SUITES NÉGATIVES – ÉQUATIONS SPECTRALES                 *)
+(*      1. Définitions SA_neg_eq et SB_neg_eq ................ 622–629 *)
+(*      2. Digamma négatif ................................... 630–636 *)
+(*      3. Rapport spectral négatif 1/2 (axiomatisation) ..... 643–657 *)
 (*                                                              *)
+(* VII. GÉOMÉTRIE SPECTRALE – ASYMÉTRIE ORDONNÉE / CHAOTIQUE    *)
+(*      1. Indices valides et croissance stricte (int) ....... 664–672 *)
+(*      2. Asymétrie ordonnée et chaotique ................... 673–689 *)
+(*      3. Propriétés générales ............................... 691–708 *)
+(*                                                              *)
+(* VIII. MÉTHODE DE COMPARAISON ASYMÉTRIQUE                     *)
+(*      1. Version nat des asymétries ........................ 741–744+ *)
+(*      2. Comparaison asymétrique modèle 1/2 ................ (suite) *)
+(*      3. Comparaison asymétrique modèle 1/4 ................ (suite) *)
+(*                                                              *)
+(* IX.  AXIOMATISATIONS SPECTRALES — SECTIONS OFFICIELLES       *)
+(*                                                              *)
+(*      1. Axiomatisation positive (modèle 1/2) .............. 207–216 *)
+(*         → section "Axiomatisation positive"                  *)
+(*         → axiome : spectral_postulate_pos                    *)
+(*                                                              *)
+(*      2. Axiomatisation spectral 1/4 ........................ 330–335 *)
+(*         → section "Axiomatisation spectral 1/4"              *)
+(*         → axiome : spectral_postulate_1_4                    *)
+(*                                                              *)
+(*      3. Axiomatisation rapport 1/3 ......................... 416–420 *)
+(*         → section "Axiomatisation rapport 1/3."              *)
+(*         → axiome : spectral_postulate_1_3                    *)
+(*                                                              *)
+(*      4. Axiomatisation négative (rapport spectral 1/2) .... 643–652 *)
+(*         → section "Rapport spectral 1/2 négatif"             *)
+(*         → axiome : spectral_ratio_neg_un_demi                *)
+(*                                                              *)
+(*      X.   VALIDATION EPIPOLAIRE DU PLAN TRIFOCAL                  *)
+(*      1. Objets abstraits du plan trifocal ................. (nouveau) *)
+(*      2. Aires et géométrie de la droite critique .......... (nouveau) *)
+(*      3. Combinatoire des écarts (simple/mixte) ............ (nouveau) *)
+(*      4. Axiomes trifocaux : Zêta / Spectral / RH .......... (nouveau) *)
+(*      5. Courbure, aire parabolique et validation .......... (nouveau) *)
+(*      6. Théorème final : solution épipolaire .............. (nouveau) *)
+(****************************************************************)
+
+
 (****************************************************************)
 (* Sous-bloc 1 : formes generales des suites A et B *)
 (****************************************************************)
 
 section "Forme genrale des suites A et B"
 
-definition SA :: "nat \<Rightarrow> real" where
+definition SA :: "nat ⇒ real" where
   "SA n = (3.25 / 2) * (2 ^ n) - 2"
 
-definition SB :: "nat \<Rightarrow> real" where
+definition SB :: "nat ⇒ real" where
   "SB n = (6.5 / 2) * (2 ^ n) - 66"
 
 
 (****************************************************************)
-(* Sous-bloc 2 : validite pour tout n > 0 *)
+(* Sous-bloc 2 : validite pour tout n >= 0 *)
 (****************************************************************)
 
 lemma SA_forme_generale:
-  assumes "n > 0"
+  assumes "n >= 1"
   shows "SA n = (3.25 / 2) * (2 ^ n) - 2"
   using assms by (simp add: SA_def)
 
 lemma SB_forme_generale:
-  assumes "n > 0"
+  assumes "n >= 1"
   shows "SB n = (6.5 / 2) * (2 ^ n) - 66"
   using assms by (simp add: SB_def)
 
 
 (****************************************************************)
-(* Sous-bloc 3 : rapport spectral = 1/2 (cas 1\<times>1) *)
+(* Sous-bloc 3 : rapport spectral = 1/2 (cas 1×1) *)
 (****************************************************************)
 
 section "Rapport spectral 1/2"
 
-definition RsP :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition RsP :: "nat ⇒ nat ⇒ real" where
   "RsP n1 n2 = (SA n1 - SA n2) / (SB n1 - SB n2)"
 
 lemma RsP_un_demi_general:
-  assumes "n1 > 0" "n2 > 0" "n1 \<noteq> n2"
+  assumes "n1 > 0" "n2 > 0" "n1 ≠ n2"
   shows "RsP n1 n2 = 1/2"
 proof -
   have SA1: "SA n1 = (3.25 / 2) * (2 ^ n1) - 2"
@@ -124,18 +148,18 @@ qed
 
 
 (****************************************************************)
-(* AJOUT : généralisation symétrique n\<times>n *)
+(* AJOUT : généralisation symétrique n×n *)
 (****************************************************************)
 
-section "Rapport spectral n\<times>n (généralisation symétrique)"
+section "Rapport spectral n×n (généralisation symétrique)"
 
-definition RsP_nn :: "nat list \<Rightarrow> nat list \<Rightarrow> real" where
+definition RsP_nn :: "nat list ⇒ nat list ⇒ real" where
   "RsP_nn A_indices B_indices =
      (sum_list (map SA A_indices)) /
      (sum_list (map SB B_indices))"
 
-definition rapport_spectral_un_demi_nn :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "rapport_spectral_un_demi_nn A_indices B_indices \<longleftrightarrow>
+definition rapport_spectral_un_demi_nn :: "nat list ⇒ nat list ⇒ bool" where
+  "rapport_spectral_un_demi_nn A_indices B_indices ⟷
      RsP_nn A_indices B_indices = 1/2"
 
 definition A3 :: "nat list" where
@@ -216,10 +240,10 @@ section "Axiomatisation positive"
 
 axiomatization where
   spectral_postulate_pos:
-    "\<And>n p. n \<ge> 1 \<Longrightarrow> prime p \<Longrightarrow> prime_equation n p = real p"
+    "⋀n p. n ≥ 1 ⟹ prime p ⟹ prime_equation n p = real p"
 
 lemma prime_equation_for_primes_pos:
-  assumes "n \<ge> 1" "prime p"
+  assumes "n ≥ 1" "prime p"
   shows "prime_equation n p = real p"
   using spectral_postulate_pos assms by blast
 (****************************************************************)
@@ -303,19 +327,19 @@ lemma relation_41:
 
 section "Modele spectral 1/4 : Forme generale des suites A et B."
 
-text \<open>
+text ‹
   Formes generalisees pour le rapport 1/4.
   On suit les equations :
     ((241/16)/12 * 4^n) - 4/3
     ((964/16)/12 * 4^n) - (3073 * (4/3))
-\<close>
+›
 
 (* --- Definition des suites A_1_4 et B_1_4 --- *)
 
-definition A_1_4 :: "nat \<Rightarrow> real" where
+definition A_1_4 :: "nat ⇒ real" where
   "A_1_4 n = ((241 / 16) / 12) * (4 ^ n) - (4 / 3)"
 
-definition B_1_4 :: "nat \<Rightarrow> real" where
+definition B_1_4 :: "nat ⇒ real" where
   "B_1_4 n = ((964 / 16) / 12) * (4 ^ n) - (3073 * (4 / 3))"
 
 
@@ -323,7 +347,7 @@ definition B_1_4 :: "nat \<Rightarrow> real" where
 (* SECTION : Equation generale pour le modele spectral 1/4     *)
 (**************************************************************)
 
-definition prime_equation_1_4 :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition prime_equation_1_4 :: "nat ⇒ nat ⇒ real" where
   "prime_equation_1_4 n p = (B_1_4 n - (B_1_4 n - 4096 * real p)) / 4096"
 
 lemma prime_equation_1_4_identity:
@@ -339,7 +363,7 @@ section "Axiomatisation spectral 1/4"
 
 axiomatization where
   spectral_postulate_1_4:
-    "\<And>n p. n > 0 \<Longrightarrow> prime p \<Longrightarrow> prime_equation_1_4 n p = real p"
+    "⋀n p. n > 0 ⟹ prime p ⟹ prime_equation_1_4 n p = real p"
 
 
 (**************************************************************)
@@ -358,14 +382,14 @@ lemma prime_equation_1_4_for_primes:
 
 section "Modele spectral 1/4: Sommes de suite A et B, Digamma, Digamma calcule et determination du premier 947."
 
-text \<open>
+text ‹
   Donnees numeriques globales pour le modele 1/4 :
   - Somme de la suite A : 1316180
   - Somme de la suite B : 5260628
   - Digamma : 65536
   - Digamma calcule : 1316180 + 65536 = 1381716
   - (5260628 - 1381716) / 4096 = 947 (premier)
-\<close>
+›
 
 definition suite_A_1_4_somme :: real where
   "suite_A_1_4_somme = 1316180"
@@ -391,17 +415,17 @@ lemma preuve_premier_947:
 
 section "Rapport 1/3 forme generaliser pour les suites A et B."
 
-text \<open>
+text ‹
   Formes généralisées pour le rapport 1/3.
   On suit les équations :
     ((73/9)/12 * 3^n) - 1.5
     ((219/9)/12 * 3^n) - (487 * 1.5)
-\<close>
+›
 
-definition A_1_3 :: "nat \<Rightarrow> real" where
+definition A_1_3 :: "nat ⇒ real" where
   "A_1_3 n = ((73 / 9) / 12) * (3 ^ n) - 1.5"
 
-definition B_1_3 :: "nat \<Rightarrow> real" where
+definition B_1_3 :: "nat ⇒ real" where
   "B_1_3 n = ((219 / 9) / 12) * (3 ^ n) - (487 * 1.5)"
 
 
@@ -409,7 +433,7 @@ definition B_1_3 :: "nat \<Rightarrow> real" where
 (* SECTION : Equation generale pour le modele spectral 1/3     *)
 (**************************************************************)
 
-definition prime_equation_1_3 :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition prime_equation_1_3 :: "nat ⇒ nat ⇒ real" where
   "prime_equation_1_3 n p = (B_1_3 n - (B_1_3 n - 729 * real p)) / 729"
 
 lemma prime_equation_1_3_identity:
@@ -425,7 +449,7 @@ section "Axiomatisation rapport 1/3."
 
 axiomatization where
   spectral_postulate_1_3:
-    "\<And>n p. n > 0 \<Longrightarrow> prime p \<Longrightarrow> prime_equation_1_3 n p = real p"
+    "⋀n p. n > 0 ⟹ prime p ⟹ prime_equation_1_3 n p = real p"
 
 
 (**************************************************************)
@@ -468,21 +492,21 @@ lemma preuve_premier_227:
 
 section "Rapport spectral constant 1/3 et 1/4."
 
-text \<open>
+text ‹
   Définition du Rapport Spectral pour les modèles 1/3 et 1/4.
-\<close>
+›
 
 section "Rapport spectral 1/3 – validation généralisée."
 
 (* Rapport spectral 1/3 *)
 
-definition RsP_1_3 :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition RsP_1_3 :: "nat ⇒ nat ⇒ real" where
   "RsP_1_3 n1 n2 =
     (A_1_3 n1 - A_1_3 n2) /
     (B_1_3 n1 - B_1_3 n2)"
 
 theorem RsP_un_tiers_constant:
-  assumes "n1 > 0" and "n2 > 0" and "n1 \<noteq> n2"
+  assumes "n1 > 0" and "n2 > 0" and "n1 ≠ n2"
   shows "RsP_1_3 n1 n2 = 1/3"
 proof -
   have diff_A:
@@ -514,7 +538,7 @@ qed
 
 section "Rapport spectral constant 1/4."
 
-definition RsP_1_4 :: "nat \<Rightarrow> nat \<Rightarrow> real" where
+definition RsP_1_4 :: "nat ⇒ nat ⇒ real" where
   "RsP_1_4 n1 n2 =
     (A_1_4 n1 - A_1_4 n2) /
     (B_1_4 n1 - B_1_4 n2)"
@@ -522,7 +546,7 @@ definition RsP_1_4 :: "nat \<Rightarrow> nat \<Rightarrow> real" where
 section "Rapport spectral 1/4 – validation généralisée."
 
 theorem RsP_un_quart_constant:
-  assumes "n1 > 0" and "n2 > 0" and "n1 \<noteq> n2"
+  assumes "n1 > 0" and "n2 > 0" and "n1 ≠ n2"
   shows "RsP_1_4 n1 n2 = 1/4"
 proof -
   have diff_A:
@@ -549,6 +573,79 @@ proof -
   finally show ?thesis .
 qed
 
+(**************************************************************)
+(* SECTION : Suites-mxites A et B (-,+)          *)
+(**************************************************************)
+
+section "Suites mixtes A et B"
+
+definition SA_mix :: "nat ⇒ real" where
+  "SA_mix n = 48 + 13 / (2 ^ (n + 2))"
+
+definition SB_mix :: "nat ⇒ real" where
+  "SB_mix n = -28 + 13 / (2 ^ (n + 1))"
+
+lemma SA_mix_closed_form:
+  "SA_mix n = 48 + 13 / (2 ^ (n + 2))"
+  by (simp add: SA_mix_def)
+
+lemma SB_mix_closed_form:
+  "SB_mix n = -28 + 13 / (2 ^ (n + 1))"
+  by (simp add: SB_mix_def)
+
+lemma SA_mix_step:
+  "SA_mix (Suc n) = SA_mix n - 13 / (2 ^ (n + 3))"
+  unfolding SA_mix_def
+  by (simp add: field_simps power_add)
+
+lemma SB_mix_step:
+  "SB_mix (Suc n) = SB_mix n - 13 / (2 ^ (n + 2))"
+  unfolding SB_mix_def
+  by (simp add: field_simps)
+
+lemma SA_mix_limit_shape:
+  "SA_mix n - 48 = 13 / (2 ^ (n + 2))"
+  unfolding SA_mix_def by simp
+
+lemma SB_mix_limit_shape:
+  "SB_mix n + 28 = 13 / (2 ^ (n + 1))"
+  unfolding SB_mix_def by simp
+
+
+section "Reconstruction générale du nombre premier"
+
+definition digamma_mix :: "(nat ⇒ real) ⇒ nat ⇒ real" where
+  "digamma_mix K n = SA_mix n + K n"
+
+definition premier_mix :: "(nat ⇒ real) ⇒ nat ⇒ real" where
+  "premier_mix K n = (SB_mix n - digamma_mix K n) / (1 / 64)"
+
+lemma premier_mix_rewrite:
+  "premier_mix K n = 64 * (SB_mix n - digamma_mix K n)"
+  unfolding premier_mix_def
+  by (simp add: field_simps)
+
+
+section "Exemple instancie : six termes negatif"
+
+definition K6 :: "real" where
+  "K6 = -(37127 / 256) - SA_mix 6"
+
+definition digamma_mix_6 :: "real" where
+  "digamma_mix_6 = SA_mix 6 + K6"
+
+definition premier_mix_6 :: "real" where
+  "premier_mix_6 = (SB_mix 6 - digamma_mix_6) / (1 / 64)"
+
+lemma digamma_mix_6_value:
+  "digamma_mix_6 = -(37127 / 256)"
+  unfolding digamma_mix_6_def K6_def SA_mix_def
+  by simp
+
+lemma premier_mix_6_value:
+  "premier_mix_6 = 29985 / 4"
+  unfolding premier_mix_6_def digamma_mix_6_def K6_def SA_mix_def SB_mix_def
+  by (simp add: field_simps)
 
 (**************************************************************)
 (* SECTION : Suites négatives – équations spectrales          *)
@@ -556,13 +653,13 @@ qed
 
 section "Suites négatives : équations spectrales"
 
-definition SA_neg_eq :: "real \<Rightarrow> real" where
+definition SA_neg_eq :: "real ⇒ real" where
   "SA_neg_eq n = 3.25 * (2 powr n) - 2"
 
-definition SB_neg_eq :: "real \<Rightarrow> real" where
+definition SB_neg_eq :: "real ⇒ real" where
   "SB_neg_eq n = 6.5 * (2 powr n) - 66"
 
-definition digamma_neg_calc :: "real \<Rightarrow> real \<Rightarrow> real" where
+definition digamma_neg_calc :: "real ⇒ real ⇒ real" where
   "digamma_neg_calc n p = SB_neg_eq n - 64 * p"
 
 lemma digamma_neg_calc_equation_alt:
@@ -577,17 +674,17 @@ lemma digamma_neg_calc_equation_alt:
 
 section "Rapport spectral 1/2 négatif"
 
-definition RsP_neg :: "real \<Rightarrow> real \<Rightarrow> real" where
+definition RsP_neg :: "real ⇒ real ⇒ real" where
   "RsP_neg n1 n2 =
      (SA_neg_eq n1 - SA_neg_eq n2) /
      (SB_neg_eq n1 - SB_neg_eq n2)"
 
 axiomatization where
   spectral_ratio_neg_un_demi:
-    "\<And>n1 n2. n1 \<le> -1 \<Longrightarrow> n2 \<le> -1 \<Longrightarrow> n1 \<noteq> n2 \<Longrightarrow> RsP_neg n1 n2 = 1/2"
+    "⋀n1 n2. n1 ≤ -1 ⟹ n2 ≤ -1 ⟹ n1 ≠ n2 ⟹ RsP_neg n1 n2 = 1/2"
 
 lemma RsP_neg_un_demi_general:
-  assumes "n1 \<le> -1" "n2 \<le> -1" "n1 \<noteq> n2"
+  assumes "n1 ≤ -1" "n2 ≤ -1" "n1 ≠ n2"
   shows "RsP_neg n1 n2 = 1/2"
   using spectral_ratio_neg_un_demi assms by blast
 
@@ -598,36 +695,36 @@ lemma RsP_neg_un_demi_general:
 
 section "Geometrie spectrale : asymetries"
 
-definition indice_valide :: "int \<Rightarrow> bool" where
-  "indice_valide n \<longleftrightarrow> (n \<ge> 1 \<or> n \<le> -1)"
+definition indice_valide :: "int ⇒ bool" where
+  "indice_valide n ⟷ (n ≥ 1 ∨ n ≤ -1)"
 
-definition liste_strictement_croissante :: "int list \<Rightarrow> bool" where
-  "liste_strictement_croissante xs \<longleftrightarrow>
-     (\<forall>i j. i < j \<and> j < length xs \<longrightarrow> xs ! i < xs ! j)"
+definition liste_strictement_croissante :: "int list ⇒ bool" where
+  "liste_strictement_croissante xs ⟷
+     (∀i j. i < j ∧ j < length xs ⟶ xs ! i < xs ! j)"
 
-definition asymetrique_ordonnee :: "int list \<Rightarrow> int list \<Rightarrow> bool" where
-  "asymetrique_ordonnee A_indices B_indices \<longleftrightarrow>
-     (\<forall>n \<in> set A_indices. indice_valide n) \<and>
-     (\<forall>n \<in> set B_indices. indice_valide n) \<and>
-     liste_strictement_croissante A_indices \<and>
-     liste_strictement_croissante B_indices \<and>
-     A_indices \<noteq> [] \<and>
-     B_indices \<noteq> [] \<and>
-     last A_indices < hd B_indices \<and>
+definition asymetrique_ordonnee :: "int list ⇒ int list ⇒ bool" where
+  "asymetrique_ordonnee A_indices B_indices ⟷
+     (∀n ∈ set A_indices. indice_valide n) ∧
+     (∀n ∈ set B_indices. indice_valide n) ∧
+     liste_strictement_croissante A_indices ∧
+     liste_strictement_croissante B_indices ∧
+     A_indices ≠ [] ∧
+     B_indices ≠ [] ∧
+     last A_indices < hd B_indices ∧
      length B_indices = length A_indices + 1"
 
-definition asymetrique_chaotique :: "int list \<Rightarrow> int list \<Rightarrow> bool" where
-  "asymetrique_chaotique A_indices B_indices \<longleftrightarrow>
-     (\<forall>n \<in> set A_indices. indice_valide n) \<and>
-     (\<forall>n \<in> set B_indices. indice_valide n) \<and>
-     length A_indices \<noteq> length B_indices \<and>
-     \<not> asymetrique_ordonnee A_indices B_indices"
+definition asymetrique_chaotique :: "int list ⇒ int list ⇒ bool" where
+  "asymetrique_chaotique A_indices B_indices ⟷
+     (∀n ∈ set A_indices. indice_valide n) ∧
+     (∀n ∈ set B_indices. indice_valide n) ∧
+     length A_indices ≠ length B_indices ∧
+     ¬ asymetrique_ordonnee A_indices B_indices"
 
 lemma asymetrie_implique_indices_valides :
-  assumes "asymetrique_ordonnee A_indices B_indices \<or>
+  assumes "asymetrique_ordonnee A_indices B_indices ∨
            asymetrique_chaotique A_indices B_indices"
-  shows "(\<forall>n \<in> set A_indices. indice_valide n) \<and>
-         (\<forall>n \<in> set B_indices. indice_valide n)"
+  shows "(∀n ∈ set A_indices. indice_valide n) ∧
+         (∀n ∈ set B_indices. indice_valide n)"
 proof -
   from assms
   show ?thesis
@@ -647,7 +744,7 @@ qed
 
 section "Methode de comparaison asymetrique pour 1/2 et 1/4"
 
-text \<open>
+text ‹
   La methode de comparaison asymetrique relie :
 
   - des suites de nombres premiers A et B (via leurs indices n),
@@ -659,50 +756,50 @@ text \<open>
   des blocs consideres. La methode est applicable a tout ensemble
   de nombres premiers dont la position correspond aux puissances
   des equations generales A et B.
-\<close>
+›
 
 
 (**************************************************************)
 (* 1. Version nat des asymetries (indices naturels)           *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Les definitions asymetrique_ordonnee et asymetrique_chaotique
   existent deja pour des listes d'entiers (int). Pour travailler
   directement avec les indices naturels des suites SA, SB, A_1_4
   et B_1_4, on introduit une version analogue sur nat.
-\<close>
+›
 
-definition indice_valide_nat :: "nat \<Rightarrow> bool" where
-  "indice_valide_nat n \<longleftrightarrow> (n > 0)"
+definition indice_valide_nat :: "nat ⇒ bool" where
+  "indice_valide_nat n ⟷ (n > 0)"
 
-definition liste_strictement_croissante_nat :: "nat list \<Rightarrow> bool" where
-  "liste_strictement_croissante_nat xs \<longleftrightarrow>
-      (\<forall>i j. i < j \<and> j < length xs \<longrightarrow> xs ! i < xs ! j)"
+definition liste_strictement_croissante_nat :: "nat list ⇒ bool" where
+  "liste_strictement_croissante_nat xs ⟷
+      (∀i j. i < j ∧ j < length xs ⟶ xs ! i < xs ! j)"
 
-definition asymetrique_ordonnee_nat :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "asymetrique_ordonnee_nat A_indices B_indices \<longleftrightarrow>
-      (\<forall>n \<in> set A_indices. indice_valide_nat n) \<and>
-      (\<forall>n \<in> set B_indices. indice_valide_nat n) \<and>
-      liste_strictement_croissante_nat A_indices \<and>
-      liste_strictement_croissante_nat B_indices \<and>
-      A_indices \<noteq> [] \<and>
-      B_indices \<noteq> [] \<and>
-      last A_indices < hd B_indices \<and>
+definition asymetrique_ordonnee_nat :: "nat list ⇒ nat list ⇒ bool" where
+  "asymetrique_ordonnee_nat A_indices B_indices ⟷
+      (∀n ∈ set A_indices. indice_valide_nat n) ∧
+      (∀n ∈ set B_indices. indice_valide_nat n) ∧
+      liste_strictement_croissante_nat A_indices ∧
+      liste_strictement_croissante_nat B_indices ∧
+      A_indices ≠ [] ∧
+      B_indices ≠ [] ∧
+      last A_indices < hd B_indices ∧
       length B_indices = length A_indices + 1"
 
-definition asymetrique_chaotique_nat :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "asymetrique_chaotique_nat A_indices B_indices \<longleftrightarrow>
-      (\<forall>n \<in> set A_indices. indice_valide_nat n) \<and>
-      (\<forall>n \<in> set B_indices. indice_valide_nat n) \<and>
-      length A_indices \<noteq> length B_indices \<and>
-      \<not> asymetrique_ordonnee_nat A_indices B_indices"
+definition asymetrique_chaotique_nat :: "nat list ⇒ nat list ⇒ bool" where
+  "asymetrique_chaotique_nat A_indices B_indices ⟷
+      (∀n ∈ set A_indices. indice_valide_nat n) ∧
+      (∀n ∈ set B_indices. indice_valide_nat n) ∧
+      length A_indices ≠ length B_indices ∧
+      ¬ asymetrique_ordonnee_nat A_indices B_indices"
 
 lemma asymetrie_nat_implique_indices_valides :
-  assumes "asymetrique_ordonnee_nat A_indices B_indices \<or>
+  assumes "asymetrique_ordonnee_nat A_indices B_indices ∨
            asymetrique_chaotique_nat A_indices B_indices"
-  shows "(\<forall>n \<in> set A_indices. indice_valide_nat n) \<and>
-         (\<forall>n \<in> set B_indices. indice_valide_nat n)"
+  shows "(∀n ∈ set A_indices. indice_valide_nat n) ∧
+         (∀n ∈ set B_indices. indice_valide_nat n)"
 proof -
   from assms show ?thesis
   proof (elim disjE)
@@ -721,7 +818,7 @@ qed
 (* 2. Methode de comparaison asymetrique pour le modele 1/2   *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Pour le modele 1/2, on utilise les suites SA et SB deja definies :
 
     SA n = (3.25 / 2) * 2^n - 2
@@ -731,51 +828,51 @@ text \<open>
   d'indices A_indices et B_indices, qui correspondent a des positions
   dans les suites de nombres premiers. On construit un rapport
   spectral de blocs a partir des sommes des valeurs SA et SB.
-\<close>
+›
 
-definition somme_SA_bloc :: "nat list \<Rightarrow> real" where
+definition somme_SA_bloc :: "nat list ⇒ real" where
   "somme_SA_bloc A_indices = sum_list (map SA A_indices)"
 
-definition somme_SB_bloc :: "nat list \<Rightarrow> real" where
+definition somme_SB_bloc :: "nat list ⇒ real" where
   "somme_SB_bloc B_indices = sum_list (map SB B_indices)"
 
-text \<open>
+text ‹
   Rapport spectral de blocs pour le modele 1/2 :
   on compare la difference des sommes de deux blocs A et B
   pour SA et SB, comme dans l'exemple (11 - 50) / (-40 - 38).
-\<close>
+›
 
-definition RsP_bloc_1_2 :: "nat list \<Rightarrow> nat list \<Rightarrow> real" where
+definition RsP_bloc_1_2 :: "nat list ⇒ nat list ⇒ real" where
   "RsP_bloc_1_2 A_indices B_indices =
      (somme_SA_bloc A_indices - somme_SA_bloc B_indices) /
      (somme_SB_bloc A_indices - somme_SB_bloc B_indices)"
 
-text \<open>
+text ‹
   Comparaison asymetrique ordonnee (modele 1/2) :
   - A_indices et B_indices sont strictement croissants,
   - les indices sont valides (n > 0),
   - B contient exactement un element de plus que A,
   - les puissances associees aux equations generales sont donc
     dans l'ordre naturel et decalees d'une unite.
-\<close>
+›
 
-definition comparaison_asym_ordonnee_1_2 :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "comparaison_asym_ordonnee_1_2 A_indices B_indices \<longleftrightarrow>
+definition comparaison_asym_ordonnee_1_2 :: "nat list ⇒ nat list ⇒ bool" where
+  "comparaison_asym_ordonnee_1_2 A_indices B_indices ⟷
      asymetrique_ordonnee_nat A_indices B_indices"
 
-text \<open>
+text ‹
   Comparaison asymetrique chaotique (modele 1/2) :
   - A_indices et B_indices ont des longueurs differentes,
   - l'ordre croissant naturel n'est pas impose,
   - les puissances associees aux equations generales ne sont pas
     necessairement consecutives.
-\<close>
+›
 
-definition comparaison_asym_chaotique_1_2 :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "comparaison_asym_chaotique_1_2 A_indices B_indices \<longleftrightarrow>
+definition comparaison_asym_chaotique_1_2 :: "nat list ⇒ nat list ⇒ bool" where
+  "comparaison_asym_chaotique_1_2 A_indices B_indices ⟷
      asymetrique_chaotique_nat A_indices B_indices"
 
-text \<open>
+text ‹
   La methode de comparaison asymetrique pour le modele 1/2
   consiste donc a :
   - choisir deux blocs A_indices et B_indices,
@@ -788,14 +885,14 @@ text \<open>
   asymetriques ordonnees lorsque la taille des blocs augmente.
   Ces comportements sont observes numeriquement et interpretes
   comme signatures spectrales, sans etre derives algébriquement.
-\<close>
+›
 
 
 (**************************************************************)
 (* 3. Methode de comparaison asymetrique pour le modele 1/4   *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Pour le modele 1/4, on utilise les suites A_1_4 et B_1_4 :
 
     A_1_4 n = ((241/16)/12) * 4^n - 4/3
@@ -803,28 +900,28 @@ text \<open>
 
   On applique la meme methode de comparaison asymetrique,
   cette fois avec ces equations generales.
-\<close>
+›
 
-definition somme_A_1_4_bloc :: "nat list \<Rightarrow> real" where
+definition somme_A_1_4_bloc :: "nat list ⇒ real" where
   "somme_A_1_4_bloc A_indices = sum_list (map A_1_4 A_indices)"
 
-definition somme_B_1_4_bloc :: "nat list \<Rightarrow> real" where
+definition somme_B_1_4_bloc :: "nat list ⇒ real" where
   "somme_B_1_4_bloc B_indices = sum_list (map B_1_4 B_indices)"
 
-definition RsP_bloc_1_4 :: "nat list \<Rightarrow> nat list \<Rightarrow> real" where
+definition RsP_bloc_1_4 :: "nat list ⇒ nat list ⇒ real" where
   "RsP_bloc_1_4 A_indices B_indices =
      (somme_A_1_4_bloc A_indices - somme_A_1_4_bloc B_indices) /
      (somme_B_1_4_bloc A_indices - somme_B_1_4_bloc B_indices)"
 
-definition comparaison_asym_ordonnee_1_4 :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "comparaison_asym_ordonnee_1_4 A_indices B_indices \<longleftrightarrow>
+definition comparaison_asym_ordonnee_1_4 :: "nat list ⇒ nat list ⇒ bool" where
+  "comparaison_asym_ordonnee_1_4 A_indices B_indices ⟷
      asymetrique_ordonnee_nat A_indices B_indices"
 
-definition comparaison_asym_chaotique_1_4 :: "nat list \<Rightarrow> nat list \<Rightarrow> bool" where
-  "comparaison_asym_chaotique_1_4 A_indices B_indices \<longleftrightarrow>
+definition comparaison_asym_chaotique_1_4 :: "nat list ⇒ nat list ⇒ bool" where
+  "comparaison_asym_chaotique_1_4 A_indices B_indices ⟷
      asymetrique_chaotique_nat A_indices B_indices"
 
-text \<open>
+text ‹
   Comme pour le modele 1/2, la methode de comparaison asymetrique
   pour le modele 1/4 s'applique a tout ensemble de nombres premiers
   dont les positions (indices) correspondent aux puissances utilisees
@@ -834,7 +931,7 @@ text \<open>
   d'observer numeriquement des rapports proches de 1/4 ou evoluant
   vers 1, sans que ces valeurs puissent etre obtenues par une
   simplification algébrique directe des equations generales.
-\<close>
+›
 
 
 (**************************************************************)
@@ -849,13 +946,13 @@ section "Rapport spectral 1/3 negatif"
   B(n) = ((219/9)/6) * 3^n - (487 * 1.5)
 *)
 
-definition SA_neg_eq_un_tiers :: "real \<Rightarrow> real" where
+definition SA_neg_eq_un_tiers :: "real ⇒ real" where
   "SA_neg_eq_un_tiers n = ((73/9) / 6) * (3 powr n) - 1.5"
 
-definition SB_neg_eq_un_tiers :: "real \<Rightarrow> real" where
+definition SB_neg_eq_un_tiers :: "real ⇒ real" where
   "SB_neg_eq_un_tiers n = ((219/9) / 6) * (3 powr n) - (487 * 1.5)"
 
-definition RsP_neg_un_tiers :: "real \<Rightarrow> real \<Rightarrow> real" where
+definition RsP_neg_un_tiers :: "real ⇒ real ⇒ real" where
   "RsP_neg_un_tiers n1 n2 =
      (SA_neg_eq_un_tiers n1 - SA_neg_eq_un_tiers n2) /
      (SB_neg_eq_un_tiers n1 - SB_neg_eq_un_tiers n2)"
@@ -871,10 +968,10 @@ definition RsP_neg_un_tiers :: "real \<Rightarrow> real \<Rightarrow> real" wher
 
 axiomatization where
   spectral_ratio_neg_un_tiers:
-    "\<And>n1 n2. n1 \<le> -1 \<Longrightarrow> n2 \<le> -1 \<Longrightarrow> n1 \<noteq> n2 \<Longrightarrow> RsP_neg_un_tiers n1 n2 = 1/3"
+    "⋀n1 n2. n1 ≤ -1 ⟹ n2 ≤ -1 ⟹ n1 ≠ n2 ⟹ RsP_neg_un_tiers n1 n2 = 1/3"
 
 lemma RsP_neg_un_tiers_general:
-  assumes "n1 \<le> -1" "n2 \<le> -1" "n1 \<noteq> n2"
+  assumes "n1 ≤ -1" "n2 ≤ -1" "n1 ≠ n2"
   shows "RsP_neg_un_tiers n1 n2 = 1/3"
   using spectral_ratio_neg_un_tiers assms by blast
  (**************************************************************)
@@ -889,13 +986,13 @@ section "Rapport spectral 1/4 negatif"
   B(n) = ((964/16)/12) * 4^n - (3073 * (4/3))
 *)
 
-definition SA_neg_eq_un_quart :: "real \<Rightarrow> real" where
+definition SA_neg_eq_un_quart :: "real ⇒ real" where
   "SA_neg_eq_un_quart n = ((241/16) / 12) * (4 powr n) - (4/3)"
 
-definition SB_neg_eq_un_quart :: "real \<Rightarrow> real" where
+definition SB_neg_eq_un_quart :: "real ⇒ real" where
   "SB_neg_eq_un_quart n = ((964/16) / 12) * (4 powr n) - (3073 * (4/3))"
 
-definition RsP_neg_un_quart :: "real \<Rightarrow> real \<Rightarrow> real" where
+definition RsP_neg_un_quart :: "real ⇒ real ⇒ real" where
   "RsP_neg_un_quart n1 n2 =
      (SA_neg_eq_un_quart n1 - SA_neg_eq_un_quart n2) /
      (SB_neg_eq_un_quart n1 - SB_neg_eq_un_quart n2)"
@@ -908,14 +1005,13 @@ definition RsP_neg_un_quart :: "real \<Rightarrow> real \<Rightarrow> real" wher
 
 axiomatization where
   spectral_ratio_neg_un_quart:
-    "\<And>n1 n2. n1 \<le> -1 \<Longrightarrow> n2 \<le> -1 \<Longrightarrow> n1 \<noteq> n2 \<Longrightarrow>
+    "⋀n1 n2. n1 ≤ -1 ⟹ n2 ≤ -1 ⟹ n1 ≠ n2 ⟹
                  RsP_neg_un_quart n1 n2 = 1/4"
 
 lemma RsP_neg_un_quart_general:
-  assumes "n1 \<le> -1" "n2 \<le> -1" "n1 \<noteq> n2"
+  assumes "n1 ≤ -1" "n2 ≤ -1" "n1 ≠ n2"
   shows "RsP_neg_un_quart n1 n2 = 1/4"
   using spectral_ratio_neg_un_quart assms by blast
-
 
 (**************************************************************)
 (* SECTION : Forme générale de l'écart négatif                *)
@@ -924,7 +1020,7 @@ lemma RsP_neg_un_quart_general:
 section "Forme générale de l'écart négatif"
 
 definition gap_neg_val ::
-  "real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real" where
+  "real ⇒ real ⇒ real ⇒ real ⇒ real ⇒ real" where
   "gap_neg_val A_next B_high D_high D_low dummy =
       (A_next - (B_high - D_high) - D_low) / 64"
 
@@ -1016,7 +1112,7 @@ definition D_m31_val :: real where
 section "Forme générale de l'écart mixte"
 
 definition gap_mix_val ::
-  "real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real" where
+  "real ⇒ real ⇒ real ⇒ real ⇒ real ⇒ real" where
   "gap_mix_val A_next B_high D_high D_low dummy =
       (A_next - (B_high - D_high) - D_low) / 64"
 
@@ -1052,11 +1148,11 @@ definition D_7_val   :: real where "D_7_val = -464"
 
 section "Note sur l'inclusion du zéro dans les écarts spectraux"
 
-text \<open>
+text ‹
   Le zéro n'est inclus que dans les écarts mixtes (exemple -31 / 17).
   Dans les écarts du même signe (-19 / -5 et 23 / 7), la progression
   spectrale ne traverse pas 0, donc il n'est pas compté.
-\<close>
+›
 
 
 (**************************************************************)
@@ -1065,7 +1161,7 @@ text \<open>
 
 section "Exemple complet : écart entre les premiers 227 et 173 (rapport 1/3)"
 
-text \<open>
+text ‹
   Exemple positif : quantité de nombres entre les deux premiers 227 et 173.
 
   Données spectrales :
@@ -1094,7 +1190,7 @@ text \<open>
       ((96/9) - (238746 - 73263) - (-1141518/9)) / 729 = -53
 
   Ce qui correspond aux 53 nombres entre 227 et 173.
-\<close>
+›
 
 
 (**************************************************************)
@@ -1139,7 +1235,7 @@ lemma ecart_227_173_1_3:
 
 section "Equation generale d'ecart pour le rapport spectral 1/3"
 
-text \<open>
+text ‹
   Formule generale pour l'ecart entre deux nombres premiers
   dans le modele spectral 1/3, a partir de deux suites A et B
   de n termes et de leurs Digamma associes.
@@ -1156,9 +1252,9 @@ text \<open>
     - D_low   : Digamma du plus petit premier
 
   Le resultat correspond a la quantite de nombres entiers entre les deux premiers.
-\<close>
+›
 
-definition gap_equation_1_3 :: "real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real" where
+definition gap_equation_1_3 :: "real ⇒ real ⇒ real ⇒ real ⇒ real" where
   "gap_equation_1_3 A_next B_high D_high D_low =
      (A_next - (B_high - D_high) - D_low) / 729"
 
@@ -1172,7 +1268,7 @@ lemma gap_equation_1_3_simplifiee:
 (* SECTION : Postulat spectral d'ecart 1/3                    *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Postulat spectral d'ecart pour le rapport 1/3 :
 
   Pour toute paire de nombres premiers (p_high, p_low),
@@ -1181,12 +1277,12 @@ text \<open>
   la quantite de nombres entiers entre ces deux premiers :
 
       gap_equation_1_3 ... = p_low - p_high
-\<close>
+›
 
 axiomatization where
   spectral_gap_postulate_1_3:
-    "\<And>p_high p_low A_next B_high D_high D_low.
-       prime p_high \<Longrightarrow> prime p_low \<Longrightarrow>
+    "⋀p_high p_low A_next B_high D_high D_low.
+       prime p_high ⟹ prime p_low ⟹
        gap_equation_1_3 A_next B_high D_high D_low =
          real (p_low - p_high)"
 
@@ -1240,7 +1336,7 @@ definition D_881_val :: real where
 
 section "Equation generale d'ecart pour le rapport spectral 1/4"
 
-definition gap_equation_1_4 :: "real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real \<Rightarrow> real" where
+definition gap_equation_1_4 :: "real ⇒ real ⇒ real ⇒ real ⇒ real" where
   "gap_equation_1_4 A_next B_high D_high D_low =
      (A_next - (B_high - D_high) - D_low) / 4096"
 
@@ -1254,7 +1350,7 @@ lemma gap_equation_1_4_simplifiee:
 (* SECTION : Postulat spectral d'ecart 1/4                    *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Postulat spectral d'ecart pour le rapport 1/4 :
 
   Pour toute paire de nombres premiers (p_high, p_low),
@@ -1263,12 +1359,12 @@ text \<open>
   la quantite de nombres entiers entre ces deux premiers :
 
       gap_equation_1_4 ... = p_low - p_high
-\<close>
+›
 
 axiomatization where
   spectral_gap_postulate_1_4:
-    "\<And>p_high p_low A_next B_high D_high D_low.
-       prime p_high \<Longrightarrow> prime p_low \<Longrightarrow>
+    "⋀p_high p_low A_next B_high D_high D_low.
+       prime p_high ⟹ prime p_low ⟹
        gap_equation_1_4 A_next B_high D_high D_low =
          real (p_low - p_high)"
 
@@ -1298,10 +1394,10 @@ lemma ecart_947_881_1_4_via_gap_equation:
 
 
 (**************************************************************)
-(* CHAPITRE DEUXIÈME : Axiomatisation analytique (\<zeta>) et spectrale *)
+(* CHAPITRE DEUXIÈME : Axiomatisation analytique (ζ) et spectrale *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Mise en garde concernant la présente section
 
   La section qui suit est fournie exclusivement à titre de référence conceptuelle.
@@ -1340,220 +1436,220 @@ text \<open>
   sans effet contraignant, sans interaction logique obligatoire, et sans
   influence sur la validité intrinsèque de la méthode spectrale ou des
   références externes auxquelles elle renvoie.
-\<close>
+›
 
 (**************************************************************)
-(* CHAPITRE DEUXIÈME : Axiomatisation analytique (\<zeta>) et spectrale *)
+(* CHAPITRE DEUXIÈME : Axiomatisation analytique (ζ) et spectrale *)
 (**************************************************************)
 
-section \<open>Axiomatisation analytique et géométrique de la position des nombres premiers\<close>
+section ‹Axiomatisation analytique et géométrique de la position des nombres premiers›
 
-text \<open>
+text ‹
   Dans cette section, nous introduisons, sous forme axiomatique, le lien classique
-  de la théorie analytique des nombres entre les zéros de la fonction \<zeta> de Riemann
+  de la théorie analytique des nombres entre les zéros de la fonction ζ de Riemann
   et la position des nombres premiers. Cette axiomatisation n’est pas une création
   originale de l’auteur de la méthode spectrale (Philippe Thomas Savard), mais une
   abstraction inspirée des formules explicites de la théorie des nombres, telles
   que celles de Riemann, von Mangoldt et leurs successeurs.
-\<close>
+›
 
-text \<open>
-  1. Axiomatisation (abstraite) de la fonction \<zeta> et de ses zéros
+text ‹
+  1. Axiomatisation (abstraite) de la fonction ζ et de ses zéros
 
-  On introduit un type abstrait pour représenter les zéros non triviaux de \<zeta>,
+  On introduit un type abstrait pour représenter les zéros non triviaux de ζ,
   ainsi qu’une fonction donnant leur partie réelle. On ne formalise pas ici la
-  fonction \<zeta> elle-même, ni la formule explicite complète, mais on encode le fait
+  fonction ζ elle-même, ni la formule explicite complète, mais on encode le fait
   que les zéros déterminent la position des nombres premiers, comme le suggèrent
   les formules explicites de Riemann–von Mangoldt.
-\<close>
+›
 
 typedecl zero_zeta
 
 consts
-  Re_zero_zeta :: "zero_zeta \<Rightarrow> real"
-  Im_zero_zeta :: "zero_zeta \<Rightarrow> real"
+  Re_zero_zeta :: "zero_zeta ⇒ real"
+  Im_zero_zeta :: "zero_zeta ⇒ real"
 
-text \<open>
+text ‹
   La fonction suivante représente, de manière abstraite, la contribution d’un zéro
-  de \<zeta> à la détermination de la position du n-ième nombre premier. Elle est inspirée
+  de ζ à la détermination de la position du n-ième nombre premier. Elle est inspirée
   des formules explicites (de type Riemann–von Mangoldt) qui expriment des fonctions
-  arithmétiques liées aux nombres premiers en termes de sommes sur les zéros de \<zeta>.
-\<close>
+  arithmétiques liées aux nombres premiers en termes de sommes sur les zéros de ζ.
+›
 
 consts
-  prime_position_from_zero :: "zero_zeta \<Rightarrow> nat \<Rightarrow> bool"
+  prime_position_from_zero :: "zero_zeta ⇒ nat ⇒ bool"
 
 axiomatization where
   explicit_formula_axiom:
-    "\<forall>n. \<exists>\<rho>::zero_zeta. prime_position_from_zero \<rho> n"
+    "∀n. ∃ρ::zero_zeta. prime_position_from_zero ρ n"
 
-text \<open>
+text ‹
   Interprétation : pour chaque entier naturel n, il existe au moins un zéro non trivial
-  de \<zeta> qui intervient dans la détermination de la position du n-ième nombre premier.
-  Cet axiome formalise, de manière abstraite, l’idée que \<guillemotleft> les zéros de \<zeta> déterminent
-  la position des nombres premiers \<guillemotright>, telle qu’on la trouve dans la théorie analytique
+  de ζ qui intervient dans la détermination de la position du n-ième nombre premier.
+  Cet axiome formalise, de manière abstraite, l’idée que « les zéros de ζ déterminent
+  la position des nombres premiers », telle qu’on la trouve dans la théorie analytique
   classique (formules explicites).
-\<close>
+›
 
 
-text \<open>
+text ‹
   2. Axiomatisation de l’évidence spectrale issue de la méthode de Philippôt
 
   La méthode spectrale, telle que développée dans les sections précédentes, repose
   sur les faits suivants (formulés ici de manière synthétique) :
 
-  – Quand n \<ge> 1 et n \<le> -1 (au sens de la structure spectrale considérée),
+  – Quand n ≥ 1 et n ≤ -1 (au sens de la structure spectrale considérée),
     tous les n ramènent à un nombre premier P.
   – La valeur de n est déterminée par la quantité de termes dans les suites A et B.
   – Tous les nombres premiers P entre eux respectent le rapport spectral 1/k.
   – Ce rapport 1/k est numériquement valide mais algébriquement incohérent.
 
   Nous encapsulons cette évidence sous forme de constantes et d’axiomes abstraits.
-\<close>
+›
 
 typedecl indice_spectral   (* type abstrait pour les n de la méthode spectrale *)
 typedecl premier_spectral  (* type abstrait pour les P de la méthode spectrale *)
 
 consts
-  A_suite :: "indice_spectral \<Rightarrow> nat"
-  B_suite :: "indice_spectral \<Rightarrow> nat"
-  P_spectral :: "indice_spectral \<Rightarrow> premier_spectral"
-  rapport_spectral :: "premier_spectral \<Rightarrow> premier_spectral \<Rightarrow> rat"
+  A_suite :: "indice_spectral ⇒ nat"
+  B_suite :: "indice_spectral ⇒ nat"
+  P_spectral :: "indice_spectral ⇒ premier_spectral"
+  rapport_spectral :: "premier_spectral ⇒ premier_spectral ⇒ rat"
 
-text \<open>
+text ‹
   Axiome : chaque indice spectral n (dans le domaine considéré) ramène à un nombre
   premier spectral P, et la valeur de n est déterminée par la quantité de termes
   dans les suites A et B. Le détail constructif est donné dans les sections précédentes
   de la méthode spectrale ; ici, nous en donnons une abstraction logique.
-\<close>
+›
 
 axiomatization where
   spectral_index_to_prime:
-    "\<forall>n::indice_spectral. \<exists>P::premier_spectral. P_spectral n = P" and
+    "∀n::indice_spectral. ∃P::premier_spectral. P_spectral n = P" and
 
   spectral_index_from_suites:
-    "\<forall>n::indice_spectral. A_suite n + B_suite n \<ge> 1"
+    "∀n::indice_spectral. A_suite n + B_suite n ≥ 1"
 
-text \<open>
+text ‹
   Axiome : tous les nombres premiers spectraux P entre eux respectent un rapport
   spectral 1/k, numériquement valide mais algébriquement incohérent. On encode
   cela en imposant que le rapport entre deux premiers spectraux soit toujours
-  de la forme 1/k pour un certain entier k \<ge> 1.
-\<close>
+  de la forme 1/k pour un certain entier k ≥ 1.
+›
 
 consts
-  k_spectral :: "premier_spectral \<Rightarrow> premier_spectral \<Rightarrow> nat"
+  k_spectral :: "premier_spectral ⇒ premier_spectral ⇒ nat"
 
 axiomatization where
   rapport_spectral_forme:
-    "\<forall>P Q::premier_spectral. k_spectral P Q \<ge> 1
-      \<longrightarrow> rapport_spectral P Q = 1 / (int (k_spectral P Q))"
+    "∀P Q::premier_spectral. k_spectral P Q ≥ 1
+      ⟶ rapport_spectral P Q = 1 / (int (k_spectral P Q))"
 
-text \<open>
+text ‹
   Interprétation : le rapport spectral entre deux nombres premiers où groupe de nombres premier   
   asymétrique ordonnés ou chaotiques de même que symétriques en paire 1*1 ou n*n
-  spectraux P et Q est toujours de la forme 1/k, avec k un entier naturel \<ge> 1. Ce rapport est
-  numériquement bien défini (dans \<rat>), mais ne correspond pas à une relation
-  algébrique classique entre nombres premiers, d’où l’expression \<guillemotleft> algébriquement
-  incohérent \<guillemotright> dans le texte conceptuel.
-\<close>
+  spectraux P et Q est toujours de la forme 1/k, avec k un entier naturel ≥ 1. Ce rapport est
+  numériquement bien défini (dans ℚ), mais ne correspond pas à une relation
+  algébrique classique entre nombres premiers, d’où l’expression « algébriquement
+  incohérent » dans le texte conceptuel.
+›
 
 
-text \<open>
-  3. Axiomatisation du lien entre la fonction \<zeta> et la géométrie spectrale
+text ‹
+  3. Axiomatisation du lien entre la fonction ζ et la géométrie spectrale
 
   Nous introduisons maintenant un axiome de concordance : la structure spectrale
   issue de la méthode de Philippôt est compatible, sur le plan conceptuel, avec
-  la structure analytique donnée par les zéros de \<zeta>. Plus précisément, nous
-  postulons qu’à chaque indice spectral n correspond un zéro de \<zeta> qui intervient
+  la structure analytique donnée par les zéros de ζ. Plus précisément, nous
+  postulons qu’à chaque indice spectral n correspond un zéro de ζ qui intervient
   dans la détermination de la position du nombre premier associé.
-\<close>
+›
 
 consts
-  zero_associe :: "indice_spectral \<Rightarrow> zero_zeta"
+  zero_associe :: "indice_spectral ⇒ zero_zeta"
 
 axiomatization where
   concordance_spectrale:
-    "\<forall>n::indice_spectral.
+    "∀n::indice_spectral.
        prime_position_from_zero (zero_associe n) (A_suite n + B_suite n)"
 
-text \<open>
-  Interprétation : pour chaque indice spectral n, il existe un zéro de \<zeta> (ici
-  représenté par \<open>zero_associe n\<close>) qui intervient, via la fonction abstraite
-  \<open>prime_position_from_zero\<close>, dans la détermination de la position du nombre
+text ‹
+  Interprétation : pour chaque indice spectral n, il existe un zéro de ζ (ici
+  représenté par ‹zero_associe n›) qui intervient, via la fonction abstraite
+  ‹prime_position_from_zero›, dans la détermination de la position du nombre
   premier correspondant (codé ici par la quantité de termes A_suite n + B_suite n).
 
   Cet axiome formalise le parallèle conceptuel entre :
 
-  – la théorie analytique de la fonction \<zeta> de Riemann, où les zéros déterminent
+  – la théorie analytique de la fonction ζ de Riemann, où les zéros déterminent
     la position des nombres premiers (formules explicites) ;
   – la géométrie du spectre des nombres premiers de la méthode de Philippôt,
     où les indices spectraux n, les suites A et B, et le rapport 1/k organisent
     la position des nombres premiers dans une structure spectrale cohérente.
 
   Cette section ne prétend pas démontrer l’hypothèse de Riemann, ni reconstruire
-  la théorie analytique complète de \<zeta>, mais elle établit, dans le langage d’Isabelle/HOL,
+  la théorie analytique complète de ζ, mais elle établit, dans le langage d’Isabelle/HOL,
   une concordance axiomatique entre la méthode spectrale et la vision analytique
   classique de la distribution des nombres premiers.
-\<close>
+›
 
 (**************************************************************)
-(* CHAPITRE DEUXIÈME : Axiomatisation analytique (\<zeta>) et spectrale *)
+(* CHAPITRE DEUXIÈME : Axiomatisation analytique (ζ) et spectrale *)
 (**************************************************************)
 
-text \<open>
+text ‹
   Dans ce chapitre, nous introduisons une axiomatisation abstraite de la fonction
-  \<zeta> de Riemann et de ses zéros non triviaux, dans le but de formuler, dans le
+  ζ de Riemann et de ses zéros non triviaux, dans le but de formuler, dans le
   langage d’Isabelle/HOL, une version informative de la conjecture de Riemann.
   Il ne s’agit pas d’une démonstration, mais d’une mise en forme logique d’une
   conjecture classique de la théorie analytique des nombres.
-\<close>
+›
 
-typedecl complex_zero_zeta   \<comment> \<open>type abstrait pour les zéros non triviaux de \<zeta>\<close>
+typedecl complex_zero_zeta   ― ‹type abstrait pour les zéros non triviaux de ζ›
 
 consts
-  Re_cz :: "complex_zero_zeta \<Rightarrow> real"   \<comment> \<open>partie réelle du zéro\<close>
-  Im_cz :: "complex_zero_zeta \<Rightarrow> real"   \<comment> \<open>partie imaginaire du zéro\<close>
+  Re_cz :: "complex_zero_zeta ⇒ real"   ― ‹partie réelle du zéro›
+  Im_cz :: "complex_zero_zeta ⇒ real"   ― ‹partie imaginaire du zéro›
 
-text \<open>
-  Nous ne définissons pas ici la fonction \<zeta> elle-même, ni son prolongement
+text ‹
+  Nous ne définissons pas ici la fonction ζ elle-même, ni son prolongement
   analytique. Nous supposons simplement l’existence d’un ensemble abstrait de
   zéros non triviaux, chacun muni d’une partie réelle et d’une partie imaginaire.
-\<close>
+›
 
-text \<open>
+text ‹
   Conjecture de Riemann (version axiomatique)
 
   La conjecture de Riemann affirme que tous les zéros non triviaux de la fonction
-  \<zeta> de Riemann ont une partie réelle égale à 1/2. Nous l’exprimons ici sous la
+  ζ de Riemann ont une partie réelle égale à 1/2. Nous l’exprimons ici sous la
   forme d’un axiome, afin de pouvoir raisonner dans un cadre où cette conjecture
   est supposée vraie, sans prétendre la démontrer.
-\<close>
+›
 
 axiomatization where
   Riemann_Hypothesis:
-    "\<forall>\<rho>::complex_zero_zeta. Re_cz \<rho> = 1 / 2"
+    "∀ρ::complex_zero_zeta. Re_cz ρ = 1 / 2"
 
 typedecl prime_index
 typedecl prime_number
 
 consts
-  P_of :: "prime_index \<Rightarrow> prime_number"
+  P_of :: "prime_index ⇒ prime_number"
 
-text \<open>
-  Interprétation : le type \<open>prime_index\<close> représente un indice abstrait pour les
-  nombres premiers, et \<open>P_of\<close> associe à chaque indice un nombre premier. Dans la
-  théorie analytique classique, les zéros de \<zeta> contrôlent la distribution de ces
+text ‹
+  Interprétation : le type ‹prime_index› représente un indice abstrait pour les
+  nombres premiers, et ‹P_of› associe à chaque indice un nombre premier. Dans la
+  théorie analytique classique, les zéros de ζ contrôlent la distribution de ces
   nombres premiers. Nous ne formalisons pas ici la formule explicite, mais nous
   admettons ce lien comme principe conceptuel.
-\<close>
+›
 
 
 (**************************************************************)
 (* SECTION : Modèle géométrique des aires sur la droite critique *)
 (**************************************************************)
 
-text \<open>
+text ‹
   La présente section introduit un modèle abstrait où la droite critique
   Re(s) = 1/2 est représentée par une aire totale T, tronquée à une hauteur
   finie. Une sous-aire Tn = T/n correspond à une zone où les zéros sont plus
@@ -1563,22 +1659,22 @@ text \<open>
   structure combinatoire des écarts mixtes. L’égalité de ces deux aires est
   interprétée comme une condition géométrique équivalente à la conjecture de
   Riemann, sans constituer une démonstration analytique.
-\<close>
+›
 
 typedecl area
 typedecl interval
 
 consts
-  T      :: area      \<comment> \<open>aire totale de la droite critique\<close>
-  Tn     :: area      \<comment> \<open>sous-aire T/n plus dense en zéros\<close>
-  T_rest :: area      \<comment> \<open>aire restante T − Tn\<close>
+  T      :: area      ― ‹aire totale de la droite critique›
+  Tn     :: area      ― ‹sous-aire T/n plus dense en zéros›
+  T_rest :: area      ― ‹aire restante T − Tn›
 
-  P      :: interval  \<comment> \<open>intervalle complet de nombres premiers associé à T\<close>
-  Pn     :: interval  \<comment> \<open>intervalle tronqué associé à Tn\<close>
+  P      :: interval  ― ‹intervalle complet de nombres premiers associé à T›
+  Pn     :: interval  ― ‹intervalle tronqué associé à Tn›
 
 consts
-  relative_value :: "interval \<Rightarrow> real"
-  geometric_area :: "real \<Rightarrow> area"
+  relative_value :: "interval ⇒ real"
+  geometric_area :: "real ⇒ area"
 
 axiomatization where
   mixed_gap_surplus:
@@ -1587,10 +1683,162 @@ axiomatization where
   complementary_areas:
     "T_rest = geometric_area (relative_value Pn - relative_value P)"
 
-consts Re_zero :: "zero_zeta \<Rightarrow> real"
+consts Re_zero :: "zero_zeta ⇒ real"
 
 axiomatization where
   all_zeros_on_critical_line:
-    "complementary_areas \<Longrightarrow> (\<forall>\<rho>::zero_zeta. Re_zero \<rho> = 1/2)"
+    "complementary_areas ⟹ (∀ρ::zero_zeta. Re_zero ρ = 1/2)"
+
+(**************************************************************)
+(* SECTION : Validation épipolaire du plan trifocal           *)
+(**************************************************************)
+
+section "Validation épipolaire du plan trifocal"
+
+text ‹
+  Cette section formalise, de manière abstraite, le plan trifocal :
+
+    1. FZg  : Fonction Zêta (vue globalement),
+    2. HyRi : Hypothèse de Riemann,
+    3. MsP  : Méthode spectrale et position des nombres premiers.
+
+  On y ajoute :
+    - la combinatoire des comparaisons de premiers (simples vs mixtes),
+    - la représentation des zéros critiques par un rectangle T_area,
+    - la partie tronquée T_tr_area et la partie restante T_restant_area,
+    - une courbure de la droite critique modélisée par une aire parabolique,
+    - une variable logique HypR_demi_solFinal qui représente la
+      « validation géométrique » de Re(s) = 1/2 dans cette perspective.
+›
+
+(**************************************************************)
+(* 1. Objets abstraits du plan trifocal                       *)
+(**************************************************************)
+
+typedecl position          (* position abstraite d'un nombre premier *)
+
+
+consts
+  FZg_posP   :: "prime_index ⇒ position"   (* Position via fonction Zêta *)
+  Ms_posP    :: "prime_index ⇒ position"   (* Position via méthode spectrale *)
+  HypR_demi  :: real                       (* Partie réelle 1/2 (RH) *)
+  Ms_demi    :: real                       (* Rapport spectral 1/2 (méthode spectrale) *)
+
+(**************************************************************)
+(* 2. Aires et géométrie de la droite critique                *)
+(**************************************************************)
+
+consts
+  T_area         :: real  (* Aire totale du rectangle des zéros critiques *)
+  T_tr_area      :: real  (* Aire tronquée correspondant à un intervalle de premiers *)
+  T_restant_area :: real  (* Aire restante hors de l'intervalle considéré *)
+
+  Courb_droitcri_init_aire_parabol :: real  (* Aire sous la courbe « courbée » *)
+  Aire_parab                        :: real  (* Aire de la parabole (modèle de courbure) *)
+
+(**************************************************************)
+(* 3. Combinatoire des comparaisons de premiers               *)
+(**************************************************************)
+
+consts
+  P_reel        :: real  (* Valeur réelle associée à l'intervalle 0..P-ième premier *)
+  Com_Pinit_Re  :: real  (* Nombre relatif de comparaisons simples dans l'intervalle *)
+  Com_mixt_Sup  :: real  (* Nombre relatif de comparaisons mixtes (-,+) *)
+  Com_ident     :: real  (* Contribution des comparaisons entre premiers identiques (-p, p) *)
+
+(**************************************************************)
+(* 4. Variable logique de « solution » de l'hypothèse         *)
+(**************************************************************)
+
+consts
+  HypR_demi_solFinal :: bool
+
+text ‹
+  Les axiomes suivants codent les relations conceptuelles :
+
+    - FZg_posP et Ms_posP donnent la même position des premiers,
+    - HypR_demi et Ms_demi représentent la même valeur 1/2,
+    - l'aire totale T_area est la somme de T_tr_area (tronqué) et T_restant_area,
+    - la combinatoire mixte est strictement plus riche que la combinatoire initiale,
+    - cette sur‑combinatoire se traduit par une courbure de la droite critique,
+    - si l'aire de la parabole égale l'aire restante T_restant_area,
+      alors la variable HypR_demi_solFinal est vraie.
+›
+
+axiomatization
+  postulate_positions :: "bool"
+  and postulate_demi :: "bool"
+  and postulate_aire_rectangle :: "bool"
+  and postulate_combinatoire_1 :: "bool"
+  and postulate_combinatoire_2 :: "bool"
+  and postulate_courbure :: "bool"
+  and postulate_solution :: "bool"
+axiomatization where
+  (* 1. Correspondance des positions des premiers : FZg_posP = Ms_posP *)
+  postulate_positions:
+    "∀p. FZg_posP p = Ms_posP p" and
+
+  (* 2. Correspondance des valeurs 1/2 : HypR_demi = Ms_demi *)
+  postulate_demi:
+    "HypR_demi = Ms_demi" and
+
+  (* 3. Décomposition de l'aire totale du rectangle des zéros critiques *)
+  postulate_aire_rectangle:
+    "T_area = T_tr_area + T_restant_area" and
+
+  (* 4. Combinatoire : l'écart mixte fournit plus de comparaisons
+        que le schéma initial, notamment via les comparaisons identiques (-p, p). *)
+  postulate_combinatoire_1:
+    "Com_Pinit_Re < Com_ident" and
+  postulate_combinatoire_2:
+    "Com_mixt_Sup > Com_Pinit_Re" and
+
+  (* 5. La sur‑combinatoire (Com_Pinit_Re < Com_ident) se traduit
+        par une courbure de la droite critique modélisée par Aire_parab. *)
+  postulate_courbure:
+    "Com_Pinit_Re < Com_ident ⟹
+     Courb_droitcri_init_aire_parabol = Aire_parab" and
+
+  (* 6. Si l'aire de la parabole égale l'aire restante T_restant_area,
+        alors la perspective géométrique est compatible avec Re(s) = 1/2. *)
+  postulate_solution:
+    "Aire_parab = T_restant_area ⟹ HypR_demi_solFinal"
+
+(**************************************************************)
+(* 5. LEMMES DE VALIDATION LOGIQUE                            *)
+(**************************************************************)
+
+lemma positions_coincident_trifocal:
+  "FZg_posP p = Ms_posP p"
+  using postulate_positions
+  by simp
+
+lemma demi_coincident_trifocal:
+  "HypR_demi = Ms_demi"
+  using postulate_demi
+  by simp
+
+lemma aire_rectangle_decompose:
+  "T_area = T_tr_area + T_restant_area"
+  using postulate_aire_rectangle
+  by simp
+
+lemma combinatoire_mixte_stricte:
+  "Com_Pinit_Re < Com_ident ∧ Com_mixt_Sup > Com_Pinit_Re"
+  using postulate_combinatoire_1 postulate_combinatoire_2
+  by simp
+
+lemma courbure_induite_par_surcombinatoire:
+  assumes "Com_Pinit_Re < Com_ident"
+  shows "Courb_droitcri_init_aire_parabol = Aire_parab"
+  using assms postulate_courbure
+  by simp
+
+lemma solution_epipolaire_Riemann:
+  assumes "Com_Pinit_Re < Com_ident"
+      and "Aire_parab = T_restant_area"
+  shows "HypR_demi_solFinal"
+  using assms postulate_courbure postulate_solution
+  by simp
 
 end
