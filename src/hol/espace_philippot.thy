@@ -1,4 +1,4 @@
-theory espace_philippot-2.0_
+theory espace_philippot
  imports Complex_Main
 begin
 
