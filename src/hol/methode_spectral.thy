@@ -1,7 +1,6 @@
 theory methode_spectral
   imports Complex_Main
 begin
-
 (****************************************************************)
 (* TABLE DES MATIERES - SCRIPT HOL : GEOMETRIE DU SPECTRE       *)
 (*                                                              *)
@@ -78,7 +77,6 @@ begin
 (*      5. Courbure, aire parabolique et validation .......... (nouveau) *)
 (*      6. Theoreme final : solution epipolaire .............. (nouveau) *)
 (****************************************************************)
-
 
 (****************************************************************)
 (* Sous-bloc 1 : formes generales des suites A et B *)
@@ -1710,18 +1708,19 @@ text "*
     - une variable logique HypR_demi_solFinal qui represente la
       validation geometrique de Re(s) = 1/2 dans cette perspective.
 *"
-
 (**************************************************************)
-(* 1. Objets abstraits du plan trifocal                       *)
+(* 1. VALIDATION EPIPOLAIRE DU PLAN TRIFOCAL                  *)
 (**************************************************************)
 
 typedecl position          (* position abstraite d'un nombre premier *)
+typedecl trifocal_index    (* indice abstrait d'un nombre premier dans le plan trifocal *)
 
 consts
-  FZg_posP   :: "prime_index => position"   (* Position via fonction Zeta *)
-  Ms_posP    :: "prime_index => position"   (* Position via methode spectrale *)
-  HypR_demi  :: real                         (* Partie reelle 1/2 (RH) *)
-  Ms_demi    :: real                         (* Rapport spectral 1/2 (methode spectrale) *)
+  FZg_posP :: "trifocal_index ⇒ position"
+  Ms_posP  :: "trifocal_index ⇒ position"
+  HypR_demi :: real
+  Ms_demi   :: real
+
 
 (**************************************************************)
 (* 2. Aires et geometrie de la droite critique                *)
@@ -1752,7 +1751,7 @@ consts
 consts
   HypR_demi_solFinal :: bool
 
-text "*
+text ‹
   Les axiomes suivants codent les relations conceptuelles :
 
     - FZg_posP et Ms_posP donnent la meme position des premiers,
@@ -1762,19 +1761,19 @@ text "*
     - cette sur-combinatoire se traduit par une courbure de la droite critique,
     - si l'aire de la parabole egale l'aire restante T_restant_area,
       alors la variable HypR_demi_solFinal est vraie.
-*"
+›
 
 axiomatization
-  postulate_positions :: bool
-  and postulate_demi :: bool
+  postulate_positions       :: bool
+  and postulate_demi        :: bool
   and postulate_aire_rectangle :: bool
   and postulate_combinatoire_1 :: bool
   and postulate_combinatoire_2 :: bool
-  and postulate_courbure :: bool
-  and postulate_solution :: bool
+  and postulate_courbure    :: bool
+  and postulate_solution    :: bool
 where
   postulate_positions:
-    "ALL p. FZg_posP p = Ms_posP p" and
+    "∀p. FZg_posP p = Ms_posP p" and
 
   postulate_demi:
     "HypR_demi = Ms_demi" and
@@ -1789,10 +1788,10 @@ where
     "Com_mixt_Sup > Com_Pinit_Re" and
 
   postulate_courbure:
-    "Com_Pinit_Re < Com_ident ==> Courb_droitcri_init_aire_parabol = Aire_parab" and
+    "Com_Pinit_Re < Com_ident ⟹ Courb_droitcri_init_aire_parabol = Aire_parab" and
 
   postulate_solution:
-    "Aire_parab = T_restant_area ==> HypR_demi_solFinal"
+    "Aire_parab = T_restant_area ⟹ HypR_demi_solFinal"
 
 (**************************************************************)
 (* 5. LEMMES DE VALIDATION LOGIQUE                            *)
@@ -1814,7 +1813,7 @@ lemma aire_rectangle_decompose:
   by simp
 
 lemma combinatoire_mixte_stricte:
-  "Com_Pinit_Re < Com_ident & Com_mixt_Sup > Com_Pinit_Re"
+  "Com_Pinit_Re < Com_ident ∧ Com_mixt_Sup > Com_Pinit_Re"
   using postulate_combinatoire_1 postulate_combinatoire_2
   by simp
 
