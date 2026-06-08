@@ -1,8 +1,8 @@
 # Catalogue des Questions/Reponses
 ## Theorie Mathematique - L'Univers est au Carre
 
-**Derniere mise a jour:** 2026-06-08 13:26 UTC
-**Total Q&R:** 142
+**Derniere mise a jour:** 2026-06-08 18:46 UTC
+**Total Q&R:** 143
 
 ---
 
@@ -536,7 +536,15 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ### Source: `methode_spectral.thy`
 
-**1. [expert] Dans le fichier 'methode_spectral.thy', quelle est la signification de l'équation du lemme 'ecart_227_173_1_3', \(((SA_179_val - (SB_227_val - D_227_val) - D_173_val) / 729) = -53\), et comment chaque terme contribue-t-il à la démonstration ?**
+**1. [avance] Quelle est la démonstration de la constance du rapport spectral 1/3 négatif dans la section 'Rapport spectral 1/3 négatif' selon les définitions dans 'methode_spectral.thy', et comment cette constance est-elle formalisée à travers les axiomes et le lemme 'RsP_neg_un_tiers_general'?**
+
+*Categorie: mathematique/geometrie | Score: 0.8*
+
+> Le rapport spectral 1/3 négatif est défini dans la section 'Rapport spectral 1/3 négatif' du fichier 'methode_spectral.thy'. Les fonctions SA_neg_eq_un_tiers et SB_neg_eq_un_tiers définissent les suites A et B nécessaires au calcul du rapport spectral spécifié par RsP_neg_un_tiers. Ces fonctions sont définies respectivement par: SA_neg_eq_un_tiers(n) = ((73/9)/6) * 3^n - 1.5 et SB_neg_eq_un_tiers(n) = ((219/9)/6) * 3^n - (487 * 1.5). Le rapport est donné par (SA_neg_eq_un_tiers(n1) - SA_neg_eq_un_tiers(n2)) / (SB_neg_eq_un_tiers(n1) - SB_neg_eq_un_tiers(n2)). L'axiome spectral_ratio_neg_un_tiers énonce que ce rapport vaut 1/3 pour toutes paires de valeurs négatives distinctes n1 et n2, c'est-à-dire: RsP_neg_un_tiers n1 n2 = 1/3, lorsque n1 ≤ -1, n2 ≤ -1 et n1 ≠ n2. Ce concept est formalisé par le lemme RsP_neg_un_tiers_general, utilisant les axiomes pour garantir la constance de ce rapport à 1/3 lorsque les conditions sont satisfaites. Cela illustre comment des propriétés géométriques de rapports peuvent être maintenues constantes dans un cadre axiomatique, même si une dérivation directe n'est pas possible.
+
+---
+
+**2. [expert] Dans le fichier 'methode_spectral.thy', quelle est la signification de l'équation du lemme 'ecart_227_173_1_3', \(((SA_179_val - (SB_227_val - D_227_val) - D_173_val) / 729) = -53\), et comment chaque terme contribue-t-il à la démonstration ?**
 
 *Categorie: mathematique/equation | Score: 0.8*
 
@@ -544,7 +552,7 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ---
 
-**2. [expert] Utilisez les définitions fournies dans la section sur le 'Modele spectral 1/4: Sommes de suite A et B, Digamma' dans le fichier 'methode_spectral.thy' pour vérifier le calcul du nombre premier 947, tel que démontré dans le lemme 'preuve_premier_947'.**
+**3. [expert] Utilisez les définitions fournies dans la section sur le 'Modele spectral 1/4: Sommes de suite A et B, Digamma' dans le fichier 'methode_spectral.thy' pour vérifier le calcul du nombre premier 947, tel que démontré dans le lemme 'preuve_premier_947'.**
 
 *Categorie: mathematique/calcul | Score: 0.8*
 
@@ -552,7 +560,7 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ---
 
-**3. [avance] Dans la théorie 'L'Univers est au Carré', comment est déterminé le rapport spectral RsP_bloc_1_2 pour des blocs d'indices A et B, et quelle est son interprétation géométrique?**
+**4. [avance] Dans la théorie 'L'Univers est au Carré', comment est déterminé le rapport spectral RsP_bloc_1_2 pour des blocs d'indices A et B, et quelle est son interprétation géométrique?**
 
 *Categorie: mathematique/geometrie | Score: 0.8*
 
@@ -560,7 +568,7 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ---
 
-**4. [avance] Dans le fichier 'methode_spectral.thy', comment la définition de 'asymetrique_ordonnee' et 'asymetrique_chaotique', et leur démonstration associée, pourraient-elles être interprétées à la lumière des implications philosophiques sur l'analogisme, où l'ordre et le chaos sont perçus comme des manifestations duales d'une même réalité fondamentale ?**
+**5. [avance] Dans le fichier 'methode_spectral.thy', comment la définition de 'asymetrique_ordonnee' et 'asymetrique_chaotique', et leur démonstration associée, pourraient-elles être interprétées à la lumière des implications philosophiques sur l'analogisme, où l'ordre et le chaos sont perçus comme des manifestations duales d'une même réalité fondamentale ?**
 
 *Categorie: philosophique/philosophique | Score: 0.8*
 
@@ -568,7 +576,7 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ---
 
-**5. [avance] Comment la démonstration du lemme 'gap_m31_17' illustre-t-elle l'utilisation des valeurs spectrales exactes pour calculer l'écart mixte entre -31 et 17?**
+**6. [avance] Comment la démonstration du lemme 'gap_m31_17' illustre-t-elle l'utilisation des valeurs spectrales exactes pour calculer l'écart mixte entre -31 et 17?**
 
 *Categorie: mathematique/demonstration | Score: 0.8*
 
@@ -576,7 +584,7 @@ Ainsi, numériquement, l'égalité est confirmée pour `p = 5` dans ce contexte.
 
 ---
 
-**6. [intermediaire] Comment la méthode d'écart spectral décrite pour le rapport 1/3 se compare-t-elle à l'approche utilisée pour les valeurs spectrales exactes pour le rapport 1/4 dans le fichier 'methode_spectral.thy' ?**
+**7. [intermediaire] Comment la méthode d'écart spectral décrite pour le rapport 1/3 se compare-t-elle à l'approche utilisée pour les valeurs spectrales exactes pour le rapport 1/4 dans le fichier 'methode_spectral.thy' ?**
 
 *Categorie: mathematique/comparaison | Score: 0.8*
 
@@ -586,7 +594,7 @@ En revanche, pour les valeurs spectrales exactes pour le rapport 1/4, le fichier
 
 ---
 
-**7. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
+**8. [avance] Quel est le rôle du lemme 'asymetrie_nat_implique_indices_valides' dans la méthode de comparaison asymétrique, et quelles sont ses implications pour les indices des suites A_indices et B_indices dans 'methode_spectral.thy'?**
 
 *Categorie: mathematique/theoreme | Score: 0.8*
 
