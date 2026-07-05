@@ -1,0 +1,69 @@
+theory reconstruct_prime_34
+  imports methode_spectral
+begin
+
+section "Reconstruction spectrale du 34e nombre premier"
+
+text \<open>
+  Objectif : reconstruire le nombre p tel que prime_equation 34 p = p
+  dans le modèle spectral, et montrer que cette solution est unique
+  et égale à 139.
+\<close>
+
+subsection "1. Existence d'une solution"
+
+lemma exists_p_solution:
+  "\<exists>p::nat. prime_equation 34 p = real p"
+proof -
+  text \<open>
+    On exhibe p = 139 comme témoin de l'existence.
+  \<close>
+  have "prime_equation 34 (139::nat) = real 139"
+    unfolding prime_equation_def SA_def SB_def digamma_calc_def
+    by simp
+  thus ?thesis
+    by blast
+qed
+
+
+subsection "2. Unicité de la solution"
+
+lemma unique_p_solution:
+  fixes p q :: nat
+  assumes "prime_equation 34 p = real p"
+      and "prime_equation 34 q = real q"
+  shows "p = q"
+proof -
+  text \<open>
+    On utilise la structure de prime_equation et de digamma_calc,
+    qui contient un terme de la forme SB 34 - 64 * p.
+  \<close>
+  have "SB 34 - real (64 * p) = SB 34 - real (64 * q)"
+    using assms unfolding prime_equation_def digamma_calc_def by simp
+  hence "real (64 * p) = real (64 * q)"
+    by simp
+  hence "64 * p = 64 * q"
+    by (simp only: of_nat_eq_iff)
+  thus "p = q"
+    by simp
+qed
+
+
+subsection "3. Identification de la solution : p = 139"
+
+lemma solution_is_139:
+  fixes p :: nat
+  assumes "prime_equation 34 p = real p"
+  shows "p = 139"
+proof -
+  text \<open>
+    On montre que 139 satisfait l'équation, puis on utilise l'unicité.
+  \<close>
+  have H139: "prime_equation 34 (139::nat) = real 139"
+    unfolding prime_equation_def SA_def SB_def digamma_calc_def
+    by simp
+  from unique_p_solution[OF assms H139]
+  show "p = 139" .
+qed
+
+end
