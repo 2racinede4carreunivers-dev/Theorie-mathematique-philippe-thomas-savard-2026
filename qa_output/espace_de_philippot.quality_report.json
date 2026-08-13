@@ -1,0 +1,12 @@
+{
+  "input": "src\\tex\\espace_de_philippot.tex",
+  "output": "src\\tex\\espace_de_philippot.corrected.tex",
+  "semantic_threshold": 9.6,
+  "language": "fr-CA",
+  "total_edits_found": 0,
+  "total_edits_accepted": 0,
+  "global_semantic_score": 10.0,
+  "final_acceptance": true,
+  "edits": [],
+  "compliance_note": "Always verify TERMIUM Plus and GDT/OQLF reuse conditions before bulk import. This pipeline stores source attribution per terminology replacement."
+}
